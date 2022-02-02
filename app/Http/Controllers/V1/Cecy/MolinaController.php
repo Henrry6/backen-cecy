@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\V1\Cecy\Attendance\GetAttendanceByParticipantRequest;
+use App\Http\Requests\V1\Cecy\Attendance\GetAttendancesByParticipantRequest;
 use App\Http\Requests\V1\Cecy\Attendance\SaveDetailAttendanceRequest;
 use App\Http\Requests\V1\Cecy\Certificates\DowloadCertificateByParticipantRequest;
 use App\Http\Requests\V1\Cecy\Participants\GetCoursesByParticipantRequest;
 use App\Http\Requests\V1\Cecy\Registrations\ShowGradesByParticipantRequest;
+use App\Http\Requests\V1\Cecy\Certificates\IndexCertificateRequest;
 use App\Http\Resources\V1\Cecy\Attendances\GetAttendanceByParticipantCollection;
 use App\Http\Resources\V1\Cecy\Attendances\SaveDetailAttendanceResource;
 use App\Http\Resources\V1\Cecy\DetailAttendances\DetailAttendanceResource;
@@ -18,6 +19,8 @@ use App\Models\Cecy\DetailPlanification;
 use App\Models\Cecy\Participant;
 use App\Models\Cecy\Planification;
 use App\Models\Cecy\Registration;
+use App\Models\Core\Catalogue;
+use App\Models\Core\File;
 use Illuminate\Http\Client\Request;
 
 class MolinaController extends Controller
@@ -68,7 +71,7 @@ class MolinaController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    //Ver las notas del estudiante en curso que se encuentra
+    /*//Ver las notas del estudiante en curso que se encuentra
     public function showGradesByParticipant(ShowGradesByParticipantRequest $request, Registration $registration)
     {
         $participant = Participant::where('user_id', $request->user()->id)->get();
@@ -84,31 +87,23 @@ class MolinaController extends Controller
                 ]
             ])
             ->response()->setStatusCode(200);
-    }
+    }*/
 
-    //Descargar certificado del curso
-    public function donwloadCertificateByParticipant(DowloadCertificateByParticipantRequest $request, Registration $registration)
+   //Descargar certificado del curso
+    public function downloadCertificateByParticipant(IndexCertificateRequest $request, Registration $registration,Catalogue $catalogue, File $file)
     {
-        $participant = Participant::where('user_id', $request->user()->id)->get();
-        $certificate = $registration->certificate()->first();
-
-        return (new DetailAttendanceResource($certificates))
-            ->additional([
-                'msg' => [
-                    'sumary' => 'consulta exitosa',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ])
-            ->response()->setStatusCode(200);
+        //$participant = Participant::firstWhere('user_id', $request->user()->id);
+        $certificate = $registration->certificate()->where(['state' => function ($state) {
+            $state->where('code', 'APPROVED')->first();
+        }]);
+        return $catalogue->downloadFileCertificates($file);
     }
-
     // Guardar asistencia
     public function saveDetailAttendances(SaveDetailAttendanceRequest $request, Attendance $attendance)
     {
-        $attendance = Attendance::find($request->input('attendance.id'));
-        $attendance->registration()->attach($registration);
-
+        $attendance->state_id = $request->input('state.id');
+        $attendance->save();
+        
         return (new SaveDetailAttendanceResource($attendance))
             ->additional([
                 'msg' => [

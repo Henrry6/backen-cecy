@@ -40,21 +40,21 @@ class InstructorsSeeder extends Seeder
                 'description' => 'Cuando ya no es un instructor del cecy se retiro el docente, no califica entre otros'
             ],
             [
-                'code' => $catalogue['instructor_type']['senescyt'],
+                'code' => $catalogue['instructor']['senescyt'],
                 'name' => 'Senescyt',
-                'type' => $catalogue['instructor_type']['type'],
+                'type' => $catalogue['instructor']['type'],
                 'description' => 'Cuando el instructor es parte de la Senescyt'
             ],
             [
-                'code' => $catalogue['instructor_type']['setec'],
+                'code' => $catalogue['instructor']['setec'],
                 'name' => 'Setec',
-                'type' => $catalogue['instructor_type']['type'],
+                'type' => $catalogue['instructor']['type'],
                 'description' => 'Cuando un instructor es parte de la Setec'
             ],
             [
-                'code' => $catalogue['instructor_type']['external'],
+                'code' => $catalogue['instructor']['external'],
                 'name' => 'Externo',
-                'type' => $catalogue['instructor_type']['type'],
+                'type' => $catalogue['instructor']['type'],
                 'description' => 'Cuando un instructor es independiente o externo a la institución'
             ]
         )->create();
@@ -69,8 +69,8 @@ class InstructorsSeeder extends Seeder
         for ($i = 6; $i <= 35; $i++) {
             Instructor::factory()->create(
                 [
-                    'state_id' =>  $this->$faker->randomElement($states->id()),
-                    'type_id' => $this->$faker->randomElement($types->id()),
+                    'state_id' =>  $this->$faker->randomElement($states),
+                    'type_id' => $this->$faker->randomElement($types),
                     'user_id' => $i
                 ]
             )->create();

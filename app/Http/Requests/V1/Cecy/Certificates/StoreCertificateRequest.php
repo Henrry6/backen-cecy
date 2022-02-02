@@ -13,8 +13,8 @@ class StoreCertificateRequest extends FormRequest
     public function rules()
     {
         return [
-            'certificate_type' => ['required','integer'],
-            'state_id' => ['required','integer'],
+            'certificateType' => ['required','integer'],
+            'state.id' => ['required','integer'],
             'code' => ['required']
         ];
     }
@@ -22,8 +22,8 @@ class StoreCertificateRequest extends FormRequest
     public function attributes()
     {
         return [
-            'certificate_type' => 'Tipo de certificado',
-            'state_id' => 'Estado del certificado',
+            'certificateType' => 'Tipo de certificado',
+            'state.id' => 'Estado del certificado',
             'code' => 'codigo del certificado'
         ];
     }
