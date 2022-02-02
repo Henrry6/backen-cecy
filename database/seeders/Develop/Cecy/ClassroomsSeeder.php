@@ -46,7 +46,7 @@ class ClassroomsSeeder extends Seeder
                 'description' => 'Tipo de aula de clase laboratorio'
             ],
         )->create();
-        echo (Catalogue::where('type', 'CLASSROOM')->get());
+        // echo (Catalogue::where('type', 'CLASSROOM')->get());
     }
 
     public function createClassrooms()

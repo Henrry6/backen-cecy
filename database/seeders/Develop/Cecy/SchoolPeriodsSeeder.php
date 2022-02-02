@@ -47,22 +47,23 @@ class SchoolPeriodsSeeder extends Seeder
         $current = Catalogue::where('code', State::CURRENT)->first();
         $historical = Catalogue::where('code', State::HISTORICAL)->first();
 
-        SchoolPeriod::create([
-            'code' => '2021-1',
-            'ended_at' => '2021-06-01',
-            'minimum_note' => 70,
-            'name' => 'ENERO 2021 - JUNIO 2021',
-            'started_at' => '2021-01-01',
-            'state_id' => $historical,
-        ]);
-
-        SchoolPeriod::create([
-            'code' => '2021-2',
-            'ended_at' => '2022-05-01',
-            'minimum_note' => 70,
-            'name' => 'DICIEMBRE 2021 - MAYO 2022',
-            'started_at' => '2021-12-01',
-            'state_id' => $current,
-        ]);
+        SchoolPeriod::factory()->sequence(
+            [
+                'code' => '2021-1',
+                'ended_at' => '2021-06-01',
+                'minimum_note' => 70,
+                'name' => 'ENERO 2021 - JUNIO 2021',
+                'started_at' => '2021-01-01',
+                'state_id' => $historical,
+            ],
+            [
+                'code' => '2021-2',
+                'ended_at' => '2022-05-01',
+                'minimum_note' => 70,
+                'name' => 'DICIEMBRE 2021 - MAYO 2022',
+                'started_at' => '2021-12-01',
+                'state_id' => $current,
+            ]
+        )->create();
     }
 }

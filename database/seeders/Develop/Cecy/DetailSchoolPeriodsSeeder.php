@@ -29,7 +29,7 @@ class DetailSchoolPeriodsSeeder extends Seeder
         $historicalSchoolPeriod = SchoolPeriod::firstWhere('code', '2021-1');
         $currentSchoolPeriod = SchoolPeriod::firstWhere('code', '2021-2');
 
-        DetailSchoolPeriod::create(
+        DetailSchoolPeriod::factory()->sequence(
             [
                 'anulation_ended_at' => '2022-04-02',
                 'anulation_started_at' => '2022-03-25',
@@ -40,9 +40,8 @@ class DetailSchoolPeriodsSeeder extends Seeder
                 'ordinary_ended_at' => '2022-03-08',
                 'ordinary_started_at' => '2022-03-01',
                 'school_period_id' => $currentSchoolPeriod,
-            ]
-        );
-        DetailSchoolPeriod::create(
+            ],
+
             [
                 'anulation_ended_at' => '2022-01-02',
                 'anulation_started_at' => '2021-12-25',
@@ -53,9 +52,7 @@ class DetailSchoolPeriodsSeeder extends Seeder
                 'ordinary_ended_at' => '2021-12-08',
                 'ordinary_started_at' => '2021-12-01',
                 'school_period_id' => $currentSchoolPeriod,
-            ]
-        );
-        DetailSchoolPeriod::create(
+            ],
             [
                 'anulation_ended_at' => '2021-06-02',
                 'anulation_started_at' => '2021-05-25',
@@ -66,9 +63,7 @@ class DetailSchoolPeriodsSeeder extends Seeder
                 'ordinary_ended_at' => '2021-05-08',
                 'ordinary_started_at' => '2021-05-01',
                 'school_period_id' => $historicalSchoolPeriod,
-            ]
-        );
-        DetailSchoolPeriod::create(
+            ],
             [
                 'anulation_ended_at' => '2021-04-02',
                 'anulation_started_at' => '2021-03-25',
@@ -79,9 +74,7 @@ class DetailSchoolPeriodsSeeder extends Seeder
                 'ordinary_ended_at' => '2021-03-08',
                 'ordinary_started_at' => '2021-03-01',
                 'school_period_id' => $historicalSchoolPeriod,
-            ]
-        );
-        DetailSchoolPeriod::create(
+            ],
             [
                 'anulation_ended_at' => '2021-02-02',
                 'anulation_started_at' => '2021-01-25',

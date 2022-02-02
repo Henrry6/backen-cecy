@@ -67,14 +67,14 @@ class PlanificationsSeeder extends Seeder
     {
         $faker = Factory::create();
         $courses = Course::all();
-        $culminatedState = Catalogue::where('code', State::CULMINATED)->get();
-        $approvedState = Catalogue::where('code', State::APPROVED)->get();
-        $cecy = Catalogue::where('code', 'CECY')->get();
-        $ocs = Catalogue::where('code', 'REPRESENTATIVE_OCS')->get();
-        $vicerectorposition = Catalogue::where('code', 'VICERECTOR')->get();
-        $responsableCecy = Authority::where('position_id', $cecy)->get();
-        $responsableOcs = Authority::where('position_id', $ocs)->get();
-        $vicerector = Authority::where('position_id', $vicerectorposition)->get();
+        $culminatedState = Catalogue::where('code', State::CULMINATED)->first();
+        $approvedState = Catalogue::where('code', State::APPROVED)->first();
+        $cecy = Catalogue::where('code', 'CECY')->first();
+        $ocs = Catalogue::where('code', 'REPRESENTATIVE_OCS')->first();
+        $vicerectorposition = Catalogue::where('code', 'VICERECTOR')->first();
+        $responsableCecy = Authority::where('position_id', $cecy)->first();
+        $responsableOcs = Authority::where('position_id', $ocs)->first();
+        $vicerector = Authority::where('position_id', $vicerectorposition)->first();
         $responsablesCourse = Instructor::all();
         $detailSchoolPeriods = DetailSchoolPeriod::all();
 
@@ -87,7 +87,7 @@ class PlanificationsSeeder extends Seeder
                 $planificationState =  $culminatedState;
             }
 
-            Planification::create(
+            Planification::factory()->create(
                 [
                     'course_id' => $courses[$i],
                     'detail_school_period_id' => $detailSchoolPeriods[$i],
