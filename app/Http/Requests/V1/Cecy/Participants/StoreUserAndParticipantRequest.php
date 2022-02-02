@@ -19,7 +19,7 @@ class StoreUserAndParticipantRequest extends FormRequest
             'lastname' => ['required', 'max:100'],
             'email' => ['required', 'max:100', 'email'],
             'password' => ['required', 'min:8', 'max:16'],
-            'type.id' => ['required', 'integer'],
+            'type.id' => ['required', 'integer']
         ];
     }
 
@@ -32,7 +32,7 @@ class StoreUserAndParticipantRequest extends FormRequest
             'lastname' => 'apellidos',
             'email' => 'correo electrónico',
             'password' => 'contraseña',
-            'type.id' => 'Id del tipo de participante',
+            'type.id' => 'Id del tipo de participante'
         ];
     }
 }

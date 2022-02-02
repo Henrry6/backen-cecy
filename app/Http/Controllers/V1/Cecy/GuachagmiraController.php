@@ -215,6 +215,7 @@ class GuachagmiraController extends Controller
             $user->save();
             $user->addPhones($request->input('phones'));
             $user->addEmails($request->input('emails'));
+            $user->assignRole($this->getParticipantType($request->input('type.id')));
             $participant = $this->storeParticipant($request, $user);
             $participant->save();
         });
@@ -238,9 +239,15 @@ class GuachagmiraController extends Controller
 
         $participant = new Participant();
         $participant->user()->associate($user);
-        $participant->personType()->associate(Catalogue::find($request->input('personType.id')));
+        $participant->type()->associate(Catalogue::find($request->input('type.id')));
         $participant->state()->associate($state);
         return $participant;
+    }
+
+    public function getParticipantType($particpantTypeId)
+    {
+        $participantType = Catalogue::find($particpantTypeId)->get();
+        return strtolower($participantType->code);
     }
 
     // Files
