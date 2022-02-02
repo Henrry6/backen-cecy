@@ -22,18 +22,14 @@ class ClassroomFactory extends Factory
      */
     public function definition()
     {
-        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
-        $detail_planification  = DetailPlanification::get();
-        $office =  Catalogue::where('code', $catalogue['classroom']['office']);
-        $classrooms_class =  Catalogue::where('code', $catalogue['classroom']['classroom_class']);
-        $laboratory = Catalogue::where('code', $catalogue['classroom']['laboratory']);
 
+        $types =  Catalogue::where('type', 'CLASSROOM')->get();
         return [
-            'state_id' => $this->faker->randomElement($office, $classrooms_class, $laboratory),
+            'type_id' =>  $this->faker->randomElement($types),
             'description' => $this->faker->text(),
             'capacity' => $this->faker->randomElement(['10', '40']),
-            'code' => $this->faker->string(),
-            'name' => $this->faker->text()
+            'code' => $this->faker->text($maxNbChars = 50),
+            'name' => $this->faker->text($maxNbChars = 50)
         ];
     }
 }

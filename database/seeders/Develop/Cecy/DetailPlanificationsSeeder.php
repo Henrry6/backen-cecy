@@ -28,7 +28,7 @@ class DetailPlanificationsSeeder extends Seeder
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
 
         //workdays
-        Catalogue::factory()->secuence(
+        Catalogue::create(
             [
                 'code' => $catalogue['workday']['evening'],
                 'name' => 'VESPERTINA',
@@ -49,7 +49,7 @@ class DetailPlanificationsSeeder extends Seeder
             ]
         )->create();
         //paralels
-        Catalogue::factory()->secuence(
+        Catalogue::create(
             [
                 'code' => $catalogue['parallel_name']['a'],
                 'name' => 'A',
@@ -64,7 +64,7 @@ class DetailPlanificationsSeeder extends Seeder
             ]
         )->create();
         //days
-        Catalogue::factory()->secuence(
+        Catalogue::create(
             [
                 'code' => $catalogue['day']['monday-friday'],
                 'name' => 'LUNES_VIERNES',
@@ -91,7 +91,7 @@ class DetailPlanificationsSeeder extends Seeder
             ]
         )->create();
         //detail_planification_states
-        Catalogue::factory()->secuence(
+        Catalogue::create(
             [
                 'code' => State::TO_BE_APPROVED,
                 'name' => 'POR APROBAR',

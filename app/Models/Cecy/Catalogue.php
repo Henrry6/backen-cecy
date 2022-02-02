@@ -20,7 +20,7 @@ class Catalogue extends Model implements Auditable
     use FileTrait;
     use ImageTrait;
 
-    protected $table = 'core.catalogues';
+    protected $table = 'cecy.catalogues';
 
     protected $fillable = [
         'code',

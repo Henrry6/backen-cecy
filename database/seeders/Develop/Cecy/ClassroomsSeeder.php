@@ -25,28 +25,30 @@ class ClassroomsSeeder extends Seeder
     {
         //Campos que son de catalogo
         //type_id
-        $catalogues = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
         Catalogue::factory(3)->sequence(
             [
-                'code' => $catalogues['classroom']['office'],
+                'code' => $catalogue['classroom']['office'],
                 'name' => 'Oficina',
-                'type' => $catalogues['classroom']['type'],
+                'type' => $catalogue['classroom']['type'],
                 'description' => 'Tipo de aula de clase de oficina'
             ],
             [
-                'code' => $catalogues['classroom']['classroom_class'],
+                'code' => $catalogue['classroom']['classroom_class'],
                 'name' => 'Aula de clase presencial',
-                'type' => $catalogues['classroom']['type'],
+                'type' => $catalogue['classroom']['type'],
                 'description' => 'Tipo de aula de clase aula de clase presencial'
             ],
             [
-                'code' => $catalogues['classroom']['laboratory'],
+                'code' => $catalogue['classroom']['laboratory'],
                 'name' => 'Laboratorio',
-                'type' => $catalogues['classroom']['type'],
+                'type' => $catalogue['classroom']['type'],
                 'description' => 'Tipo de aula de clase laboratorio'
             ],
         )->create();
+        echo (Catalogue::where('type', 'CLASSROOM')->get());
     }
+
     public function createClassrooms()
     {
         Classroom::factory(10)->create();
