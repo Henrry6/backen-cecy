@@ -27,7 +27,6 @@ class Course extends Model implements Auditable
         'duration',
         'evaluation_mechanisms',
         'expired_at',
-        // 'facilities',
         'free',
         'name',
         'needs',
@@ -36,20 +35,28 @@ class Course extends Model implements Auditable
         'learning_environments',
         'local_proposal',
         'objective',
-        'observation',
-        // 'practical_phase',
+        'observations',
         'practice_hours',
         'proposed_at',
         'project',
         'public',
-        // 'required_installing_sources',
         'setec_name',
         'summary',
         'target_groups',
         'teaching_strategies',
         'techniques_requisites',
-        // 'theoretical_phase',
         'theory_hours'
+    ];
+
+    protected $casts = [
+        'bibliographies' => 'array',
+        'evaluation_mechanisms' => 'array',
+        'needs' => 'array',
+        'learning_environments' => 'array',
+        'observations' => 'array',
+        'target_groups' => 'array',
+        'teaching_strategies' => 'array',
+        'techniques_requisites' => 'array',
     ];
 
     // Relationships
@@ -169,6 +176,7 @@ class Course extends Model implements Auditable
     {
         return $this->morphMany(Image::class, 'imageable');
     }
+
     // Mutators
     public function setAbbreviationAttribute($value)
     {
@@ -190,11 +198,6 @@ class Course extends Model implements Auditable
         $this->attributes['record_number'] = strtoupper($value);
     }
 
-    public function setLearningTeachingStrategyAttribute($value)
-    {
-        $this->attributes['learning_teaching_strategy'] = strtoupper($value);
-    }
-
     public function setLocalProposalAttribute($value)
     {
         $this->attributes['local_proposal'] = strtoupper($value);
@@ -205,24 +208,9 @@ class Course extends Model implements Auditable
         $this->attributes['objective'] = strtoupper($value);
     }
 
-    public function setObservationAttribute($value)
-    {
-        $this->attributes['observation'] = strtoupper($value);
-    }
-
-    public function setPracticeRequiredResourcesAttribute($value)
-    {
-        $this->attributes['practice_required_resources'] = strtoupper($value);
-    }
-
     public function setProjectAttribute($value)
     {
         $this->attributes['project'] = strtoupper($value);
-    }
-
-    public function setRequiredInstallingSourcesAttribute($value)
-    {
-        $this->attributes['required_installing_sources'] = strtoupper($value);
     }
 
     public function setSetecNameAttribute($value)
@@ -321,13 +309,6 @@ class Course extends Model implements Auditable
         }
     }
 
-    // public function scopePracticeRequiredResources($query, $practice_required_resources)
-    // {
-    //     if ($practice_required_resources) {
-    //         return $query->orWhere('practice_required_resources', $practice_required_resources);
-    //     }
-    // }
-
     public function scopeProject($query, $project)
     {
         if ($project) {
@@ -339,13 +320,6 @@ class Course extends Model implements Auditable
     {
         if ($public) {
             return $query->orWhere('year', $public);
-        }
-    }
-
-    public function scopeRequiredInstallingSources($query, $required_installing_sources)
-    {
-        if ($required_installing_sources) {
-            return $query->orWhere('required_installing_sources', $required_installing_sources);
         }
     }
 

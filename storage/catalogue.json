@@ -87,11 +87,17 @@
         "assistance": "ASSISTANCE",
         "approval":"APPROVAL"
     },
-    "frecuency": {
-        "type": "FRECUENCY"
+    "frequency": {
+        "type": "FREQUENCY"
     },
     "area": {
-        "type": "AREA"
+        "type": "AREA",
+        "a": "A",
+        "b": "B",
+        "c": "C",
+        "d": "D",
+        "e": "E",
+        "f": "F"
     },
     "speciality_area": {
         "type": "SPECIALITY_AREA",

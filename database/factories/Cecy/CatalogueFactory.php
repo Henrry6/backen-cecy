@@ -13,6 +13,7 @@ class CatalogueFactory extends Factory
      * @var string
      */
     protected $model = Catalogue::class;
+
     /**
      * Define the model's default state.
      *
@@ -21,7 +22,7 @@ class CatalogueFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'code' => $this->faker->word()
         ];
     }
 }

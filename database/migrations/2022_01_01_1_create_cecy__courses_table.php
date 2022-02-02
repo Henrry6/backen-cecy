@@ -15,66 +15,77 @@ class CreateCecyCoursesTable extends Migration
 
             $table->foreignId('academic_period_id')
                 ->comment('Primero, segundo, tercero, cuarto, quinto, sexto, séptimo')
+                ->nullable()
                 ->constrained('cecy.catalogues');
 
             $table->foreignId('entity_certification_id')
                 ->comment('Institución que lo avala, Senecyt, Setec, Setec')
+                ->nullable()
                 ->constrained('cecy.catalogues');
 
             $table->foreignId('career_id')
                 ->comment('El id de la carrera que oferto el curso')
+                ->nullable()
                 ->constrained('core.careers');
 
             $table->foreignId('category_id')
                 ->comment('Categoría a la cual pertenece el curso, ingles, pedagógico, programación ')
+                ->nullable()
                 ->constrained('cecy.catalogues');
 
             $table->foreignId('formation_type_id')
                 ->comment('Tipo de capacitación puede ser webinar, taller, curso')
+                ->nullable()
                 ->constrained('cecy.catalogues');
 
             $table->foreignId('certified_type_id')
                 ->comment('Curso, Taller, Webinar')
+                ->nullable()
                 ->constrained('cecy.catalogues');
 
             $table->foreignId('compliance_indicator_id')
                 ->comment('Por averigurar campo añadido 21/01')
-                ->constrained('cecy.catalogues')
-                ->nullable();
+                ->nullable()
+                ->constrained('cecy.catalogues');
 
             $table->foreignId('control_id')
                 ->comment('Por averigurar campo añadido 21/01')
-                ->constrained('cecy.catalogues')
-                ->nullable();
+                ->nullable()
+                ->constrained('cecy.catalogues');
 
             $table->foreignId('course_type_id')
                 ->comment('Ténico, Administrativo')
+                ->nullable()
                 ->constrained('cecy.catalogues');
 
             $table->foreignId('frequency_id')
                 ->comment('Por averigurar campo añadido 21/01')
-                ->constrained('cecy.catalogues')
-                ->nullable();
+                ->nullable()
+                ->constrained('cecy.catalogues');
 
             $table->foreignId('modality_id')
                 ->comment('Presencial, Virtual')
+                ->nullable()
                 ->constrained('cecy.catalogues');
 
             $table->foreignId('means_verification_id')
                 ->comment('Por averigurar campo añadido 21/01')
-                ->constrained('cecy.catalogues')
-                ->nullable();
+                ->nullable()
+                ->constrained('cecy.catalogues');
 
             $table->foreignId('responsible_id')
                 ->comment('Id del docente responsable del curso')
+                ->nullable()
                 ->constrained('cecy.instructors');
 
             $table->foreignId('speciality_id')
                 ->comment('')
+                ->nullable()
                 ->constrained('cecy.catalogues');
 
             $table->foreignId('state_id')
                 ->comment('Aprobado, rechazado, pendiente')
+                ->nullable()
                 ->constrained('cecy.catalogues');
 
             $table->string('abbreviation')
@@ -113,10 +124,6 @@ class CreateCecyCoursesTable extends Migration
                 ->comment('Fecha de expiración del curso')
                 ->nullable();
 
-            // $table->json('facilities')
-            //     ->comment('instalaciones')
-            //     ->nullable();
-
             $table->boolean('free')
                 ->comment('Si el curso es gratuito es true y si no es false')
                 ->nullable();
@@ -148,12 +155,12 @@ class CreateCecyCoursesTable extends Migration
                 ->comment('Objetivo del curso')
                 ->nullable();
 
-            $table->string('observation')
+            $table->json('observations')
                 ->comment('Observación de curso')
                 ->nullable();
 
-                // $table->json('practical_phases')
-                // ->comment('Fase práctica')
+            // $table->json('practical_phases')
+            // ->comment('Fase práctica')
             // ->nullable();
 
             $table->integer('practice_hours')

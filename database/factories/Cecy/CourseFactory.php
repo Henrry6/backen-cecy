@@ -18,39 +18,39 @@ class CourseFactory extends Factory
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
         $academicPeriods = Catalogue::where('type', $catalogue['academic_period']['type'])->get();
         // $areas = Catalogue::where('type', $catalogue['area']['type'])->get();
-        $entityCertification = Catalogue::where('type', $catalogue['entity_certification']['type'])->get();
-        $career = Career::get();
-        $responsible = Instructor::get();
-        $category = Catalogue::where('type', $catalogue['category']['type'])->get();
-        $formationType = Catalogue::where('type', $catalogue['formation']['type'])->get();
-        $certificateType = Catalogue::where('type', $catalogue['certificate_type']['type'])->get();
-        $compliance = Catalogue::where('type', $catalogue['compliance']['type'])->get();
-        $control = Catalogue::where('type', $catalogue['control']['type'])->get();
-        $courseType = Catalogue::where('type', $catalogue['course']['type'])->get();
-        $frencuency = Catalogue::where('type', $catalogue['frecuency']['type'])->get();
-        $modality = Catalogue::where('type', $catalogue['modality']['type'])->get();
-        $meansVerification = Catalogue::where('type', $catalogue['means_verification']['type'])->get();
-        $speciality = Catalogue::where('type', $catalogue['speciality_area']['type'])->get();
-        $state = Catalogue::where('type', $catalogue['course_state']['type'])->get();
+        $entityCertifications = Catalogue::where('type', $catalogue['entity_certification']['type'])->get();
+        $careers = Career::get();
+        $responsibles = Instructor::get();
+        $categories = Catalogue::where('type', $catalogue['category']['type'])->get();
+        $formationTypes = Catalogue::where('type', $catalogue['formation']['type'])->get();
+        $certificateTypes = Catalogue::where('type', $catalogue['certificate_type']['type'])->get();
+        $compliances = Catalogue::where('type', $catalogue['compliance']['type'])->get();
+        $controls = Catalogue::where('type', $catalogue['control']['type'])->get();
+        $courseTypes = Catalogue::where('type', $catalogue['course']['type'])->get();
+        $frequencies = Catalogue::where('type', $catalogue['frequency']['type'])->get();
+        $modalities = Catalogue::where('type', $catalogue['modality']['type'])->get();
+        $meansVerifications = Catalogue::where('type', $catalogue['means_verification']['type'])->get();
+        $specialities = Catalogue::where('type', $catalogue['speciality_area']['type'])->get();
+        $states = Catalogue::where('type', $catalogue['course_state']['type'])->get();
 
         return [
             'academic_period_id' => $this->faker->randomElement($academicPeriods),
-            'entity_certification_id' => $this->faker->randomElement($entityCertification),
-            'career_id' => $this->faker->randomElement($career[rand(0, sizeof($career) - 1)]),
-            'category_id' => $this->faker->randomElement($category),
-            'formation_type_id' => $this->faker->randomElement($formationType),
-            'certified_type_id' => $this->faker->randomElement($certificateType),
-            'compliance_indicators_id' => $this->faker->randomElement($compliance),
-            'control_id' => $this->faker->randomElement($control),
-            'course_type_id' => $this->faker->randomElement($courseType),
-            'frecuency_id' => $this->faker->randomElement($frencuency),
-            'modality_id' => $this->faker->randomElement($modality),
-            'means_verification_id' => $this->faker->randomElement($meansVerification),
-            'speciality_id' => $this->faker->randomElement($speciality),
-            'responsible_id' => $this->faker->randomElement($responsible[rand(0, sizeof($responsible) - 1)]),
-            'state_id' => $this->faker->randomElement($state),
+            'entity_certification_id' => $this->faker->randomElement($entityCertifications),
+            'career_id' => $this->faker->randomElement($careers),
+            'category_id' => $this->faker->randomElement($categories),
+            'formation_type_id' => $this->faker->randomElement($formationTypes),
+            'certified_type_id' => $this->faker->randomElement($certificateTypes),
+            'compliance_indicator_id' => $this->faker->randomElement($compliances),
+            'control_id' => $this->faker->randomElement($controls),
+            'course_type_id' => $this->faker->randomElement($courseTypes),
+            'frequency_id' => $this->faker->randomElement($frequencies),
+            'modality_id' => $this->faker->randomElement($modalities),
+            'means_verification_id' => $this->faker->randomElement($meansVerifications),
+            'speciality_id' => $this->faker->randomElement($specialities),
+            'responsible_id' => $this->faker->randomElement($responsibles),
+            'state_id' => $this->faker->randomElement($states),
             'abbreviation' => $this->faker->word(),
-            'alignment' => $this->faker->words(3),
+            'alignment' => $this->faker->word(),
             'approved_at' => $this->faker->date('Y_m_d'),
             'bibliographies' => $this->faker->sentences(),
             'code' => $this->faker->numerify('COD-####'),
@@ -58,46 +58,37 @@ class CourseFactory extends Factory
             'duration' => $this->faker->numberBetween(40, 200),
             'evaluation_mechanisms' => [
                 'a' => [
-                    'diagnostica' => $this->faker->words(2),
-                    'formativa' => $this->faker->words(2)
+                    'diagnostica' => $this->faker->word(2),
+                    'formativa' => $this->faker->word(2)
                 ],
                 'b' => [
-                    'diagnostica' => $this->faker->words(2),
-                    'formativa' => $this->faker->words(2)
+                    'diagnostica' => $this->faker->word(2),
+                    'formativa' => $this->faker->word(2)
                 ],
                 'c' => [
-                    'diagnostica' => $this->faker->words(2),
-                    'formativa' => $this->faker->words(2)
+                    'diagnostica' => $this->faker->word(2),
+                    'formativa' => $this->faker->word(2)
                 ]
             ],
             'expired_at' => $this->faker->date('Y_m_d'),
-            'free' => $this->faker->randomElement(true, false),
-            'name' => $this->faker->words(3),
+            'free' => $this->faker->boolean(),
+            'name' => $this->faker->word(),
             'needs' => $this->faker->words(6),
             'needed_at' => $this->faker->date('Y_m_d'),
             'record_number' => $this->faker->regexify('[A-Z]{5}[0-4]{3}'),
-            'learning_environments' => [
-                'enviroments' => $this->faker->words(3)
-            ],
+            'learning_environments' => $this->faker->words(3),
             'local_proposal' => $this->faker->sentence(8),
             'objective' => $this->faker->sentence(10),
-            'observation' => $this->faker->sentence(8),
+            'observations' => $this->faker->sentence(8),
             'practice_hours' => $this->faker->numberBetween(40, 200),
             'proposed_at' => $this->faker->date('Y_m_d'),
             'project' => $this->faker->sentence(8),
-            'public' => $this->faker->randomElement(true, false),
-            // 'required_installing_sources' => 'contenido',
-            'setec_name' => $this->faker->words(3),
-            'summary' => $this->faker->sentence(10),
-            'target_groups' => [
-                'target' => $this->faker->words(3)
-            ],
-            'teaching_strategies' => [
-                'strategies' => $this->faker->words(3)
-            ],
-            'techniques_requisites' => [
-                'requisites' => $this->faker->words(3)
-            ],
+            'public' => $this->faker->boolean(),
+            'setec_name' => $this->faker->word(),
+            'summary' => $this->faker->sentence(),
+            'target_groups' => $this->faker->words(3),
+            'teaching_strategies' => $this->faker->words(3),
+            'techniques_requisites' => $this->faker->words(3),
             'theory_hours' => $this->faker->numberBetween(40, 200),
         ];
     }

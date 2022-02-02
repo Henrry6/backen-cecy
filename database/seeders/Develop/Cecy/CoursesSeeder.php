@@ -16,24 +16,8 @@ class CoursesSeeder extends Seeder
 
     public function createCoursesCatalogue()
     {
-        //Campos que son de catalogo
-        //academic_period_id (hecho)
-        //area_id    (debe hacerlo henrry)
-        //entity_certification_id (hecho)
-        //category_id (hecho)
-        //capacitation_type_id (hecho)
-        //certified_type_id (hecho)
-        //compliance_indicators_id (Aun sin valores)
-        //control_id  (Aun sin valores)
-        //course_type_id (hecho)
-        //frecuency_id (Aun sin valores)
-        //modality_id (hecho)
-        //means_verification_id (Aun sin valores)
-        //participant_type_id (hecho)
-        //speciality_id (debe hacerlo henrry)
-        //state_id (hecho)
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
-        Catalogue::factory()->sequence(
+        Catalogue::factory(38)->sequence(
             [
                 'code' => $catalogue['academic_period']['first'],
                 'name' => 'PRIMERO',
@@ -77,33 +61,13 @@ class CoursesSeeder extends Seeder
                 'description' => 'Septimo semestre'
             ],
             [
-                'code' => $catalogue['area']['a'],
                 'name' => 'ADMINISTRACIÓN Y LEGISLACIÓN',
                 'type' => $catalogue['area']['type'],
                 'description' => null
             ],
             [
-                'code' => $catalogue['area']['b'],
                 'name' => 'AGRONOMÍA',
                 'type' => $catalogue['area']['type'],
-                'description' => null
-            ],
-            [
-                'code' => $catalogue['speciality_area']['a.1'],
-                'name' => 'Administración General (Pública, Empresas, Microempresas, Cooperativas, Aduanera, Agrícola, Agropecuaria, Agroindustrial, Bancaria, Financiera, Forestal, Hospitalaria, Hotelera, Inmobiliaria, Pesquera, Minera, Etc.)',
-                'type' => $catalogue['speciality_area']['type'],
-                'description' => null
-            ],
-            [
-                'code' => $catalogue['speciality_area']['a.2'],
-                'name' => 'Gestión del Talento Humano (Manejo de Personal, Desempeño, Motivación, Liderazgo, Coaching, Trabajo en Equipo, Selección por Competencias, Plan Interno de Carrera, Comunicación Organizacional, Profesiogramas)',
-                'type' => $catalogue['speciality_area']['type'],
-                'description' => null
-            ],
-            [
-                'code' => $catalogue['speciality_area']['a.3'],
-                'name' => 'Administración Contable y de Costos (Matemática Financiera, Estadística, Tributaria, Normas de Contabilidad, Auditorías Financieras, Contables, de Costos y Relacionadas, Normas Internacionales de Información Financiera Niif)',
-                'type' => $catalogue['speciality_area']['type'],
                 'description' => null
             ],
             [
@@ -281,7 +245,35 @@ class CoursesSeeder extends Seeder
                 'description' => 'Cuando el estado del curso es no parobado'
             ]
         )->create();
+
+        Catalogue::factory(4)->sequence(
+            [
+                'name' => 'Administración General (Pública, Empresas, Microempresas, Cooperativas, Aduanera, Agrícola, Agropecuaria, Agroindustrial, Bancaria, Financiera, Forestal, Hospitalaria, Hotelera, Inmobiliaria, Pesquera, Minera, Etc.)',
+                'type' => $catalogue['speciality_area']['type'],
+//                'parent_id' => (Catalogue::firstWhere('code', $catalogue['area']['a']))->id
+                'parent_id' => 1
+            ],
+            [
+                'name' => 'Gestión del Talento Humano (Manejo de Personal, Desempeño, Motivación, Liderazgo, Coaching, Trabajo en Equipo, Selección por Competencias, Plan Interno de Carrera, Comunicación Organizacional, Profesiogramas)',
+                'type' => $catalogue['speciality_area']['type'],
+//                'parent_id' => (Catalogue::firstWhere('code', $catalogue['area']['a']))->id
+                'parent_id' => 2
+            ],
+            [
+                'name' => 'Administración de Costos',
+                'type' => $catalogue['speciality_area']['type'],
+//                'parent_id' => (Catalogue::firstWhere('code', $catalogue['area']['b']))->id
+                'parent_id' => 3
+            ],
+            [
+                'name' => 'Administración Contable',
+                'type' => $catalogue['speciality_area']['type'],
+//                'parent_id' => (Catalogue::firstWhere('code', $catalogue['area']['b']))->id
+                'parent_id' => 4
+            ]
+        )->create();
     }
+
     public function createCourses()
     {
         Course::factory(6)->create();
