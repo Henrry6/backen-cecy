@@ -4,7 +4,7 @@ namespace App\Http\Requests\V1\Cecy\Attendance;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class GetAttendanceByParticipantRequest extends FormRequest
+class GetAttendancesByParticipantRequest extends FormRequest
 {
     public function authorize()
     {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\V1\Core\Certificates;
+namespace App\Http\Requests\V1\Cecy\Certificates;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -24,6 +24,9 @@ class IndexCertificateRequest extends FormRequest
     public function rules()
     {
         return [
+            'certificateType' => ['required','integer'],
+            'state.id' => ['required','integer'],
+            'code' => ['required']
 
         ];
     }
@@ -31,6 +34,9 @@ class IndexCertificateRequest extends FormRequest
     public function attributes()
     {
         return [
+            'certificateType' => 'Tipo de certificado',
+            'state.id' => 'Estado del certificado',
+            'code' => 'codigo del certificado'
 
         ];
     }

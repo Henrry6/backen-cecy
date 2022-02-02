@@ -4,6 +4,7 @@ namespace App\Http\Resources\V1\Cecy\DetailPlanifications;
 
 use App\Http\Resources\V1\Cecy\Catalogues\CatalogueResource;
 use App\Http\Resources\V1\Cecy\Classrooms\ClassroomResource;
+use App\Http\Resources\V1\Cecy\Courses\CourseResource;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -13,6 +14,7 @@ class DetailPlanificationResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'course' => CourseResource::make($this->course),
             'day' => CatalogueResource::make($this->day_id),
             'classroom' => ClassroomResource::make($this->classroom_id),
             'parallel' => CatalogueResource::make($this->parallel_id),
