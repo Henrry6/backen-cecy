@@ -111,7 +111,7 @@ class ParticipantsSeeder extends Seeder
                 [
                     'state_id' => $faker->randomElement($states),
                     'type_id' => $faker->randomElement($types),
-                    'user_id' => $faker->randomElement($user)
+                    'user_id' => $user->id
                 ]
             );
         }

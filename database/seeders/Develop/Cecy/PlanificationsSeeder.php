@@ -28,8 +28,7 @@ class PlanificationsSeeder extends Seeder
     public function createPlanificationsCatalogue()
     {
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
-        //Campos que son de catalogo
-        //state_id
+
         Catalogue::factory()->sequence(
             [
                 'code' => State::TO_BE_APPROVED,
@@ -66,21 +65,21 @@ class PlanificationsSeeder extends Seeder
     public function createPlanifications()
     {
         $faker = Factory::create();
-        $courses = Course::all();
+        $courses = Course::get();
         $culminatedState = Catalogue::where('code', State::CULMINATED)->first();
         $approvedState = Catalogue::where('code', State::APPROVED)->first();
         $cecy = Catalogue::where('code', 'CECY')->first();
         $ocs = Catalogue::where('code', 'REPRESENTATIVE_OCS')->first();
         $vicerectorposition = Catalogue::where('code', 'VICERECTOR')->first();
-        $responsableCecy = Authority::where('position_id', $cecy)->first();
-        $responsableOcs = Authority::where('position_id', $ocs)->first();
-        $vicerector = Authority::where('position_id', $vicerectorposition)->first();
-        $responsablesCourse = Instructor::all();
-        $detailSchoolPeriods = DetailSchoolPeriod::all();
+        $responsableCecy = Authority::where('position_id', $cecy->id)->first();
+        $responsableOcs = Authority::where('position_id', $ocs->id)->first();
+        $vicerector = Authority::where('position_id', $vicerectorposition->id)->first();
+        $responsablesCourse = Instructor::get();
+        $detailSchoolPeriods = DetailSchoolPeriod::get();
 
         for ($i = 1; $i < 6; $i++) {
-            $schoolPeriod = $detailSchoolPeriods[$i]->schoolPeriod();
-            $state = $schoolPeriod->state();
+            $schoolPeriod = $detailSchoolPeriods[$i]->schoolPeriod()->first();
+            $state = $schoolPeriod->state()->first();
             $planificationState =  $approvedState;
 
             if ($state->code === State::HISTORICAL) {
@@ -89,18 +88,18 @@ class PlanificationsSeeder extends Seeder
 
             Planification::factory()->sequence(
                 [
-                    'course_id' => $courses[$i],
-                    'detail_school_period_id' => $detailSchoolPeriods[$i],
-                    'vicerector_id' => $vicerector,
-                    'responsible_course_id' => $responsablesCourse[rand(0, sizeof($responsablesCourse) - 1)],
-                    'responsible_ocs_id' => $responsableOcs,
-                    'responsible_cecy_id' => $responsableCecy,
+                    'course_id' => ($courses[$i])->id,
+                    'detail_school_period_id' => ($detailSchoolPeriods[$i])->id,
+                    'vicerector_id' => $vicerector->id,
+                    'responsible_course_id' => ($responsablesCourse[rand(0, sizeof($responsablesCourse) - 1)])->id,
+                    'responsible_ocs_id' => $responsableOcs->id,
+                    'responsible_cecy_id' => $responsableCecy->id,
                     'state_id' => $planificationState->id,
                     'approved_at' => $faker->date(),
                     'code' => $faker->word(),
                     'ended_at' => $faker->date('+2 months', '+3 months'),
-                    'needs' => json_encode(["necesidad_1" => $faker->sentences(), "necesidad_2" => $faker->sentences()]),
-                    'observations' => json_encode(["observación_1" => $faker->sentences(), "observación_2" => $faker->sentences()]),
+                    'needs' => $faker->sentences(),
+                    'observations' => $faker->sentences(),
                     'started_at' => $faker->dateTimeBetween('-1 months', '+1 months'),
                 ]
             )->create();
