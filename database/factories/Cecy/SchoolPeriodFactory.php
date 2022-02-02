@@ -1,18 +1,18 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Cecy;
 
-use App\Models\Cecy\DetailSchoolPeriod;
+use App\Models\Cecy\SchoolPeriod;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class DetailSchoolPeriodsFactory extends Factory
+class SchoolPeriodFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = DetailSchoolPeriod::class;
+    protected $model = SchoolPeriod::class;
     /**
      * Define the model's default state.
      *
