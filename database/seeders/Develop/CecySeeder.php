@@ -38,7 +38,7 @@ class CecySeeder extends Seeder
     {
         $this->call([
             //CecyCatalogueSeeder::class,
-            //ClassroomsSeeder::class,
+            ClassroomsSeeder::class,
             InstructorsSeeder::class,
             //CoursesSeeder::class,
             InstitutionsSeeder::class,
