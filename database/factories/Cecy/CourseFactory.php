@@ -62,24 +62,28 @@ class CourseFactory extends Factory
             'abbreviation' => $this->faker->word(),
             'alignment' => $this->faker->words(3),
             'approved_at' => $this->faker->date('Y_m_d'),
-            'bibliographies' => [
-                'bibliographies' => $this->faker->uuid()
-            ],
+            'bibliographies' => $this->faker->sentences(),
             'code' => $this->faker->numerify('COD-####'),
             'cost' => $this->faker->numberBetween(0, 100),
             'duration' => $this->faker->numberBetween(40, 200),
             'evaluation_mechanisms' => [
-                'mechanisms' => [
-                    'diagnostica' =>  $this->faker->words(2),
+                'a' => [
+                    'diagnostica' => $this->faker->words(2),
+                    'formativa' => $this->faker->words(2)
+                ],
+                'b' => [
+                    'diagnostica' => $this->faker->words(2),
+                    'formativa' => $this->faker->words(2)
+                ],
+                'c' => [
+                    'diagnostica' => $this->faker->words(2),
                     'formativa' => $this->faker->words(2)
                 ]
             ],
             'expired_at' => $this->faker->date('Y_m_d'),
             'free' => $this->faker->randomElement(true, false),
             'name' => $this->faker->words(3),
-            'needs' => [
-                'necesidades' => $this->faker->words(6)
-            ],
+            'needs' => $this->faker->words(6),
             'needed_at' => $this->faker->date('Y_m_d'),
             'record_number' => $this->faker->regexify('[A-Z]{5}[0-4]{3}'),
             'learning_environments' => [
