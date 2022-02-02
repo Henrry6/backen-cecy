@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Requests\V1\Cecy\Participants;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -12,7 +13,7 @@ class UpdateParticipantRequest extends FormRequest
     public function rules()
     {
         return [
-            'person_type.id' => ['required', 'integer'],
+            'personType.id' => ['required', 'integer'],
             'state.id' => ['required', 'integer'],
             'user.id' => ['required', 'integer'],
         ];
@@ -21,7 +22,7 @@ class UpdateParticipantRequest extends FormRequest
     public function attributes()
     {
         return [
-            'person_type.id' => 'Tipo de participante',
+            'personType.id' => 'Tipo de participante',
             'state.id' => 'Estado del partipante',
             'user.id' => 'Usuario',
         ];

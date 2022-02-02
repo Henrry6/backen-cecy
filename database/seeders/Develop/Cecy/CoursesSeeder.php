@@ -3,8 +3,8 @@
 namespace Database\Seeders\Develop\Cecy;
 
 use App\Models\Cecy\Catalogue;
+use App\Models\Cecy\Course;
 use Illuminate\Database\Seeder;
-use Faker\Factory;
 
 class CoursesSeeder extends Seeder
 {
@@ -284,6 +284,6 @@ class CoursesSeeder extends Seeder
     }
     public function createCourses()
     {
-        Couser::Factory(6)->create();
+        Course::factory(6)->create();
     }
 }

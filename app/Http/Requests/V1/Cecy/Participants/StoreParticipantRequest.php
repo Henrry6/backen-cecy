@@ -13,7 +13,7 @@ class StoreParticipantRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_id' => ['required', 'integer'],
+            'user.id' => ['required', 'integer'],
             'type.id' => ['required', 'integer'],
             'state.id' => ['required', 'integer'],
         ];
@@ -22,7 +22,7 @@ class StoreParticipantRequest extends FormRequest
     public function attributes()
     {
         return [
-            'user_id' => 'Id del usuario',
+            'user.id' => 'Id del usuario',
             'type.id' => 'Id del tipo de participante',
             'state.id' => 'Id del estado del participante'
         ];

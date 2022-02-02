@@ -20,7 +20,7 @@ class Catalogue extends Model implements Auditable
     use FileTrait;
     use ImageTrait;
 
-    protected $table = 'core.catalogues';
+    protected $table = 'cecy.catalogues';
 
     protected $fillable = [
         'code',
@@ -36,7 +36,7 @@ class Catalogue extends Model implements Auditable
         return $this->belongsTo(Catalogue::class, 'parent_id', 'core.catalogues');
     }
 
-    public function course()
+    public function courses()
     {
         return $this->belongsToMany(Course::class, 'participant_course', 'participant_type_id', 'course_id');
     }

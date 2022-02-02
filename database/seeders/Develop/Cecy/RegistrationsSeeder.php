@@ -105,9 +105,9 @@ class RegistrationsSeeder extends Seeder
         $states = Catalogue::where('type', 'REGISTRATION_STATE')->get();
         $states_course = Catalogue::where('type', 'STATE_COURSE')->get();
         $types = Catalogue::where('type', 'REGISTRATION')->get();
+        $participant = 36;
 
         foreach ($detailPlanifications as $detailPlanification) {
-            $participant = 36;
             $user =  User::find($participant);
             $user_roles =  $user->roles();
             for ($i = 0; $i <= 4; $i++) {

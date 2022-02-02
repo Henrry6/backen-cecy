@@ -14,7 +14,7 @@ class UpdateCertificateRequest extends FormRequest
     {
         return [
             'certificate_type' => ['required','integer'],
-            'state_id' => ['required','integer'],
+            'state.id' => ['required','integer'],
             'code' => ['required']
         ];
     }
@@ -23,7 +23,7 @@ class UpdateCertificateRequest extends FormRequest
     {
         return [
             'certificate_type' => 'Tipo de certificado',
-            'state_id' => 'Estado del certificado',
+            'state.id' => 'Estado del certificado',
             'code' => 'codigo del certificado'
         ];
     }

@@ -74,7 +74,7 @@ class Course extends Model implements Auditable
         return $this->belongsTo(Career::class);
     }
 
-    public function catalogue()
+    public function catalogues()
     {
         return $this->belongsToMany(Catalogue::class, 'participant_course', 'course_id' . 'participant_type_id');
     }
