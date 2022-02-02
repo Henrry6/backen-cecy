@@ -106,12 +106,14 @@ class ParticipantsSeeder extends Seeder
         $types = Catalogue::where('type', 'PARTICIPANT')->get();
         $users = User::where('id', '>', 36)->where('id', '<', 85)->get();
 
-        Participant::factory()->create(
-            [
-                'state_id' => $faker->randomElement($states),
-                'type_id' => $faker->randomElement($types),
-                'user_id' => $faker->randomElement($users)
-            ]
-        );
+        foreach ($users  as $user) {
+            Participant::factory()->create(
+                [
+                    'state_id' => $faker->randomElement($states),
+                    'type_id' => $faker->randomElement($types),
+                    'user_id' => $faker->randomElement($user)
+                ]
+            );
+        }
     }
 }

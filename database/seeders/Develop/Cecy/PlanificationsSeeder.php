@@ -87,14 +87,14 @@ class PlanificationsSeeder extends Seeder
                 $planificationState =  $culminatedState;
             }
 
-            Planification::factory()->create(
+            Planification::factory()->sequence(
                 [
                     'course_id' => $courses[$i],
                     'detail_school_period_id' => $detailSchoolPeriods[$i],
-                    'vicerector_id' => $vicerector->id(),
+                    'vicerector_id' => $vicerector,
                     'responsible_course_id' => $responsablesCourse[rand(0, sizeof($responsablesCourse) - 1)],
-                    'responsible_ocs_id' => $responsableOcs->id(),
-                    'responsible_cecy_id' => $responsableCecy->id(),
+                    'responsible_ocs_id' => $responsableOcs,
+                    'responsible_cecy_id' => $responsableCecy,
                     'state_id' => $planificationState->id,
                     'approved_at' => $faker->date(),
                     'code' => $faker->word(),
@@ -103,7 +103,7 @@ class PlanificationsSeeder extends Seeder
                     'observations' => json_encode(["observación_1" => $faker->sentences(), "observación_2" => $faker->sentences()]),
                     'started_at' => $faker->dateTimeBetween('-1 months', '+1 months'),
                 ]
-            );
+            )->create();
         }
     }
 }
