@@ -34,7 +34,7 @@ class RegistrationsSeeder extends Seeder
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
 
         //type_id
-        Catalogue::factory()->secuence(
+        Catalogue::factory()->sequence(
             [
                 'code' => $catalogue['registration']['special'],
                 'name' => 'Especial',

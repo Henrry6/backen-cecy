@@ -43,7 +43,6 @@ class CreateCecyRegistrationsTable extends Migration
                 ->comment('Tipo de participante: Externo, docente, GAD, senecyt')
                 ->constrained('cecy.catalogues');
 
-
             $table->unsignedFloat('final_grade')
                 ->nullable()
                 ->comment('nota final');

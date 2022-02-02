@@ -30,7 +30,7 @@ class PlanificationsSeeder extends Seeder
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
         //Campos que son de catalogo
         //state_id
-        Catalogue::factory()->secuence(
+        Catalogue::factory()->sequence(
             [
                 'code' => State::TO_BE_APPROVED,
                 'name' => 'POR APROBADO',
@@ -82,7 +82,7 @@ class PlanificationsSeeder extends Seeder
             $schoolPeriod = $detailSchoolPeriods[$i]->schoolPeriod();
             $state = $schoolPeriod->state();
             $planificationState =  $approvedState;
-            
+
             if ($state->code === State::HISTORICAL) {
                 $planificationState =  $culminatedState;
             }

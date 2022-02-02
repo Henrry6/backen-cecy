@@ -21,6 +21,7 @@ class ParticipantsSeeder extends Seeder
         $this->createParticipantCatalogue();
         $this->createParticipants();
     }
+
     public function createParticipantCatalogue()
     {
         //Campos que son de catalogo
@@ -96,24 +97,21 @@ class ParticipantsSeeder extends Seeder
             ]
         )->create();
     }
+
     public function createParticipants()
     {
         $faker = Factory::create();
 
         $states = Catalogue::where('type', 'PARTICIPANT_STATE')->get();
         $types = Catalogue::where('type', 'PARTICIPANT')->get();
+        $users = User::where('id', '>', 36)->where('id', '<', 85)->get();
 
-
-        for ($i = 36; $i <= 85; $i++) {
-            $user =  User::find($i);
-            $user_roles =  $user->roles();
-            Participant::factory()->create(
-                [
-                    'state_id' => $faker->randomElement($states),
-                    'type_id' => $user_roles[0],
-                    'user_id' => $i
-                ]
-            )->create();
-        }
+        Participant::factory()->create(
+            [
+                'state_id' => $faker->randomElement($states),
+                'type_id' => $faker->randomElement($types),
+                'user_id' => $faker->randomElement($users)
+            ]
+        );
     }
 }

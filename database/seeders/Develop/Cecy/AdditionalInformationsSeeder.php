@@ -29,7 +29,7 @@ class AdditionalInformationsSeeder extends Seeder
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
 
         //type_id
-        Catalogue::factory()->secuence(
+        Catalogue::factory()->sequence(
             [
                 'code' => $catalogue['level_instruction']['primary'],
                 'name' => 'Primaria',
@@ -71,7 +71,7 @@ class AdditionalInformationsSeeder extends Seeder
 
 
         foreach ($registrations as $registration) {
-            AdditionalInformation::factory()->secuence([
+            AdditionalInformation::factory()->sequence([
                 'level_instruction_id' => $faker->randomElement($levelInstructions),
                 'registration_id' => $registration->id(),
                 'company_activity' => $faker->name(),
