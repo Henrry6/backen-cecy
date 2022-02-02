@@ -18,7 +18,7 @@ class AuthoritiesSeeder extends Seeder
     public function run()
     {
         $this->createAuthoritiesCatalogue();
-        $this->createAuthoritiess();
+        //$this->createAuthoritiess();
     }
 
     public function createAuthoritiesCatalogue()
@@ -90,52 +90,48 @@ class AuthoritiesSeeder extends Seeder
         $faker = Factory::create();
 
         $institutions = Institution::get();
-        $position_rector = Catalogue::where('code', $catalogue['position']['rector']);
-        $position_vicerector = Catalogue::where('code', $catalogue['position']['vicerector']);
-        $position_representative_ocs = Catalogue::where('code', $catalogue['position']['representative_ocs']);
-        $position_cecy = Catalogue::where('code', $catalogue['position']['cecy']);
+        $positionRector = Catalogue::where('code', $catalogue['position']['rector']);
+        $positionVicerector = Catalogue::where('code', $catalogue['position']['vicerector']);
+        $positionRepresentativeOcs = Catalogue::where('code', $catalogue['position']['representative_ocs']);
+        $positionCecy = Catalogue::where('code', $catalogue['position']['cecy']);
         $state = Catalogue::where('code', $catalogue['authority_state']['active']);
 
         Authority::factory(4)->sequence(
-            //RECTOR
             [
-                'intitution_id' => $this->$faker->randomElement($institutions),
-                'position_id' => $position_rector->id(),
+                'intitution_id' => $faker->randomElement($institutions),
+                'position_id' => $positionRector,
                 'state_id' => $state,
                 'user_id' => 2,
-                'position_started_at' => $this->$faker->dateTimeBetween('-1 months', '+1 months'),
-                'position_ended_at' => $this->$faker->dateTimeBetween('+2 months', '+3 months'),
-                'electronic_signature' => $this->$faker->text()
+                'position_started_at' => $faker->dateTime->format('Y-m-d H:i:s'),
+                'position_ended_at' => $faker->dateTimeBetween('+2 months', '+3 months')->format('Y-m-d H:i:s'),
+                'electronic_signature' => $faker->text($maxNbChars = 50)
             ],
-            //VICERECTOR
             [
-                'intitution_id' => $this->$faker->randomElement($institutions),
-                'position_id' => $position_vicerector->id(),
+                'intitution_id' =>  $faker->randomElement($institutions),
+                'position_id' => $positionVicerector,
                 'state_id' => $state,
                 'user_id' => 3,
-                'position_started_at' => $this->$faker->dateTimeBetween('-1 months', '+1 months'),
-                'position_ended_at' => $this->$faker->dateTimeBetween('+2 months', '+3 months'),
-                'electronic_signature' => $this->$faker->text()
+                'position_started_at' => $faker->dateTimeBetween('-1 months', '+1 months')->format('Y-m-d H:i:s'),
+                'position_ended_at' => $faker->dateTimeBetween('+2 months', '+3 months')->format('Y-m-d H:i:s'),
+                'electronic_signature' => $faker->text($maxNbChars = 50)
             ],
-            //REPRESENTANTE_OCS
             [
-                'intitution_id' => $this->$faker->randomElement($institutions),
-                'position_id' => $position_representative_ocs->id(),
+                'intitution_id' =>  $faker->randomElement($institutions),
+                'position_id' => $positionRepresentativeOcs,
                 'state_id' => $state,
                 'user_id' => 4,
-                'position_started_at' => $this->$faker->dateTimeBetween('-1 months', '+1 months'),
-                'position_ended_at' => $this->$faker->dateTimeBetween('+2 months', '+3 months'),
-                'electronic_signature' => $this->$faker->text()
+                'position_started_at' => $faker->dateTimeBetween('-1 months', '+1 months')->format('Y-m-d H:i:s'),
+                'position_ended_at' => $faker->dateTimeBetween('+2 months', '+3 months')->format('Y-m-d H:i:s'),
+                'electronic_signature' => $faker->text($maxNbChars = 50)
             ],
-            //REPRESENTANTE CECY
             [
-                'intitution_id' => $this->$faker->randomElement($institutions),
-                'position_id' => $position_cecy->id(),
+                'intitution_id' =>  $faker->randomElement($institutions),
+                'position_id' => $positionCecy,
                 'state_id' => $state,
                 'user_id' => 5,
-                'position_started_at' => $this->$faker->dateTimeBetween('-1 months', '+1 months'),
-                'position_ended_at' => $this->$faker->dateTimeBetween('+2 months', '+3 months'),
-                'electronic_signature' => $this->$faker->text()
+                'position_started_at' => $faker->dateTimeBetween('-1 months', '+1 months')->format('Y-m-d H:i:s'),
+                'position_ended_at' => $faker->dateTimeBetween('+2 months', '+3 months')->format('Y-m-d H:i:s'),
+                'electronic_signature' => $faker->text($maxNbChars = 50)
             ],
         )->create();
     }

@@ -109,7 +109,7 @@ class ParticipantsSeeder extends Seeder
             $user_roles =  $user->roles();
             Participant::factory()->create(
                 [
-                    'state_id' => $this->$faker->randomElement($states->id()),
+                    'state_id' => $faker->randomElement($states),
                     'type_id' => $user_roles[0],
                     'user_id' => $i
                 ]

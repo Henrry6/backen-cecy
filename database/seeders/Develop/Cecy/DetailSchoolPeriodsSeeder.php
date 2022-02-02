@@ -29,10 +29,10 @@ class DetailSchoolPeriodsSeeder extends Seeder
         $historicalSchoolPeriod = SchoolPeriod::firstWhere('code', '2021-1');
         $currentSchoolPeriod = SchoolPeriod::firstWhere('code', '2021-2');
 
-        DetailSchoolPeriod::create(
+        DetailSchoolPeriod::factory(5)->sequence(
             [
-                'anulation_ended_at' => '2022-04-02',
-                'anulation_started_at' => '2022-03-25',
+                'nullification_ended_at' => '2022-04-02',
+                'nullification_started_at' => '2022-03-25',
                 'especial_ended_at' => '2022-03-24',
                 'especial_started_at' => '2022-03-17',
                 'extraordinary_ended_at' => '2022-03-16',
@@ -40,12 +40,10 @@ class DetailSchoolPeriodsSeeder extends Seeder
                 'ordinary_ended_at' => '2022-03-08',
                 'ordinary_started_at' => '2022-03-01',
                 'school_period_id' => $currentSchoolPeriod,
-            ]
-        );
-        DetailSchoolPeriod::create(
+            ],
             [
-                'anulation_ended_at' => '2022-01-02',
-                'anulation_started_at' => '2021-12-25',
+                'nullification_ended_at' => '2022-01-02',
+                'nullification_started_at' => '2021-12-25',
                 'especial_ended_at' => '2021-12-24',
                 'especial_started_at' => '2021-12-17',
                 'extraordinary_ended_at' => '2021-12-16',
@@ -53,12 +51,10 @@ class DetailSchoolPeriodsSeeder extends Seeder
                 'ordinary_ended_at' => '2021-12-08',
                 'ordinary_started_at' => '2021-12-01',
                 'school_period_id' => $currentSchoolPeriod,
-            ]
-        );
-        DetailSchoolPeriod::create(
+            ],
             [
-                'anulation_ended_at' => '2021-06-02',
-                'anulation_started_at' => '2021-05-25',
+                'nullification_ended_at' => '2021-06-02',
+                'nullification_started_at' => '2021-05-25',
                 'especial_ended_at' => '2021-05-24',
                 'especial_started_at' => '2021-05-17',
                 'extraordinary_ended_at' => '2021-05-16',
@@ -66,12 +62,10 @@ class DetailSchoolPeriodsSeeder extends Seeder
                 'ordinary_ended_at' => '2021-05-08',
                 'ordinary_started_at' => '2021-05-01',
                 'school_period_id' => $historicalSchoolPeriod,
-            ]
-        );
-        DetailSchoolPeriod::create(
+            ],
             [
-                'anulation_ended_at' => '2021-04-02',
-                'anulation_started_at' => '2021-03-25',
+                'nullification_ended_at' => '2021-04-02',
+                'nullification_started_at' => '2021-03-25',
                 'especial_ended_at' => '2021-03-24',
                 'especial_started_at' => '2021-03-17',
                 'extraordinary_ended_at' => '2021-03-16',
@@ -79,12 +73,10 @@ class DetailSchoolPeriodsSeeder extends Seeder
                 'ordinary_ended_at' => '2021-03-08',
                 'ordinary_started_at' => '2021-03-01',
                 'school_period_id' => $historicalSchoolPeriod,
-            ]
-        );
-        DetailSchoolPeriod::create(
+            ],
             [
-                'anulation_ended_at' => '2021-02-02',
-                'anulation_started_at' => '2021-01-25',
+                'nullification_ended_at' => '2021-02-02',
+                'nullification_started_at' => '2021-01-25',
                 'especial_ended_at' => '2021-01-24',
                 'especial_started_at' => '2021-01-17',
                 'extraordinary_ended_at' => '2021-01-16',
@@ -93,6 +85,6 @@ class DetailSchoolPeriodsSeeder extends Seeder
                 'ordinary_started_at' => '2021-01-01',
                 'school_period_id' => $historicalSchoolPeriod,
             ]
-        );
+        )->create();
     }
 }
