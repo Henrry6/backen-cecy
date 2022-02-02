@@ -4,7 +4,7 @@ namespace Database\Seeders\Develop\Cecy;
 
 use App\Models\Cecy\Catalogue;
 use App\Models\Cecy\Requirement;
-use Faker\Factory as Faker;
+use Faker\Factory;
 use Illuminate\Database\Seeder;
 
 class RequirementsSeeder extends Seeder
@@ -26,7 +26,7 @@ class RequirementsSeeder extends Seeder
         //state_id
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
 
-        Catalogue::factory()->secuence(
+        Catalogue::factory(2)->sequence(
             [
                 'code' => $catalogue['requirement_state']['enabled'],
                 'name' => 'Habilitado',
@@ -43,24 +43,23 @@ class RequirementsSeeder extends Seeder
     }
     public function createRequirements()
     {
-        $faker = Faker::create();
+        $faker = Factory::create();
 
         $states = Catalogue::where('type', 'REQUIREMENT_STATE')->get();
 
         Requirement::factory(3)->sequence(
-            //Cedula
             [
-                'state_id' => $faker->randomElement($states),
+                'state_id' =>  $states[rand(0, sizeof($states) - 1)],
                 'name' => 'Cedula',
                 'required' => $faker->randomElement([true, false])
             ],
             [
-                'state_id' => $faker->randomElement($states),
+                'state_id' =>  $states[rand(0, sizeof($states) - 1)],
                 'name' => 'Certificado de pago',
                 'required' => $faker->randomElement([true, false])
             ],
             [
-                'state_id' => $faker->randomElement($states),
+                'state_id' =>  $states[rand(0, sizeof($states) - 1)],
                 'name' => 'Certificado no adedudar',
                 'required' => $faker->randomElement([true, false])
             ]

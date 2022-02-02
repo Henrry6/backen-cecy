@@ -2,17 +2,18 @@
 
 namespace Database\Factories\Cecy;
 
-use App\Models\Cecy\Institution;
+use App\Models\Cecy\AdditionalInformation;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class InstitutionsFactory extends Factory
+class AddtionalInformationFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Institution::class;
+    protected $model = AdditionalInformation::class;
+
     /**
      * Define the model's default state.
      *
@@ -20,6 +21,7 @@ class InstitutionsFactory extends Factory
      */
     public function definition()
     {
+
         return [
             //
         ];

@@ -2,18 +2,17 @@
 
 namespace Database\Factories\Cecy;
 
-use App\Models\Cecy\AdditionalInformation;
+use App\Models\Cecy\PhotographicRecord;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class AddtionalInformationsFactory extends Factory
+class PhotograficRecordFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = AdditionalInformation::class;
-
+    protected $model = PhotographicRecord::class;
     /**
      * Define the model's default state.
      *
@@ -21,7 +20,6 @@ class AddtionalInformationsFactory extends Factory
      */
     public function definition()
     {
-
         return [
             //
         ];

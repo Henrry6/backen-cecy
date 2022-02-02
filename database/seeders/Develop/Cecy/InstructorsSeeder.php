@@ -61,7 +61,6 @@ class InstructorsSeeder extends Seeder
     }
     public function  createInstructors()
     {
-        $faker = Factory::create();
 
         $states = Catalogue::where('type', 'INSTRUCTOR_STATE')->get();
         $types = Catalogue::where('type', 'INSTRUCTOR')->get();
@@ -69,8 +68,8 @@ class InstructorsSeeder extends Seeder
         for ($i = 6; $i <= 35; $i++) {
             Instructor::factory()->create(
                 [
-                    'state_id' =>  $this->$faker->randomElement($states),
-                    'type_id' => $this->$faker->randomElement($types),
+                    'state_id' =>  $states[rand(0, sizeof($states) - 1)],
+                    'type_id' => $types[rand(0, sizeof($types) - 1)],
                     'user_id' => $i
                 ]
             )->create();

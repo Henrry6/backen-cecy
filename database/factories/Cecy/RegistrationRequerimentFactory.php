@@ -7,7 +7,7 @@ use App\Models\Cecy\RegistrationRequirement;
 use App\Models\Cecy\Requirement;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class RegistrationRequerimentsFactory extends Factory
+class RegistrationRequerimentFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
