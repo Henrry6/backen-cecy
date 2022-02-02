@@ -7,7 +7,7 @@ use App\Models\Cecy\Catalogue;
 use App\Models\Cecy\Classroom;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class ClassroomsFactory extends Factory
+class ClassroomFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
@@ -24,10 +24,8 @@ class ClassroomsFactory extends Factory
     {
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
         $detail_planification  = DetailPlanification::get();
-
         $office =  Catalogue::where('code', $catalogue['classroom_type']['office']);
         $classrooms_class =  Catalogue::where('code', $catalogue['classroom_type']['classrooms_class']);
-
         $laboratory = Catalogue::where('code', $catalogue['classroom_type']['laboratory']);
 
         return [
