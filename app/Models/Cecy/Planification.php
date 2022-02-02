@@ -61,7 +61,7 @@ class Planification extends Model implements Auditable
         return $this->belongsTo(Authority::class);
     }
 
-    public function detailplanifications()
+    public function detailPlanifications()
     {
         $this->hasMany(DetailPlanification::class);
     }
