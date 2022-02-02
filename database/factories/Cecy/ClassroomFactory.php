@@ -24,9 +24,9 @@ class ClassroomFactory extends Factory
     {
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
         $detail_planification  = DetailPlanification::get();
-        $office =  Catalogue::where('code', $catalogue['classroom_type']['office']);
-        $classrooms_class =  Catalogue::where('code', $catalogue['classroom_type']['classrooms_class']);
-        $laboratory = Catalogue::where('code', $catalogue['classroom_type']['laboratory']);
+        $office =  Catalogue::where('code', $catalogue['classroom']['office']);
+        $classrooms_class =  Catalogue::where('code', $catalogue['classroom']['classroom_class']);
+        $laboratory = Catalogue::where('code', $catalogue['classroom']['laboratory']);
 
         return [
             'state_id' => $this->faker->randomElement($office, $classrooms_class, $laboratory),
