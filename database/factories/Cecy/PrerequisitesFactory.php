@@ -3,25 +3,20 @@
 namespace Database\Factories\Cecy;
 
 use App\Models\Cecy\Prerequisite;
+use App\Models\Cecy\Course;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PrerequisitesFactory extends Factory
 {
-    /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
     protected $model = Prerequisite::class;
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
+    
     public function definition()
     {
+        $course = Course::get();
+
         return [
-            //
+            'course_id' => $this->faker->randomElement($course[rand(0, sizeof($course) - 1)]),
+            'prerequisite_id' => $this->faker->randomElement($course[rand(0, sizeof($course) - 1)]),
         ];
     }
 }
