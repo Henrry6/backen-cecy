@@ -59,7 +59,13 @@ class PlanificationsSeeder extends Seeder
                 'name' => 'APROBADO',
                 'type' => $catalogue['planification_state']['type'],
                 'description' => 'Falta poner una descripción'
-            ]
+            ],
+            [
+                'code' => State::CULMINATED,
+                'name' => 'CULMINADO',
+                'type' => $catalogue['planification_state']['type'],
+                'description' => 'Falta poner una descripción'
+            ],
         )->create();
     }
     public function createPlanifications()
