@@ -74,10 +74,7 @@ class RivasController extends Controller
     /*DDRC-C: Busca informacion de un participante(datos del usuario) y de registro a un curso especifico(informacion adicional y archivos)*/
     public function getParticipantInformation(IndexRegistrationRequest $request, Registration $registration)
     {
-        // para traer informacion del estudiante
-        // $user = User::FirstWhere('id', $request->participant()->id)->get();
-
-
+        
         return (new ParticipantInformationResource($registration))
             ->additional([
                 'msg' => [
