@@ -9,8 +9,9 @@ use OwenIt\Auditing\Auditable as Auditing;
 use App\Models\Authentication\User;
 use App\Models\Core\Institution;
 use App\Models\Core\State;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class Authority extends Model
+class Authority extends Model implements Auditable
 {
     use HasFactory;
     use Auditing;

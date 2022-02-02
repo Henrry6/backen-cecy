@@ -84,17 +84,18 @@ class AuthoritiesSeeder extends Seeder
             ]
         )->create();
     }
+
     public function createAuthoritiess()
     {
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
         $faker = Factory::create();
 
         $institutions = Institution::get();
-        $positionRector = Catalogue::where('code', $catalogue['position']['rector']);
-        $positionVicerector = Catalogue::where('code', $catalogue['position']['vicerector']);
-        $positionRepresentativeOcs = Catalogue::where('code', $catalogue['position']['representative_ocs']);
-        $positionCecy = Catalogue::where('code', $catalogue['position']['cecy']);
-        $state = Catalogue::where('code', $catalogue['authority_state']['active']);
+        $positionRector = Catalogue::firstWhere('code', $catalogue['position']['rector']);
+        $positionVicerector = Catalogue::firstWhere('code', $catalogue['position']['vicerector']);
+        $positionRepresentativeOcs = Catalogue::firstWhere('code', $catalogue['position']['representative_ocs']);
+        $positionCecy = Catalogue::firstWhere('code', $catalogue['position']['cecy']);
+        $state = Catalogue::firstWhere('code', $catalogue['authority_state']['active']);
 
         Authority::factory(4)->sequence(
             [
@@ -107,7 +108,7 @@ class AuthoritiesSeeder extends Seeder
                 'electronic_signature' => $faker->text($maxNbChars = 50)
             ],
             [
-                'intitution_id' =>  $faker->randomElement($institutions),
+                'intitution_id' => $faker->randomElement($institutions),
                 'position_id' => $positionVicerector,
                 'state_id' => $state,
                 'user_id' => 3,
@@ -116,7 +117,7 @@ class AuthoritiesSeeder extends Seeder
                 'electronic_signature' => $faker->text($maxNbChars = 50)
             ],
             [
-                'intitution_id' =>  $faker->randomElement($institutions),
+                'intitution_id' => $faker->randomElement($institutions),
                 'position_id' => $positionRepresentativeOcs,
                 'state_id' => $state,
                 'user_id' => 4,
@@ -125,7 +126,7 @@ class AuthoritiesSeeder extends Seeder
                 'electronic_signature' => $faker->text($maxNbChars = 50)
             ],
             [
-                'intitution_id' =>  $faker->randomElement($institutions),
+                'intitution_id' => $faker->randomElement($institutions),
                 'position_id' => $positionCecy,
                 'state_id' => $state,
                 'user_id' => 5,
