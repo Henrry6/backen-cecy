@@ -18,6 +18,7 @@ use Database\Seeders\Develop\Cecy\DetailSchoolPeriodsSeeder;
 use Database\Seeders\Develop\Cecy\InstitutionsSeeder;
 use Database\Seeders\Develop\Cecy\InstructorsSeeder;
 use Database\Seeders\Develop\Cecy\NotificationsSeeder;
+use Database\Seeders\Develop\Cecy\ParticipantCourseSeeder;
 use Database\Seeders\Develop\Cecy\ParticipantsSeeder;
 use Database\Seeders\Develop\Cecy\PhotograficRecordsSeeder;
 use Database\Seeders\Develop\Cecy\PlanificationsSeeder;
@@ -37,7 +38,7 @@ class CecySeeder extends Seeder
     {
         $this->call([
             //CecyCatalogueSeeder::class,
-            ClassroomsSeeder::class,
+            //ClassroomsSeeder::class,
             InstructorsSeeder::class,
             //CoursesSeeder::class,
             InstitutionsSeeder::class,
@@ -56,6 +57,7 @@ class CecySeeder extends Seeder
             //TopicsSeeder::class,
             AttendancesSeeder::class,
             DetailPlanificationsInstructorSeeder::class,
+            ParticipantCourseSeeder::class,
             //CertificatesSeeder::class,
             //NotificationsSeeder::class,
             //PhotograficRecordsSeeder::class,
