@@ -17,10 +17,6 @@ class CreateCecyCoursesTable extends Migration
                 ->comment('Primero, segundo, tercero, cuarto, quinto, sexto, séptimo')
                 ->constrained('cecy.catalogues');
 
-            $table->foreignId('area_id')
-                ->comment()
-                ->constrained('cecy.catalogues');
-
             $table->foreignId('entity_certification_id')
                 ->comment('Institución que lo avala, Senecyt, Setec, Setec')
                 ->constrained('cecy.catalogues');
@@ -33,7 +29,7 @@ class CreateCecyCoursesTable extends Migration
                 ->comment('Categoría a la cual pertenece el curso, ingles, pedagógico, programación ')
                 ->constrained('cecy.catalogues');
 
-            $table->foreignId('formation_type')
+            $table->foreignId('formation_type_id')
                 ->comment('Tipo de capacitación puede ser webinar, taller, curso')
                 ->constrained('cecy.catalogues');
 

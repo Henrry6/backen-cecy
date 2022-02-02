@@ -18,7 +18,7 @@ class AuthoritiesSeeder extends Seeder
     public function run()
     {
         $this->createAuthoritiesCatalogue();
-        //$this->createAuthoritiess();
+        $this->createAuthoritiess();
     }
 
     public function createAuthoritiesCatalogue()

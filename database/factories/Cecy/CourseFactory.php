@@ -16,10 +16,8 @@ class CourseFactory extends Factory
     public function definition()
     {
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
-        $academic_period = Catalogue::where('code', $catalogue['academic_period']['first']);
-        $academic_period2 = Catalogue::where('code', $catalogue['academic_period']['second']);
-        $area = Catalogue::where('code', $catalogue['area']['A']);
-        // $area2 = Catalogue::where('code', $catalogue['area']['B']);
+        $academicPeriods = Catalogue::where('type', $catalogue['academic_period']['type'])->get();
+        $areas = Catalogue::where('type', $catalogue['area']['type'])->get();
         $senecyt = Catalogue::where('code', $catalogue['entity_certification']['senecyt']);
         $setec = Catalogue::where('code', $catalogue['entity_certification']['setec']);
         $cecy = Catalogue::where('code', $catalogue['entity_certification']['cecy']);
@@ -46,11 +44,11 @@ class CourseFactory extends Factory
 
         return [
             'academic_period_id' => $this->faker->randomElement([$academic_period, $academic_period2]),
-            'area_id' => $this->faker->randomElement($area),
+            'area_id' => $this->faker->randomElement($areas),
             'entity_certification_id' => $this->faker->randomElement([$senecyt, $setec, $cecy]),
             'career_id' => $this->faker->randomElement($career[rand(0, sizeof($career) - 1)]),
             'category_id' => $this->faker->randomElement([$technical, $administrative]),
-            'formation_type' => $this->faker->randomElement([$taller, $curso]),
+            'formation_type_id' => $this->faker->randomElement([$taller, $curso]),
             'certified_type_id' => $this->faker->randomElement([$assistance, $approval]),
             'compliance_indicators_id' => $this->faker->randomElement($compliance),
             'control_id' => $this->faker->randomElement($control),

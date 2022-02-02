@@ -161,21 +161,21 @@ class CoursesSeeder extends Seeder
                 'description' => 'Cuando el curso es de pedagogía'
             ],
             [
-                'code' => $catalogue['capacitation']['course'],
+                'code' => $catalogue['formation']['course'],
                 'name' => 'Curso',
-                'type' => $catalogue['capacitation']['type'],
+                'type' => $catalogue['formation']['type'],
                 'description' => 'Cuando el curso es de tipo capacitación'
             ],
             [
-                'code' => $catalogue['capacitation']['workshop'],
+                'code' => $catalogue['formation']['workshop'],
                 'name' => 'Taller',
-                'type' => $catalogue['capacitation']['type'],
+                'type' => $catalogue['formation']['type'],
                 'description' => 'Cuando el curso es de tipo taller'
             ],
             [
-                'code' => $catalogue['capacitation']['webinar'],
+                'code' => $catalogue['formation']['webinar'],
                 'name' => 'Webinar',
-                'type' => $catalogue['capacitation']['type'],
+                'type' => $catalogue['formation']['type'],
                 'description' => 'Cuando el curso es de tipo Webinar'
             ],
             [
@@ -233,19 +233,19 @@ class CoursesSeeder extends Seeder
                 'description' => 'Cuando el curso esta dedicado para participantes de una empresa privada'
             ],
             [
-                'code' => $catalogue['participant']['external'],
+                'code' => $catalogue['participant']['external_student'],
                 'name' => 'Estudiante externo',
                 'type' => $catalogue['participant']['type'],
                 'description' => 'Cuando el curso esta dedicado para estudiantes externos'
             ],
             [
-                'code' => $catalogue['participant']['internal'],
+                'code' => $catalogue['participant']['internal_student'],
                 'name' => 'Estudiante interno',
                 'type' => $catalogue['participant']['type'],
                 'description' => 'Cuando el curso esta dedicado para estudiantes internos'
             ],
             [
-                'code' => $catalogue['participant']['senecyt'],
+                'code' => $catalogue['participant']['senecyt_staff'],
                 'name' => 'Senecyt',
                 'type' => $catalogue['participant']['type'],
                 'description' => 'Cuando el curso esta dedicado para personal del senecyt'

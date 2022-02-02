@@ -91,13 +91,7 @@
         "type": "FRECUENCY"
     },
     "area": {
-        "type": "AREA",
-        "a": "A",
-        "b": "B",
-        "c": "C",
-        "d": "D",
-        "e": "E",
-        "f": "F"
+        "type": "AREA"
     },
     "speciality_area": {
         "type": "SPECIALITY_AREA",
