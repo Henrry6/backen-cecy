@@ -86,7 +86,7 @@ class PlanificationsSeeder extends Seeder
                 $planificationState =  $culminatedState;
             }
 
-            Planification::factory()->sequence(
+            Planification::factory()->create(
                 [
                     'course_id' => ($courses[$i])->id,
                     'detail_school_period_id' => ($detailSchoolPeriods[$i])->id,

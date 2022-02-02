@@ -26,6 +26,10 @@ class Planification extends Model implements Auditable
         'started_at'
     ];
 
+    protected $casts = [
+        'needs' => 'array',
+        'observations' => 'array',
+    ];
     // Relationships
     public function course()
     {
@@ -79,7 +83,6 @@ class Planification extends Model implements Auditable
             return $query->orWhere('code', $code);
         }
     }
-
 
     public function scopeCourse($query, $course)
     {
