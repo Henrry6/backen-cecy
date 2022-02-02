@@ -4,7 +4,6 @@ namespace Database\Seeders\Develop\Cecy;
 
 use App\Models\Cecy\Catalogue;
 use App\Models\Cecy\Classroom;
-use App\Models\Cecy\Classrooms;
 use Illuminate\Database\Seeder;
 //use Illuminate\Support\Facades\DB;
 

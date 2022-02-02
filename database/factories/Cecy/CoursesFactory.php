@@ -3,24 +3,16 @@
 namespace Database\Factories\Cecy;
 
 use App\Models\Cecy\Catalogue;
+use App\Models\Cecy\Course;
+use App\Models\Cecy\Instructor;
 use App\Models\Core\Career;
-use App\Models\Core\Instructor;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class CoursesFactory extends Factory
 {
-    /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
     protected $model = Course::class;
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
+
     public function definition()
     { 
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
@@ -56,7 +48,7 @@ class CoursesFactory extends Factory
             'academic_period_id' => $this->faker->randomElement([$academic_period, $academic_period2]),
             'area_id' => $this->faker->randomElement($area),
             'entity_certification_id' => $this->faker->randomElement([$senecyt, $setec, $cecy]),
-            'career_id' => $this->faker->randomElement($career),
+            'career_id' => $this->faker->randomElement($career[rand(0, sizeof($career) - 1)]),
             'category_id' => $this->faker->randomElement([$technical, $administrative]),
             'formation_type' => $this->faker->randomElement([$taller, $curso]),
             'certified_type_id' => $this->faker->randomElement([$assistance, $approval]),
@@ -67,7 +59,7 @@ class CoursesFactory extends Factory
             'modality_id' => $this->faker->randomElement([$presencial, $virtual]),
             'means_verification_id' => $this->faker->randomElement($means),
             'speciality_id' => $this->faker->randomElement([$speciality, $speciality2]),
-            'responsible_id' => $this->faker->randomElement($responsible),
+            'responsible_id' => $this->faker->randomElement($responsible[rand(0, sizeof($responsible) - 1)]),
             'state_id' => $this->faker->randomElement($state, $state2),
             'abbreviation' => $this->faker->word(),
             'alignment' => $this->faker->words(3),
