@@ -23,7 +23,6 @@ class AuthorizedInstructorsFactory extends Factory
         return [
             'instructor_id' => $this->faker->randomElement($instructor),
             'profile_instructor_course_id' => $this->faker->randomElement($profileInstructor),
-
         ];
     }
 }
