@@ -190,7 +190,7 @@
         "to_be_approved": "TO_BE_APPROVED"
     },
     "school_period_state": {
-        "type": "SCHOOL_PERIODS",
+        "type": "SCHOOL_PERIOD_STATE",
         "current": "CURRENT",
         "historical": "HISTORICAL"
     },

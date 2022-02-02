@@ -31,11 +31,13 @@ class SchoolPeriodsSeeder extends Seeder
                 'code' => State::CURRENT,
                 'name' => 'CURRENT',
                 'type' => $catalogues['school_period_state']['type'],
+                'description' => 'Estado de periodo académico',
             ],
             [
                 'code' => State::HISTORICAL,
                 'name' => 'HISTORICAL',
                 'type' => $catalogues['school_period_state']['type'],
+                'description' => 'Estado de periodo académico',
             ],
 
         )->create();
