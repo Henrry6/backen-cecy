@@ -5,7 +5,7 @@ namespace Database\Factories\Cecy;
 use App\Models\Cecy\ProfileInstructorCourse;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class ProfileInstructorCoursesFactory extends Factory
+class ProfileInstructorCourseFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.

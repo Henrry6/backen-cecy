@@ -5,9 +5,10 @@ namespace App\Models\Cecy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as Auditing;
 
-class Requirement extends Model
+class Requirement extends Model implements Auditable
 {
     use HasFactory;
     use Auditing;
@@ -52,7 +53,7 @@ class Requirement extends Model
             return $query;
         }
     }
-    
+
     public function scopeName($query, $name)
     {
         if ($name) {
@@ -66,6 +67,4 @@ class Requirement extends Model
             return $query->where('state_id', $requirement->state);
         }
     }
-
-   
 }

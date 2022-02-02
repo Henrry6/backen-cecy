@@ -42,11 +42,6 @@ class SchoolPeriodsSeeder extends Seeder
     }
     public function createSchoolPeriods()
     {
-        // DB::select("insert into cecy.school_periods(state_id, code, name,minimun_note, ended_at, started_at)VALUES('','2021-1','70','2021-04-01','2021-01-04')");
-        // DB::select("insert into cecy.school_periods(state_id, code, name,minimun_note, ended_at, started_at)VALUES('','2021-2','70','2021-04-01','2021-01-04')");
-        // DB::select("insert into cecy.school_periods(state_id, code, name,minimun_note, ended_at, started_at)VALUES('','2022-1','70','2021-04-01','2021-01-04')");
-        // DB::select("insert into cecy.school_periods(state_id, code, name,minimun_note, ended_at, started_at)VALUES('','2022-2','70','2021-04-01','2021-01-04')");
-
         $current = Catalogue::where('code', State::CURRENT)->first();
         $historical = Catalogue::where('code', State::HISTORICAL)->first();
 

@@ -6,7 +6,7 @@ use App\Models\Cecy\Instructor;
 use App\Models\Cecy\ProfileInstructorCourse;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class AuthorizedInstructorsFactory extends Factory
+class AuthorizedInstructorFactory extends Factory
 {
     /**
      * Define the model's default state.

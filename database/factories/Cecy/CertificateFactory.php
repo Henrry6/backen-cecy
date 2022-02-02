@@ -7,7 +7,7 @@ use App\Models\Cecy\Certificate;
 use App\Models\Cecy\Registration;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class CertificatesFactory extends Factory
+class CertificateFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.

@@ -26,7 +26,7 @@ use Database\Seeders\Develop\Cecy\PrerequisitesSeeder;
 use Database\Seeders\Develop\Cecy\ProfileInstructorCoursesSeeder;
 use Database\Seeders\Develop\Cecy\RegistrationRequerimentsSeeder;
 use Database\Seeders\Develop\Cecy\RegistrationsSeeder;
-use Database\Seeders\Develop\Cecy\RequirementesSeeder;
+use Database\Seeders\Develop\Cecy\RequirementsSeeder;
 use Database\Seeders\Develop\Cecy\SchoolPeriodsSeeder;
 use Database\Seeders\Develop\Cecy\TopicsSeeder;
 use Illuminate\Database\Seeder;
@@ -42,7 +42,7 @@ class CecySeeder extends Seeder
             InstructorsSeeder::class,
             //CoursesSeeder::class,
             InstitutionsSeeder::class,
-            RequirementesSeeder::class,
+            RequirementsSeeder::class,
             SchoolPeriodsSeeder::class,
             AuthoritiesSeeder::class,
             DetailSchoolPeriodsSeeder::class,

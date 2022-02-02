@@ -2,17 +2,17 @@
 
 namespace Database\Factories\Cecy;
 
-use App\Models\Cecy\Notification;
+use App\Models\Cecy\Requirement;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class NotificationsFactory extends Factory
+class RequirementFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Notification::class;
+    protected $model = Requirement::class;
     /**
      * Define the model's default state.
      *

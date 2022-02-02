@@ -6,10 +6,10 @@ use App\Models\Cecy\Prerequisite;
 use App\Models\Cecy\Course;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class PrerequisitesFactory extends Factory
+class PrerequisiteFactory extends Factory
 {
     protected $model = Prerequisite::class;
-    
+
     public function definition()
     {
         $course = Course::get();

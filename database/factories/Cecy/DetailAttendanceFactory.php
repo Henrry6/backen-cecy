@@ -8,7 +8,7 @@ use App\Models\Cecy\DetailAttendance;
 use App\Models\Cecy\Registration;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class DetailAttendancesFactory extends Factory
+class DetailAttendanceFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.

@@ -4,7 +4,7 @@ namespace Database\Factories\Cecy;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class RegistrationsFactory extends Factory
+class RegistrationFactory extends Factory
 {
 
     /**

@@ -27,7 +27,7 @@ class InstitutionsSeeder extends Seeder
             [
                 'code' => 'CECY2022',
                 'name' => 'CENTRO DE FORMACIÓN INTEGRAL y SERVICIOS ESPECIALZADOS YAVIRAC',
-                'logo' => 'CECY',
+                'logo' => 12321,
                 'slogan' => 'Formando profesionales'
             ]
         )->create();
