@@ -47,7 +47,7 @@ class SchoolPeriodsSeeder extends Seeder
         $current = Catalogue::where('code', State::CURRENT)->first();
         $historical = Catalogue::where('code', State::HISTORICAL)->first();
 
-        SchoolPeriod::factory()->sequence(
+        SchoolPeriod::factory(2)->sequence(
             [
                 'code' => '2021-1',
                 'ended_at' => '2021-06-01',
