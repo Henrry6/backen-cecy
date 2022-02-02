@@ -15,8 +15,8 @@ class PrerequisiteFactory extends Factory
         $course = Course::get();
 
         return [
-            'course_id' => $this->faker->randomElement($course[rand(0, sizeof($course) - 1)]),
-            'prerequisite_id' => $this->faker->randomElement($course[rand(0, sizeof($course) - 1)]),
+            'course_id' => $this->faker->randomElement($course),
+            'prerequisite_id' => $this->faker->randomElement($course),
         ];
     }
 }
