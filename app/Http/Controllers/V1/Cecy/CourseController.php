@@ -419,7 +419,7 @@ class CourseController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    public function showCurricularDesign(Course $course, Request $request)
+    public function showCurricularDesign(getCoursesByNameRequest $request, Course $course)
       {
         // trae la informacion de diseño curricular
 
@@ -439,7 +439,7 @@ class CourseController extends Controller
         ]);
     }
 
-    public function showFinalCourseReport(Course $course, Request $request)
+    public function showFinalCourseReport(getCoursesByNameRequest $request, Course $course)
     {
      // trae la informacion del informe final del curso
 
