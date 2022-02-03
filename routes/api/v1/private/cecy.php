@@ -45,7 +45,6 @@ Route::prefix('planification')->group(function () {
     Route::get('state/{state}', [PerezController::class, 'getKpi']);
 });
 
-
 Route::prefix('planification/{planification}')->group(function () {
     Route::put('', [PerezController::class, 'updateDatesAndNeedsInPlanification']);
 });
@@ -83,17 +82,17 @@ Route::prefix('topics')->group(function () {
     Route::delete('', [AlvaradoController::class, 'destroyTopic']);
     Route::patch('', [AlvaradoController::class, 'destroysTopics']);
 });
+
 /***********************************************************************************************************************
  * PREREQUISITES
  **********************************************************************************************************************/
-Route::prefix('prerequisites')->group(function () {
+Route::prefix('prerequisite')->group(function () {
     Route::get('/{course}', [AlvaradoController::class, 'getPrerequisites']);
     Route::post('/{course}', [AlvaradoController::class, 'storePrerequisite']);
     Route::put('/{course}', [AlvaradoController::class, 'updatePrerequisite']);
     Route::delete('', [AlvaradoController::class, 'DestroyPrerequisite']);
     Route::patch('', [AlvaradoController::class, 'destroysPrerequisites']);
 });
-
 
 /***********************************************************************************************************************
  * USERS

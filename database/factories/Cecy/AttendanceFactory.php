@@ -27,7 +27,7 @@ class AttendanceFactory extends Factory
         return [
             'detail_planification_id' => $detail[rand(0, sizeof($detail) - 1)],
             'duration' => $this->faker->randomElement(['120', '60']),
-            'registered_at' => $this->faker->date('d_m_Y'),
+            'registered_at' => $this->faker->date(),
         ];
     }
 }

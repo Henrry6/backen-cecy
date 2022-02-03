@@ -33,20 +33,22 @@ class AlvaradoController extends Controller
     // }
 
     // Devuelve los cursos que le fueron asignados al docente responsable
+    // InstructorCotroller
     public function getCourses(Instructor $instructor)
     {
         $courses = $instructor->courses()->get();
         return (new CourseCollection($courses))
-        ->additional([
-            'msg' => [
-                'summary' => 'success',
-                'detail' => '',
-                'code' => '200'
-            ]
-        ]);
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ]);
     }
 
     // Actualiza la informacion del diseño curricular
+    // CourseController
     public function updateCourse(UpdateCourseRequest $request, Course $course)
     {
         $course->area()->associate(Catalogue::find($request->input('area.id')));
@@ -63,30 +65,32 @@ class AlvaradoController extends Controller
         $course->save();
 
         return (new CourseResource($course))
-        ->additional([
-            'msg' => [
-                'summary' => 'success',
-                'detail' => '',
-                'code' => '200'
-            ]
-        ]);
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ]);
     }
 
     // Devuelve los temas y subtemas de un curso
+    // TopicController
     public function getTopics(Course $course)
     {
         $topics = $course->topics()->get();
         return (new TopicCollection($topics))
-        ->additional([
-            'msg' => [
-                'summary' => 'success',
-                'detail' => '',
-                'code' => '200'
-            ]
-        ]);
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ]);
     }
 
     // Crea un nuevo tema o subtema para un curso
+    // TopicController
     public function storeTopic(StoreTopicRequest $request, Course $course, Topic $topic)
     {
         $topic = new Topic();
@@ -96,44 +100,47 @@ class AlvaradoController extends Controller
         $topic->description = $request->input('description');
         $topic->save();
         return (new TopicResource($topic))
-        ->additional([
-            'msg' => [
-                'summary' => 'Tema o subtema Creado',
-                'detail' => '',
-                'code' => '200'
-            ]
-        ]);
+            ->additional([
+                'msg' => [
+                    'summary' => 'Tema o subtema Creado',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ]);
     }
 
     // Actualiza el tema o subtema de un curso
-    public function updateTopic(UpdateTopicRequest $request, Course $course, Topic $topic )
+    // TopicController
+    public function updateTopic(UpdateTopicRequest $request, Course $course, Topic $topic)
     {
         $topic->description = $request->input('description');
         $topic->save();
         return (new TopicResource($topic))
-        ->additional([
-            'msg' => [
-                'summary' => 'Tema o subtema Actualizado',
-                'detail' => '',
-                'code' => '200'
-            ]
-        ]);
+            ->additional([
+                'msg' => [
+                    'summary' => 'Tema o subtema Actualizado',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ]);
     }
 
     // Elimina un tema o subtema
+    // TopicCotroller
     public function destroyTopic(Topic $topic)
     {
         $topic->delete();
         return (new TopicResource($topic))
-        ->additional([
-            'msg' => [
-                'summary' => 'Tema o subtema Eliminado',
-                'detail' => '',
-                'code' => '200'
-            ]
-        ]);
+            ->additional([
+                'msg' => [
+                    'summary' => 'Tema o subtema Eliminado',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ]);
     }
 
+    // TopicController
     public function destroysTopics(DestroysTopicRequest $request)
     {
         $topic = Topic::whereIn('id', $request->input('ids'))->get();
@@ -148,21 +155,25 @@ class AlvaradoController extends Controller
                 ]
             ]);
     }
+
     // PREREQUISITOS
     // Obtiene todos los prerequisitos para un curso
+    // PrerequisteController
     public function getPrerequisites(Course $course)
     {
         $prerequisites = $course->prerequisites()->get();
         return (new PrerequisiteCollection($prerequisites))
-        ->additional([
-            'msg' => [
-                'summary' => 'success',
-                'detail' => '',
-                'code' => '200'
-            ]
-        ]);
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ]);
     }
+
     // Agrega prerequsitos para un curso
+    // PrerequisteController
     public function storePrerequisite(StorePrerequisiteRequest $request, Course $course, Prerequisite $prerequisite)
     {
         $prerequisite = new Prerequisite();
@@ -170,42 +181,48 @@ class AlvaradoController extends Controller
         $prerequisite->prerequisite()->associate($prerequisite);
         $prerequisite->save();
         return (new PrerequisiteResource($prerequisite))
-        ->additional([
-            'msg' => [
-                'summary' => 'success',
-                'detail' => '',
-                'code' => '200'
-            ]
-        ]);
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ]);
     }
+
     // Actualiza el prerequisito para un curso
+    // PrerequisteController
     public function updatePrerequisite(UpdatePrerequisiteRequest $request, Course $course, Prerequisite $prerequisite)
     {
         $prerequisite->prerequisite()->associate($prerequisite);
         $prerequisite->save();
         return (new PrerequisiteResource($prerequisite))
-        ->additional([
-            'msg' => [
-                'summary' => 'success',
-                'detail' => '',
-                'code' => '200'
-            ]
-        ]);
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ]);
     }
+
     // Eliminda los prerequisitos para un curso
+    // PrerequisteController
     public function DestroyPrerequisite(Prerequisite $prerequisite)
     {
         $prerequisite->delete();
         return (new PrerequisiteResource($prerequisite))
-        ->additional([
-            'msg' => [
-                'summary' => 'Prerequisito Eliminado',
-                'detail' => '',
-                'code' => '200'
-            ]
-        ]);
+            ->additional([
+                'msg' => [
+                    'summary' => 'Prerequisito Eliminado',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ]);
     }
+
     //Elimina varios prerequisitos de un curso
+    // PrerequisteController
     public function destroysPrerequisites(DestroyPrerequisiteRequest $request)
     {
         $prerequisite = Prerequisite::whereIn('id', $request->input('ids'))->get();
