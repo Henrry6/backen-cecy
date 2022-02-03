@@ -5,6 +5,9 @@ use App\Http\Controllers\V1\Cecy\CatalogueController;
 use App\Http\Controllers\V1\Cecy\GuachagmiraController;
 use App\Http\Controllers\V1\Cecy\GuanunaController;
 use App\Http\Controllers\V1\Cecy\PerezController;
+use App\Http\Controllers\V1\Cecy\CourseController;
+use App\Http\Controllers\V1\Cecy\TopicController;
+use App\Http\Controllers\V1\Cecy\PrerequisiteController;
 
 /***********************************************************************************************************************
  * CATALOGUES
@@ -68,30 +71,30 @@ Route::prefix('detailPlanification/{detailPlanification}')->group(function () {
  * COURSE
  **********************************************************************************************************************/
 Route::prefix('courses')->group(function () {
-    Route::get('', [AlvaradoController::class, 'getCourses']);
-    Route::put('/{course}', [AlvaradoController::class, 'updateCourse']);
+    Route::get('', [CourseController::class, 'getCourses']);
+    Route::put('/{course}', [CourseController::class, 'updateCourse']);
 });
 
 /***********************************************************************************************************************
  * TOPICS
  **********************************************************************************************************************/
 Route::prefix('topics')->group(function () {
-    Route::get('/{course}', [AlvaradoController::class, 'getTopics']);
-    Route::post('/{course}', [AlvaradoController::class, 'storeTopic']);
-    Route::put('/{course}', [AlvaradoController::class, 'updateTopic']);
-    Route::delete('', [AlvaradoController::class, 'destroyTopic']);
-    Route::patch('', [AlvaradoController::class, 'destroysTopics']);
+    Route::get('/{course}', [TopicController::class, 'getTopics']);
+    Route::post('/{course}', [TopicController::class, 'storeTopic']);
+    Route::put('/{course}', [TopicController::class, 'updateTopic']);
+    Route::delete('', [TopicController::class, 'destroyTopic']);
+    Route::patch('', [TopicController::class, 'destroysTopics']);
 });
 
 /***********************************************************************************************************************
  * PREREQUISITES
  **********************************************************************************************************************/
 Route::prefix('prerequisite')->group(function () {
-    Route::get('/{course}', [AlvaradoController::class, 'getPrerequisites']);
-    Route::post('/{course}', [AlvaradoController::class, 'storePrerequisite']);
-    Route::put('/{course}', [AlvaradoController::class, 'updatePrerequisite']);
-    Route::delete('', [AlvaradoController::class, 'DestroyPrerequisite']);
-    Route::patch('', [AlvaradoController::class, 'destroysPrerequisites']);
+    Route::get('/{course}', [PrerequisiteController::class, 'getPrerequisites']);
+    Route::post('/{course}', [PrerequisiteController::class, 'storePrerequisite']);
+    Route::put('/{course}', [PrerequisiteController::class, 'updatePrerequisite']);
+    Route::delete('', [PrerequisiteController::class, 'DestroyPrerequisite']);
+    Route::patch('', [PrerequisiteController::class, 'destroysPrerequisites']);
 });
 
 /***********************************************************************************************************************
