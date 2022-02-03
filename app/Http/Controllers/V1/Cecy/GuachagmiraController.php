@@ -38,6 +38,24 @@ class GuachagmiraController extends Controller
         // $this->middleware('permission:view-Instructors')->only(['view']);
         // $this->middleware('permission:view-Planifications')->only(['view']);
     }
+
+
+    public function getPublicCourses(IndexCourseRequest $request)
+    {
+        $courses = Course::where('public', true)->get();
+
+
+
+        return (new CoursePublicPrivateCollection($courses))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])->response()->setStatusCode(200);
+    }
+
     public function getCoursesByApprovedPlanifications(IndexPlanificationRequest $request)
     {
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
@@ -215,7 +233,7 @@ class GuachagmiraController extends Controller
             $user->save();
             $user->addPhones($request->input('phones'));
             $user->addEmails($request->input('emails'));
-            $user->assignRole($this->getParticipantType($request->input('type.id')));
+            // $user->assignRole($this->getParticipantType($request->input('type.id')));
             $participant = $this->storeParticipant($request, $user);
             $participant->save();
         });
@@ -244,11 +262,11 @@ class GuachagmiraController extends Controller
         return $participant;
     }
 
-    public function getParticipantType($particpantTypeId)
-    {
-        $participantType = Catalogue::find($particpantTypeId)->get();
-        return strtolower($participantType->code);
-    }
+    // public function getParticipantType($particpantTypeId)
+    // {
+    //     $participantType = Catalogue::find($particpantTypeId)->get();
+    //     return strtolower($participantType->code);
+    // }
 
     // Files
     public function showFileCourse(Course $courses, File $file)
@@ -261,38 +279,13 @@ class GuachagmiraController extends Controller
         return $courses->showImage($image);
     }
 
-    public function showFileInstructor(Instructor $instructor, File $file)
-    {
-        return $instructor->showFile($file);
-    }
-
-    public function showImageInstructor(Instructor $instructor, Image $image)
-    {
-        return $instructor->showImage($image);
-    }
-
-    public function downloadFile(User $user, File $file)
-    {
-        return $user->downloadFile($file);
-    }
-
-    public function showFile(User $user, File $file)
+    public function showFileInstructor(User $user, File $file)
     {
         return $user->showFile($file);
     }
 
-    public function updateFile(UpdateFileRequest $request, User $user, File $file)
+    public function showImageInstructor(User $user, Image $image)
     {
-        return $user->updateFile($request, $file);
-    }
-
-    public function destroyFile(User $user, File $file)
-    {
-        return $user->destroyFile($file);
-    }
-
-    public function destroyFiles(User $user, DestroysFileRequest $request)
-    {
-        return $user->destroyFiles($request);
+        return $user->showImage($image);
     }
 }

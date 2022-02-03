@@ -30,11 +30,6 @@ class Instructor extends Model implements Auditable
         return $this->hasMany(Course::class);
     }
 
-    public function detailInstructors()
-    {
-        $this->hasMany(DetailInstructor::class);
-    }
-
     public function detailPlanifications()
     {
         return $this->belongsToMany(DetailPlanification::class, 'cecy.detail_planification_instructor', 'instructor_id', 'detail_planification_id')->withPivot('topic_id');;
@@ -47,7 +42,7 @@ class Instructor extends Model implements Auditable
 
     public function profileInstructorCourses()
     {
-        return $this->belongsToMany(ProfileInstructorCourse::class, 'cecy.authorized_instructors', 'profile_instructor_id', 'instructor_id');
+        return $this->belongsToMany(ProfileInstructorCourse::class, 'cecy.authorized_instructors', 'profile_instructor_course_id', 'instructor_id');
     }
 
     public function state()
