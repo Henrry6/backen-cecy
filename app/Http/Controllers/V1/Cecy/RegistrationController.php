@@ -82,5 +82,41 @@ class RegistrationController extends Controller
 
         return $catalogue->downloadFile($file);
     }
+    /*DDRC-C: Anular varias Matriculas */
+    // RegistrationController
+    public function nullifyRegistrations(Request $request)
+    {
+        $registrations = Registration::whereIn('id', $request->input('ids'))->get();
+        $registrations->state()->associate(Catalogue::find($request->input('state.id')));
+
+        return (new RegistrationCollection($registrations))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Matriculas Anuladas',
+                    'detail' => '',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
+    }
+
+    
+    /*DDRC-C: elimina una matricula de un participante en un curso especifico */
+    // RegistrationController
+    public function nullifyRegistration(Registration $registration)
+    {
+        $registrations = Registration::whereIn('id', $request->input('id'))->get();
+        $registrations->state()->associate(Catalogue::find($request->input('state.id')));
+
+        return (new UserResource($registration))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Matrícula Anulada',
+                    'detail' => '',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
+    }
 
 }

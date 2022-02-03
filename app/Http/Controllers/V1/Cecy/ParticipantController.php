@@ -113,4 +113,81 @@ class ParticipantController extends Controller
     {
         return $user->showImage($image);
     }
+    /*DDRC-C: Busca los participantes inscritos a una planificación especifica*/
+    // ParticipantController
+    public function getParticipantsByPlanification(DetailPlanificationRequest $request, Planification $planification)
+    {
+        $detailPlanifications = $planification->detailPlanifications()->get();
+
+        $participants = Registration::whereIn('detail_planification_id', $detailPlanifications)
+            ->paginate($request->input('per_page'));
+
+        return (new PlanificationParticipantCollection($participants))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])->response()->setStatusCode(200);
+    }
+/*DDRC-C: Busca informacion de un participante(datos del usuario) y de registro a un curso especifico(informacion adicional y archivos)*/
+    // ParticipantController
+    public function getParticipantInformation(IndexRegistrationRequest $request, Registration $registration)
+    {
+
+        return (new ParticipantInformationResource($registration))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])->response()->setStatusCode(200);
+    }
+
+    /*DDRC-C: actualiza una inscripcion, cambiando la observacion,y estado de una inscripción de un participante en un curso especifico  */
+    // ParticipantController
+    public function updateParticipantRegistration(UpdateRegistrationRequest $request, Registration $registration)
+    {
+        $registration->observation = $request->input('observation');
+        $registration->state()->associate(Catalogue::find($request->input('state.id')));
+        $registration->save();
+
+        return (new RegistrationResource($registration))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '201'
+                ]
+            ])->response()->setStatusCode(201);
+    }
+
+    /*DDRC-C: Matricula un participante */
+    // ParticipantController
+    public function registerParticipant(Request $request, Participant $participant)
+    {
+        $registration = $participant->registration()->first();
+        $registration->state()->associate(Catalogue::find($request->input('state.id')));
+        $registration->save();
+
+        return (new RegistrationResource($registration))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Participantes matriculados',
+                    'detail' => '',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
+    }
+    /*DDRC-C: notifica a un participante de una observacion en su inscripcion*/
+    // ParticipantController
+    // Pendiente
+    public function notifyParticipant()
+    {
+        //TODO: revisar sobre el envio de notificaciones
+        return 'por revisar';
+    }
 }

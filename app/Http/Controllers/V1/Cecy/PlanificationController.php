@@ -128,4 +128,45 @@ class PlanificationController extends Controller
             ->response()->setStatusCode(200);
 
     }
+
+    /*DDRC-C: Busca planificaciones vigentes por periodo asignadas al usuario logueado(responsable del CECY)*/
+    // PlanificationController
+    public function getPlanificationsByPeriodState(InstructorRequest $request)
+    {
+        $instructor = Instructor::FirstWhere('user_id', $request->user()->id)->get();
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+        $planifications = $instructor
+            ->planifications()
+            ->period($request->input('period.id'))
+            ->where('state', $catalogue['planification_state']['approved'])
+            ->paginate($request->input('per_page'));
+
+        return (new PlanificationCollection($planifications))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])->response()->setStatusCode(200);
+    }
+    /*DDRC-C: Trae una lista de nombres de cursos, paralelos y jornadas*/
+    // PlanificationController
+    public function getCoursesParallelsWorkdays(getCoursesByResponsibleRequest $request)
+    {
+        $sorts = explode(',', $request->sort);
+        $courseParallelWorkday = Planification::customOrderBy($sorts)
+//            ->detailplanifications()
+//            ->course()
+            ->get();
+
+        return (new CourseParallelWorkdayResource($courseParallelWorkday))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])->response()->setStatusCode(201);
+    }
 }
