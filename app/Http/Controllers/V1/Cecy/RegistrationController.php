@@ -4,12 +4,16 @@ namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Cecy\Certificates\ShowParticipantsRequest;
+use App\Http\Requests\V1\Cecy\Courses\GetCoursesByNameRequest;
 use App\Http\Requests\V1\Cecy\Participants\GetCoursesByParticipantRequest;
 use App\Models\Cecy\Course;
 use App\Http\Requests\V1\Cecy\Registrations\IndexRegistrationRequest;
 use App\Http\Resources\V1\Cecy\Certificates\CertificateResource;
 use App\Http\Resources\V1\Cecy\Participants\CoursesByParticipantCollection;
+use App\Http\Resources\V1\Cecy\Registrations\RegistrationCollection;
+use App\Http\Resources\V1\Cecy\Registrations\RegistrationRecordCompetitorResource;
 use App\Http\Resources\V1\Cecy\Registrations\RegistrationResource;
+use App\Http\Resources\V1\Cecy\Users\UserResource;
 use App\Models\Cecy\Catalogue;
 use App\Models\Cecy\DetailPlanification;
 use App\Models\Cecy\Participant;
@@ -118,5 +122,40 @@ class RegistrationController extends Controller
             ])
             ->response()->setStatusCode(201);
     }
+
+       // RegistrationController
+       public function showRecordCompetitor(GetCoursesByNameRequest $request, Course $course)
+       {
+           //trae todos los participantes registrados de un curso en especifico
+           $planification = $course->planifications()->get();
+           $detailPlanification = $planification->detailPlanifications()->get();
+           $registrations = $detailPlanification->registrations()->get();
+           /*        $aditionalInformation= $registrations->aditionalInformations()->get();
+                  $participant = $aditionalInformation->registrations()->get()
+                  ->participants()
+                  ->users();
+           */
+           /*  $Course = Planification::where('course_id', $request->course()->id)->get(); */
+   
+           /*         $registration = $registrations
+                       ->planifications()
+                       ->detailPlanifications()
+                       ->additionalInformations()
+                       ->users()
+                       ->participants()
+                       ->registrations()
+                        ->course()
+                       ->paginate($request->input('per_page')); */
+   
+           return (new RegistrationRecordCompetitorResource($registrations))
+               ->additional([
+                   'msg' => [
+                       'summary' => 'success',
+                       'detail' => '',
+                       'code' => '200'
+                   ]
+               ])
+               ->response()->setStatusCode(200);
+       }
 
 }

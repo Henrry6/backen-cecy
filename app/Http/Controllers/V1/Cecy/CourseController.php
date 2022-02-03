@@ -16,9 +16,12 @@ use App\Http\Resources\V1\Cecy\Courses\CourseResource;
 use App\Http\Resources\V1\Cecy\Courses\CourseCollection;
 use App\Http\Requests\V1\Cecy\Courses\UpdateCourseRequest;
 use App\Http\Requests\V1\Cecy\Courses\UploadCertificateOfApprovalRequest;
+use App\Http\Requests\V1\Cecy\Planifications\GetDateByshowYearScheduleRequest;
 use App\Http\Requests\V1\Cecy\Planifications\IndexPlanificationRequest;
 use App\Http\Resources\V1\Cecy\Courses\CourseByCoordinatorCecyCollection;
 use App\Http\Resources\V1\Cecy\Courses\CoursePublicPrivateCollection;
+use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationInformNeedResource;
+use App\Http\Resources\V1\Cecy\Planifications\InformCourseNeedsResource;
 use App\Http\Resources\V1\Cecy\Prerequisites\CoursesByResponsibleCollection;
 use App\Models\Cecy\Instructor;
 use App\Models\Cecy\Participant;
@@ -225,14 +228,13 @@ class CourseController extends Controller
                 ]
             ])
             ->response()->setStatusCode(200);
-
     }
 
-     //obtener los cursos asignados a un docente responsable logueado
+    //obtener los cursos asignados a un docente responsable logueado
     // CourseController
     public function getCoursesByResponsibleCourse(getCoursesByResponsibleRequest $request)
     {
-        $instructor = Instructor::FirstWhere('user_id',$request->user()->id);
+        $instructor = Instructor::FirstWhere('user_id', $request->user()->id);
         $courses = $instructor->courses()->get();
 
         return (new CoursesByResponsibleCollection($courses))
@@ -246,7 +248,7 @@ class CourseController extends Controller
     }
 
 
-    
+
     // trae toda la info de un curso seleccionado
     // CourseController
     public function show(Course $course)
@@ -262,7 +264,7 @@ class CourseController extends Controller
     }
 
 
-      //actualiza datos generales de un curso seleccionado
+    //actualiza datos generales de un curso seleccionado
     // CourseController
     public function updateGeneralInformationCourse(UpdateCourseGeneralDataRequest $request, Course $course)
     {
@@ -279,16 +281,16 @@ class CourseController extends Controller
         $course->save();
 
         return (new CourseResource($course))
-        ->additional([
-            'msg' => [
-                'summary' => 'success',
-                'detail' => '',
-                'code' => '200'
-            ]
-        ]);
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ]);
     }
 
-    
+
     /**
      * Obtener cursos y Filtrarlos por peridos lectivos , carrera o estado
      */
@@ -371,6 +373,49 @@ class CourseController extends Controller
             ])
             ->response()->setStatusCode(200);
     }
+    public function showInformCourseNeeds(Course $course)
+    {
+        //trae un informe de nececidades de una planificacion, un curso en especifico por el docente que se logea
+
+
+        $planification = $course->planifications()->first();
+        //            ->detailPlanifications()
+        //            ->instructors()
+        //            ->classrooms();
+        /*         ->planifications() */
+        //->course()
+
+        /*             $planification = $course->planifications()->instructors()->users()->get()
+                    ->detailPlanifications()
+                    ->classrooms(); */
+
+        $data = new InformCourseNeedsResource($planification);
+    }
+
+    // CourseController
+    public function showYearSchedule(GetDateByshowYearScheduleRequest $request)
+    {
+        //trae todos los cursos planificados de un año en especifico
+        $year = Planification::whereYear('started_at', $request->input('startedAt'))->get();
+
+        $planificacion = $year
+            ->instructors()
+            ->detailPlanifications()
+            ->classrooms()
+            ->planifications()
+            ->courses()
+            ->paginate($request->input('per_page'));
+
+        return (new DetailPlanificationInformNeedResource($planificacion))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
 
     /*
     * Adjuntar el acta de aprobación
@@ -384,12 +429,13 @@ class CourseController extends Controller
     // Files
     public function showFileCourse(Course $courses, File $file)
     {
-    return $courses->showFile($file);
+        return $courses->showFile($file);
     }
 
     public function showImageCourse(Course $courses, Image $image)
     {
-    return $courses->showImage($image);
+        return $courses->showImage($image);
     }
+    // CourseController
 
 }
