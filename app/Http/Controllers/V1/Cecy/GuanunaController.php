@@ -143,85 +143,87 @@ class GuanunaController extends Controller
     }
 
 //actualizar informacion del detalle planificación
-public function updatedetailPlanificationByCecy(UpdateDetailPlanificationRequest $request)
-{
-    $loggedAuthority = Authority::where('user_id', $request->user()->id)->get();
-    $planification = Planification::find($request->input('planification.id'));
+    public function updatedetailPlanificationByCecy(UpdateDetailPlanificationRequest $request)
+    {
+        $loggedAuthority = Authority::where('user_id', $request->user()->id)->get();
+        $planification = Planification::find($request->input('planification.id'));
 
-    $classroom = Classroom::find($request->input('classroom.id'));
-    $days = Catalogue::find($request->input('day.id'));
-    $planification = Planification::find($request->input('planification.id'));
-    $workday = Catalogue::find($request->input('workday.id'));
-    $state = Catalogue::find($request->input('state.id'));
+        $classroom = Classroom::find($request->input('classroom.id'));
+        $days = Catalogue::find($request->input('day.id'));
+        $planification = Planification::find($request->input('planification.id'));
+        $workday = Catalogue::find($request->input('workday.id'));
+        $state = Catalogue::find($request->input('state.id'));
 
-    $detailPlanification = DetailPlanification::find($request->input('detailPlanification.id'));
+        $detailPlanification = DetailPlanification::find($request->input('detailPlanification.id'));
 
-    $detailPlanification->classroom()->associate($classroom);
-    $detailPlanification->day()->associate($days);
-    //$detailPlanification->planification()->associate($planification);
-    $detailPlanification->workday()->associate($workday);
+        $detailPlanification->classroom()->associate($classroom);
+        $detailPlanification->day()->associate($days);
+        //$detailPlanification->planification()->associate($planification);
+        $detailPlanification->workday()->associate($workday);
 
-    $detailPlanification->days_number = $request->input('days_number');
-    $detailPlanification->ended_at = $request->input('ended_at');
-    $detailPlanification->plan_ended_at = $request->input('plan_ended_at');
-    $detailPlanification->started_at = $request->input('started_at');
-    $detailPlanification->save();
+        $detailPlanification->days_number = $request->input('days_number');
+        $detailPlanification->ended_at = $request->input('ended_at');
+        $detailPlanification->plan_ended_at = $request->input('plan_ended_at');
+        $detailPlanification->started_at = $request->input('started_at');
+        $detailPlanification->save();
 
-    return (new DetailPlanificationResource ($detailPlanification))
-        ->additional([
-            'msg' => [
-                'summary' => 'Actualizado correctamente',
-                'detail' => '',
-                'code' => '200'
-            ]
-        ]);
-}
+        return (new DetailPlanificationResource ($detailPlanification))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Actualizado correctamente',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ]);
+    }
+
 //actualizar informacion de la planificacion
-public function updatePlanificationByCecy(UpdatePlanificationRequest $request, Planification $planification)
-{
-    $loggedAuthority = Authority::where('user_id', $request->user()->id)->get();
-    $planification = Planification::find($request->input('planification.id'));
-    $responsibleCecy = $planification->reponsibleCecy();
+    public function updatePlanificationByCecy(UpdatePlanificationRequest $request, Planification $planification)
+    {
+        $loggedAuthority = Authority::where('user_id', $request->user()->id)->get();
+        $planification = Planification::find($request->input('planification.id'));
+        $responsibleCecy = $planification->reponsibleCecy();
 
-    $planification->course()->associate(Course::find($request->input('course.id')));
-    $planification->detail_school_period()->associate(DetailSchoolPeriod::find($request->input('detail_school_period.id')));
-    $planification->vicerrector()->associate(Authority::find($request->input('vicerrector.id')));
-    $planification->responsible_ocs()->associate(Catalogue::find($request->input('responsible_ocs.id')));
-    $planification->ended_at = $request->input('ended_at');
-    $planification->started_at = $request->input('started_at');
-    $planification->save();
-}
+        $planification->course()->associate(Course::find($request->input('course.id')));
+        $planification->detail_school_period()->associate(DetailSchoolPeriod::find($request->input('detail_school_period.id')));
+        $planification->vicerrector()->associate(Authority::find($request->input('vicerrector.id')));
+        $planification->responsible_ocs()->associate(Catalogue::find($request->input('responsible_ocs.id')));
+        $planification->ended_at = $request->input('ended_at');
+        $planification->started_at = $request->input('started_at');
+        $planification->save();
+    }
+
 //Asignar codigo a la planificacion
-public function assignCodeToPlanification(Planification $planification, $request)
-{
-    $planification->code=$request->input('code');
-    return (new PlanificationResource($planification))
-    ->additional([
-        'msg' => [
-            'summary' => 'Curso actualizado',
-            'detail' => '',
-            'code' => '200'
-        ]
-    ]);
+    public function assignCodeToPlanification(Planification $planification, $request)
+    {
+        $planification->code = $request->input('code');
+        return (new PlanificationResource($planification))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Curso actualizado',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ]);
 
-}
+    }
 
 //Aprobacion de planificacion
-public function approvePlanification($request, Planification $planification)
-{
-$planification->state()->associate(State::FirstWhere('code', State::APPROVED));
-$planification->observation = $request->input('observation');
-$planification->save();
+    public function approvePlanification($request, Planification $planification)
+    {
+        $planification->state()->associate(State::FirstWhere('code', State::APPROVED));
+        $planification->observation = $request->input('observation');
+        $planification->save();
 
-return (new PlanificationResource($planification))
-    ->additional([
-        'msg' => [
-            'summary' => 'Planificacion actualizada',
-            'detail' => '',
-            'code' => '200'
-        ]
-    ]);
-}
+        return (new PlanificationResource($planification))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Planificacion actualizada',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ]);
+    }
 
 
 
