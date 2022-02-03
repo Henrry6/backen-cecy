@@ -58,7 +58,7 @@ Route::prefix('planification/{planification}')->group(function () {
 Route::prefix('detailPlanification')->group(function () {
     Route::get('', [PerezController::class, 'getDetailPlanificationsByPlanification']);
     Route::post('', [PerezController::class, 'registerDetailPlanification']);
-    Route::delete('', [PerezController::class, 'destroysDetailPlanifications']);
+    Route::patch('', [PerezController::class, 'destroysDetailPlanifications']);
 });
 
 Route::prefix('detailPlanification/{detailPlanification}')->group(function () {
