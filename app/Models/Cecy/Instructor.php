@@ -30,11 +30,6 @@ class Instructor extends Model implements Auditable
         return $this->hasMany(Course::class);
     }
 
-    public function detailInstructors()
-    {
-        return $this->hasMany(DetailPlanification::class);
-    }
-
     public function detailPlanifications()
     {
         return $this->belongsToMany(DetailPlanification::class, 'cecy.detail_planification_instructor', 'instructor_id', 'detail_planification_id')->withPivot('topic_id');;

@@ -23,7 +23,7 @@ class AuthorizedInstructorsSeeder extends Seeder
         $instructors = Instructor::get();
 
         foreach ($instructors as $instructor) {
-            $instructor->detailInstructors()->attach(
+            $instructor->profileInstructorCourses()->attach(
                 $profileInstructorCourses->random(rand(1, 3))->pluck('id')->toArray()
             );
         }
