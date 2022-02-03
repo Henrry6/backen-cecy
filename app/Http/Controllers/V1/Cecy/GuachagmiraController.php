@@ -180,8 +180,8 @@ class GuachagmiraController extends Controller
     */
     public function getInstructorsInformationByCourse(Course $course)
     {
-        $planification = $course->planifications()->get();
-        $detailPlanifications =  $planification->detailPlanifications()->get();
+        $planifications = $course->planifications()->get();
+        $detailPlanifications =  $planifications->detailPlanifications()->get();
         $instructors =  $detailPlanifications->instructors()->get();
         $user_instructors = $instructors->user()->get();
 
