@@ -25,6 +25,10 @@ class Registration extends Model implements Auditable
         'registered_at',
     ];
 
+    protected $casts = [
+        'observations' => 'array',
+    ];
+
     public function additionalInformation()
     {
         $this->hasOne(AdditionalInformation::class);
@@ -71,10 +75,6 @@ class Registration extends Model implements Auditable
     }
 
     // Mutators
-    public function setObservationsAttribute($value)
-    {
-        $this->attributes['observations'] = strtoupper($value);
-    }
     // Scopes
     public function scopeCode($query, $observations)
     {
