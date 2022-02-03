@@ -40,12 +40,13 @@ Route::prefix('catalogue/{catalogue}')->group(function () {
  * PLANIFICATIONS
  **********************************************************************************************************************/
 Route::prefix('planification')->group(function () {
-    Route::get('', [PerezController::class, 'getPlanificationsByCourse']);
+    Route::get('course/{course}', [PerezController::class, 'getPlanificationsByCourse']);
+    Route::get('state/{state}', [PerezController::class, 'getKpi']);
 });
 
 
 Route::prefix('planification/{planification}')->group(function () {
-    Route::put('', [PerezController::class, 'updateDatesAndNeedsinPlanification']);
+    Route::put('', [PerezController::class, 'updateDatesAndNeedsInPlanification']);
 });
 
 /***********************************************************************************************************************
@@ -53,14 +54,15 @@ Route::prefix('planification/{planification}')->group(function () {
  **********************************************************************************************************************/
 Route::prefix('detailPlanification')->group(function () {
     Route::get('', [PerezController::class, 'getDetailPlanificationsByPlanification']);
-    Route::post('', [PerezController::class, 'registerDetailPlanificationByResponsibleCourse']);
-    Route::get('/{course}', [GuachagmiraController::class, 'getDetailPlanificationsByCourse']);
+    Route::post('', [PerezController::class, 'registerDetailPlanification']);
+    Route::delete('', [PerezController::class, 'destroysDetailPlanifications']);
+    Route::get('{course}', [GuachagmiraController::class, 'getDetailPlanificationsByCourse']);
 });
 
 Route::prefix('detailPlanification/{detailPlanification}')->group(function () {
-    Route::get('', [PerezController::class, 'showDetailPlanificationByResponsibleCourse']);
-    Route::put('', [PerezController::class, 'updateDetailPlanificationByResponsibleCourse']);
-    Route::delete('', [PerezController::class, 'deleteDetailPlanificationByResponsibleCourse']);
+    Route::get('', [PerezController::class, 'showDetailPlanification']);
+    Route::put('', [PerezController::class, 'updateDetailPlanification']);
+    Route::delete('', [PerezController::class, 'deleteDetailPlanification']);
 });
 
 /***********************************************************************************************************************

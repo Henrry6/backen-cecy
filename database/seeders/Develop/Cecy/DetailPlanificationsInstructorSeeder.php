@@ -33,19 +33,17 @@ class DetailPlanificationsInstructorSeeder extends Seeder
         $instructors = Instructor::get();
         $topics = Topic::get();
 
-        // foreach ($instructors as $instructor) {
-        //     foreach ($detailPlanifications as $detailPlanification) {
-        //         $instructor->detailPlanifications()->attach(
-        //             $detailPlanification,
-        //             ['topic_id' => $faker->randomElement($topics)]
-        //         );
-        //     }
-        // }
-
         foreach ($instructors as $instructor) {
+            $topicId = $faker->randomElement($topics)->id;
             $instructor->detailPlanifications()->attach(
-                $detailPlanifications->random(rand(1, 3))->pluck('id')->toArray(),
-                ['topic_id' => $faker->randomElement($topics)]
+                [
+                    ($faker->randomElement($detailPlanifications))->id => ['topic_id' => $topicId],
+                    ($faker->randomElement($detailPlanifications))->id => ['topic_id' => $topicId],
+                    ($faker->randomElement($detailPlanifications))->id => ['topic_id' => $topicId],
+                    ($faker->randomElement($detailPlanifications))->id => ['topic_id' => $topicId],
+                    ($faker->randomElement($detailPlanifications))->id => ['topic_id' => $topicId],
+                    ($faker->randomElement($detailPlanifications))->id => ['topic_id' => $topicId],
+                ]
             );
         }
     }
