@@ -18,6 +18,7 @@ use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\GetDetailPla
 use App\Http\Resources\V1\Cecy\Attendances\GetAttendanceByParticipantCollection;
 use App\Http\Resources\V1\Cecy\Attendances\SaveDetailAttendanceResource;
 use App\Http\Resources\V1\Cecy\PhotographicRecords\PhotographicRecordResource;
+use App\Http\Resources\V1\Cecy\Registrations\RegistrationRecordCompetitorResource;
 use App\Models\Cecy\Attendance;
 use App\Models\Cecy\Registration;
 
@@ -97,6 +98,29 @@ class AttendanceController extends Controller
               ])
               ->response()->setStatusCode(200);
       }
+
+      public function showAttendenceEvaluationRecord(Course $course, Request $request)
+      {
+         // trae la informacion de registro asistencia-evaluacion
+         $course = Course::where('course_id', $request->course()->id)->get();
+
+    $detailPlanifications = $course
+        ->detailPlanifications()
+        ->planifications()
+        ->course()
+        ->registration()
+        ->attendence()
+        ->paginate($request->input('per_page'));
+
+    return (new RegistrationRecordCompetitorResource($detailPlanifications))
+        ->additional([
+            'msg' => [
+                'summary' => 'success',
+                'detail' => '',
+                'code' => '200'
+            ]
+        ]);
+    }
 }
 
 

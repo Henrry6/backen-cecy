@@ -417,6 +417,51 @@ class CourseController extends Controller
             ->response()->setStatusCode(200);
     }
 
+    public function showCurricularDesign(Course $course, Request $request)
+      {
+        // trae la informacion de diseño curricular
+
+    $planification = $course->planifications()->get()
+        ->detailPlanifications()
+        ->planifications()
+        ->course()
+        ->paginate($request->input('per_page'));
+
+    return (new InformCourseNeedsResource($planification))
+        ->additional([
+            'msg' => [
+                'summary' => 'success',
+                'detail' => '',
+                'code' => '200'
+            ]
+        ]);
+    }
+
+    public function showFinalCourseReport(Course $course, Request $request)
+    {
+     // trae la informacion del informe final del curso
+
+     $course = Course::where('course_id', $request->course()->id)->get();
+
+     $detailPlanifications = $course
+      ->detailPlanifications()
+      ->planifications()
+      ->instructors()
+      ->course()
+      ->registration()
+      ->paginate($request->input('per_page'));
+
+
+      return (new InformCourseNeedsResource($course))
+      ->additional([
+          'msg' => [
+              'summary' => 'success',
+              'detail' => '',
+              'code' => '200'
+          ]
+      ]);
+  }
+
     /*
     * Adjuntar el acta de aprobación
     */
