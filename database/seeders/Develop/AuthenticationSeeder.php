@@ -161,29 +161,29 @@ class AuthenticationSeeder extends Seeder
     private function assignUserRoles()
     {
 
-        $roles = Role::where([
-            'name' => 'public_company',
-            'name' => 'private_company',
-            'name' => 'training_company',
-            'name' => 'external_student',
-            'name' => 'internal_student',
-            'name' => 'senecyt_staff',
-            'name' => 'gad'
-        ])->get();
-        $roles = Role::all();
+        // $roles = Role::where([
+        //     'name' => 'public_company',
+        //     'name' => 'private_company',
+        //     'name' => 'training_company',
+        //     'name' => 'external_student',
+        //     'name' => 'internal_student',
+        //     'name' => 'senecyt_staff',
+        //     'name' => 'gad'
+        // ])->get();
+        // $roles = Role::all();
         $user = User::find(1);
         $user->assignRole('admin');
 
-        for ($i = 6; $i <= 35; $i++) {
-            $user = User::find($i);
-            $user->assignRole('teacher');
-        }
+        // for ($i = 6; $i <= 35; $i++) {
+        //     $user = User::find($i);
+        //     $user->assignRole('teacher');
+        // }
 
 
-        for ($i = 36; $i <= 85; $i++) {
-            $user = User::find($i);
-            $user->assignRole(rand(0, $roles->count() - 1));
-        }
+        // for ($i = 36; $i <= 85; $i++) {
+        //     $user = User::find($i);
+        //     $user->assignRole(rand(0, $roles->count() - 1));
+        // }
     }
 
     private function createLocationCatalogues()

@@ -25,7 +25,7 @@ class Requirement extends Model implements Auditable
 
     public function registrations()
     {
-        return $this->belongsToMany(Registration::class);
+        return $this->belongsToMany(Registration::class, 'cecy.registration_requirement', 'requirement_id', 'registration_id');
     }
     public function state()
     {
@@ -35,7 +35,7 @@ class Requirement extends Model implements Auditable
     // Mutators
     public function setNameAttribute($value)
     {
-        $this->attributes['name'] = strtoupper($value);
+        return $this->attributes['name'] = strtoupper($value);
     }
 
     // Scopes

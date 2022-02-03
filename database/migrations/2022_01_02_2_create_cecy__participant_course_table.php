@@ -14,7 +14,7 @@ class CreateCecyParticipantCourseTable extends Migration
             $table->foreignId('course_id')
                 ->constrained('cecy.courses');
 
-            $table->foreignId('participant_type_id')
+            $table->foreignId('catalogue_id')
                 ->constrained('cecy.catalogues');
         });
     }

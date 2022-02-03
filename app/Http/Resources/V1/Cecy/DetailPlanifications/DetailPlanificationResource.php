@@ -6,6 +6,9 @@ use App\Http\Resources\V1\Cecy\Catalogues\CatalogueResource;
 use App\Http\Resources\V1\Cecy\Classrooms\ClassroomResource;
 use App\Http\Resources\V1\Cecy\Courses\CourseResource;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationResource;
+use App\Http\Resources\V1\Cecy\Registrations\RegistrationResource;
+use App\Models\Cecy\Classroom;
+use App\Models\Cecy\Registration;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class DetailPlanificationResource extends JsonResource
@@ -21,6 +24,8 @@ class DetailPlanificationResource extends JsonResource
             'planification' => PlanificationResource::make($this->planification_id),
             'workday' => CatalogueResource::make($this->workday_id),
             'state' => CatalogueResource::make($this->state_id),
+            'registrations' => RegistrationResource::collection($this->registrations),
+            'classrooms' => ClassroomResource::collection($this->classrooms),
             'endedTime' => $this->ended_time,
             'observations' => $this->observations,
             'planEndedAt' => $this->plan_ended_at,

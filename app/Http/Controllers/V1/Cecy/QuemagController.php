@@ -27,6 +27,7 @@ class QuemagController extends Controller
     }
 
     //trae participantes matriculados
+    // RegistrationController
     public function showParticipants(ShowParticipantsRequest $request, DetailPlanification $detailPlanification)
     {
         $responsibleCourse = course::where('course_id', $request->course()->id)->get();
@@ -46,6 +47,7 @@ class QuemagController extends Controller
     }
 
     //Trae todos los cursos
+    // PlanificationController
     public function getPlanitifications()
     {
         $planifications = Planification::where(['state' => function ($state) {
@@ -69,6 +71,7 @@ class QuemagController extends Controller
      ******************************************************************************************************************/
 
     //Descargar matriz
+    // RegistrationController
     public function downloadFile(Catalogue $catalogue, File $file)
     {
         $registratiton = Registration::find(1);
@@ -83,7 +86,7 @@ class QuemagController extends Controller
     }
 
     //Subir certificado Firmado
-
+// CerticateController
     public function uploadFileCertificateFirm(UploadFileRequest $request, Catalogue $catalogue)
     {
 
@@ -91,14 +94,14 @@ class QuemagController extends Controller
     }
 
     //Carga de codigos certificado excel
-
+// CerticateController
     public function uploadFileCertificate(UploadFileRequest $request, Catalogue $catalogue)
     {
         return $catalogue->uploadFileCertificate($request);
     }
 
     //Descarga de certificados generados
-
+// CerticateController
     public function downloadFileCertificates(Catalogue $catalogue, File $file)
     {
         return $catalogue->downloadFileCertificates($file);

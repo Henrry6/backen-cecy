@@ -22,6 +22,11 @@ class ProfileInstructorCourse extends Model implements Auditable
         'required_skills',
     ];
 
+    protected $casts = [
+        'required_experiences' => 'array',
+        'required_knowledges' => 'array',
+        'required_skills' => 'array'
+    ];
     // Relationships
     public function course()
     {
@@ -30,7 +35,7 @@ class ProfileInstructorCourse extends Model implements Auditable
 
     public function instructors()
     {
-        return $this->belongsToManyy(Instructor::class, 'authorized_instructors', 'instructor_id', 'profile_instructor_id');
+        return $this->belongsToManyy(Instructor::class, 'cecy.authorized_instructors', 'instructor_id', 'profile_instructor_course_id');
     }
     // Mutators
 

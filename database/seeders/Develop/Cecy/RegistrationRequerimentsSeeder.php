@@ -31,8 +31,8 @@ class RegistrationRequerimentsSeeder extends Seeder
 
         //por cada registro le asigno entre 1 a 3 requerimientos
 
-        foreach ($registrations as $registro) {
-            $registro->requirements()->attach(
+        foreach ($registrations as $registration) {
+            $registration->requirements()->attach(
                 $requirements->random(rand(1, 3))->pluck('id')->toArray(),
                 ['url' => '/server/etc/images']
             );

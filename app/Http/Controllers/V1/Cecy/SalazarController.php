@@ -7,7 +7,7 @@ use App\Http\Resources\V1\Cecy\ProfileInstructorCourses\ProfileInstructorCourseC
 use App\Http\Resources\V1\Cecy\ProfileInstructorCourses\ProfileInstructorCourseResource;
 use Illuminate\Http\Request;
 use App\Models\Cecy\ProfileInstructorCourse;
-use App\Models\Cecy\Course;    
+use App\Models\Cecy\Course;
 use App\Http\Resources\V1\Cecy\Planifications\InformCourseNeedsResource;
 use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationInformNeedResource;
 use App\Http\Resources\V1\Cecy\Registration\RegistrationRecordCompetitorResource;
@@ -20,9 +20,10 @@ class SalazarController extends Controller
         $this->middleware('permission:show')->only(['show']);
     }
 
+    // CourseController
       public function showCurricularDesign(Course $course)
       {
-        // trae la informacion de diseño curricular 
+        // trae la informacion de diseño curricular
 
     $planification = $course->planifications()->get()
         ->detailPlanifications()
@@ -40,7 +41,7 @@ class SalazarController extends Controller
         ]);
     }
 
-      
+    // AttendanceController
       public function showAttendenceEvaluationRecord(Course $course)
       {
          // trae la informacion de registro asistencia-evaluacion
@@ -63,11 +64,11 @@ class SalazarController extends Controller
             ]
         ]);
     }
-      
-  
+
+    // CourseController
       public function showFinalCourseReport(Course $course)
       {
-       // trae la informacion del informe final del curso 
+       // trae la informacion del informe final del curso
 
        $course = Course::where('course_id', $request->course()->id)->get();
 
@@ -79,7 +80,7 @@ class SalazarController extends Controller
         ->registration()
         ->paginate($request->input('per_page'));
 
-       
+
         return (new InformCourseNeedsResource($course))
         ->additional([
             'msg' => [
@@ -89,8 +90,7 @@ class SalazarController extends Controller
             ]
         ]);
     }
-         
+
       }
 
-  
-    
+

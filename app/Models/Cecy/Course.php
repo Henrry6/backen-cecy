@@ -83,7 +83,7 @@ class Course extends Model implements Auditable
 
     public function catalogues()
     {
-        return $this->belongsToMany(Catalogue::class, 'participant_course', 'course_id' . 'participant_type_id');
+        return $this->belongsToMany(Catalogue::class, 'cecy.participant_course', 'course_id', 'catalogue_id');
     }
 
     public function category()
@@ -164,7 +164,7 @@ class Course extends Model implements Auditable
 
     public function topics()
     {
-        return $this->hasMany(Topics::class);
+        return $this->hasMany(Topic::class);
     }
 
     public function files()

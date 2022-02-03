@@ -32,7 +32,7 @@ class RiveraController extends Controller
         $this->middleware('permission:show')->only(['show']);
     }
 
-
+// CourseController
     public function showInformCourseNeeds(Course $course)
     {
         //trae un informe de nececidades de una planificacion, un curso en especifico por el docente que se logea
@@ -53,6 +53,7 @@ class RiveraController extends Controller
 
     }
 
+    // CourseController
     public function showYearSchedule(GetDateByshowYearScheduleRequest $request)
     {
         //trae todos los cursos planificados de un año en especifico
@@ -77,6 +78,7 @@ class RiveraController extends Controller
             ->response()->setStatusCode(200);
     }
 
+    // RegistrationController
     public function showRecordCompetitor(getCoursesByNameRequest $request, Course $course)
     {
         //trae todos los participantes registrados de un curso en especifico
@@ -111,6 +113,7 @@ class RiveraController extends Controller
             ->response()->setStatusCode(200);
     }
 
+    // AttendanceController
     public function showPhotographicRecord(GetDetailPlanificationsByResponsibleCourseRequest $request, Course $course)
     {
         //trae el registro fotografico de un curso en especifico por el docente que se loguea

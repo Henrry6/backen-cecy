@@ -38,6 +38,7 @@ class SantillanController extends Controller
      }*/
 
     //ver todas las asistencias de un detalle planification
+    // AttendanceController
     public function getAttendancesByDetailPlanification(GetAttendanceTeacherRequest $request, DetailPlanification $detailPlanification)
     {
         $attendances = $detailPlanification->attendances()->get();
@@ -53,6 +54,7 @@ class SantillanController extends Controller
     }
 
     //asistencias de los estudiantes de un curso
+    // DetailAttendanceController
     public function ShowParticipantCourse(ShowParticipantsRequest $request, Attendance $attendance)
     {
 
@@ -71,6 +73,7 @@ class SantillanController extends Controller
     }
 
     //estudiantes de un curso y sus notas
+    // RegistrationController
     public function ShowParticipantGrades(ShowParticipantsRequest $request, DetailPlanification $detailPlanification)
     {
         $registrations = $detailPlanification->registrations()->paginate();
@@ -86,6 +89,7 @@ class SantillanController extends Controller
     }
 
     //cursos de un docente instructor
+    // CourseController
     public function getCoursesByInstructor(GetPlanificationByResponsableCourseRequest $request)
     {
 
@@ -123,6 +127,7 @@ class SantillanController extends Controller
     }*/
 
     //crear una asistencia a partir de las fechas y horarios de detalle planificacion.
+    // AttendanceController
     public function storeAttendanceTeacher(StoreAttendanceRequest $request)
     {
         $attendance = new Attendance();
@@ -149,6 +154,7 @@ class SantillanController extends Controller
     }
 
     //ver asistencia una por una
+    // AttendanceController
     public function showAttendanceTeacher(ShowAttendanceTeacherRequest $request)
     {
         $attendance = Attendance::where([['registered_at', $request->input('registered_at')]])->get();
@@ -166,6 +172,7 @@ class SantillanController extends Controller
     }
 
     //editar o actualizar una asistencia
+    // DetailAttendanceController
     public function updatDetailAttendanceTeacher(UpdateDetailAttendanceRequest $request, DetailAttendance $detailAttendance)
     {
         $detailAttendance->type_id = $request->input('type.id');
@@ -185,7 +192,7 @@ class SantillanController extends Controller
     }
 
     //eliminar una asistencia
-
+// AttendanceController
     public function destroysAttendanceTeacher(DestroysAttendanceRequest $request)
     {
         $attendance = Attendance::whereIn('id', $request->input('ids'))->get();
@@ -204,7 +211,7 @@ class SantillanController extends Controller
     }
 
     //traer temas y subtemas de un curso
-
+// TopicController
     public function getTopicsByCourse(Course $course)
     {
         $topics = $course->topics()->get();
@@ -222,6 +229,7 @@ class SantillanController extends Controller
      ******************************************************************************************************************/
 
     //subir notas de los estudiantes
+    // RegistrationController
     public function uploadFile(UploadFileRequest $request, FIle $file)
     {
         return $file->uploadFile($request);
@@ -229,28 +237,31 @@ class SantillanController extends Controller
 
 
     //descargar plantilla de las notas
+    // RegistrationController
     public function downloadFile(Catalogue $catalogue, File $file)
     {
         return $catalogue->downloadFile($file);
     }
 
     //previsualizar la platilla de notas
+    // RegistrationController
     public function showFile(Catalogue $catalogue, File $file)
     {
         return $catalogue->showFile($file);
     }
 
     //eliminar el archivo existente para poder cargar de nuevo
+    // RegistrationController
     public function destroyFile(Catalogue $catalogue, File $file)
     {
         return $catalogue->destroyFile($file);
     }
 
-
     /*******************************************************************************************************************
      * IMAGES
      ******************************************************************************************************************/
     //subir evidencia fotografica
+    // AttendanceController
     public function uploadImage(UploadImageRequest $request, PhotograficRecord $photograficRecord)
     {
         $storagePath = storage_path('app/private/images/');

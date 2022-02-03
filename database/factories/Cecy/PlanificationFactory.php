@@ -12,11 +12,6 @@ class PlanificationFactory extends Factory
 
     public function definition()
     {
-        $course = Course::get();
-
-        return [
-            'course_id' => $this->faker->randomElement($course[rand(0, sizeof($course) - 1)]),
-            'prerequisite_id' => $this->faker->randomElement($course[rand(0, sizeof($course) - 1)]),
-        ];
+        return [];
     }
 }

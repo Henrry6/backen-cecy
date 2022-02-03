@@ -104,7 +104,7 @@ class ParticipantsSeeder extends Seeder
 
         $states = Catalogue::where('type', 'PARTICIPANT_STATE')->get();
         $types = Catalogue::where('type', 'PARTICIPANT')->get();
-        $users = User::where('id', '>', 36)->where('id', '<', 85)->get();
+        $users = User::where('id', '>=', 36)->where('id', '<=', 85)->get();
 
         foreach ($users  as $user) {
             Participant::factory()->create(

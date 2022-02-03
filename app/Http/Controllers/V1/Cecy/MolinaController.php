@@ -35,6 +35,7 @@ class MolinaController extends Controller
     }*/
 
     //Ver todas las asistencias del estudiante
+    // AttendanceController
     public function getAttendancesByParticipant(GetAttendancesByParticipantRequest $request, Registration $registration)
     {
         $detailPlanification = $registration->detailPlanification()->first();
@@ -54,6 +55,7 @@ class MolinaController extends Controller
     }
 
     //Ver todos los cursos del estudiante en el cual esta matriculado
+    // RegistrationController
     public function getCoursesByParticipant(GetCoursesByParticipantRequest $request)
     {
         $participant = Participant::firstWhere('user_id', $request->user()->id);
@@ -107,6 +109,7 @@ class MolinaController extends Controller
     }*/
 
     //Descargar certificado del curso
+    // CertificateController
     public function downloadCertificateByParticipant(IndexCertificateRequest $request, Registration $registration, Catalogue $catalogue, File $file)
     {
         //$participant = Participant::firstWhere('user_id', $request->user()->id);
@@ -115,7 +118,9 @@ class MolinaController extends Controller
         }]);
         return $catalogue->downloadFileCertificates($file);
     }
+
     // Guardar asistencia
+    // AttendanceController
     public function saveDetailAttendances(SaveDetailAttendanceRequest $request, Attendance $attendance)
     {
         $attendance->state_id = $request->input('state.id');

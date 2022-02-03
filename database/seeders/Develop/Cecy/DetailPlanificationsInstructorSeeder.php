@@ -5,6 +5,7 @@ namespace Database\Seeders\Develop\Cecy;
 use App\Models\Cecy\DetailPlanification;
 use App\Models\Cecy\Instructor;
 use App\Models\Cecy\Topic;
+use Faker\Factory;
 use Illuminate\Database\Seeder;
 
 class DetailPlanificationsInstructorSeeder extends Seeder
@@ -23,23 +24,27 @@ class DetailPlanificationsInstructorSeeder extends Seeder
 
     public function createDetailPlanificationsInstructorCatalogue()
     {
-        //Campos que son de catalogo
     }
 
     public function createDetailPlanificationsInstructor()
     {
-        //CREAR AQUI LAS SEMILLAS PARA DETAILPLANIFICATIONS
+        $faker = Factory::create();
         $detailPlanifications = DetailPlanification::get();
         $instructors = Instructor::get();
         $topics = Topic::get();
 
         foreach ($instructors as $instructor) {
-            foreach ($detailPlanifications as $detailPlanification) {
-                $instructor->detailPlanifications()->attach(
-                    $detailPlanification->id,
-                    ['topic_id' => $topics[rand(0, sizeof($topics) - 1)]]
-                );
-            }
+            $topicId = $faker->randomElement($topics)->id;
+            $instructor->detailPlanifications()->attach(
+                [
+                    ($faker->randomElement($detailPlanifications))->id => ['topic_id' => $topicId],
+                    ($faker->randomElement($detailPlanifications))->id => ['topic_id' => $topicId],
+                    ($faker->randomElement($detailPlanifications))->id => ['topic_id' => $topicId],
+                    ($faker->randomElement($detailPlanifications))->id => ['topic_id' => $topicId],
+                    ($faker->randomElement($detailPlanifications))->id => ['topic_id' => $topicId],
+                    ($faker->randomElement($detailPlanifications))->id => ['topic_id' => $topicId],
+                ]
+            );
         }
     }
 }

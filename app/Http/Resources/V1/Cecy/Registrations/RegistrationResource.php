@@ -26,6 +26,7 @@ class RegistrationResource extends JsonResource
             'stateCourse.id' => Catalogue::make($this->stateCourse),
             'type.id' => CatalogueResource::make($this->type),
             'typeParticipant.id' => CatalogueResource::make($this->typeParticipant),
+            'participants' => ParticipantResource::collection($this->participants),
             'finalGrade' => $this->final_grade,
             'grade1' => $this->grade1,
             'grade2' => $this->grade2,

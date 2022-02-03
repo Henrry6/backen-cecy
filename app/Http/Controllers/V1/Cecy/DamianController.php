@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 class DamianController extends Controller
 {
     //inscripcion a un curso
+
     public function registerStudent(RegisterStudentRequest $request)
     {
         $participant = Participant::firstWhere('user_id', $request->user()->id);

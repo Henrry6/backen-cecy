@@ -10,6 +10,8 @@ class CreateCecyDetailAttendancesTable extends Migration
     {
         Schema::connection(env('DB_CONNECTION_CECY'))->create('detail_attendances', function (Blueprint $table) {
             $table->id();
+            $table->timestamps();
+            $table->softDeletes();
 
             $table->foreignId('attendance_id')
                 ->nullable()
@@ -30,5 +32,3 @@ class CreateCecyDetailAttendancesTable extends Migration
         Schema::connection(env('DB_CONNECTION_CECY'))->dropIfExists('detail_attendances');
     }
 }
-
-

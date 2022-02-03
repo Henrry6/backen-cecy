@@ -5,7 +5,7 @@ namespace Database\Factories\Cecy;
 use App\Models\Cecy\AdditionalInformation;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class AddtionalInformationFactory extends Factory
+class AdditionalInformationFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.

@@ -19,6 +19,7 @@ class AuthorizedInstructorsSeeder extends Seeder
 
         $profileInstructorCourses = ProfileInstructorCourse::get();
         $instructors = Instructor::get();
+
         foreach ($instructors as $instructor) {
             foreach ($profileInstructorCourses as $profileInstructorCourse) {
                 $instructor->profileInstructorCourses()->attach(
@@ -27,5 +28,4 @@ class AuthorizedInstructorsSeeder extends Seeder
             }
         }
     }
-
 }

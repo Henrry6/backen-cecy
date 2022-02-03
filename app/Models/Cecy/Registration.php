@@ -25,6 +25,10 @@ class Registration extends Model implements Auditable
         'registered_at',
     ];
 
+    protected $casts = [
+        'observations' => 'array',
+    ];
+
     public function additionalInformation()
     {
         $this->hasOne(AdditionalInformation::class);
@@ -47,7 +51,7 @@ class Registration extends Model implements Auditable
 
     public function requirements()
     {
-        $this->belongsToMany(Requirement::class);
+        return $this->belongsToMany(Requirement::class, 'cecy.registration_requirement', 'registration_id', 'requirement_id');
     }
 
     public function state()
@@ -71,10 +75,6 @@ class Registration extends Model implements Auditable
     }
 
     // Mutators
-    public function setObservationsAttribute($value)
-    {
-        $this->attributes['observations'] = strtoupper($value);
-    }
     // Scopes
     public function scopeCode($query, $observations)
     {
