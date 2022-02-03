@@ -201,6 +201,24 @@ class CourseController extends Controller
             ])->response()->setStatusCode(200);
     }
 
+    //visualizar todos los cursos
+
+    public function getCourses()
+    {
+        $courses = Course::get();
+
+        return (new CourseCollection($courses))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Me trae los cursos',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+
+    }
+
     // Files
     public function showFileCourse(Course $courses, File $file)
     {
