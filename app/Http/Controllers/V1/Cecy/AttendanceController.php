@@ -9,6 +9,7 @@ use App\Http\Requests\V1\Cecy\Attendance\GetAttendanceTeacherRequest;
 use App\Http\Requests\V1\Cecy\Attendance\SaveDetailAttendanceRequest;
 use App\Http\Requests\V1\Cecy\Attendance\ShowAttendanceTeacherRequest;
 use App\Http\Requests\V1\Cecy\Attendance\StoreAttendanceRequest;
+use App\Http\Requests\V1\Cecy\Courses\GetCoursesByNameRequest;
 use App\Http\Requests\V1\Core\Images\UploadImageRequest;
 use App\Http\Resources\V1\Cecy\Attendances\AttendanceCollection;
 use App\Http\Resources\V1\Cecy\Attendances\AttendanceResource;
@@ -108,7 +109,7 @@ class AttendanceController extends Controller
               ->response()->setStatusCode(200);
       }
 
-      public function showAttendenceEvaluationRecord(Course $course, Request $request)
+      public function showAttendenceEvaluationRecord(GetCoursesByNameRequest $request ,Course $course)
       {
          // trae la informacion de registro asistencia-evaluacion
          $course = Course::where('course_id', $request->course()->id)->get();
