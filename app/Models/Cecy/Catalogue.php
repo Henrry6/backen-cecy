@@ -33,17 +33,17 @@ class Catalogue extends Model implements Auditable
     // Relationships
     public function parent()
     {
-        return $this->belongsTo(Catalogue::class, 'parent_id', 'core.catalogues');
+        return $this->belongsTo(Catalogue::class, 'parent_id', 'cecy.catalogues');
     }
 
     public function courses()
     {
-        return $this->belongsToMany(Course::class, 'participant_course', 'participant_type_id', 'course_id');
+        return $this->belongsToMany(Course::class, 'cecy.participant_course', 'catalogue_id', 'course_id');
     }
 
     public function children()
     {
-        return $this->hasMany(Catalogue::class, 'parent_id', 'core.catalogues');
+        return $this->hasMany(Catalogue::class, 'parent_id', 'cecy.catalogues');
     }
 
     public function files()

@@ -51,7 +51,7 @@ class DetailPlanification extends Model implements Auditable
 
     public function instructors()
     {
-        return $this->belongsToMany(Instructor::class, 'detail_planification_instructor', 'detail_planification_id', 'instructor_id');
+        return $this->belongsToMany(Instructor::class, 'cecy.detail_planification_instructor', 'detail_planification_id', 'instructor_id');
     }
 
     public function parallel()

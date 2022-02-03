@@ -34,7 +34,7 @@ class RegistrationsSeeder extends Seeder
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
 
         //type_id
-        Catalogue::factory()->sequence(
+        Catalogue::factory(10)->sequence(
             [
                 'code' => $catalogue['registration']['special'],
                 'name' => 'Especial',
@@ -105,27 +105,28 @@ class RegistrationsSeeder extends Seeder
         $states = Catalogue::where('type', 'REGISTRATION_STATE')->get();
         $states_course = Catalogue::where('type', 'STATE_COURSE')->get();
         $types = Catalogue::where('type', 'REGISTRATION')->get();
-        $participant = 36;
+        $participants = Participant::get();
+        $iterador = 1;
 
         foreach ($detailPlanifications as $detailPlanification) {
-            $user =  User::find($participant);
-            $user_roles =  $user->roles();
             for ($i = 0; $i <= 4; $i++) {
-                Registration::create([
-                    'detail_planification_id' => $detailPlanification,
-                    'participant_id' => $participant,
-                    'state_id' =>  $faker->randomElement($states),
-                    'state_course_id' => $faker->randomElement($states_course),
-                    'type_id' => $faker->randomElement($types),
-                    'type_participant_id' => $user_roles[0],
-                    'final_grade' => $faker->unique()->numberBetween(50, 100),
-                    'grade1' => $faker->unique()->numberBetween(50, 100),
-                    'grade2' => $faker->unique()->numberBetween(50, 100),
-                    'number' => $faker->unique()->numberBetween(1, 3),
-                    'observations' => json_encode(["observación_1" => $faker->sentences(), "observación_2" => $faker->sentences()]),
-                    'registered_at' => $faker->date()
-                ]);
-                $participant = $participant + 1;
+                Registration::factory()->create(
+                    [
+                        'detail_planification_id' => $detailPlanification,
+                        'participant_id' => $iterador,
+                        'state_id' =>  $faker->randomElement($states),
+                        'state_course_id' => $faker->randomElement($states_course),
+                        'type_id' => $faker->randomElement($types),
+                        'type_participant_id' => $participants[$iterador - 1]->type()->first(),
+                        'final_grade' => $faker->numberBetween(50, 100),
+                        'grade1' => $faker->numberBetween(50, 100),
+                        'grade2' => $faker->numberBetween(50, 100),
+                        'number' => $faker->numberBetween(1, 3),
+                        'observations' => $faker->sentences(3),
+                        'registered_at' => $faker->date()
+                    ]
+                );
+                $iterador = $iterador + 1;
             }
         }
     }

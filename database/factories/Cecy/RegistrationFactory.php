@@ -2,6 +2,7 @@
 
 namespace Database\Factories\Cecy;
 
+use App\Models\Cecy\Registration;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class RegistrationFactory extends Factory

@@ -2,6 +2,9 @@
 
 namespace Database\Seeders\Develop\Cecy;
 
+use App\Models\Cecy\Course;
+use App\Models\Cecy\ProfileInstructorCourse;
+use Faker\Factory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -24,10 +27,19 @@ class ProfileInstructorCoursesSeeder extends Seeder
     }
     public function createProfileInstructorCourses()
     {
-        DB::select("insert into cecy.profile_instructor_courses(course_id, required_knowledge, required_experience, required_skills)VALUES('1','Conocimineto en Angular','2 años de experiencia en angular','habilidades en Base de datos y angular')");
-        DB::select("insert into cecy.profile_instructor_courses(course_id, required_knowledge, required_experience, required_skills)VALUES('2','Conocimineto en Angular','2 años de experiencia en angular','habilidades en Base de datos y angular')");
-        DB::select("insert into cecy.profile_instructor_courses(course_id, required_knowledge, required_experience, required_skills)VALUES('3','Conocimineto en Angular','2 años de experiencia en angular','habilidades en Base de datos y angular')");
-        DB::select("insert into cecy.profile_instructor_courses(course_id, required_knowledge, required_experience, required_skills)VALUES('4','Conocimineto en Angular','2 años de experiencia en angular','habilidades en Base de datos y angular')");
-        DB::select("insert into cecy.profile_instructor_courses(course_id, required_knowledge, required_experience, required_skills)VALUES('5','Conocimineto en Angular','2 años de experiencia en angular','habilidades en Base de datos y angular')");
+
+        $faker = Factory::create();
+
+        $courses = Course::get();
+
+
+        foreach ($courses as $course) {
+            ProfileInstructorCourse::factory()->create([
+                'course_id' => $course,
+                'required_knowledges' => $faker->sentences(),
+                'required_experiences' => $faker->sentences(),
+                'required_skills' => $faker->sentences(),
+            ]);
+        }
     }
 }
