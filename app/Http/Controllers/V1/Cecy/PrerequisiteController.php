@@ -5,7 +5,6 @@ namespace App\Http\Controllers\V1\Cecy;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Cecy\Course;
-use App\Models\Cecy\Catalogue;
 use App\Models\Cecy\Prerequisite;
 use App\Http\Resources\V1\Cecy\Prerequisites\PrerequisiteCollection;
 use App\Http\Resources\V1\Cecy\Prerequisites\PrerequisiteResource;
@@ -41,7 +40,7 @@ class PrerequisiteController extends Controller
 
     // Agrega prerequsitos para un curso
     // PrerequisteController
-    public function storePrerequisite(StorePrerequisiteRequest $request, Course $course, Prerequisite $prerequisite)
+    public function storePrerequisite(StorePrerequisiteRequest $request, Course $course)
     {
         $prerequisite = new Prerequisite();
         $prerequisite->course()->associate($course);

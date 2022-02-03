@@ -6,11 +6,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Cecy\Topic;
 use App\Models\Cecy\Course;
-use App\Models\Cecy\Catalogue;
 use App\Http\Resources\V1\Cecy\Topics\TopicResource;
 use App\Http\Resources\V1\Cecy\Topics\TopicCollection;
 use App\Http\Requests\V1\Cecy\Topics\StoreTopicRequest;
 use App\Http\Requests\V1\Cecy\Topics\UpdateTopicRequest;
+use App\Http\Requests\V1\Cecy\Topics\DestroysTopicRequest;
 
 
 class TopicController extends Controller
@@ -42,7 +42,7 @@ class TopicController extends Controller
 
     // Crea un nuevo tema o subtema para un curso
     // TopicController
-    public function storeTopic(StoreTopicRequest $request, Course $course, Topic $topic)
+    public function storeTopic(StoreTopicRequest $request, Course $course )
     {
         $topic = new Topic();
         $topic->course()->associate($course);
@@ -76,7 +76,7 @@ class TopicController extends Controller
             ]);
     }
 
-    // Elimina un tema o subtema
+    // Elimina un tema o subtema de un curso
     // TopicCotroller
     public function destroyTopic(Topic $topic)
     {
@@ -91,6 +91,7 @@ class TopicController extends Controller
             ]);
     }
 
+    // Elimina varios temas o subtemas de un curso
     // TopicController
     public function destroysTopics(DestroysTopicRequest $request)
     {

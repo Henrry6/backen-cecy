@@ -81,19 +81,19 @@ Route::prefix('courses')->group(function () {
 Route::prefix('topics')->group(function () {
     Route::get('/{course}', [TopicController::class, 'getTopics']);
     Route::post('/{course}', [TopicController::class, 'storeTopic']);
-    Route::put('/{course}', [TopicController::class, 'updateTopic']);
-    Route::delete('', [TopicController::class, 'destroyTopic']);
+    Route::put('/{course}/{topic}', [TopicController::class, 'updateTopic']);
+    Route::delete('/{topic}', [TopicController::class, 'destroyTopic']);
     Route::patch('', [TopicController::class, 'destroysTopics']);
 });
 
 /***********************************************************************************************************************
  * PREREQUISITES
  **********************************************************************************************************************/
-Route::prefix('prerequisite')->group(function () {
+Route::prefix('prerequisites')->group(function () {
     Route::get('/{course}', [PrerequisiteController::class, 'getPrerequisites']);
     Route::post('/{course}', [PrerequisiteController::class, 'storePrerequisite']);
-    Route::put('/{course}', [PrerequisiteController::class, 'updatePrerequisite']);
-    Route::delete('', [PrerequisiteController::class, 'DestroyPrerequisite']);
+    Route::put('/{course}/{prerequisite}', [PrerequisiteController::class, 'updatePrerequisite']);
+    Route::delete('/{prerequisite}', [PrerequisiteController::class, 'DestroyPrerequisite']);
     Route::patch('', [PrerequisiteController::class, 'destroysPrerequisites']);
 });
 
