@@ -45,7 +45,6 @@ class PerezController extends Controller
     /**
      * Get all planifications filtered by and course
      */
-    // PlanificationController
     public function getPlanificationsByCourse(GetPlanificationsByCourseRequest $request, Course $course)
     {
         $sorts = explode(',', $request->sort);
@@ -67,7 +66,6 @@ class PerezController extends Controller
     /**
      * Get all detail planifications filtered by responsible_course
      */
-    // DetailPlanificationController
     public function getDetailPlanificationsByResponsibleCourse(GetDetailPlanificationsByResponsibleCourseRequest $request)
     {
         $responsibleCourse = Instructor::where('user_id', $request->user()->id)->get();
@@ -90,7 +88,6 @@ class PerezController extends Controller
     /**
      * Get all detail planifications filtered by planification
      */
-    // DetailPlanificationController
     public function getDetailPlanificationsByPlanification(GetDetailPlanificationsByPlanificationRequest $request)
     {
         // $sorts = explode(',', $request->sort);
@@ -118,7 +115,6 @@ class PerezController extends Controller
     /**
      * Store a detail planification record
      */
-    // DetailPlanificationController
     public function registerDetailPlanification(RegisterDetailPlanificationRequest $request)
     {
         $loggedInInstructor = Instructor::where('user_id', $request->user()->id)->get();
@@ -186,7 +182,6 @@ class PerezController extends Controller
     /**
      * Return a detailPlanification record
      */
-    // DetailPlanificationController
     public function showDetailPlanification(ShowDetailPlanificationRequest $request, DetailPlanification $detailPlanification)
     {
         return (new DetailPlanificationResource($detailPlanification))
@@ -203,7 +198,6 @@ class PerezController extends Controller
     /**
      * Update a detail planification record
      */
-    // DetailPlanificationController
     public function updateDetailPlanification(UpdateDetailPlanificationRequest $request, DetailPlanification $detailPlanification)
     {
         $loggedInstructor = Instructor::where('user_id', $request->user()->id)->get();
@@ -256,7 +250,6 @@ class PerezController extends Controller
     /**
      * Update start_at and ended_at and needs in planification
      */
-    // PlanificationController
     public function updateDatesAndNeedsInPlanification(UpdateDatesinPlanificationRequest $request, Planification $planification)
     {
         $planification->started_at = $request->input('startedAt');
@@ -277,7 +270,6 @@ class PerezController extends Controller
     /**
      * Delete a detail planification record
      */
-    // DetailPlanificationController
     public function deleteDetailPlanification(DeleteDetailPlanificationRequest $request, DetailPlanification $detailPlanification)
     {
         $detailPlanification->delete();
@@ -296,7 +288,6 @@ class PerezController extends Controller
     /**
      * Delete a detail planification record
      */
-    // DetailPlanificationController
     public function destroysDetailPlanifications(DestroysDetailPlanificationRequest $request)
     {
         $detailPlanifications = DetailPlanification::whereIn('id', $request->input('ids'))->get();
@@ -316,7 +307,6 @@ class PerezController extends Controller
     /**
      * KPI of planifications
      */
-    // PlanificationController
     public function getKpi(ShowKpiRequest $request, Catalogue $state)
     {
         $planifications = Planification::withCount([
