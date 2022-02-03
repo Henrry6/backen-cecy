@@ -9,6 +9,8 @@ use App\Http\Requests\V1\Cecy\Participants\InstructorRequest;
 use App\Http\Requests\V1\Cecy\Registrations\IndexRegistrationRequest;
 use App\Http\Requests\V1\Cecy\Registrations\UpdateRegistrationRequest;
 use App\Http\Resources\V1\Cecy\Courses\CourseCollection;
+use App\Http\Resources\V1\Cecy\Courses\CourseParallelWorkdayResource;
+use App\Http\Resources\V1\Cecy\Participants\ParticipantInformationResource;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationCollection;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationParticipantCollection;
 use App\Http\Resources\V1\Cecy\Registrations\RegistrationCollection;
@@ -148,7 +150,7 @@ class RivasController extends Controller
 //            ->course()
             ->get();
 
-        return (new CourseCollection($courseParallelWorkday))
+        return (new CourseParallelWorkdayResource($courseParallelWorkday))
             ->additional([
                 'msg' => [
                     'summary' => 'success',
@@ -168,8 +170,9 @@ class RivasController extends Controller
     /*DDRC-C: elimina una matricula de un participante en un curso especifico */
     public function nullifyRegistration(Registration $registration)
     {
-        $registration->delete();
-
+        $registrations = Registration::whereIn('id', $request->input('id'))->get();
+        $registrations->state()->associate(Catalogue::find($request->input('state.id')));
+        
         return (new UserResource($registration))
             ->additional([
                 'msg' => [
