@@ -56,7 +56,6 @@ Route::prefix('detailPlanification')->group(function () {
     Route::get('', [PerezController::class, 'getDetailPlanificationsByPlanification']);
     Route::post('', [PerezController::class, 'registerDetailPlanification']);
     Route::delete('', [PerezController::class, 'destroysDetailPlanifications']);
-    Route::get('{course}', [GuachagmiraController::class, 'getDetailPlanificationsByCourse']);
 });
 
 Route::prefix('detailPlanification/{detailPlanification}')->group(function () {
@@ -94,12 +93,6 @@ Route::prefix('prerequisites')->group(function () {
     Route::patch('', [AlvaradoController::class, 'destroysPrerequisites']);
 });
 
-/***********************************************************************************************************************
- * USERS
- **********************************************************************************************************************/
-Route::prefix('users')->group(function () {
-    Route::get('/{course}', [GuanunaController::class, 'getInstructorsInformationByCourse']);
-});
 
 /***********************************************************************************************************************
  * USERS

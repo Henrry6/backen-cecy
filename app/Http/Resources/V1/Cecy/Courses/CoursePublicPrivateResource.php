@@ -33,6 +33,7 @@ class CourseResource extends JsonResource
             'speciality' => CatalogueResource::make($this->speciality),
             'state' => CatalogueResource::make($this->state),
             'planifications' => PlanificationResource::collection($this->planifications),
+            'catalogues' => CatalogueResource::collection($this->catalogues),
             'abbreviation' => $this->abbreviation,
             'alignment' => $this->alignment,
             'approvedAt' => $this->approved_at,
@@ -58,12 +59,6 @@ class CourseResource extends JsonResource
             'project' => $this->project,
             'requiredInstallingSources' => $this->required_installing_sources,
             'setecName' => $this->setec_name,
-            'summary' => $this->summary,
-            'targetGroups' => $this->target_group,
-            'teachingStrategies' => $this->teaching_strategies,
-            'techniquesRequisites' => $this->techniques_requisites,
-            'theoreticalPhase' => $this->theoretical_phase,
-            'theoryHours' => $this->theory_hours
         ];
     }
 }

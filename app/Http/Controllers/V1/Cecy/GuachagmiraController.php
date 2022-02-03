@@ -11,6 +11,7 @@ use App\Http\Requests\V1\Cecy\Planifications\IndexPlanificationRequest;
 use App\Http\Requests\V1\Core\Files\DestroysFileRequest;
 use App\Http\Requests\V1\Core\Files\UpdateFileRequest;
 use App\Http\Resources\V1\Cecy\Courses\CourseCollection;
+use App\Http\Resources\V1\Cecy\Courses\CoursePublicPrivateCollection;
 use App\Http\Resources\V1\Cecy\Courses\TopicsByCourseCollection;
 use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationResource;
 use App\Http\Resources\V1\Cecy\Participants\ParticipantResource;
@@ -40,13 +41,14 @@ class GuachagmiraController extends Controller
     }
 
 
+
     public function getPublicCourses(IndexCourseRequest $request)
     {
-        $courses = Course::where('public', true)->get();
 
+        $courses = $this->getCoursesByAcceptedPlanification();
+        $public_courses = $courses->where('public', true)->get();
 
-
-        return (new CoursePublicPrivateCollection($courses))
+        return (new CoursePublicPrivateCollection($public_courses))
             ->additional([
                 'msg' => [
                     'summary' => 'success',
@@ -55,35 +57,20 @@ class GuachagmiraController extends Controller
                 ]
             ])->response()->setStatusCode(200);
     }
-
-    public function getCoursesByApprovedPlanifications(IndexPlanificationRequest $request)
+    public function getPublicCoursesByCategory(getCoursesByCategoryRequest $request)
     {
-        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
-
-        $planifications = Planification::where('code', $catalogue['planification_state']['approved'])->get();
-        $courses =  $planifications->course()->get();
-
-
-        return (new CourseCollection($courses))
-            ->additional([
-                'msg' => [
-                    'summary' => 'success',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ])
-            ->response()->setStatusCode(200);
-    }
-
-    public function getCoursesByCategory(getCoursesByCategoryRequest $request)
-    {
+        $courses = $this->getCoursesByAcceptedPlanification();
         $sorts = explode(',', $request->sort);
 
-        $courses = Course::customOrderBy($sorts)
+        $coursesByCategory = $courses
+            ->customOrderBy($sorts)
             ->category($request->input('category.id'))
             ->paginate($request->input('per_page'));
 
-        return (new CourseCollection($courses))
+        $public_courses = $coursesByCategory->where('public', true)->get();
+
+
+        return (new CoursePublicPrivateCollection($public_courses))
             ->additional([
                 'msg' => [
                     'summary' => 'success',
@@ -93,15 +80,20 @@ class GuachagmiraController extends Controller
             ])->response()->setStatusCode(200);
     }
 
-    public function getCoursesByName(getCoursesByNameRequest $request)
+    public function getPublicCoursesByName(getCoursesByNameRequest $request)
     {
+        $courses = $this->getCoursesByAcceptedPlanification();
         $sorts = explode(',', $request->sort);
 
-        $courses = Course::customOrderBy($sorts)
+        $coursesByName = $courses
+            ->customOrderBy($sorts)
             ->name($request->input('name'))
             ->paginate($request->input('per_page'));
 
-        return (new CourseCollection($courses))
+        $public_courses = $coursesByName->where('public', true)->get();
+
+
+        return (new CoursePublicPrivateCollection($public_courses))
             ->additional([
                 'msg' => [
                     'summary' => 'success',
@@ -111,6 +103,78 @@ class GuachagmiraController extends Controller
             ])->response()->setStatusCode(200);
     }
 
+    public function getPrivateCoursesByParticipantType(IndexPlanificationRequest $request)
+    {
+        $catalogues =  Catalogue::get();
+
+        $participant = Participant::where('user_id', $request->user()->id)->get();
+        $typeParticipant = $participant->type();
+
+        $participants_courses = $catalogues->courses()->where('catalogue_id', $typeParticipant)->exists();
+
+        $allowedCourses = $participants_courses->courses();
+
+
+        return (new CoursePublicPrivateCollection($allowedCourses))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])->response()->setStatusCode(200);
+    }
+
+    // public function getPrivateCoursesByCategory(getCoursesByCategoryRequest $request)
+    // {
+    //     $sorts = explode(',', $request->sort);
+
+    //     $courses = Course::customOrderBy($sorts)
+    //         ->category($request->input('category.id'))
+    //         ->paginate($request->input('per_page'));
+
+    //     $private_courses = $courses->where('public', false)->get();
+
+
+    //     return (new CoursePublicPrivateCollection($private_courses))
+    //         ->additional([
+    //             'msg' => [
+    //                 'summary' => 'success',
+    //                 'detail' => '',
+    //                 'code' => '200'
+    //             ]
+    //         ])->response()->setStatusCode(200);
+    // }
+
+    // public function getPrivateCoursesByName(getCoursesByNameRequest $request)
+    // {
+    //     $sorts = explode(',', $request->sort);
+
+    //     $courses = Course::customOrderBy($sorts)
+    //         ->name($request->input('name'))
+    //         ->paginate($request->input('per_page'));
+
+    //     $private_courses = $courses->where('public', false)->get();
+
+    //     return (new CoursePublicPrivateCollection($private_courses))
+    //         ->additional([
+    //             'msg' => [
+    //                 'summary' => 'success',
+    //                 'detail' => '',
+    //                 'code' => '200'
+    //             ]
+    //         ])->response()->setStatusCode(200);
+    // }
+
+    public function getCoursesByAcceptedPlanification()
+    {
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+
+        $planifications = Planification::where('state', $catalogue['planification_state']['approved'])->get();
+        $courses = $planifications->courses()->get();
+
+        return $courses;
+    }
     /*
         Obtener la información personal de cada instructor que dicta dado un curso
     */
@@ -186,7 +250,7 @@ class GuachagmiraController extends Controller
             ]);
     }
 
-    public function storeUser(StoreUserAndParticipantRequest $request)
+    public function registerUserAndParticipant(StoreUserAndParticipantRequest $request)
     {
         $user = User::where('username', $request->input('username'))
             ->orWhere('email', $request->input('email'))->first();
