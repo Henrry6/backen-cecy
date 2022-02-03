@@ -24,6 +24,7 @@ class MatangoController extends Controller
     }
 
     //obtener los cursos asignados a un docente responsable logueado
+    // CourseController
     public function getCoursesByResponsibleCourse(getCoursesByResponsibleRequest $request)
     {
         $instructor = Instructor::FirstWhere('user_id',$request->user()->id);
@@ -40,6 +41,7 @@ class MatangoController extends Controller
     }
 
     // trae toda la info de un curso seleccionado
+    // CourseController
     public function show(Course $course)
     {
         return (new CourseResource($course))
@@ -53,6 +55,7 @@ class MatangoController extends Controller
     }
 
     //actualiza datos generales de un curso seleccionado
+    // CourseController
     public function updateGeneralInformationCourse(UpdateCourseGeneralDataRequest $request, Course $course)
     {
         $course->category()->associate(Catalogue::find($request->input('category.id')));
@@ -78,6 +81,7 @@ class MatangoController extends Controller
     }
 
     // Pendiente
+    // CourseController
     public function showImage(Course $course, Image $image)
     {
         return $course->showImage($image);

@@ -23,58 +23,62 @@ class JumboController extends Controller
 //        $this->middleware('permission:delete')->only(['destroy', 'destroys']);
     }
 
-
-    public function updateTypeInstructors(Request $request,Instructor $instructor )
+// InstructorController
+    public function updateTypeInstructors(Request $request, Instructor $instructor)
     {
         $instructor->type()->associate(Catalogue::find($request->input('type.id')));
         $instructor->save();
 
         return (new InstructorResource($instructor))
-        ->additional([
-            'msg' => [
-                'summary' => 'Instructor Actualizado',
-                'detail' => '',
-                'code' => '200'
-            ]
-        ])
-        ->response()->setStatusCode(200);
-        
+            ->additional([
+                'msg' => [
+                    'summary' => 'Instructor Actualizado',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+
     }
 
     // para eliminar un instructor
+    // InstructorController
     public function destroyInstructors(DestroysInstructorRequest $request)
     {
-       $instructor = Instructor::whereIn('id', $request->input('ids'))->get();
+        $instructor = Instructor::whereIn('id', $request->input('ids'))->get();
         Instructor::destroy($request->input('ids'));
         return (new InstructorResource($instructor))
-        ->additional([
-            'msg' => [
-                'summary' => 'Instructor Eliminado',
-                'detail' => '',
-                'code' => '200'
-            ]
-        ])
-        ->response()->setStatusCode(200);
+            ->additional([
+                'msg' => [
+                    'summary' => 'Instructor Eliminado',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
 
     }
 
     //visualizar todos los cursos
+    // CourseController
     public function getCourses()
     {
         $courses = Course::get();
 
         return (new CourseCollection($courses))
-        ->additional([
-            'msg' => [
-                'summary' => 'Me trae los cursos',
-                'detail' => '',
-                'code' => '200'
-            ]
-        ])
-        ->response()->setStatusCode(200);
+            ->additional([
+                'msg' => [
+                    'summary' => 'Me trae los cursos',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
 
     }
+
     //Agregar perfil a un curso
+    // ProfileInstructorCourseController
     public function storeProfileCourse(StoreProfileCourseRequest $request)
     {
         $profile = new ProfileInstructorCourse();

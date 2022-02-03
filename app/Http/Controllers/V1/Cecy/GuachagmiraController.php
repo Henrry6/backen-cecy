@@ -40,8 +40,7 @@ class GuachagmiraController extends Controller
         // $this->middleware('permission:view-Planifications')->only(['view']);
     }
 
-
-
+    // CourseController
     public function getPublicCourses(IndexCourseRequest $request)
     {
 
@@ -57,6 +56,8 @@ class GuachagmiraController extends Controller
                 ]
             ])->response()->setStatusCode(200);
     }
+
+    // CourseController
     public function getPublicCoursesByCategory(getCoursesByCategoryRequest $request)
     {
         $courses = $this->getCoursesByAcceptedPlanification();
@@ -80,6 +81,7 @@ class GuachagmiraController extends Controller
             ])->response()->setStatusCode(200);
     }
 
+    // CourseController
     public function getPublicCoursesByName(getCoursesByNameRequest $request)
     {
         $courses = $this->getCoursesByAcceptedPlanification();
@@ -103,9 +105,10 @@ class GuachagmiraController extends Controller
             ])->response()->setStatusCode(200);
     }
 
+    // CourseController
     public function getPrivateCoursesByParticipantType(IndexPlanificationRequest $request)
     {
-        $catalogues =  Catalogue::get();
+        $catalogues = Catalogue::get();
 
         $participant = Participant::where('user_id', $request->user()->id)->get();
         $typeParticipant = $participant->type();
@@ -166,7 +169,8 @@ class GuachagmiraController extends Controller
     //         ])->response()->setStatusCode(200);
     // }
 
-    public function getCoursesByAcceptedPlanification()
+    // CourseController
+    private function getCoursesByAcceptedPlanification()
     {
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
 
@@ -175,14 +179,16 @@ class GuachagmiraController extends Controller
 
         return $courses;
     }
+
     /*
         Obtener la información personal de cada instructor que dicta dado un curso
     */
+    // InstructorController
     public function getInstructorsInformationByCourse(Course $course)
     {
-        $planifications = $course->planifications()->get();
-        $detailPlanifications =  $planifications->detailPlanifications()->get();
-        $instructors =  $detailPlanifications->instructors()->get();
+        $planification = $course->planifications()->get();
+        $detailPlanifications = $planification->detailPlanifications()->get();
+        $instructors = $detailPlanifications->instructors()->get();
         $user_instructors = $instructors->user()->get();
 
         return (new UserCollection($user_instructors))
@@ -198,6 +204,7 @@ class GuachagmiraController extends Controller
     /*
         Obtener los horarios de cada paralelo dado un curso
     */
+    // DetailController
     public function getDetailPlanificationsByCourse(Course $course)
     {
         $planification = $course->planifications()->get();
@@ -217,6 +224,7 @@ class GuachagmiraController extends Controller
     /*
         Obtener los prerequisitos dado un curso
     */
+    // PrerequisteController
     public function getPrerequisitesByCourse(Course $course)
     {
         $prerequisites = $course->prerequisite()->get();
@@ -235,7 +243,7 @@ class GuachagmiraController extends Controller
     /*
         Obtener los topicos  dado un curso
     */
-
+    // TopicsController
     public function getTopicsByCourse(Course $course)
     {
         $topics = $course->topics()->get();
@@ -250,7 +258,8 @@ class GuachagmiraController extends Controller
             ]);
     }
 
-    public function registerUserAndParticipant(StoreUserAndParticipantRequest $request)
+    // ParticipantController
+    public function registerParticipant(StoreUserAndParticipantRequest $request)
     {
         $user = User::where('username', $request->input('username'))
             ->orWhere('email', $request->input('email'))->first();
@@ -314,7 +323,7 @@ class GuachagmiraController extends Controller
     }
 
 
-    public function storeParticipant(StoreUserAndParticipantRequest $request, User $user)
+    private function createParticipant(StoreUserAndParticipantRequest $request, User $user)
     {
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
         $state = Catalogue::where('code', $catalogue['participant_state']['to_be_approved'])->get();
