@@ -71,19 +71,19 @@ class AdditionalInformationsSeeder extends Seeder
 
 
         foreach ($registrations as $registration) {
-            AdditionalInformation::factory()->sequence([
+            AdditionalInformation::factory()->create([
                 'level_instruction_id' => $faker->randomElement($levelInstructions),
-                'registration_id' => $registration->id(),
+                'registration_id' => $registration,
                 'company_activity' => $faker->name(),
                 'company_address' => $faker->address(),
                 'company_email' => $faker->email(),
                 'company_name' => $faker->name(),
                 'company_phone' => $faker->phoneNumber(),
-                'company_sponsored' => $faker->name(),
+                'company_sponsored' => $faker->boolean(),
                 'contact_name' => $faker->name(),
-                'course_follows' =>  $faker->json_encode(["course_follows_1" => $faker->sentences(), "course_follows_2" => $faker->sentences()]),
-                'course_knows' =>  $faker->json_encode(["course_knows_1" => $faker->sentences(), "course_knows_2" => $faker->sentences()]),
-                'worked' => $faker->randomElement([true, false])
+                'course_follows' =>  $faker->sentences(),
+                'course_knows' => $faker->sentences(),
+                'worked' => $faker->boolean()
             ]);
         }
     }

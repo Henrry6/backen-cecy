@@ -127,23 +127,27 @@ class DetailPlanificationsSeeder extends Seeder
         $parallels = Catalogue::where('type', 'PARALLEL_NAME')->get();
         $states = Catalogue::where('type', 'DETAIL_PLANIFICATION_STATE')->get();
         $planifications = Planification::all();
+        $iterator = 0;
 
-        for ($i = 0; $i <= 4; $i++) {
-            DetailPlanification::factory()->create(
-                [
-                    'classroom_id' => $classrooms[$i],
-                    'day_id' => $days[rand(0, sizeof($days) - 1)],
-                    'parallel_id' => $parallels[rand(0, sizeof($parallels) - 1)],
-                    'planification_id' => $planifications[$i],
-                    'workday_id' => $workdays[rand(0, sizeof($workdays) - 1)],
-                    'state_id' => $faker->randomElement($states),
-                    'ended_time' => $faker->time(),
-                    'observations' => $faker->sentences(3),
-                    'plan_ended_at' => $faker->date('Y_m_d'),
-                    'registrations_left' => $faker->randomDigit(),
-                    'started_time' => $faker->time()
-                ]
-            );
+        foreach ($planifications as $planification) {
+            for ($i = 0; $i <= 1; $i++) {
+                DetailPlanification::factory()->create(
+                    [
+                        'classroom_id' => $classrooms[$iterator],
+                        'day_id' => $days[rand(0, sizeof($days) - 1)],
+                        'parallel_id' => $parallels[rand(0, sizeof($parallels) - 1)],
+                        'planification_id' => $planification,
+                        'workday_id' => $workdays[rand(0, sizeof($workdays) - 1)],
+                        'state_id' => $faker->randomElement($states),
+                        'ended_time' => $faker->time(),
+                        'observations' => $faker->sentences(3),
+                        'plan_ended_at' => $faker->date('Y_m_d'),
+                        'registrations_left' => $faker->randomDigit(),
+                        'started_time' => $faker->time()
+                    ]
+                );
+                $iterator = $iterator + 1;
+            }
         }
     }
 }
