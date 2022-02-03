@@ -15,7 +15,7 @@ class DetailPlanification extends Model implements Auditable
     use SoftDeletes;
 
     protected $table = 'cecy.detail_planifications';
-    
+
     protected $fillable = [
         'ended_time',
         'observations',
@@ -23,7 +23,11 @@ class DetailPlanification extends Model implements Auditable
         'registrations_left',
         'started_time',
     ];
-    
+
+    protected $casts = [
+        'observations' => 'array',
+    ];
+
     // Relationships
     public function attendaces()
     {
@@ -44,7 +48,7 @@ class DetailPlanification extends Model implements Auditable
     {
         return $this->belongsTo(Catalogue::class);
     }
-    
+
     public function instructors()
     {
         return $this->belongsToMany(Instructor::class, 'detail_planification_instructor', 'detail_planification_id', 'instructor_id');
@@ -69,7 +73,7 @@ class DetailPlanification extends Model implements Auditable
     {
         return $this->hasMany(Registration::class);
     }
-    
+
     public function state()
     {
         return $this->belongsTo(Catalogue::class);
@@ -79,7 +83,7 @@ class DetailPlanification extends Model implements Auditable
     {
         return $this->belongsTo(Catalogue::class);
     }
-    
+
     // Mutators
 
     // Scopes

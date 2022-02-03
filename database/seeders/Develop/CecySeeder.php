@@ -47,7 +47,7 @@ class CecySeeder extends Seeder
             DetailSchoolPeriodsSeeder::class,
             ParticipantsSeeder::class,
             PlanificationsSeeder::class,
-            //            DetailPlanificationsSeeder::class,
+            DetailPlanificationsSeeder::class,
             //            RegistrationsSeeder::class,
             //            AdditionalInformationsSeeder::class,
             //            RegistrationRequerimentsSeeder::class,

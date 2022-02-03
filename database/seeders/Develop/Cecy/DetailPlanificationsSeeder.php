@@ -28,7 +28,7 @@ class DetailPlanificationsSeeder extends Seeder
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
 
         //workdays
-        Catalogue::create(
+        Catalogue::factory(14)->sequence(
             [
                 'code' => $catalogue['workday']['evening'],
                 'name' => 'VESPERTINA',
@@ -36,20 +36,18 @@ class DetailPlanificationsSeeder extends Seeder
                 'description' => 'Falta poner una descripción'
             ],
             [
-                'code' => $catalogue['location']['morning'],
+                'code' => $catalogue['workday']['morning'],
                 'name' => 'MATUTINA',
                 'type' => $catalogue['workday']['type'],
                 'description' => 'Falta poner una descripción'
             ],
             [
-                'code' => $catalogue['location']['nocturnal'],
+                'code' => $catalogue['workday']['nocturnal'],
                 'name' => 'NOCTURNA',
                 'type' => $catalogue['workday']['type'],
                 'description' => 'Falta poner una descripción'
-            ]
-        )->create();
-        //paralels
-        Catalogue::create(
+            ],
+            //parallels
             [
                 'code' => $catalogue['parallel_name']['a'],
                 'name' => 'A',
@@ -61,18 +59,16 @@ class DetailPlanificationsSeeder extends Seeder
                 'name' => 'B',
                 'type' => $catalogue['parallel_name']['type'],
                 'description' => 'Falta poner una descripción'
-            ]
-        )->create();
-        //days
-        Catalogue::create(
+            ],
+            //days
             [
-                'code' => $catalogue['day']['monday-friday'],
+                'code' => $catalogue['day']['monday_friday'],
                 'name' => 'LUNES_VIERNES',
                 'type' => $catalogue['day']['type'],
                 'description' => 'Falta poner una descripción'
             ],
             [
-                'code' => $catalogue['day']['monday-sunday'],
+                'code' => $catalogue['day']['monday_sunday'],
                 'name' => 'LUNES_DOMINGO',
                 'type' => $catalogue['day']['type'],
                 'description' => 'Falta poner una descripción'
@@ -88,10 +84,8 @@ class DetailPlanificationsSeeder extends Seeder
                 'name' => 'SABADOS',
                 'type' => $catalogue['day']['type'],
                 'description' => 'Falta poner una descripción'
-            ]
-        )->create();
-        //detail_planification_states
-        Catalogue::create(
+            ],
+            //detail_planification_states
             [
                 'code' => State::TO_BE_APPROVED,
                 'name' => 'POR APROBAR',
@@ -130,29 +124,22 @@ class DetailPlanificationsSeeder extends Seeder
         $classrooms = Classroom::all();
         $days = Catalogue::where('type', 'DAY')->get();
         $workdays = Catalogue::where('type', 'WORKDAY')->get();
-        $paralels = Catalogue::where('type', 'PARALLEL_NAME')->get();
-        $culminatedState = Catalogue::where('code', State::CULMINATED)->get();
-        $approvedState = Catalogue::where('code', State::APPROVED)->get();
+        $parallels = Catalogue::where('type', 'PARALLEL_NAME')->get();
+        $states = Catalogue::where('type', 'DETAIL_PLANIFICATION_STATE')->get();
         $planifications = Planification::all();
 
-        for ($i = 0; $i <= 5; $i++) {
-            $planificationState = $planifications[$i]->state();
-            $detailPlanificationState =  $approvedState;
-
-            if ($planificationState->code === State::CULMINATED) {
-                $detailPlanificationState =  $culminatedState;
-            }
-            DetailPlanification::create(
+        for ($i = 0; $i <= 4; $i++) {
+            DetailPlanification::factory()->create(
                 [
                     'classroom_id' => $classrooms[$i],
                     'day_id' => $days[rand(0, sizeof($days) - 1)],
-                    'paralel_id' => $paralels[rand(0, sizeof($paralels) - 1)],
+                    'parallel_id' => $parallels[rand(0, sizeof($parallels) - 1)],
                     'planification_id' => $planifications[$i],
                     'workday_id' => $workdays[rand(0, sizeof($workdays) - 1)],
-                    'state_id' => $detailPlanificationState,
-                    'ended_time' => $faker->$faker->time(),
+                    'state_id' => $faker->randomElement($states),
+                    'ended_time' => $faker->time(),
                     'observations' => $faker->sentences(3),
-                    'plan_ended_at' => $faker->date(),
+                    'plan_ended_at' => $faker->date('Y_m_d'),
                     'registrations_left' => $faker->randomDigit(),
                     'started_time' => $faker->time()
                 ]
