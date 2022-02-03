@@ -14,18 +14,19 @@ use App\Http\Requests\V1\Cecy\Prerequisites\StorePrerequisiteRequest;
 use App\Http\Requests\V1\Cecy\Prerequisites\UpdatePrerequisiteRequest;
 
 
-class AttendanceController extends Controller
+class RegistrationController extends Controller
 {
- //Ver todas las asistencias del estudiante
-    // AttendanceController
-    public function getAttendancesByParticipant(GetAttendancesByParticipantRequest $request, Registration $registration)
+ //Ver todos los cursos del estudiante en el cual esta matriculado
+    // RegistrationController
+    public function getCoursesByParticipant(GetCoursesByParticipantRequest $request)
     {
-        $detailPlanification = $registration->detailPlanification()->first();
-        $attendances = $detailPlanification
-            ->attendances()
+        $participant = Participant::firstWhere('user_id', $request->user()->id);
+        $registrations = $participant->registrations()->where(['state' => function ($state) {
+            $state->where('code', 'MATRICULADO');
+        }])
             ->paginate($request->input('per_page'));
 
-        return (new GetAttendanceByParticipantCollection($attendances))
+        return (new CoursesByParticipantCollection($registrations))
             ->additional([
                 'msg' => [
                     'sumary' => 'consulta exitosa',
@@ -35,14 +36,12 @@ class AttendanceController extends Controller
             ])
             ->response()->setStatusCode(200);
     }
-    / Guardar asistencia
-    // AttendanceController
-    public function saveDetailAttendances(SaveDetailAttendanceRequest $request, Attendance $attendance)
+    public function recordsReturnedByRegistration(IndexRegistrationRequest $request)
     {
-        $attendance->state_id = $request->input('state.id');
-        $attendance->save();
+        $participant = Participant::firstWhere('user_id', $request->user()->id);
+        $registrations = $participant->registrations()->get();
 
-        return (new SaveDetailAttendanceResource($attendance))
+        return (new RegistrationResource($registrations))
             ->additional([
                 'msg' => [
                     'sumary' => 'consulta exitosa',
@@ -53,5 +52,3 @@ class AttendanceController extends Controller
             ->response()->setStatusCode(200);
     }
 }
-
-
