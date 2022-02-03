@@ -9,6 +9,8 @@ use App\Http\Requests\V1\Cecy\Courses\GetCoursesByNameRequest;
 use App\Http\Requests\V1\Cecy\Courses\getCoursesByResponsibleRequest;
 use App\Http\Requests\V1\Cecy\Courses\IndexCourseRequest;
 use App\Http\Requests\V1\Cecy\Courses\UpdateCourseGeneralDataRequest;
+use App\Http\Requests\V1\Cecy\Planifications\GetPlanificationByResponsableCourseRequest;
+use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationCollection;
 use Illuminate\Http\Request;
 use App\Models\Cecy\Course;
 use App\Models\Cecy\Catalogue;
@@ -461,6 +463,25 @@ class CourseController extends Controller
           ]
       ]);
   }
+    //cursos de un docente instructor
+    // CourseController
+    public function getCoursesByInstructor(GetPlanificationByResponsableCourseRequest $request)
+    {
+
+        $instructor = Instructor::FirstWhere('user_id', $request->user()->id);
+        $planifications = $instructor->planifications()->get();
+
+        return (new DetailPlanificationCollection($planifications))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Consulta exitosa',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+
+    }
 
     /*
     * Adjuntar el acta de aprobación
