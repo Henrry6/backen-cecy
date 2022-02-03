@@ -35,7 +35,7 @@ class ProfileInstructorCourse extends Model implements Auditable
 
     public function instructors()
     {
-        return $this->belongsToManyy(Instructor::class, 'cecy.authorized_instructors', 'instructor_id', 'profile_instructor_id');
+        return $this->belongsToManyy(Instructor::class, 'cecy.authorized_instructors', 'instructor_id', 'profile_instructor_course_id');
     }
     // Mutators
 

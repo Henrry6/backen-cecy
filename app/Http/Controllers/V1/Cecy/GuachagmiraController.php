@@ -38,6 +38,24 @@ class GuachagmiraController extends Controller
         // $this->middleware('permission:view-Instructors')->only(['view']);
         // $this->middleware('permission:view-Planifications')->only(['view']);
     }
+
+
+    public function getPublicCourses(IndexCourseRequest $request)
+    {
+        $courses = Course::where('public', true)->get();
+
+
+
+        return (new CoursePublicPrivateCollection($courses))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])->response()->setStatusCode(200);
+    }
+
     public function getCoursesByApprovedPlanifications(IndexPlanificationRequest $request)
     {
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);

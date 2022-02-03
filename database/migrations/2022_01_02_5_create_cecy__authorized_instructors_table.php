@@ -13,11 +13,11 @@ class CreateCecyAuthorizedInstructorsTable extends Migration
 
             $table->foreignId('instructor_id')
                 ->nullable()
-                ->constrained('cecy.catalogues');
+                ->constrained('cecy.instructors');
 
             $table->foreignId('profile_instructor_course_id')
                 ->nullable()
-                ->constrained('cecy.profile_instructor_courses');    
+                ->constrained('cecy.profile_instructor_courses');
         });
     }
 
