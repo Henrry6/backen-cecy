@@ -134,7 +134,7 @@ class PerezController extends Controller
         // }
 
         //validar que la planification ha culminado
-        if ($planification->state()->code === State::CULMINATED) {
+        if ($planification->state()->first()->code === State::CULMINATED) {
             return response()->json([
                 'msg' => [
                     'summary' => 'La planificación ha culminado.',
@@ -148,7 +148,7 @@ class PerezController extends Controller
         $classroom = Classroom::find($request->input('classroom.id'));
         $days = Catalogue::find($request->input('day.id'));
         $workday = Catalogue::find($request->input('workday.id'));
-        $paralel = Catalogue::find($request->input('paralel.id'));
+        $parallel = Catalogue::find($request->input('parallel.id'));
 
         $detailPlanification = new DetailPlanification();
 
@@ -157,7 +157,7 @@ class PerezController extends Controller
         $detailPlanification->day()->associate($days);
         $detailPlanification->planification()->associate($planification);
         $detailPlanification->workday()->associate($workday);
-        $detailPlanification->paralel()->associate($paralel);
+        $detailPlanification->parallel()->associate($parallel);
 
         $detailPlanification->ended_time = $request->input('endedTime');
         $detailPlanification->started_time = $request->input('startedTime');
@@ -219,16 +219,17 @@ class PerezController extends Controller
         $days = Catalogue::find($request->input('day.id'));
         $planification = Planification::find($request->input('planification.id'));
         $workday = Catalogue::find($request->input('workday.id'));
-        $paralel = Catalogue::find($request->input('paralel.id'));
+        $parallel = Catalogue::find($request->input('parallel.id'));
 
         $detailPlanification->classroom()->associate($classroom);
         $detailPlanification->day()->associate($days);
         $detailPlanification->planification()->associate($planification);
         $detailPlanification->workday()->associate($workday);
-        $detailPlanification->paralel()->associate($paralel);
+        $detailPlanification->parallel()->associate($parallel);
 
         $detailPlanification->ended_time = $request->input('endedTime');
         $detailPlanification->started_time = $request->input('startedTime');
+
         if ($request->has('observations')) {
             $detailPlanification->observations = $request->input('observations');
         }
@@ -306,13 +307,13 @@ class PerezController extends Controller
     /**
      * KPI of planifications
      */
-    public function kpi(ShowKpiRequest $request)
+    public function getKpi(ShowKpiRequest $request, Catalogue $state)
     {
         $planifications = Planification::withCount([
             'id' => function (Builder $query) {
                 $query->where(
                     'state_id',
-                    Catalogue::firstWhere('id', request()->input('state.id'))->id
+                    $state->id
                 );
             },
         ])->get();
@@ -326,46 +327,5 @@ class PerezController extends Controller
                 ]
             ])
             ->response()->setStatusCode(200);
-    }
-    /**
-     * KPI of planificationsToBeApproved
-     */
-    public function planificationsToBeApproved($request)
-    {
-        $planifications = Planification::withCount([
-            'id as planifications_to_be_approved' => function (Builder $query) {
-                $query->where('state_id', State::TO_BE_APPROVED);
-            },
-        ])->get();
-
-        return $planifications[0]->planifications_to_be_approved;
-    }
-
-    /**
-     * KPI of planificationsInProcess
-     */
-    public function planificationsInProcess($request)
-    {
-        $planifications = Planification::withCount([
-            'id as planifications_in_process' => function (Builder $query) {
-                $query->where('state_id', State::IN_PROCESS);
-            },
-        ])->get();
-
-        return $planifications[0]->planifications_in_process;
-    }
-
-    /**
-     * KPI of planificationsCulminated
-     */
-    public function planificationsCulminated($request)
-    {
-        $planifications = Planification::withCount([
-            'id as planifications_culminated' => function (Builder $query) {
-                $query->where('state_id', State::CULMINATED);
-            },
-        ])->get();
-
-        return $planifications[0]->planifications_culminated;
     }
 }
