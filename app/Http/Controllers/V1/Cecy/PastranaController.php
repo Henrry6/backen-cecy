@@ -27,6 +27,7 @@ class PastranaController extends Controller
     /**
      * Obtener cursos y Filtrarlos por peridos lectivos , carrera o estado
      */
+    // CourseController
     public function getCourses(GetCoursesByCoordinatorCecyRequest $request)
     {
         $sorts = explode(',', $request->sort);
@@ -51,6 +52,7 @@ class PastranaController extends Controller
     /*
     * MOSTRAR LOS KPI DE CURSOS APROBADOS, POR APROBAR Y EN PROCESO
     */
+    // CourseController
     public function getCoursesKPI(Request $request)
     {
         $courses = DB::table('courses as cr')
@@ -67,6 +69,7 @@ class PastranaController extends Controller
     /*
     * Asignar docente responsable de cecy de la planificación
     */
+    // PlanificationController
     public function updateAssignResponsibleCecy(UpdateAssignResponsibleCecyRequest $request, Planification $planification)
     {
         $planification->responsibleCecy()->associate(Authority::find($request->input('responsibleCecy.id')));
@@ -86,6 +89,7 @@ class PastranaController extends Controller
     /*
     * Asignar código al curso
     */
+    // CourseController
     public function assignCodeToCourse($request, Course $course)
     {
         $course->code = $request->input('code');
@@ -105,6 +109,7 @@ class PastranaController extends Controller
     /*
     * Ingresar el motivo del por cual el curso no esta aprobado
     */
+    // CourseController
     public function approveCourse($request, Course $course)
     {
         $course->state()->associate(State::firstWhere('code', State::APPROVED));
@@ -125,6 +130,7 @@ class PastranaController extends Controller
     /*
     * Adjuntar el acta de aprobación
     */
+    // CourseController
     public function uploadFile(UploadFileRequest $request, File $file)
     {
         return $file->uploadFile($request);

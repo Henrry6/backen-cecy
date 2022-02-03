@@ -45,6 +45,7 @@ class PerezController extends Controller
     /**
      * Get all planifications filtered by and course
      */
+    // PlanificationController
     public function getPlanificationsByCourse(GetPlanificationsByCourseRequest $request, Course $course)
     {
         $sorts = explode(',', $request->sort);
