@@ -2,6 +2,8 @@
 
 namespace Database\Seeders\Develop\Cecy;
 
+use App\Models\Cecy\Catalogue;
+use App\Models\Cecy\Course;
 use App\Models\Cecy\Instructor;
 use App\Models\Cecy\ProfileInstructorCourse;
 use Illuminate\Database\Seeder;
@@ -19,13 +21,11 @@ class AuthorizedInstructorsSeeder extends Seeder
 
         $profileInstructorCourses = ProfileInstructorCourse::get();
         $instructors = Instructor::get();
+
         foreach ($instructors as $instructor) {
-            foreach ($profileInstructorCourses as $profileInstructorCourse) {
-                $instructor->profileInstructorCourses()->attach(
-                    $profileInstructorCourse->id
-                );
-            }
+            $instructor->detailInstructors()->attach(
+                $profileInstructorCourses->random(rand(1, 3))->pluck('id')->toArray()
+            );
         }
     }
-
 }

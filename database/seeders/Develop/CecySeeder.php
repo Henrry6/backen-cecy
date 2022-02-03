@@ -57,11 +57,11 @@ class CecySeeder extends Seeder
             AttendancesSeeder::class,
             ParticipantCourseSeeder::class,
             DetailAttendancesSeeder::class,
+            AuthorizedInstructorsSeeder::class,
             //DetailPlanificationsInstructorSeeder::class,
             //CertificatesSeeder::class,
             //NotificationsSeeder::class,
             //PhotograficRecordsSeeder::class,
-            //AuthorizedInstructorsSeeder::class,
         ]);
     }
 }

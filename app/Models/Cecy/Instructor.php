@@ -32,7 +32,7 @@ class Instructor extends Model implements Auditable
 
     public function detailInstructors()
     {
-        $this->hasMany(DetailInstructor::class);
+        return $this->hasMany(DetailPlanification::class);
     }
 
     public function detailPlanifications()
