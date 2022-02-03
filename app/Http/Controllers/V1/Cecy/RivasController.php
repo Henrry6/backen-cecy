@@ -35,6 +35,7 @@ class RivasController extends Controller
     //     $this->middleware('permission:delete-catalogues')->only(['destroy', 'destroys']);
     // }
     /*DDRC-C: Busca planificaciones vigentes por periodo asignadas al usuario logueado(responsable del CECY)*/
+    // PlanificationController
     public function getPlanificationsByPeriodState(InstructorRequest $request)
     {
         $instructor = Instructor::FirstWhere('user_id', $request->user()->id)->get();
@@ -56,6 +57,7 @@ class RivasController extends Controller
     }
 
     /*DDRC-C: Busca los participantes inscritos a una planificación especifica*/
+    // ParticipantController
     public function getPlanificationParticipants(DetailPlanificationRequest $request, Planification $planification)
     {
         $detailPlanifications = $planification->detailPlanifications()->get();
@@ -74,9 +76,10 @@ class RivasController extends Controller
     }
 
     /*DDRC-C: Busca informacion de un participante(datos del usuario) y de registro a un curso especifico(informacion adicional y archivos)*/
+    // ParticipantController
     public function getParticipantInformation(IndexRegistrationRequest $request, Registration $registration)
     {
-        
+
         return (new ParticipantInformationResource($registration))
             ->additional([
                 'msg' => [
@@ -88,6 +91,7 @@ class RivasController extends Controller
     }
 
     /*DDRC-C: actualiza una inscripcion, cambiando la observacion,y estado de una inscripción de un participante en un curso especifico  */
+    // ParticipantController
     public function updateParticipantRegistration(UpdateRegistrationRequest $request, Registration $registration)
     {
         $registration->observation = $request->input('observation');
@@ -105,6 +109,7 @@ class RivasController extends Controller
     }
 
     /*DDRC-C: Matricula un participante */
+    // ParticipantController
     public function registerParticipant(Request $request, Participant $participant)
     {
         $registration = $participant->registration()->first();
@@ -123,6 +128,7 @@ class RivasController extends Controller
     }
 
     /*DDRC-C: Anular varias Matriculas */
+    // RegistrationController
     public function nullifyRegistrations(Request $request)
     {
         $registrations = Registration::whereIn('id', $request->input('ids'))->get();
@@ -139,9 +145,9 @@ class RivasController extends Controller
             ->response()->setStatusCode(201);
     }
 
-  
 
     /*DDRC-C: Trae una lista de nombres de cursos, paralelos y jornadas*/
+    // PlanificationController
     public function getCoursesParallelsWorkdays(getCoursesByResponsibleRequest $request)
     {
         $sorts = explode(',', $request->sort);
@@ -161,6 +167,8 @@ class RivasController extends Controller
     }
 
     /*DDRC-C: notifica a un participante de una observacion en su inscripcion*/
+    // ParticipantController
+    // Pendiente
     public function notifyParticipant()
     {
         //TODO: revisar sobre el envio de notificaciones
@@ -168,11 +176,12 @@ class RivasController extends Controller
     }
 
     /*DDRC-C: elimina una matricula de un participante en un curso especifico */
+    // RegistrationController
     public function nullifyRegistration(Registration $registration)
     {
         $registrations = Registration::whereIn('id', $request->input('id'))->get();
         $registrations->state()->associate(Catalogue::find($request->input('state.id')));
-        
+
         return (new UserResource($registration))
             ->additional([
                 'msg' => [
@@ -183,12 +192,13 @@ class RivasController extends Controller
             ])
             ->response()->setStatusCode(201);
     }
-    
+
     /*******************************************************************************************************************
      * FILES
      ******************************************************************************************************************/
     /*ver documentos  requeridos para un registro                  */
-     public function showFile(Requirement $Requirement, File $file)
+    // RequirementController
+    public function showFile(Requirement $Requirement, File $file)
     {
         return $Requirement->showFile($file);
     }
@@ -197,7 +207,8 @@ class RivasController extends Controller
     /*******************************************************************************************************************
      * IMAGES
      ******************************************************************************************************************/
-/*ver documentos  requeridos para un registro */
+    /*ver documentos  requeridos para un registro */
+    // RequirementController
     public function showImage(Requirement $Requirement, Image $image)
     {
         return $Requirement->showImage($image);
