@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\Cecy\Participants\GetCoursesByParticipantRequest;
 use Illuminate\Http\Request;
 use App\Models\Cecy\Course;
 use App\Models\Cecy\Catalogue;
@@ -12,7 +13,10 @@ use App\Http\Resources\V1\Cecy\Prerequisites\PrerequisiteResource;
 use App\Http\Requests\V1\Cecy\Prerequisites\DestroyPrerequisiteRequest;
 use App\Http\Requests\V1\Cecy\Prerequisites\StorePrerequisiteRequest;
 use App\Http\Requests\V1\Cecy\Prerequisites\UpdatePrerequisiteRequest;
-
+use App\Http\Requests\V1\Cecy\Registrations\IndexRegistrationRequest;
+use App\Http\Resources\V1\Cecy\Participants\CoursesByParticipantCollection;
+use App\Http\Resources\V1\Cecy\Registrations\RegistrationResource;
+use App\Models\Cecy\Participant;
 
 class RegistrationController extends Controller
 {

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\Cecy\Attendance\GetAttendancesByParticipantRequest;
+use App\Http\Requests\V1\Cecy\Attendance\SaveDetailAttendanceRequest;
 use Illuminate\Http\Request;
 use App\Models\Cecy\Course;
 use App\Models\Cecy\Catalogue;
@@ -12,7 +14,10 @@ use App\Http\Resources\V1\Cecy\Prerequisites\PrerequisiteResource;
 use App\Http\Requests\V1\Cecy\Prerequisites\DestroyPrerequisiteRequest;
 use App\Http\Requests\V1\Cecy\Prerequisites\StorePrerequisiteRequest;
 use App\Http\Requests\V1\Cecy\Prerequisites\UpdatePrerequisiteRequest;
-
+use App\Http\Resources\V1\Cecy\Attendances\GetAttendanceByParticipantCollection;
+use App\Http\Resources\V1\Cecy\Attendances\SaveDetailAttendanceResource;
+use App\Models\Cecy\Attendance;
+use App\Models\Cecy\Registration;
 
 class AttendanceController extends Controller
 {
@@ -35,7 +40,7 @@ class AttendanceController extends Controller
             ])
             ->response()->setStatusCode(200);
     }
-    / Guardar asistencia
+    // Guardar asistencia
     // AttendanceController
     public function saveDetailAttendances(SaveDetailAttendanceRequest $request, Attendance $attendance)
     {
