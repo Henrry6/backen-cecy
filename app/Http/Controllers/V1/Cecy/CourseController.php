@@ -4,6 +4,7 @@ namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Cecy\Courses\GetCoursesByCategoryRequest;
+use App\Http\Requests\V1\Cecy\Courses\GetCoursesByCoordinatorCecyRequest;
 use App\Http\Requests\V1\Cecy\Courses\GetCoursesByNameRequest;
 use App\Http\Requests\V1\Cecy\Courses\getCoursesByResponsibleRequest;
 use App\Http\Requests\V1\Cecy\Courses\IndexCourseRequest;
@@ -14,7 +15,9 @@ use App\Models\Cecy\Catalogue;
 use App\Http\Resources\V1\Cecy\Courses\CourseResource;
 use App\Http\Resources\V1\Cecy\Courses\CourseCollection;
 use App\Http\Requests\V1\Cecy\Courses\UpdateCourseRequest;
+use App\Http\Requests\V1\Cecy\Courses\UploadCertificateOfApprovalRequest;
 use App\Http\Requests\V1\Cecy\Planifications\IndexPlanificationRequest;
+use App\Http\Resources\V1\Cecy\Courses\CourseByCoordinatorCecyCollection;
 use App\Http\Resources\V1\Cecy\Courses\CoursePublicPrivateCollection;
 use App\Http\Resources\V1\Cecy\Prerequisites\CoursesByResponsibleCollection;
 use App\Models\Cecy\Instructor;
@@ -22,6 +25,8 @@ use App\Models\Cecy\Participant;
 use App\Models\Cecy\Planification;
 use App\Models\Core\File;
 use App\Models\Core\Image;
+use App\Models\Core\State;
+use Illuminate\Support\Facades\DB;
 
 class CourseController extends Controller
 {
@@ -223,19 +228,6 @@ class CourseController extends Controller
 
     }
 
-    // Files
-    public function showFileCourse(Course $courses, File $file)
-    {
-        return $courses->showFile($file);
-    }
-
-    public function showImageCourse(Course $courses, Image $image)
-    {
-        return $courses->showImage($image);
-    }
-
-
-
      //obtener los cursos asignados a un docente responsable logueado
     // CourseController
     public function getCoursesByResponsibleCourse(getCoursesByResponsibleRequest $request)
@@ -296,12 +288,108 @@ class CourseController extends Controller
         ]);
     }
 
-    // Pendiente
+    
+    /**
+     * Obtener cursos y Filtrarlos por peridos lectivos , carrera o estado
+     */
     // CourseController
-    public function showImage(Course $course, Image $image)
+    public function getCoursesByCoordinator(GetCoursesByCoordinatorCecyRequest $request)
     {
-        return $course->showImage($image);
+        $sorts = explode(',', $request->sort);
+
+        $courses = Course::customOrderBy($sorts)
+            ->career(($request->input('career.id')))
+            ->academicPeriod(($request->input('academicPeriod.id')))
+            ->state(($request->input('state.id')))
+            ->paginate($request->input('per_page'));
+
+        return (new CourseByCoordinatorCecyCollection($courses))
+            ->additional([
+                'msg' => [
+                    'summary' => '',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
     }
 
+    /*
+    * MOSTRAR LOS KPI DE CURSOS APROBADOS, POR APROBAR Y EN PROCESO
+    */
+    // CourseController
+    public function getCoursesKPI(Request $request)
+    {
+        $courses = DB::table('courses as cr')
+            ->join('catalogue as ct', 'ct.id', '=', 'cr.state_id')
+            ->where('ct.name', '=', 'APPROVED, TO_BE_APPROVED, IN_PROCESS')
+            ->select(DB::raw('count(*) as course_count'))
+            ->first()
+            ->paginate($request->input('per_page'));
+
+
+        echo $courses->course_count;
+    }
+
+    /*
+    * Asignar código al curso
+    */
+    // CourseController
+    public function assignCodeToCourse($request, Course $course)
+    {
+        $course->code = $request->input('code');
+        $course->save();
+
+        return (new CourseResource($course))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Curso actualizado',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
+
+    /*
+    * Ingresar el motivo del por cual el curso no esta aprobado
+    */
+    // CourseController
+    public function approveCourse($request, Course $course)
+    {
+        $course->state()->associate(Catalogue::firstWhere('code', State::APPROVED));
+        $course->observation = $request->input('observation');
+        $course->save();
+
+        return (new CourseResource($course))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Curso actualizado',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
+
+    /*
+    * Adjuntar el acta de aprobación
+    */
+    // CourseController
+    public function uploadCertificateOfApproval(UploadCertificateOfApprovalRequest $request, File $file)
+    {
+        return $file->uploadFile($request);
+    }
+
+    // Files
+    public function showFileCourse(Course $courses, File $file)
+    {
+    return $courses->showFile($file);
+    }
+
+    public function showImageCourse(Course $courses, Image $image)
+    {
+    return $courses->showImage($image);
+    }
 
 }
