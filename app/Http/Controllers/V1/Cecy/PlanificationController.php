@@ -7,6 +7,7 @@ use App\Http\Requests\V1\Cecy\KPI\Planifications\ShowKpiRequest;
 use App\Http\Requests\V1\Cecy\Planifications\UpdateAssignResponsibleCecyRequest;
 use App\Http\Requests\V1\Cecy\Planifications\UpdateDatesinPlanificationRequest;
 use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\GetPlanificationsByCourseRequest;
+use App\Http\Resources\V1\Cecy\Courses\CourseCollection;
 use App\Http\Resources\V1\Cecy\Planifications\Kpi\KpiPlanificationResourse;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationByCourseCollection;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationResource;
@@ -14,6 +15,7 @@ use App\Models\Cecy\Authority;
 use App\Models\Cecy\Catalogue;
 use App\Models\Cecy\Course;
 use App\Models\Cecy\Planification;
+use App\Models\Core\State;
 use Illuminate\Database\Eloquent\Builder;
 
 class PlanificationController extends Controller
@@ -105,5 +107,25 @@ class PlanificationController extends Controller
                 ]
             ])
             ->response()->setStatusCode(200);
+    }
+
+    //Trae todos los cursos
+    // PlanificationController
+    public function getPlanitifications()
+    {
+        $planifications = Planification::where(['state' => function ($state) {
+            $state->where('code', State::APPROVED);
+        }])->paginate();
+
+        return (new CourseCollection($planifications))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Me trae los cursos',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+
     }
 }
