@@ -100,3 +100,10 @@ Route::prefix('prerequisite')->group(function () {
 /***********************************************************************************************************************
  * USERS
  **********************************************************************************************************************/
+Route::prefix('user')->group(function () {
+    Route::get('course/{course}', [GuachagmiraController::class, 'getInstructorsInformationByCourse']);
+});
+
+Route::prefix('detailPlanification')->group(function () {
+    Route::get('course/{course}', [GuachagmiraController::class, 'getDetailPlanificationsByCourse']);
+});
