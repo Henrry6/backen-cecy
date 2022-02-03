@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\Cecy\Topics\DestroysTopicRequest;
 use Illuminate\Http\Request;
 use App\Models\Cecy\Topic;
 use App\Models\Cecy\Course;
@@ -11,7 +12,7 @@ use App\Http\Resources\V1\Cecy\Topics\TopicResource;
 use App\Http\Resources\V1\Cecy\Topics\TopicCollection;
 use App\Http\Requests\V1\Cecy\Topics\StoreTopicRequest;
 use App\Http\Requests\V1\Cecy\Topics\UpdateTopicRequest;
-
+use App\Http\Resources\V1\Cecy\Courses\TopicsByCourseCollection;
 
 class TopicController extends Controller
 {
@@ -101,6 +102,23 @@ class TopicController extends Controller
             ->additional([
                 'msg' => [
                     'summary' => 'Temas o subtemas Eliminados',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ]);
+    }
+    /*
+        Obtener los topicos  dado un curso
+    */
+    // TopicsController
+    public function getTopicsByCourse(Course $course)
+    {
+        $topics = $course->topics()->get();
+
+        return (new TopicsByCourseCollection($topics))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
                     'detail' => '',
                     'code' => '200'
                 ]

@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Cecy\Instructor;
 use App\Http\Resources\V1\Cecy\Courses\CourseResource;
 use App\Http\Resources\V1\Cecy\Courses\CourseCollection;
-
+use App\Http\Resources\V1\Core\Users\UserCollection;
+use App\Models\Cecy\Course;
 
 class InstructorController extends Controller
 {
@@ -31,5 +32,24 @@ class InstructorController extends Controller
                     'code' => '200'
                 ]
             ]);
+    }
+    /*
+        Obtener la información personal de cada instructor que dicta dado un curso
+    */
+    public function getInstructorsInformationByCourse(Course $course)
+    {
+        $planification = $course->planifications()->get();
+        $detailPlanifications = $planification->detailPlanifications()->get();
+        $instructors = $detailPlanifications->instructors()->get();
+        $user_instructors = $instructors->user()->get();
+
+        return (new UserCollection($user_instructors))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])->response()->setStatusCode(200);
     }
 }
