@@ -10,7 +10,7 @@ use App\Models\Cecy\Catalogue;
 use App\Models\Cecy\Planification;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CourseResource extends JsonResource
+class CoursePublicPrivateResource extends JsonResource
 {
     public function toArray($request)
     {
@@ -18,7 +18,7 @@ class CourseResource extends JsonResource
             'id' => $this->id,
             'academicPeriod' => CatalogueResource::make($this->academicPeriod),
             'area' => CatalogueResource::make($this->area),
-            'entityCertification' => Catalogue::make($this->entityCertification),
+            'entityCertification' => CatalogueResource::make($this->entityCertification),
             'career' => CareerResource::make($this->career),
             'category' => CatalogueResource::make($this->category),
             'formationType' => CatalogueResource::make($this->formationType),
@@ -28,11 +28,11 @@ class CourseResource extends JsonResource
             'courseType' => CatalogueResource::make($this->courseType),
             'frequency' => CatalogueResource::make($this->frequency),
             'modality' => CatalogueResource::make($this->modality),
-            'meanVerification' => Catalogue::make($this->meanVerification),
-            'responsible' => InstructorResource::make($this->responsible),
-            'speciality' => CatalogueResource::make($this->speciality),
+            'meanVerification' => CatalogueResource::make($this->meanVerification),
+            // 'responsible' => InstructorResource::make($this->responsible),
+            // 'speciality' => CatalogueResource::make($this->speciality),
             'state' => CatalogueResource::make($this->state),
-            'planifications' => PlanificationResource::collection($this->planifications),
+            // 'planifications' => PlanificationResource::collection($this->planifications),
             'catalogues' => CatalogueResource::collection($this->catalogues),
             'abbreviation' => $this->abbreviation,
             'alignment' => $this->alignment,

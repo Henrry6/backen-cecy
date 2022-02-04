@@ -104,14 +104,13 @@ Route::prefix('prerequisite')->group(function () {
  **********************************************************************************************************************/
 Route::prefix('course')->group(function () {
     Route::patch('{course}', [CourseController::class, 'updateCourse']);
-    Route::get('public', [CourseController::class, 'getPublicCourses']);
-    Route::get('', [CourseController::class, 'getPublicCoursesByCategory']);
-    Route::get('', [CourseController::class, 'getPublicCoursesByName']);
-    Route::get('', [CourseController::class, 'getPrivateCoursesByParticipantType']);
-    Route::get('', [CourseController::class, 'getPrivateCoursesByCategory']);
-    Route::get('', [CourseController::class, 'getPrivateCoursesByName']);
-    Route::get('', [CourseController::class, 'getCoursesByResponsibleCourse']);
-    Route::get('', [CourseController::class, '']);
+    Route::get('public-courses', [CourseController::class, 'getPublicCourses']);
+    Route::get('public-courses-category', [CourseController::class, 'getPublicCoursesByCategory']);
+    Route::get('public-courses-name', [CourseController::class, 'getPublicCoursesByName']);
+    Route::get('private-courses-participant', [CourseController::class, 'getPrivateCoursesByParticipantType']);
+    Route::get('private-courses-category', [CourseController::class, 'getPrivateCoursesByCategory']);
+    Route::get('private-courses-name', [CourseController::class, 'getPrivateCoursesByName']);
+    Route::get('courses-responsible', [CourseController::class, 'getCoursesByResponsibleCourse']);
     Route::patch('{course}', [CourseController::class, 'updateGeneralInformationCourse']);
     Route::get('', [CourseController::class, 'getCoursesByCoordinator']);
     Route::get('', [CourseController::class, 'getCoursesKPI']);
@@ -136,6 +135,5 @@ Route::prefix('courses')->group(function () {
 
 Route::prefix('detailAttendance')->group(function () {
     Route::get('course/{course}', [DetailAttendanceController::class, 'showAttedanceParticipant']);
-    Route::patch('/{detailAttendance}',[DetailAttendanceController::class,'updatDetailAttendanceTeacher']);
+    Route::patch('/{detailAttendance}', [DetailAttendanceController::class, 'updatDetailAttendanceTeacher']);
 });
-
