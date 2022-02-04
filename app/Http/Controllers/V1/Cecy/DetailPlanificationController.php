@@ -20,6 +20,7 @@ use App\Http\Requests\V1\Cecy\Topics\StoreTopicRequest;
 use App\Http\Requests\V1\Cecy\Topics\UpdateTopicRequest;
 use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationCollection;
 use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationResource;
+use App\Models\Cecy\Authority;
 use App\Models\Cecy\Classroom;
 use App\Models\Cecy\DetailPlanification;
 use App\Models\Cecy\Instructor;
@@ -256,6 +257,41 @@ class DetailPlanificationController extends Controller
                 ]
             ])
             ->response()->setStatusCode(200);
+    }
+
+    //actualizar informacion del detalle planificación
+    public function updatedetailPlanificationByCecy(UpdateDetailPlanificationRequest $request)
+    {
+        $loggedAuthority = Authority::where('user_id', $request->user()->id)->get();
+        $classroom = Classroom::find($request->input('classroom.id'));
+        $days = Catalogue::find($request->input('day.id'));
+        $planification = Planification::find($request->input('planification.id'));
+        $workday = Catalogue::find($request->input('workday.id'));
+        $parallel = Catalogue::find($request->input('parallel.id'));
+        
+        $detailPlanification = DetailPlanification::find($request->input('detailPlanification.id'));
+
+        $detailPlanification->classroom()->associate($classroom);
+        $detailPlanification->planification()->associate($planification);
+        $detailPlanification->day()->associate($days);
+        $detailPlanification->workday()->associate($workday);
+        $detailPlanification->parallel()->associate($parallel);
+
+
+        $detailPlanification->days_number = $request->input('days_number');
+        $detailPlanification->ended_at = $request->input('ended_at');
+        $detailPlanification->plan_ended_at = $request->input('plan_ended_at');
+        $detailPlanification->started_at = $request->input('started_at');
+        $detailPlanification->save();
+
+        return (new DetailPlanificationResource ($detailPlanification))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Actualizado correctamente',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ]);
     }
 
     /**
