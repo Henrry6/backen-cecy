@@ -8,7 +8,9 @@ use App\Http\Requests\V1\Cecy\Courses\GetCoursesByCoordinatorCecyRequest;
 use App\Http\Requests\V1\Cecy\Courses\GetCoursesByNameRequest;
 use App\Http\Requests\V1\Cecy\Courses\getCoursesByResponsibleRequest;
 use App\Http\Requests\V1\Cecy\Courses\IndexCourseRequest;
+use App\Http\Requests\V1\Cecy\Courses\GetCoursesByCareerRequest;
 use App\Http\Requests\V1\Cecy\Courses\UpdateCourseGeneralDataRequest;
+use App\Http\Requests\V1\Cecy\Courses\StoreCourseNewRequest;
 use App\Http\Requests\V1\Cecy\Planifications\GetPlanificationByResponsableCourseRequest;
 use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationCollection;
 use Illuminate\Http\Request;
@@ -31,6 +33,7 @@ use App\Models\Cecy\Planification;
 use App\Models\Core\File;
 use App\Models\Core\Image;
 use App\Models\Core\State;
+use App\Models\Core\Career;
 use Illuminate\Support\Facades\DB;
 
 class CourseController extends Controller
@@ -481,6 +484,48 @@ class CourseController extends Controller
             ])
             ->response()->setStatusCode(200);
 
+    }
+
+    //filtrar cursos por carrera
+    public function getCoursesByCareer(GetCoursesByCareerRequest $request, Career $career)
+    {
+        $sorts = explode(',', $request->sort);
+        $course=Course::where('career.id',$career->id);
+        
+        $course = Course::customOrderBy($sorts)
+            ->academicPeriod(($request->input('academicPeriod.id')))
+            ->state(($request->input('state.id')))
+            ->paginate($request->input('per_page'));
+
+        return (new CourseResource($course))
+            ->additional([
+                'msg' => [
+                    'summary' => '',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ]);
+    }
+    //crear curso no existente
+    public function storeCourseNew(StoreCourseNewRequest $request, Course $course)
+    {
+        $course = new Course();
+        $course->name = $request->input('search');
+        $course->participant_type = $request->input('search');
+        $course->state = $request->input('estado del curso');
+        $course->duration = $request->input('search');
+        // $courses->started_at()->associate(Planification::find($request->input('fecha inicio de planificacion')));
+        // $courses->ended_at()->associate(Planification::find($request->input('fecha fin de planificacion')));
+        $course->save();
+
+        return (new CourseResource($course))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Curso creado',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ]);
     }
 
     /*
