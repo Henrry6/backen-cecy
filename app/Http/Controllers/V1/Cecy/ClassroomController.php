@@ -11,9 +11,6 @@ use App\Http\Resources\V1\Cecy\Classrooms\ClassroomCollection;
 use App\Http\Resources\V1\Cecy\Classrooms\ClassroomResource;
 use App\Models\Cecy\Catalogue;
 use App\Models\Cecy\Classroom;
-use App\Models\Cecy\Requirement;
-use App\Models\Core\File;
-use App\Models\Core\Image;
 use Illuminate\Support\Facades\Request;
 
 class ClassroomController extends Controller
