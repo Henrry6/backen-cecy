@@ -13,7 +13,7 @@ use App\Models\Cecy\Catalogue;
 use App\Models\Cecy\SchoolPeriod;
 use Illuminate\Support\Facades\Request;
 
-class ClassroomController extends Controller
+class ShoolPeriodController extends Controller
 {
     //Obtiene todas los periodos escolares que hay
     public function index(IndexSchoolPeriodsRequest $request)

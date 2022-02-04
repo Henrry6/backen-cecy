@@ -73,24 +73,15 @@ class CourseController extends Controller
     }
 
 
-    // Funcion privada para obtener cursos de planifaciones aprovadas
-    private function getCoursesByAcceptedPlanification()
-    {
-        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
-
-        $planifications = Planification::where('state', $catalogue['planification_state']['approved'])->get();
-        $courses = $planifications->courses()->get();
-
-        return $courses;
-    }
     // Obtiene los cursos públicos aprobados
     public function getPublicCourses(IndexCourseRequest $request)
     {
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+        $coursesTypes = Catalogue::where('type',  $catalogue['course_state']['type'])->get();
+        $courseApproved = $coursesTypes->where('code', $catalogue['course_state']['approved'])->first();
+        $courses =  Course::where([['state_id', $courseApproved->id], ['public', true]])->get();
 
-        $courses = $this->getCoursesByAcceptedPlanification();
-        $public_courses = $courses->where('public', true)->get();
-
-        return (new CoursePublicPrivateCollection($public_courses))
+        return (new CoursePublicPrivateCollection($courses))
             ->additional([
                 'msg' => [
                     'summary' => 'success',
@@ -423,49 +414,49 @@ class CourseController extends Controller
     }
 
     public function showCurricularDesign(getCoursesByNameRequest $request, Course $course)
-      {
+    {
         // trae la informacion de diseño curricular
 
-    $planification = $course->planifications()->get()
-        ->detailPlanifications()
-        ->planifications()
-        ->course()
-        ->paginate($request->input('per_page'));
+        $planification = $course->planifications()->get()
+            ->detailPlanifications()
+            ->planifications()
+            ->course()
+            ->paginate($request->input('per_page'));
 
-    return (new InformCourseNeedsResource($planification))
-        ->additional([
-            'msg' => [
-                'summary' => 'success',
-                'detail' => '',
-                'code' => '200'
-            ]
-        ]);
+        return (new InformCourseNeedsResource($planification))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ]);
     }
 
     public function showFinalCourseReport(getCoursesByNameRequest $request, Course $course)
     {
-     // trae la informacion del informe final del curso
+        // trae la informacion del informe final del curso
 
-     $course = Course::where('course_id', $request->course()->id)->get();
+        $course = Course::where('course_id', $request->course()->id)->get();
 
-     $detailPlanifications = $course
-      ->detailPlanifications()
-      ->planifications()
-      ->instructors()
-      ->course()
-      ->registration()
-      ->paginate($request->input('per_page'));
+        $detailPlanifications = $course
+            ->detailPlanifications()
+            ->planifications()
+            ->instructors()
+            ->course()
+            ->registration()
+            ->paginate($request->input('per_page'));
 
 
-      return (new InformCourseNeedsResource($course))
-      ->additional([
-          'msg' => [
-              'summary' => 'success',
-              'detail' => '',
-              'code' => '200'
-          ]
-      ]);
-  }
+        return (new InformCourseNeedsResource($course))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ]);
+    }
     //cursos de un docente instructor
     // CourseController
     public function getCoursesByInstructor(GetPlanificationByResponsableCourseRequest $request)
@@ -483,15 +474,14 @@ class CourseController extends Controller
                 ]
             ])
             ->response()->setStatusCode(200);
-
     }
 
     //filtrar cursos por carrera
     public function getCoursesByCareer(GetCoursesByCareerRequest $request, Career $career)
     {
         $sorts = explode(',', $request->sort);
-        $course=Course::where('career.id',$career->id);
-        
+        $course = Course::where('career.id', $career->id);
+
         $course = Course::customOrderBy($sorts)
             ->academicPeriod(($request->input('academicPeriod.id')))
             ->state(($request->input('state.id')))

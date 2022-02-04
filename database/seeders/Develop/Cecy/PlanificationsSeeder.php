@@ -95,7 +95,7 @@ class PlanificationsSeeder extends Seeder
                     'responsible_course_id' => $responsablesCourse[rand(0, sizeof($responsablesCourse) - 1)],
                     'responsible_ocs_id' => $responsableOcs,
                     'responsible_cecy_id' => $responsableCecy,
-                    'state_id' => $faker->randomElement($states),
+                    'state_id' => 77,
                     'approved_at' => $faker->date('Y-m-d'),
                     'code' => $faker->word(),
                     'ended_at' => $faker->dateTimeBetween('+2 months', '+3 months')->format('Y-m-d'),
