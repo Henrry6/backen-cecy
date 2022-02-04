@@ -14,7 +14,7 @@ class DetailAttendanceController extends Controller
 {
     //asistencias de los estudiantes de un curso
     // DetailAttendanceController
-    public function ShowParticipantCourse(ShowParticipantsRequest $request, Attendance $attendance)
+    public function showAttedanceParticipant(ShowParticipantsRequest $request, Attendance $attendance)
     {
 
         $detailAttendances = $attendance->detailAttendances()->paginate();

@@ -6,6 +6,7 @@ use App\Http\Controllers\V1\Cecy\GuachagmiraController;
 use App\Http\Controllers\V1\Cecy\GuanunaController;
 use App\Http\Controllers\V1\Cecy\PerezController;
 use App\Http\Controllers\V1\Cecy\CourseController;
+use App\Http\Controllers\V1\Cecy\DetailAttendanceController;
 use App\Http\Controllers\V1\Cecy\TopicController;
 use App\Http\Controllers\V1\Cecy\PrerequisiteController;
 use App\Http\Controllers\V1\Cecy\PlanificationController;
@@ -128,3 +129,13 @@ Route::prefix('courses')->group(function () {
     Route::get('', [CourseController::class, 'getCourses']);
     Route::get('', [CourseController::class, 'getCoursesByInstructor']);
 });
+
+/***********************************************************************************************************************
+ * DETAIL ATTENDANCES
+ **********************************************************************************************************************/
+
+Route::prefix('detailAttendance')->group(function () {
+    Route::get('course/{course}', [DetailAttendanceController::class, 'showAttedanceParticipant']);
+    Route::patch('/{detailAttendance}',[DetailAttendanceController::class,'updatDetailAttendanceTeacher']);
+});
+
