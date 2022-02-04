@@ -56,8 +56,7 @@ class ClassroomController extends Controller
         $classroom->capacity = $request->input('capacity');
         $classroom->code = $request->input('code');
         $classroom->name = $request->input('name');
-        $classroom->birthdate = $request->input('birthdate');
-        $classroom->email = $request->input('email');
+        
         $classroom->save();
 
         return (new ClassroomResource($classroom))
@@ -79,8 +78,7 @@ class ClassroomController extends Controller
         $classroom->capacity = $request->input('capacity');
         $classroom->code = $request->input('code');
         $classroom->name = $request->input('name');
-        $classroom->birthdate = $request->input('birthdate');
-        $classroom->email = $request->input('email');
+  
         $classroom->save();
 
         return (new ClassroomResource($classroom))
@@ -94,7 +92,7 @@ class ClassroomController extends Controller
         ->response()->setStatusCode(201);
     }
     /*DDRC-C: Elimina una clase*/
-    public function destroy (Request $request, Classroom $classroom)
+    public function destroy ( Classroom $classroom)
     {
         
         $classroom->delete();

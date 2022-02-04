@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\V1\Cecy\Institutions;
+namespace App\Http\Requests\V1\Cecy\Authorities;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class DestroysInstitutionsRequest extends FormRequest
+class DestroysAuthorityRequest extends FormRequest
 {
-    public function authorize()
+  public function authorize()
   {
     return true;
   }
@@ -20,7 +20,7 @@ class DestroysInstitutionsRequest extends FormRequest
   public function attributes()
   {
     return [
-      'ids' => 'ID`s de las insitituciones',
+      'ids' => 'ID`s de las autoridades',
     ];
   }
 }

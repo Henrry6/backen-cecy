@@ -28,7 +28,7 @@ class PlanificationController extends Controller
     /**
      * Get all planifications filtered by and course
      */
-    // PlanificationController
+    // PlanificationController ya esta
     public function getPlanificationsByCourse(GetPlanificationsByCourseRequest $request, Course $course)
     {
         $sorts = explode(',', $request->sort);
@@ -68,7 +68,7 @@ class PlanificationController extends Controller
     /**
      * Update start_at and ended_at and needs in planification
      */
-    // PlanificationController
+    // PlanificationController ya esta
     public function updateDatesAndNeedsInPlanification(UpdateDatesinPlanificationRequest $request, Planification $planification)
     {
         $planification->started_at = $request->input('startedAt');
@@ -91,7 +91,7 @@ class PlanificationController extends Controller
     /**
      * KPI of planifications
      */
-    // PlanificationController
+    // PlanificationController ya esta
     public function getKpi(ShowKpiRequest $request, Catalogue $state)
     {
         $planifications = Planification::withCount([
@@ -115,7 +115,7 @@ class PlanificationController extends Controller
     }
 
     //Trae todos los cursos
-    // PlanificationController
+    // PlanificationController ya esta
     public function getPlanitifications()
     {
         $planifications = Planification::where(['state' => function ($state) {
@@ -135,7 +135,7 @@ class PlanificationController extends Controller
     }
 
     /*DDRC-C: Busca planificaciones vigentes por periodo asignadas al usuario logueado(responsable del CECY)*/
-    // PlanificationController
+    // PlanificationController ya esta
     public function getPlanificationsByPeriodState(InstructorRequest $request)
     {
         $instructor = Instructor::FirstWhere('user_id', $request->user()->id)->get();
@@ -156,7 +156,7 @@ class PlanificationController extends Controller
             ])->response()->setStatusCode(200);
     }
     /*DDRC-C: Trae una lista de nombres de cursos, paralelos y jornadas*/
-    // PlanificationController
+    // PlanificationController ya esta
     public function getCoursesParallelsWorkdays(getCoursesByResponsibleRequest $request)
     {
         $sorts = explode(',', $request->sort);
@@ -175,7 +175,7 @@ class PlanificationController extends Controller
             ])->response()->setStatusCode(201);
     }
 
-    // asignar docente responsable de curso a una planificacion
+    // asignar docente responsable de curso a una planificacion ya esta
     public function storePlanificationByCourse(StorePlanificationByCourseRequest $request, Planification $planification)
     {
         $planification ->responsibleCourse()->associate(Instructor::find($request->input('responsibleCourse.id')));
@@ -196,7 +196,7 @@ class PlanificationController extends Controller
             ]);
     }
 
-    //actualizar informacion de la planificacion
+    //actualizar informacion de la planificacion ya esta
     public function updatePlanificationByCecy(UpdatePlanificationRequest $request, Planification $planification)
     {
         $loggedAuthority = Authority::where('user_id', $request->user()->id)->get();
@@ -220,7 +220,7 @@ class PlanificationController extends Controller
             ]);
     }
 
-    //Asignar codigo a la planificacion
+    //Asignar codigo a la planificacion ya esta
     public function assignCodeToPlanification(Planification $planification, $request)
     {
         $planification->code = $request->input('code');
@@ -235,7 +235,7 @@ class PlanificationController extends Controller
 
     }
 
-    //Aprobacion de planificacion   
+    //Aprobacion de planificacion ya esta
     public function approvePlanification($request, Planification $planification)
     {
         $planification->state()->associate(Catalogue::FirstWhere('code', State::APPROVED));
