@@ -47,6 +47,7 @@ class RegisterStudentRequest extends FormRequest
     public function attributes()
     {
         return [
+            'typeParticipant' => 'Tipo de participante',
             'participant.id' => 'Nombre del participante',
             'type.id' => 'tipo de matricula',
             'state.id' => 'Estado de revision en la que se encuentra la solicitud',
