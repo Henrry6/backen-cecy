@@ -13,14 +13,20 @@ class ShowParticipantsRequest extends FormRequest
     public function rules()
     {
         return [
-            'course_id' => ['required','integer']
+            'course_id' => ['required','integer'],
+            'certificateType' => ['required','integer'],
+            'state.id' => ['required','integer'],
+            'code' => ['required']
         ];
     }
 
     public function attributes()
     {
         return [
-            'course_id' => 'id del curso'
+            'course_id' => 'id del curso',
+            'certificateType' => 'Tipo de certificado',
+            'state.id' => 'Estado del certificado',
+            'code' => 'codigo del certificado'
         ];
     }
 }

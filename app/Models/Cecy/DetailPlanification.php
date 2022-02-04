@@ -17,14 +17,28 @@ class DetailPlanification extends Model implements Auditable
     protected $table = 'cecy.detail_planifications';
 
     protected $fillable = [
-        'end_time',
-        'observation',
+        'ended_time',
+        'observations',
         'plan_ended_at',
         'registrations_left',
-        'start_time',
+        'started_time',
+    ];
+
+    protected $casts = [
+        'observations' => 'array',
     ];
 
     // Relationships
+    public function attendaces()
+    {
+        return $this->hasMany(Attendance::class);
+    }
+
+    public function certificates()
+    {
+        return $this->morphMany(Certificate::class, 'certificateable');
+    }
+
     public function classroom()
     {
         return $this->belongsTo(Classroom::class);
@@ -35,7 +49,12 @@ class DetailPlanification extends Model implements Auditable
         return $this->belongsTo(Catalogue::class);
     }
 
-    public function paralel()
+    public function instructors()
+    {
+        return $this->belongsToMany(Instructor::class, 'cecy.detail_planification_instructor', 'detail_planification_id', 'instructor_id');
+    }
+
+    public function parallel()
     {
         return $this->belongsTo(Catalogue::class);
     }
@@ -45,9 +64,14 @@ class DetailPlanification extends Model implements Auditable
         return $this->belongsTo(Planification::class);
     }
 
-    public function workday()
+    public function photographicRecords()
     {
-        return $this->belongsTo(Catalogue::class);
+        return $this->hasMany(PhotograficRecord::class);
+    }
+
+    public function registrations()
+    {
+        return $this->hasMany(Registration::class);
     }
 
     public function state()
@@ -55,28 +79,56 @@ class DetailPlanification extends Model implements Auditable
         return $this->belongsTo(Catalogue::class);
     }
 
-    public function detailInstructors()
+    public function workday()
     {
-        return $this->hasMany(DetailInstructor::class);
+        return $this->belongsTo(Catalogue::class);
     }
 
-    public function photographicRecords()
-    {
-        return $this->hasMany(PhotograficRecord::class);
-    }
-
-    public function instructors()
-    {
-        return $this->belongsToMany(Instructor::class, 'detail_planification_instructor', 'detail_planification_id', 'instructor_id');
-    }
-    
-    public function registrations()
-    {
-        return $this->hasMany(Registration::class);
-    }
     // Mutators
 
     // Scopes
+    public function scopeEndedTime($query, $endedTime)
+    {
+        if ($endedTime) {
+            return $query->where('ended_time', $endedTime);
+        }
+    }
+
+    public function scopeObservations($query, $observations)
+    {
+        if ($observations) {
+            return $query->where('observations', $observations);
+        }
+    }
+
+    public function scopePlanEndedAt($query, $planEndedAt)
+    {
+        if ($planEndedAt) {
+            return $query->where('plan_ended_at', $planEndedAt);
+        }
+    }
+
+    public function scopeRegistrationsLeft($query, $registrationsLeft)
+    {
+        if ($registrationsLeft) {
+            return $query->where('registrations_left', $registrationsLeft);
+        }
+    }
+
+    public function scopeStartedTime($query, $startedTime)
+    {
+        if ($startedTime) {
+            return $query->where('started_time', $startedTime);
+        }
+    }
+
+    public function scopePlanification($query, $planification)
+    {
+        if ($planification) {
+            return $query->orWhere('planification_id', $planification->id);
+        }
+    }
+
     public function scopeCustomOrderBy($query, $sorts)
     {
         if (!empty($sorts[0])) {
@@ -89,13 +141,6 @@ class DetailPlanification extends Model implements Auditable
                 }
             }
             return $query;
-        }
-    }
-
-    public function scopePlanificationplanification($query, $planification)
-    {
-        if ($planification) {
-            return $query->orWhere('planification_id', $planification->id);
         }
     }
 }

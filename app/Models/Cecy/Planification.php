@@ -2,6 +2,7 @@
 
 namespace App\Models\Cecy;
 
+use App\Models\Core\State;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -25,6 +26,10 @@ class Planification extends Model implements Auditable
         'started_at'
     ];
 
+    protected $casts = [
+        'needs' => 'array',
+        'observations' => 'array',
+    ];
     // Relationships
     public function course()
     {
@@ -35,12 +40,6 @@ class Planification extends Model implements Auditable
     {
         return $this->belongsTo(DetailSchoolPeriod::class);
     }
-
-    public function vicerrector()
-    {
-        return $this->belongsTo(Authority::class);
-    }
-
     public function responsibleCourse()
     {
         return $this->belongsTo(Instructor::class);
@@ -61,9 +60,14 @@ class Planification extends Model implements Auditable
         return $this->belongsTo(Catalogue::class);
     }
 
-    public function detailplanifications()
+    public function vicerector()
     {
-        $this->hasMany(DetailPlanification::class);
+        return $this->belongsTo(Authority::class);
+    }
+
+    public function detailPlanifications()
+    {
+        return $this->hasMany(DetailPlanification::class);
     }
 
     //Mutators
@@ -80,17 +84,22 @@ class Planification extends Model implements Auditable
         }
     }
 
-    public function scopeResponsibleCourse($query, $responsibleCourse)
-    {
-        if ($responsibleCourse) {
-            return $query->orWhere('responsible_course_id', $responsibleCourse->id);
-        }
-    }
-
     public function scopeCourse($query, $course)
     {
         if ($course) {
             return $query->orWhere('course_id', $course->id);
+        }
+    }
+
+    public function scopeKpi($query, $planifications, $state)
+    {
+        return $query->orWhere('state_id', $planifications->$state);
+    }
+
+    public function scopeResponsibleCourse($query, $responsibleCourse)
+    {
+        if ($responsibleCourse) {
+            return $query->orWhere('responsible_course_id', $responsibleCourse->id);
         }
     }
 

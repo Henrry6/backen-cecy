@@ -25,7 +25,7 @@ class CreateCecyDetailPlanificationsTable extends Migration
                 ->comment('Id día')
                 ->constrained('cecy.catalogues');
 
-            $table->foreignId('paralel_id')
+            $table->foreignId('parallel_id')
                 ->comment('A,B,C,D')
                 ->constrained('cecy.catalogues');
 
@@ -44,7 +44,7 @@ class CreateCecyDetailPlanificationsTable extends Migration
                 ->constrained('cecy.catalogues');
 
             // nombre del campo debe ir en pasado -2
-            $table->time('end_time')
+            $table->time('ended_time')
                 ->nullable()
                 ->comment('Hora de finalización de clases');
 
@@ -55,12 +55,11 @@ class CreateCecyDetailPlanificationsTable extends Migration
             $table->date('plan_ended_at')
                 ->comment('Fecha final real de la planificación (que puede variar a la planificación)');
 
-            // Esto deberia ser calculado
             $table->integer('registrations_left')
                 ->comment('Capacidad restante del paralelo');
 
             // nombre del campo debe ir en pasado -2
-            $table->time('start_time')
+            $table->time('started_time')
                 ->nullable()
                 ->comment('Hora de inicio de clases');
         });

@@ -9,15 +9,20 @@
     "ethnic_origin": {
         "type": "ETHNIC_ORIGIN"
     },
+    "attendances": {
+        "type": "ATTENDANCES",
+        "duration": "DURATION",
+        "registered_at": "REGISTERED_AT"
+    },
     "entity_certification": {
         "type": "ENTITY_CERTIFICATION",
         "senecyt": "SENECYT",
         "setec": "SETECT",
         "cecy": "CECY"
     },
-    "capacitation": {
-        "type": "CAPACITATION",
-        "curso": "CURSO",
+    "formation": {
+        "type": "FORMATION",
+        "course": "COURSE",
         "workshop": "WORKSHOP",
         "webinar": "WEBINAR"
     },
@@ -26,7 +31,7 @@
         "technical": "TECHNICAL",
         "administrative": "ADMINISTRATIVE"
     },
-    "modality": {
+    "academic_period": {
         "type": "ACADEMIC_PERIOD",
         "first": "FIRST",
         "second": "SECOND",
@@ -36,7 +41,7 @@
         "sixth": "SIXTH",
         "seventh": "SEVENTH"
     },
-    "participant": {
+    "participant_course": {
         "type": "PARTICIPANT",
         "external": "EXTERNAL",
         "student": "STUDENT",
@@ -51,7 +56,7 @@
     },
     "certificate": {
         "type": "CERTIFICATE",
-        "assitance": "ASSITANCE",
+        "assistance": "ASSISTANCE",
         "approval": "APPROVAL"
     },
     "category": {
@@ -63,6 +68,11 @@
         "patern_tailoring": "PATERN_TAILORING",
         "pedagogical": "PEDAGOGICAL"
     },
+    "modality": {
+        "type": "MODALITY",
+        "presencial": "PRESENCIAL",
+        "virtual": "VIRTUAL"
+    },
     "compliance": {
         "type": "COMPLIANCE"
     },
@@ -72,14 +82,37 @@
     "means_verification": {
         "type": "MEANS_VERIFICATION"
     },
-    "frecuency": {
-        "type": "FRECUENCY"
+    "certificate_type":{
+        "type": "CERTIFICATE_TYPE",
+        "assistance": "ASSISTANCE",
+        "approval":"APPROVAL"
+    },
+    "frequency": {
+        "type": "FREQUENCY"
     },
     "area": {
-        "type": "AREA"
+        "type": "AREA",
+        "a": "A",
+        "b": "B",
+        "c": "C",
+        "d": "D",
+        "e": "E",
+        "f": "F"
     },
     "speciality_area": {
-        "type": "SPECIALITY_AREA"
+        "type": "SPECIALITY_AREA",
+        "a.1": "A.1",
+        "a.2": "A.2",
+        "a.3": "A.3",
+        "a.4": "A.4",
+        "a.5": "A.5",
+        "a.6": "A.6",
+        "a.7": "A.7",
+        "b.1": "B.1",
+        "b.2": "B.2",
+        "b.3": "B.3",
+        "b.4": "B.4",
+        "b.5": "B.5"
     },
     "economic_sector": {
         "type": "ECONOMIC_SECTOR",
@@ -94,9 +127,9 @@
         "not_approved": "NOT_APPROVED",
         "approved": "APPROVED"
     },
-    "classroom_type": {
-        "type": "CLASSROOM_TYPE",
-        "classroom_class": "CLASSROOMCLASS",
+    "classroom": {
+        "type": "CLASSROOM",
+        "classroom_class": "CLASSROOM_CLASS",
         "office": "OFFICE",
         "laboratory": "LABORATORY"
     },
@@ -113,8 +146,8 @@
         "not_approved": "NOT_APPROVED",
         "approved": "APPROVED"
     },
-    "type_attendace": {
-        "type": "TYPE_ATTENDANCE",
+    "attendance": {
+        "type": "ATTENDANCE",
         "present": "PRESENT",
         "backwardness": "BACKWARDNESS",
         "absent": "ABSENT"
@@ -124,8 +157,8 @@
         "active": "ACTIVE",
         "inactive": "INACTIVE"
     },
-    "instructor_type": {
-        "type": "INSTRUCTOR_TYPE",
+    "instructor": {
+        "type": "INSTRUCTOR",
         "senescyt": "SENESCYT",
         "setec": "SETECT",
         "external": "EXTERNAL"
@@ -156,15 +189,72 @@
         "not_approved": "NOT_APPROVED",
         "to_be_approved": "TO_BE_APPROVED"
     },
-    "school_period":{
-        "type": "SCHOOL_PERIODS",
-        "current":"CURRENT",
-        "historical":"HISTORICAL"
+    "school_period_state": {
+        "type": "SCHOOL_PERIOD_STATE",
+        "current": "CURRENT",
+        "historical": "HISTORICAL"
     },
-    "notification":{
-        "type":"NOTIFICATION",
-        "read":"READ",
-        "unread":"UNREAD"
+    "notification": {
+        "type": "NOTIFICATION",
+        "read": "READ",
+        "unread": "UNREAD"
+    },
+    "workday": {
+        "type": "WORKDAY",
+        "evening": "EVENING",
+        "morning": "MORNING",
+        "nocturnal": "NOCTURNAL"
+    },
+    "day": {
+        "type": "DAY",
+        "monday_friday": "MONDAY-FRIDAY",
+        "monday_sunday": "MONDAY-SUNDAY",
+        "sundays": "SUNDAYS",
+        "saturdays": "SATURDAYS"
+    },
+    "participant": {
+        "type": "PARTICIPANT",
+        "teacher": "TEACHER",
+        "public_company": "PUBLIC_COMPANY",
+        "private_company": "PRIVATE_COMPANY",
+        "training_company": "TRAINING_COMPANY",
+        "external_student": "EXTERNAL_STUDENT",
+        "internal_student": "INTERNAL_STUDENT",
+        "senecyt_staff": "SENESCYT_STAFF",
+        "gad": "GAD"
+    },
+    "position": {
+        "type": "participant",
+        "rector": "RECTOR",
+        "vicerector": "VICERECTOR",
+        "representative_ocs": "REPRESENTATIVE_OCS",
+        "logistics": "LOGISTICS",
+        "cecy": "CECY"
+    },
+    "authority_state": {
+        "type": "participant",
+        "on_vocation": "ON_VOCATION",
+        "medical_consent": "MEDICAL_CONSENT",
+        "active": "ACTIVE",
+        "inactive": "INACTIVE"
+    },
+    "level_instruction": {
+        "type": "LEVEL_INSTRUCTION",
+        "primary": "PRIMARY",
+        "secondary": "SECONDARY",
+        "undergraduate": "UNDERGRADUATE",
+        "mastery": "MASTERY",
+        "doctorate": "DOCTORATE"
+    },
+    "registration": {
+        "type": "REGISTRATION",
+        "special": "SPECIAL",
+        "ordinary": "ORDINARY",
+        "extraordinary": "EXTRAORDINARY"
+    },
+    "requirement_state": {
+        "type": "REQUIREMENT_STATE",
+        "enabled": "ENABLED",
+        "disabled": "DISABLED"
     }
-
 }

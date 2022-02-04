@@ -15,17 +15,8 @@ class CreateCecyCertificatesTable extends Migration
 
             $table->morphs('certificateable');
 
-            // este campo no va porque ya esta en certificateable
-            $table->foreignId('certificable_id')
-            ->constrained('cecy.registrations');
-
-            // este campo no va porque ya esta en certificateable
-            $table->foreignId('certificable_type')
-            ->constrained('cecy.detail_planification_instructor');
-
-            // El comentario o el campo no estan corectos -3
             $table->foreignId('state_id')
-                ->comment('Id del tema principal')
+                ->comment('Estado del certificado [Firmado,Con codigo,Generado,En Proceso,Sin Firma]')
                 ->constrained('cecy.catalogues');
 
             $table->string('code')
@@ -33,6 +24,7 @@ class CreateCecyCertificatesTable extends Migration
 
             $table->text('issued_at')
                 ->comment('Fecha de emisión del certificado');
+                
         });
     }
 

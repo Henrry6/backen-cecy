@@ -1,9 +1,10 @@
 <?php
 
-namespace Database\Seeders\Cecy;
+namespace Database\Seeders\Develop\Cecy;
 
 use App\Models\Cecy\Attendance;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class AttendancesSeeder extends Seeder
 {
@@ -14,7 +15,16 @@ class AttendancesSeeder extends Seeder
      */
     public function run()
     {
-        //CREAR AQUI LAS SEMILLAS PARA ATTENDANCE
-        Attendance::factory(150)->create();
+        $this->createAttendancesCatalogue();
+        $this->createAttendances();
+    }
+
+    public function createAttendancesCatalogue()
+    {
+        //Campos que son de catalogo
+    }
+    public function createAttendances()
+    {
+        Attendance::factory(70)->create();
     }
 }

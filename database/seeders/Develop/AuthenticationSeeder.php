@@ -100,20 +100,20 @@ class AuthenticationSeeder extends Seeder
                 ]
             );
         Email::factory(2)->for($userFactory, 'emailable')->create();
-//        for ($i = 1; $i <= 10; $i++) {
-//            $userFactory = User::factory()
-//                ->create([
-//                    'identification_type_id' => $identificationTypes[rand(0, $identificationTypes->count() - 1)],
-//                    'sex_id' => $sexes[rand(0, $sexes->count() - 1)],
-//                    'gender_id' => $genders[rand(0, $genders->count() - 1)],
-//                    'ethnic_origin_id' => $ethnicOrigin[rand(0, $ethnicOrigin->count() - 1)],
-//                    'blood_type_id' => $bloodType[rand(0, $bloodType->count() - 1)],
-//                    'civil_status_id' => $civilStatus[rand(0, $civilStatus->count() - 1)],
-//                ]);
-//            Phone::factory(2)->for($userFactory, 'phoneable')
-//                ->create(['operator_id' => $operators[rand(0, $operators->count() - 1)]]);
-//            Email::factory(2)->for($userFactory, 'emailable')->create();
-//        }
+        for ($i = 1; $i <= 84; $i++) {
+            $userFactory = User::factory()
+                ->create([
+                    'identification_type_id' => $identificationTypes[rand(0, $identificationTypes->count() - 1)],
+                    'sex_id' => $sexes[rand(0, $sexes->count() - 1)],
+                    'gender_id' => $genders[rand(0, $genders->count() - 1)],
+                    'ethnic_origin_id' => $ethnicOrigin[rand(0, $ethnicOrigin->count() - 1)],
+                    'blood_type_id' => $bloodType[rand(0, $bloodType->count() - 1)],
+                    'civil_status_id' => $civilStatus[rand(0, $civilStatus->count() - 1)],
+                ]);
+            Phone::factory(2)->for($userFactory, 'phoneable')
+                ->create(['operator_id' => $operators[rand(0, $operators->count() - 1)]]);
+            Email::factory(2)->for($userFactory, 'emailable')->create();
+        }
     }
 
     private function createRoles()
@@ -121,7 +121,14 @@ class AuthenticationSeeder extends Seeder
         Role::create(['name' => 'admin']);
         Role::create(['name' => 'guest']);
         Role::create(['name' => 'professional']);
-        Role::create(['name' => 'company']);
+        Role::create(['name' => 'teacher']);
+        Role::create(['name' => 'public_company']);
+        Role::create(['name' => 'private_company']);
+        Role::create(['name' => 'training_company']);
+        Role::create(['name' => 'external_student']);
+        Role::create(['name' => 'internal_student']);
+        Role::create(['name' => 'senecyt_staff']);
+        Role::create(['name' => 'gad']);
     }
 
     private function createPermissions()
@@ -148,13 +155,35 @@ class AuthenticationSeeder extends Seeder
         $role = Role::firstWhere('name', 'admin');
         $roleProfessional = Role::firstWhere('name', 'professional');
         $role->syncPermissions(Permission::get());
-        $roleProfessional->syncPermissions(Permission::where('name','like','%professionals%')->get());
+        $roleProfessional->syncPermissions(Permission::where('name', 'like', '%professionals%')->get());
     }
 
     private function assignUserRoles()
     {
+
+        // $roles = Role::where([
+        //     'name' => 'public_company',
+        //     'name' => 'private_company',
+        //     'name' => 'training_company',
+        //     'name' => 'external_student',
+        //     'name' => 'internal_student',
+        //     'name' => 'senecyt_staff',
+        //     'name' => 'gad'
+        // ])->get();
+        // $roles = Role::all();
         $user = User::find(1);
         $user->assignRole('admin');
+
+        // for ($i = 6; $i <= 35; $i++) {
+        //     $user = User::find($i);
+        //     $user->assignRole('teacher');
+        // }
+
+
+        // for ($i = 36; $i <= 85; $i++) {
+        //     $user = User::find($i);
+        //     $user->assignRole(rand(0, $roles->count() - 1));
+        // }
     }
 
     private function createLocationCatalogues()

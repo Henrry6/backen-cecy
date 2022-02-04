@@ -9,8 +9,9 @@ use OwenIt\Auditing\Auditable as Auditing;
 use App\Models\Authentication\User;
 use App\Models\Core\Institution;
 use App\Models\Core\State;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class Authority extends Model
+class Authority extends Model implements Auditable
 {
     use HasFactory;
     use Auditing;
@@ -21,7 +22,7 @@ class Authority extends Model
     protected $fillable = [
         'position_started_at',
         'position_ended_at',
-        'firm'
+        'electronic_signature'
     ];
 
     // Relationships
@@ -45,7 +46,7 @@ class Authority extends Model
         return $this->belongsTo(State::class);
     }
 
-    public function planification()
+    public function planifications()
     {
         return $this->hasMany(Planification::class);
     }
@@ -67,10 +68,10 @@ class Authority extends Model
             return $query->orWhere('position_ended_at', $positionEndedAt);
         }
     }
-    public function scopeFirm($query, $firm)
+    public function scopeFirm($query, $electronicSignature)
     {
-        if ($firm) {
-            return $query->orWhere('firm', $firm);
+        if ($electronicSignature) {
+            return $query->orWhere('electronic_signature', $electronicSignature);
         }
     }
 

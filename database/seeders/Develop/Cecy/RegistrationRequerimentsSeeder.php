@@ -1,7 +1,10 @@
 <?php
 
-namespace Database\Seeders\Cecy;
+namespace Database\Seeders\Develop\Cecy;
 
+use App\Models\Cecy\Registration;
+use App\Models\Cecy\RegistrationRequirement;
+use App\Models\Cecy\Requirement;
 use Illuminate\Database\Seeder;
 
 class RegistrationRequerimentsSeeder extends Seeder
@@ -13,6 +16,26 @@ class RegistrationRequerimentsSeeder extends Seeder
      */
     public function run()
     {
-        //CREAR AQUI LAS SEMILLAS PARA REGISTRATIONREQUIREMENTSS
+        $this->createRegistrationRequerimentsCatalogue();
+        $this->createRegistrationRequeriments();
+    }
+
+    public function createRegistrationRequerimentsCatalogue()
+    {
+        //Campos que son de catalogo
+    }
+    public function createRegistrationRequeriments()
+    {
+        $registrations = Registration::get();
+        $requirements = Requirement::get();
+
+        //por cada registro le asigno entre 1 a 3 requerimientos
+
+        foreach ($registrations as $registration) {
+            $registration->requirements()->attach(
+                $requirements->random(rand(1, 3))->pluck('id')->toArray(),
+                ['url' => '/server/etc/images']
+            );
+        }
     }
 }

@@ -6,8 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Auditable as Auditing;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class AdditionalInformation extends Model
+class AdditionalInformation extends Model implements Auditable
 {
     use HasFactory;
     use Auditing;
@@ -23,17 +24,24 @@ class AdditionalInformation extends Model
         'company_phone',
         'company_sponsored',
         'contact_name',
-        "course_follows",
+        'course_follows',
         'course_knows',
         'worked',
     ];
 
+    protected $casts = [
+        'course_follows' => 'array',
+        'course_knows' => 'array'
+    ];
     // Relationships
     public function registration()
     {
         return $this->belongsTo(Registration::class);
     }
-
+    public function levelInstruction()
+    {
+        return $this->belongsTo(Catalogue::class);
+    }
     // Mutators
     public function setCompanyActivityAttribute($value)
     {

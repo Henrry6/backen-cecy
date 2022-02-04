@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Seeders\Cecy;
+namespace Database\Seeders\Develop\Cecy;
 
 use Illuminate\Database\Seeder;
 
@@ -13,6 +13,6 @@ class CecyCatalogueSeeder extends Seeder
      */
     public function run()
     {
-        //CREAR AQUI LAS SEMILLAS PARA CecyCatalogue
+        //Aqui se va guardar cuando todos los registros de catalogo cuando se tenga TODO DE TODOS
     }
 }

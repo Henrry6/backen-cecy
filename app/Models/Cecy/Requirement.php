@@ -5,9 +5,10 @@ namespace App\Models\Cecy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as Auditing;
 
-class Requirement extends Model
+class Requirement extends Model implements Auditable
 {
     use HasFactory;
     use Auditing;
@@ -22,9 +23,9 @@ class Requirement extends Model
 
     // Relationships
 
-    public function registrarionRequirements()
+    public function registrations()
     {
-        return $this->hasMany(RegistrationRequirement::class);
+        return $this->belongsToMany(Registration::class, 'cecy.registration_requirement', 'requirement_id', 'registration_id');
     }
     public function state()
     {
@@ -34,17 +35,10 @@ class Requirement extends Model
     // Mutators
     public function setNameAttribute($value)
     {
-        $this->attributes['name'] = strtoupper($value);
+        return $this->attributes['name'] = strtoupper($value);
     }
 
     // Scopes
-    public function scopeName($query, $name)
-    {
-        if ($name) {
-            return $query->where('name', $name);
-        }
-    }
-
     public function scopeCustomOrderBy($query, $sorts)
     {
         if (!empty($sorts[0])) {
@@ -57,6 +51,20 @@ class Requirement extends Model
                 }
             }
             return $query;
+        }
+    }
+
+    public function scopeName($query, $name)
+    {
+        if ($name) {
+            return $query->where('name', $name);
+        }
+    }
+
+    public function scopeState($query, $requirement)
+    {
+        if ($requirement) {
+            return $query->where('state_id', $requirement->state);
         }
     }
 }

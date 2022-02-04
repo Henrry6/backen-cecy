@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Seeders\Cecy;
+namespace Database\Seeders\Develop\Cecy;
 
 use Illuminate\Database\Seeder;
 
@@ -13,6 +13,15 @@ class PhotograficRecordsSeeder extends Seeder
      */
     public function run()
     {
-        //CREAR AQUI LAS SEMILLAS PARA PHOTOGRAFICRECORDS
+        $this->createPhotograficRecordsCatalogue();
+        $this->createPhotograficRecords();
+    }
+
+    public function createPhotograficRecordsCatalogue()
+    {
+        //Campos que son de catalogo
+    }
+    public function createPhotograficRecords()
+    {
     }
 }

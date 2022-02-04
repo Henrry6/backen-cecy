@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\V1\Cecy\Participants;
 
+use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class CoursesByParticipantResource extends JsonResource
@@ -16,8 +17,12 @@ class CoursesByParticipantResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'detailPlanificationResource' => DetailPlanificationResource::make($this->detailPlanificationResource),
             'name' => $this->name,
             'code' => $this->code,
+            'grade1' => $this->grade1,
+            'grade2' => $this->grade2,
+            'final_grade' => $this->final_grade,
             'approvedAt' => $this->approved_at,
 
         ];

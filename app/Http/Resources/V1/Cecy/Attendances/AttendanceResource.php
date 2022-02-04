@@ -2,8 +2,7 @@
 
 namespace App\Http\Resources\V1\Cecy\Attendances;
 
-use App\Models\Cecy\Catalogue;
-use App\Models\Cecy\DetailPlanification;
+use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class AttendanceResource extends JsonResource
@@ -12,9 +11,9 @@ class AttendanceResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'type_id' => Catalogue::make($this->type_id),
+            'detailPlanification' => DetailPlanificationResource::make($this->detailPlanification),
             'duration' => $this->duration,
-            'registered_at' => $this->registered_at,
+            'registeredAt' => $this->registered_at,
         ];
     }
 }

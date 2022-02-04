@@ -16,15 +16,15 @@ class UpdateDetailPlanificationRequest extends FormRequest
         return [
             'classroom.id' => ['required', 'integer'],
             'day.id' => ['required', 'integer'],
-            'detailPlanification.id' => ['required', 'integer'],
-            'instructors' => ['required'],
-            'planification.id' => ['required', 'integer'],
-            'workday.id' => ['required', 'integer'],
-            'daysNumber' => ['required', 'integer'],
-            'endedAt' => ['required', 'date'],
             'endedTime' => ['required', 'time'],
-            'startedAt' => ['required', 'date'],
+            'observations' => ['required', 'string'],
+            'parallel.id' => ['required', 'integer'],
+            'planification.id' => ['required', 'integer'],
+            'planEndedAt' => ['required', 'date'],
+            'registrationsLeft' => ['required', 'integer'],
+            'state.id' => ['required', 'integer'],
             'startedTime' => ['required', 'time'],
+            'workday.id' => ['required', 'integer'],
         ];
     }
     
@@ -33,16 +33,15 @@ class UpdateDetailPlanificationRequest extends FormRequest
         return [
             'classroom.id' => 'Aula',
             'day.id' => 'Días de clase',
-            'detailPlanification.id' => 'Detalle de planificación',
-            'instructors' => 'Instructores',
+            'endedTime' => 'Hora final',
+            'observations' => 'Observaciones',
+            'parallel.id' => 'Paralelo',
             'planification.id' => 'Planificación',
-            'workday.id' => 'Jornada',
-            'daysNumber' => 'Número total de días de clase',
-            'endedAt' => 'Fecha de finalización de clases',
-            'endedTime' => ['required', 'time'],
-            'planEndedAt' => 'Fecha real de finalización de clases',
-            'startedAt' => 'Fecha de inicio de clases',
-            'startedTime' => ['required', 'time'],
+            'planEndedAt' => 'Fecha final real de la planificación',
+            'registrationsLeft' => 'Capacidad restante del paralelo',
+            'state.id' => 'Estado',
+            'startedTime' => 'Hora inicio',
+            'workday.id' => 'Jornada'
         ];
     }
 }

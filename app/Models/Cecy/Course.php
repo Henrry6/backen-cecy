@@ -27,7 +27,6 @@ class Course extends Model implements Auditable
         'duration',
         'evaluation_mechanisms',
         'expired_at',
-        'facilities',
         'free',
         'name',
         'needs',
@@ -36,32 +35,31 @@ class Course extends Model implements Auditable
         'learning_environments',
         'local_proposal',
         'objective',
-        'observation',
-        'practical_phase',
+        'observations',
         'practice_hours',
         'proposed_at',
         'project',
-        'required_installing_sources',
+        'public',
         'setec_name',
         'summary',
-        'target_group',
+        'target_groups',
         'teaching_strategies',
         'techniques_requisites',
-        'theoretical_phase',
         'theory_hours'
     ];
 
+    protected $casts = [
+        'bibliographies' => 'array',
+        'evaluation_mechanisms' => 'array',
+        'needs' => 'array',
+        'learning_environments' => 'array',
+        'observations' => 'array',
+        'target_groups' => 'array',
+        'teaching_strategies' => 'array',
+        'techniques_requisites' => 'array',
+    ];
+
     // Relationships
-
-    public function files()
-    {
-        return $this->morphMany(File::class, 'fileable');
-    }
-
-    public function images()
-    {
-        return $this->morphMany(Image::class, 'imageable');
-    }
 
     public function academicPeriod()
     {
@@ -83,22 +81,23 @@ class Course extends Model implements Auditable
         return $this->belongsTo(Career::class);
     }
 
+    public function catalogues()
+    {
+        return $this->belongsToMany(Catalogue::class, 'cecy.participant_course', 'course_id', 'catalogue_id');
+    }
+
     public function category()
     {
         return $this->belongsTo(Catalogue::class);
     }
 
-    public function capacitationType()
-    {
-        return $this->belongsTo(Catalogue::class);
-    }
 
     public function certifiedType()
     {
         return $this->belongsTo(Catalogue::class);
     }
 
-    public function complianceIndicators()
+    public function complianceIndicator()
     {
         return $this->belongsTo(Catalogue::class);
     }
@@ -113,7 +112,12 @@ class Course extends Model implements Auditable
         return $this->belongsTo(Catalogue::class);
     }
 
-    public function frecuency()
+    public function formationType()
+    {
+        return $this->belongsTo(Catalogue::class);
+    }
+
+    public function frequency()
     {
         return $this->belongsTo(Catalogue::class);
     }
@@ -128,9 +132,19 @@ class Course extends Model implements Auditable
         return $this->belongsTo(Catalogue::class);
     }
 
-    public function participantType()
+    public function planifications()
     {
-        return $this->belongsTo(Catalogue::class);
+        return $this->hasMany(Planification::class);
+    }
+
+    public function prerequisites()
+    {
+        return $this->hasMany(Prerequisite::class);
+    }
+
+    public function profileInstructorCourses()
+    {
+        return $this->hasMany(ProfileInstructorCourses::class);
     }
 
     public function responsible()
@@ -150,22 +164,17 @@ class Course extends Model implements Auditable
 
     public function topics()
     {
-        return $this->hasMany(Topics::class);
+        return $this->hasMany(Topic::class);
     }
 
-    public function planifications()
+    public function files()
     {
-        return $this->hasMany(Planification::class);
+        return $this->morphMany(File::class, 'fileable');
     }
 
-    public function prerequisites()
+    public function images()
     {
-        return $this->hasMany(Prerequisite::class);
-    }
-
-    public function profileInstructorCourses()
-    {
-        return $this->hasMany(ProfileInstructorCourses::class);
+        return $this->morphMany(Image::class, 'imageable');
     }
 
     // Mutators
@@ -189,11 +198,6 @@ class Course extends Model implements Auditable
         $this->attributes['record_number'] = strtoupper($value);
     }
 
-    public function setLearningTeachingStrategyAttribute($value)
-    {
-        $this->attributes['learning_teaching_strategy'] = strtoupper($value);
-    }
-
     public function setLocalProposalAttribute($value)
     {
         $this->attributes['local_proposal'] = strtoupper($value);
@@ -204,24 +208,9 @@ class Course extends Model implements Auditable
         $this->attributes['objective'] = strtoupper($value);
     }
 
-    public function setObservationAttribute($value)
-    {
-        $this->attributes['observation'] = strtoupper($value);
-    }
-
-    public function setPracticeRequiredResourcesAttribute($value)
-    {
-        $this->attributes['practice_required_resources'] = strtoupper($value);
-    }
-
     public function setProjectAttribute($value)
     {
         $this->attributes['project'] = strtoupper($value);
-    }
-
-    public function setRequiredInstallingSourcesAttribute($value)
-    {
-        $this->attributes['required_installing_sources'] = strtoupper($value);
     }
 
     public function setSetecNameAttribute($value)
@@ -278,6 +267,13 @@ class Course extends Model implements Auditable
         }
     }
 
+    public function scopeFree($query, $free)
+    {
+        if ($free) {
+            return $query->orWhere('free', $free);
+        }
+    }
+
     public function scopeName($query, $name)
     {
         if ($name) {
@@ -313,13 +309,6 @@ class Course extends Model implements Auditable
         }
     }
 
-    public function scopePracticeRequiredResources($query, $practice_required_resources)
-    {
-        if ($practice_required_resources) {
-            return $query->orWhere('practice_required_resources', $practice_required_resources);
-        }
-    }
-
     public function scopeProject($query, $project)
     {
         if ($project) {
@@ -327,10 +316,10 @@ class Course extends Model implements Auditable
         }
     }
 
-    public function scopeRequiredInstallingSources($query, $required_installing_sources)
+    public function scopePublic($query, $public)
     {
-        if ($required_installing_sources) {
-            return $query->orWhere('required_installing_sources', $required_installing_sources);
+        if ($public) {
+            return $query->orWhere('year', $public);
         }
     }
 
@@ -352,13 +341,6 @@ class Course extends Model implements Auditable
     {
         if ($summary) {
             return $query->orWhere('summary', $summary);
-        }
-    }
-    //pendiente
-    public function scopeYear($query, $year)
-    {
-        if ($year) {
-            return $query->orWhere('year', $year);
         }
     }
 

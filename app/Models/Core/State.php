@@ -14,6 +14,15 @@ class State extends Model implements Auditable
     use Auditing;
     use SoftDeletes;
 
+    const APPROVED = 'APPROVED';
+    const TO_BE_APPROVED = 'TO_BE_APPROVED';
+    const NOT_APPROVED = 'NOT_APPROVED';
+    const CULMINATED = 'CULMINATED';
+    const COMPLETED = 'COMPLETED';
+    const IN_PROCESS = 'IN_PROCESS';
+    const CURRENT = 'CURRENT';
+    const HISTORICAL = 'HISTORICAL';
+
     protected $table = 'core.states';
 
     protected $fillable = ['code', 'name'];

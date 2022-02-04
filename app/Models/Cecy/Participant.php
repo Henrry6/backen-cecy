@@ -19,9 +19,12 @@ class Participant extends Model implements Auditable
 
     protected $fillable = [];
 
+    protected $casts = [
+        'observations' => 'array',
+    ];
     // Relationships
 
-    public function personType()
+    public function type()
     {
         return $this->belongsTo(Catalogue::class);
     }

@@ -6,8 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Auditable as Auditing;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class Attendance extends Model
+class Attendance extends Model implements Auditable
 {
     use HasFactory;
     use Auditing;
@@ -24,12 +25,12 @@ class Attendance extends Model
 
     public function detailAttendance()
     {
-        return $this->belongsToMany(DetailAttendance::class);
+        return $this->hasMany(DetailAttendance::class);
     }
 
     public function detailPlanification()
     {
-        return $this->belongsToMany(DetailPlanification::class);
+        return $this->belongsTo(DetailPlanification::class);
     }
 
 
@@ -37,6 +38,7 @@ class Attendance extends Model
 
 
     // Scopes
+
     public function scopeCustomOrderBy($query, $sorts)
     {
         if (!empty($sorts[0])) {
