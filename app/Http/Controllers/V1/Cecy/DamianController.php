@@ -24,6 +24,7 @@ class DamianController extends Controller
         $registration = new Registration();
         $registration->participant()->associate($participant);
         $registration->type()->associate(Catalogue::find($request->input('type.id')));
+        $registration->type()->associate(Catalogue::find($request->input('state.id')));
         $registration->number = $request->input('number');
         $registration->registered_at = $request->input('registeredAt');
 
@@ -70,6 +71,7 @@ class DamianController extends Controller
     {
         return;
     }
+    // CRUD de requisitos
     // ver los requisito
     public function getAllRequirement(getAllRequirementRequest $request)
     {
@@ -135,7 +137,19 @@ class DamianController extends Controller
                 ]
             ]);
     }
-
+    //Eliminar un requisito
+    public function destroy(Requirement $requirement)
+    {
+        $requirement->delete();
+        return (new RequirementResource($requirement))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Registro Eliminado',
+                    'detail' => '',
+                    'code' => '201'
+                ]
+            ]);
+    }
     // crear un school periods
 
 
