@@ -136,7 +136,7 @@ class PlanificationController extends Controller
 
     /*DDRC-C: Busca planificaciones vigentes por periodo asignadas al usuario logueado(responsable del CECY)*/
     // PlanificationController ya esta
-    public function getPlanificationsByPeriodState(InstructorRequest $request)
+    public function getPlanificationsByPeriodState(InstructorRequest $request )
     {
         $instructor = Instructor::FirstWhere('user_id', $request->user()->id)->get();
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
