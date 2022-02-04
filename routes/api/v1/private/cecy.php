@@ -46,16 +46,13 @@ Route::prefix('catalogue/{catalogue}')->group(function () {
  * PLANIFICATIONS
  **********************************************************************************************************************/
 Route::prefix('planification')->group(function () {
-<<<<<<< HEAD
+
     Route::get('planifications',[PlanificationController::class,'getPlanitifications']);
     Route::get('planfications-course/{course}', [PlanificationController::class, 'getPlanificationsByCourse']);
     Route::get('kpis/{state}', [PlanificationController::class, 'getKpi']);
     // tambien podria ser user/{users}/planification
     Route::get('planifications-period-state',[PlanificationController::class, 'getPlanificationsByPeriodState']);
     Route::get('course_parallels-works',[PlanificationController::class, 'getCoursesParallelsWorkdays']);
-
-
-
 });
 
 Route::prefix('planification/{planification}')->group(function () {
@@ -64,22 +61,6 @@ Route::prefix('planification/{planification}')->group(function () {
     Route::put('planifications-cecy',[PlanificationController::class, 'updatePlanificationByCecy']);
     Route::put('assign-code-planification',[PlanificationController::class, 'assignCodeToPlanification']);
     Route::put('approve-planification',[PlanificationController::class, 'approvePlanification']);
-=======
-    Route::get('course', [PlanificationController::class, 'getPlanitifications']);
-    Route::get('course/{course}', [PlanificationController::class, 'getPlanificationsByCourse']);
-    Route::get('state/{state}', [PlanificationController::class, 'getKpi']);
-    // tambien podria ser user/{users}/planification
-    Route::get('user/{users}', [PlanificationController::class, 'getPlanificationsByPeriodState']);
-    Route::get('detailPlanification/{detailPlanifications}', [PlanificationController::class, 'getCoursesParallelsWorkdays']);
-});
-
-Route::prefix('planification/{planification}')->group(function () {
-    Route::put('', [PlanificationController::class, 'updateDatesAndNeedsInPlanification']);
-    Route::post('', [PlanificationController::class, 'storePlanificationByCourse']);
-    Route::put('', [PlanificationController::class, 'updatePlanificationByCecy']);
-    Route::put('', [PlanificationController::class, 'assignCodeToPlanification']);
-    Route::put('', [PlanificationController::class, 'approvePlanification']);
->>>>>>> 56fa59cf29ac9fb60e5046c4895040fa4351f447
 });
 
 /***********************************************************************************************************************
