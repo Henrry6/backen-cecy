@@ -48,7 +48,7 @@ class CourseFactory extends Factory
             'means_verification_id' => $this->faker->randomElement($meansVerifications),
             'speciality_id' => $this->faker->randomElement($specialities),
             'responsible_id' => $this->faker->randomElement($responsibles),
-            'state_id' => $this->faker->randomElement($states),
+            'state_id' => 45,
             'abbreviation' => $this->faker->word(),
             'alignment' => $this->faker->word(),
             'approved_at' => $this->faker->date('Y_m_d'),

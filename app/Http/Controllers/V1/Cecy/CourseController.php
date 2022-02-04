@@ -73,24 +73,15 @@ class CourseController extends Controller
     }
 
 
-    // Funcion privada para obtener cursos de planifaciones aprovadas
-    private function getCoursesByAcceptedPlanification()
-    {
-        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
-
-        $planifications = Planification::where('state', $catalogue['planification_state']['approved'])->get();
-        $courses = $planifications->courses()->get();
-
-        return $courses;
-    }
     // Obtiene los cursos públicos aprobados
     public function getPublicCourses(IndexCourseRequest $request)
     {
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+        $coursesTypes = Catalogue::where('type',  $catalogue['course_state']['type'])->get();
+        $courseApproved = $coursesTypes->where('code', $catalogue['course_state']['approved'])->first();
+        $courses =  Course::where([['state_id', $courseApproved->id], ['public', true]])->get();
 
-        $courses = $this->getCoursesByAcceptedPlanification();
-        $public_courses = $courses->where('public', true)->get();
-
-        return (new CoursePublicPrivateCollection($public_courses))
+        return (new CoursePublicPrivateCollection($courses))
             ->additional([
                 'msg' => [
                     'summary' => 'success',
