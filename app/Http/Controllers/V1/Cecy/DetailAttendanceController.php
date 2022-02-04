@@ -8,6 +8,7 @@ use App\Http\Requests\V1\Cecy\Certificates\ShowParticipantsRequest;
 use App\Http\Resources\V1\Cecy\Authorities\DetailAttendanceCollection;
 use App\Http\Resources\V1\Cecy\DetailAttendances\DetailAttendanceResource;
 use App\Models\Cecy\Attendance;
+use App\Models\Cecy\DetailAttendance;
 
 class DetailAttendanceController extends Controller
 {
