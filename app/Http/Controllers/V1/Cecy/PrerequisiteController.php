@@ -103,4 +103,24 @@ class PrerequisiteController extends Controller
                 ]
             ]);
     }
+
+
+    /*
+        Obtener los prerequisitos dado un curso
+    */
+    // PrerequisteController
+    public function getPrerequisitesByCourse(Course $course)
+    {
+        $prerequisites = $course->prerequisite()->get();
+
+        return (new PrerequisiteCollection($prerequisites))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
 }

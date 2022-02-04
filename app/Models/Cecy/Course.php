@@ -164,7 +164,7 @@ class Course extends Model implements Auditable
 
     public function topics()
     {
-        return $this->hasMany(Topics::class);
+        return $this->hasMany(Topic::class);
     }
 
     public function files()

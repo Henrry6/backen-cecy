@@ -4,7 +4,6 @@ namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Cecy\Registrations\RegisterStudentRequest;
-use App\Http\Resources\V1\Cecy\AdditionalInformations\AdditionalInformationResource;
 use App\Http\Resources\V1\Cecy\Registrations\RegisterStudentResource;
 use App\Models\Cecy\AdditionalInformation;
 use App\Models\Cecy\Catalogue;
@@ -16,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 class DamianController extends Controller
 {
     //inscripcion a un curso
+
     public function registerStudent(RegisterStudentRequest $request)
     {
         $participant = Participant::firstWhere('user_id', $request->user()->id);
@@ -23,6 +23,8 @@ class DamianController extends Controller
         $registration = new Registration();
         $registration->participant()->associate($participant);
         $registration->type()->associate(Catalogue::find($request->input('type.id')));
+        $registration->state()->associate(Catalogue::find($request->input('state.id')));
+        $registration->typeParticipant()->associate(Catalogue::find($request->input('type_participant.id')));
         $registration->number = $request->input('number');
         $registration->registered_at = $request->input('registeredAt');
 
@@ -69,6 +71,7 @@ class DamianController extends Controller
     {
         return;
     }
+    // CRUD de requisitos
     // ver los requisito
     public function getAllRequirement(getAllRequirementRequest $request)
     {
@@ -134,8 +137,21 @@ class DamianController extends Controller
                 ]
             ]);
     }
-
+    //Eliminar un requisito
+    public function destroy(Requirement $requirement)
+    {
+        $requirement->delete();
+        return (new RequirementResource($requirement))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Registro Eliminado',
+                    'detail' => '',
+                    'code' => '201'
+                ]
+            ]);
+    }
     // crear un school periods
+
 
     // mostrar todos los school periods
 

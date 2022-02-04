@@ -23,7 +23,6 @@ class AdditionalInformationResource extends JsonResource
             'companyActivity' => $this->company_activity,
             'companyAddress' => $this->company_address,
             'companyEmail' => $this->company_email,
-            'companyAddress' => $this->company_name,
             'companyPhone' => $this->company_phone,
             'companySponsored' => $this->company_sponsored,
             'contactName' => $this->contact_name,

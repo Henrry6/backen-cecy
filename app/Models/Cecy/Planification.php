@@ -67,7 +67,7 @@ class Planification extends Model implements Auditable
 
     public function detailPlanifications()
     {
-        $this->hasMany(DetailPlanification::class);
+        return $this->hasMany(DetailPlanification::class);
     }
 
     //Mutators

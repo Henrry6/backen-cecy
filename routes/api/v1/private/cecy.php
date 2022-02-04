@@ -6,8 +6,10 @@ use App\Http\Controllers\V1\Cecy\GuachagmiraController;
 use App\Http\Controllers\V1\Cecy\GuanunaController;
 use App\Http\Controllers\V1\Cecy\PerezController;
 use App\Http\Controllers\V1\Cecy\CourseController;
+use App\Http\Controllers\V1\Cecy\DetailAttendanceController;
 use App\Http\Controllers\V1\Cecy\TopicController;
 use App\Http\Controllers\V1\Cecy\PrerequisiteController;
+use App\Http\Controllers\V1\Cecy\PlanificationController;
 
 /***********************************************************************************************************************
  * CATALOGUES
@@ -44,12 +46,20 @@ Route::prefix('catalogue/{catalogue}')->group(function () {
  * PLANIFICATIONS
  **********************************************************************************************************************/
 Route::prefix('planification')->group(function () {
-    Route::get('course/{course}', [PerezController::class, 'getPlanificationsByCourse']);
-    Route::get('state/{state}', [PerezController::class, 'getKpi']);
+    Route::get('course', [PlanificationController::class, 'getPlanitifications']);
+    Route::get('course/{course}', [PlanificationController::class, 'getPlanificationsByCourse']);
+    Route::get('state/{state}', [PlanificationController::class, 'getKpi']);
+    // tambien podria ser user/{users}/planification
+    Route::get('user/{users}', [PlanificationController::class, 'getPlanificationsByPeriodState']);
+    Route::get('detailPlanification/{detailPlanifications}', [PlanificationController::class, 'getCoursesParallelsWorkdays']);
 });
 
 Route::prefix('planification/{planification}')->group(function () {
-    Route::put('', [PerezController::class, 'updateDatesAndNeedsInPlanification']);
+    Route::put('', [PlanificationController::class, 'updateDatesAndNeedsInPlanification']);
+    Route::post('', [PlanificationController::class, 'storePlanificationByCourse']);
+    Route::put('', [PlanificationController::class, 'updatePlanificationByCecy']);
+    Route::put('', [PlanificationController::class, 'assignCodeToPlanification']);
+    Route::put('', [PlanificationController::class, 'approvePlanification']);
 });
 
 /***********************************************************************************************************************
@@ -58,21 +68,13 @@ Route::prefix('planification/{planification}')->group(function () {
 Route::prefix('detailPlanification')->group(function () {
     Route::get('', [PerezController::class, 'getDetailPlanificationsByPlanification']);
     Route::post('', [PerezController::class, 'registerDetailPlanification']);
-    Route::delete('', [PerezController::class, 'destroysDetailPlanifications']);
+    Route::patch('', [PerezController::class, 'destroysDetailPlanifications']);
 });
 
 Route::prefix('detailPlanification/{detailPlanification}')->group(function () {
     Route::get('', [PerezController::class, 'showDetailPlanification']);
     Route::put('', [PerezController::class, 'updateDetailPlanification']);
     Route::delete('', [PerezController::class, 'deleteDetailPlanification']);
-});
-
-/***********************************************************************************************************************
- * COURSE
- **********************************************************************************************************************/
-Route::prefix('courses')->group(function () {
-    Route::get('', [CourseController::class, 'getCourses']);
-    Route::put('/{course}', [CourseController::class, 'updateCourse']);
 });
 
 /***********************************************************************************************************************
@@ -98,5 +100,42 @@ Route::prefix('prerequisites')->group(function () {
 });
 
 /***********************************************************************************************************************
- * USERS
+ * COURSE
  **********************************************************************************************************************/
+Route::prefix('course')->group(function () {
+    Route::patch('{course}', [CourseController::class, 'updateCourse']);
+    Route::get('public', [CourseController::class, 'getPublicCourses']);
+    Route::get('', [CourseController::class, 'getPublicCoursesByCategory']);
+    Route::get('', [CourseController::class, 'getPublicCoursesByName']);
+    Route::get('', [CourseController::class, 'getPrivateCoursesByParticipantType']);
+    Route::get('', [CourseController::class, 'getPrivateCoursesByCategory']);
+    Route::get('', [CourseController::class, 'getPrivateCoursesByName']);
+    Route::get('', [CourseController::class, 'getCoursesByResponsibleCourse']);
+    Route::get('', [CourseController::class, '']);
+    Route::patch('{course}', [CourseController::class, 'updateGeneralInformationCourse']);
+    Route::get('', [CourseController::class, 'getCoursesByCoordinator']);
+    Route::get('', [CourseController::class, 'getCoursesKPI']);
+    Route::patch('', [CourseController::class, 'assignCodeToCourse']);
+    Route::patch('{course}', [CourseController::class, 'approveCourse']);
+    Route::get('{course}', [CourseController::class, 'showInformCourseNeeds']);
+    Route::get('', [CourseController::class, 'showYearSchedule']);
+    Route::get('{course}', [CourseController::class, 'showCurricularDesign']);
+    Route::get('{course}', [CourseController::class, 'showFinalCourseReport']);
+    Route::get('{career}', [CourseController::class, 'getCoursesByInstructor']);
+    Route::post('{course}', [CourseController::class, 'storeCourseNew']);
+});
+
+Route::prefix('courses')->group(function () {
+    Route::get('', [CourseController::class, 'getCourses']);
+    Route::get('', [CourseController::class, 'getCoursesByInstructor']);
+});
+
+/***********************************************************************************************************************
+ * DETAIL ATTENDANCES
+ **********************************************************************************************************************/
+
+Route::prefix('detailAttendance')->group(function () {
+    Route::get('course/{course}', [DetailAttendanceController::class, 'showAttedanceParticipant']);
+    Route::patch('/{detailAttendance}',[DetailAttendanceController::class,'updatDetailAttendanceTeacher']);
+});
+
