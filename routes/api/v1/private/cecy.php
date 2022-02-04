@@ -8,6 +8,7 @@ use App\Http\Controllers\V1\Cecy\PerezController;
 use App\Http\Controllers\V1\Cecy\CourseController;
 use App\Http\Controllers\V1\Cecy\TopicController;
 use App\Http\Controllers\V1\Cecy\PrerequisiteController;
+use App\Http\Controllers\V1\Cecy\PlanificationController;
 
 /***********************************************************************************************************************
  * CATALOGUES
@@ -44,12 +45,22 @@ Route::prefix('catalogue/{catalogue}')->group(function () {
  * PLANIFICATIONS
  **********************************************************************************************************************/
 Route::prefix('planification')->group(function () {
-    Route::get('course/{course}', [PerezController::class, 'getPlanificationsByCourse']);
-    Route::get('state/{state}', [PerezController::class, 'getKpi']);
+    Route::get('course',[PlanificationController::class,'getPlanitifications']);
+    Route::get('course/{course}', [PlanificationController::class, 'getPlanificationsByCourse']);
+    Route::get('state/{state}', [PlanificationController::class, 'getKpi']);
+    // tambien podria ser user/{users}/planification
+    Route::get('user/{users}',[PlanificationController::class, 'getPlanificationsByPeriodState']);
+    Route::get('detailPlanification/{detailPlanifications}',[PlanificationController::class, 'getCoursesParallelsWorkdays']);
+    Route::post('/{planifications}',[PlanificationController::class, 'storePlanificationByCourse']);
+    Route::put('/{planifications}',[PlanificationController::class, 'updatePlanificationByCecy']);
+    Route::put('/{planifications}',[PlanificationController::class, 'assignCodeToPlanification']);
+    Route::put('/{planifications}',[PlanificationController::class, 'approvePlanification']);
+
+
 });
 
 Route::prefix('planification/{planification}')->group(function () {
-    Route::put('', [PerezController::class, 'updateDatesAndNeedsInPlanification']);
+    Route::put('', [PlanificationController::class, 'updateDatesAndNeedsInPlanification']);
 });
 
 /***********************************************************************************************************************
