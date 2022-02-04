@@ -51,16 +51,17 @@ Route::prefix('planification')->group(function () {
     // tambien podria ser user/{users}/planification
     Route::get('user/{users}',[PlanificationController::class, 'getPlanificationsByPeriodState']);
     Route::get('detailPlanification/{detailPlanifications}',[PlanificationController::class, 'getCoursesParallelsWorkdays']);
-    Route::post('/{planifications}',[PlanificationController::class, 'storePlanificationByCourse']);
-    Route::put('/{planifications}',[PlanificationController::class, 'updatePlanificationByCecy']);
-    Route::put('/{planifications}',[PlanificationController::class, 'assignCodeToPlanification']);
-    Route::put('/{planifications}',[PlanificationController::class, 'approvePlanification']);
+   
 
 
 });
 
 Route::prefix('planification/{planification}')->group(function () {
     Route::put('', [PlanificationController::class, 'updateDatesAndNeedsInPlanification']);
+    Route::post('',[PlanificationController::class, 'storePlanificationByCourse']);
+    Route::put('',[PlanificationController::class, 'updatePlanificationByCecy']);
+    Route::put('',[PlanificationController::class, 'assignCodeToPlanification']);
+    Route::put('',[PlanificationController::class, 'approvePlanification']);
 });
 
 /***********************************************************************************************************************
