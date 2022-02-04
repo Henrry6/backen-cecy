@@ -40,7 +40,7 @@ class InstitutionController extends Controller
         return (new InstitutionResource($institution))
             ->additional([
                 'msg' => [
-                    'summary' => 'Institutione Creado',
+                    'summary' => 'Institution Creado',
                     'Institution' => '',
                     'code' => '200'
                 ]
@@ -71,7 +71,7 @@ class InstitutionController extends Controller
         return (new InstitutionResource($institution))
             ->additional([
                 'msg' => [
-                    'summary' => 'Institutione Actualizado',
+                    'summary' => 'Institution Actualizado',
                     'Institution' => '',
                     'code' => '200'
                 ]
@@ -87,7 +87,7 @@ class InstitutionController extends Controller
         return (new InstitutionResource($institution))
             ->additional([
                 'msg' => [
-                    'summary' => 'Clase Eliminada',
+                    'summary' => 'Institucion Eliminada',
                     'detail' => '',
                     'code' => '201'
                 ]
@@ -106,7 +106,7 @@ class InstitutionController extends Controller
         return (new InstitutionCollection($institution))
             ->additional([
                 'msg' => [
-                    'summary' => 'Clases Eliminadas',
+                    'summary' => 'instituciones Eliminadas',
                     'detail' => '',
                     'code' => '201'
                 ]
