@@ -76,10 +76,12 @@ class CourseController extends Controller
     // Obtiene los cursos públicos aprobados
     public function getPublicCourses(IndexCourseRequest $request)
     {
-        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
-        $coursesTypes = Catalogue::where('type',  $catalogue['course_state']['type'])->get();
-        $courseApproved = $coursesTypes->where('code', $catalogue['course_state']['approved'])->first();
-        $courses =  Course::where([['state_id', $courseApproved->id], ['public', true]])->get();
+        // $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+        // $coursesTypes = Catalogue::where('type',  $catalogue['course_state']['type'])->get();
+        // $courseApproved = $coursesTypes->where('code', $catalogue['course_state']['approved'])->first();
+        // $courses =  Course::where([['state_id', $courseApproved->id], ['public', true]])->get();
+
+        $courses =  Course::get();
 
         return (new CoursePublicPrivateCollection($courses))
             ->additional([

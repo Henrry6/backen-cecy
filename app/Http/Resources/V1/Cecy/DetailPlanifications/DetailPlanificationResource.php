@@ -18,19 +18,18 @@ class DetailPlanificationResource extends JsonResource
         return [
             'id' => $this->id,
             'course' => CourseResource::make($this->course),
-            'day' => CatalogueResource::make($this->day_id),
-            'classroom' => ClassroomResource::make($this->classroom_id),
-            'parallel' => CatalogueResource::make($this->parallel_id),
-            'planification' => PlanificationResource::make($this->planification_id),
-            'workday' => CatalogueResource::make($this->workday_id),
-            'state' => CatalogueResource::make($this->state_id),
-            'registrations' => RegistrationResource::collection($this->registrations),
-            'classrooms' => ClassroomResource::collection($this->classrooms),
-            'endedTime' => $this->ended_time,
-            'observations' => $this->observations,
-            'planEndedAt' => $this->plan_ended_at,
-            'registrationsLeft' => $this->registrations_left,
-            'startedTime' => $this->started_time
+            'day' => CatalogueResource::make($this->day),
+            'classroom' => ClassroomResource::make($this->classroom),
+            'parallel' => CatalogueResource::make($this->parallel),
+            'planification' => PlanificationResource::make($this->planification),
+            // 'workday' => CatalogueResource::make($this->workday),
+            // 'state' => CatalogueResource::make($this->state),
+            // 'registrations' => RegistrationResource::collection($this->registrations),
+            // 'endedTime' => $this->ended_time,
+            // 'observations' => $this->observations,
+            // 'planEndedAt' => $this->plan_ended_at,
+            // 'registrationsLeft' => $this->registrations_left,
+            // 'startedTime' => $this->started_time
         ];
     }
 }
