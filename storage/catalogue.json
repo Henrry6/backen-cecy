@@ -41,12 +41,6 @@
         "sixth": "SIXTH",
         "seventh": "SEVENTH"
     },
-    "participant_course": {
-        "type": "PARTICIPANT",
-        "external": "EXTERNAL",
-        "student": "STUDENT",
-        "teacher": "TEACHER"
-    },
     "course_state": {
         "type": "COURSE_STATE",
         "defeated": "DEFEATED",
@@ -82,10 +76,10 @@
     "means_verification": {
         "type": "MEANS_VERIFICATION"
     },
-    "certificate_type":{
+    "certificate_type": {
         "type": "CERTIFICATE_TYPE",
         "assistance": "ASSISTANCE",
-        "approval":"APPROVAL"
+        "approval": "APPROVAL"
     },
     "frequency": {
         "type": "FREQUENCY"
@@ -224,7 +218,7 @@
         "gad": "GAD"
     },
     "position": {
-        "type": "participant",
+        "type": "POSITION",
         "rector": "RECTOR",
         "vicerector": "VICERECTOR",
         "representative_ocs": "REPRESENTATIVE_OCS",
@@ -232,7 +226,7 @@
         "cecy": "CECY"
     },
     "authority_state": {
-        "type": "participant",
+        "type": "AUTHORITY_STATE",
         "on_vocation": "ON_VOCATION",
         "medical_consent": "MEDICAL_CONSENT",
         "active": "ACTIVE",
