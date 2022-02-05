@@ -31,7 +31,7 @@ class CourseFactory extends Factory
         $modalities = Catalogue::where('type', $catalogue['modality']['type'])->get();
         $meansVerifications = Catalogue::where('type', $catalogue['means_verification']['type'])->get();
         $specialities = Catalogue::where('type', $catalogue['speciality_area']['type'])->get();
-        $states = Catalogue::where('type', $catalogue['course_state']['type'])->get();
+        $states = Catalogue::where('code', $catalogue['course_state']['approved'])->first();
 
         return [
             'academic_period_id' => $this->faker->randomElement($academicPeriods),
@@ -48,7 +48,7 @@ class CourseFactory extends Factory
             'means_verification_id' => $this->faker->randomElement($meansVerifications),
             'speciality_id' => $this->faker->randomElement($specialities),
             'responsible_id' => $this->faker->randomElement($responsibles),
-            'state_id' => 45,
+            'state_id' => $states,
             'abbreviation' => $this->faker->word(),
             'alignment' => $this->faker->word(),
             'approved_at' => $this->faker->date('Y_m_d'),

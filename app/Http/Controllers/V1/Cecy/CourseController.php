@@ -128,17 +128,14 @@ class CourseController extends Controller
         $participant = Participant::where('user_id', $request->user()->id)->first();
         $typeParticipant = $participant->type_id;
 
-        // $participants_courses = $catalogues->courses()->>where([['catalogue_id', $typeParticipant],['state_id', $courseApproved]])->get();
+        // $courses = $catalogues->courses()->where([['catalogue_id', $typeParticipant], ['state_id', $courseApproved->id]])->get();
+        //echo ($courses);
 
         foreach ($catalogues as $catalogue) {
-            echo ($catalogue->courses()
-                ->where(
-                    [
-                        ['catalogue_id', 41],
-                        // ['state_id', $courseApproved->id]
-                    ]
-                )
-                ->get());
+            $data = $catalogue->courses()->where([['catalogue_id', $typeParticipant], ['state_id', $courseApproved->id]])->get();
+            if ($data) {
+                echo ($data);
+            }
         }
 
 
