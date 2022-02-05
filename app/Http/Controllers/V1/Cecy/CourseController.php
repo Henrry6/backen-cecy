@@ -76,12 +76,10 @@ class CourseController extends Controller
     // Obtiene los cursos públicos aprobados
     public function getPublicCourses(IndexCourseRequest $request)
     {
-        // $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
-        // $coursesTypes = Catalogue::where('type',  $catalogue['course_state']['type'])->get();
-        // $courseApproved = $coursesTypes->where('code', $catalogue['course_state']['approved'])->first();
-        // $courses =  Course::where([['state_id', $courseApproved->id], ['public', true]])->get();
-
-        $courses =  Course::get();
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+        $coursesTypes = Catalogue::where('type',  $catalogue['course_state']['type'])->get();
+        $courseApproved = $coursesTypes->where('code', $catalogue['course_state']['approved'])->first();
+        $courses =  Course::where([['state_id', $courseApproved->id], ['public', true]])->get();
 
         return (new CoursePublicPrivateCollection($courses))
             ->additional([
@@ -97,15 +95,22 @@ class CourseController extends Controller
 
     public function getPublicCoursesByCategory(GetCoursesByCategoryRequest $request)
     {
-        $courses = $this->getCoursesByAcceptedPlanification();
         $sorts = explode(',', $request->sort);
 
-        $coursesByCategory = $courses
-            ->customOrderBy($sorts)
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+        $coursesTypes = Catalogue::where('type',  $catalogue['course_state']['type'])->get();
+        $courseApproved = $coursesTypes->where('code', $catalogue['course_state']['approved'])->first();
+        $courses =  Course::where([['state_id', $courseApproved->id], ['public', true]])->get();
+        $public_courses = $courses->customOrderBy($sorts)
             ->category($request->input('category.id'))
-            ->paginate($request->input('per_page'));
+            ->paginate($request->input('per_page'))
+            ->get();
 
-        $public_courses = $coursesByCategory->where('public', true)->get();
+
+        // $coursesByCategory = Course::get()
+        //     ->customOrderBy($sorts)
+        //     ->category($request->input('category.id'))
+        //     ->paginate($request->input('per_page'));
 
 
         return (new CoursePublicPrivateCollection($public_courses))

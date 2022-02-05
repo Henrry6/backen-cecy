@@ -10,9 +10,12 @@ class CatalogueResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'additional_information_id' => $this->additional_information_id,
-            'person_type_id' => $this->person_type_id,
-            'user_id' => $this->user_id,
+            // 'parent' => CatalogueResource::make($this->parent),
+            'code' => $this->code,
+            'description' => $this->description,
+            'icon' => $this->icon,
+            'name' => $this->name,
+            'type' => $this->type,
         ];
     }
 }

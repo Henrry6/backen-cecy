@@ -105,6 +105,18 @@ Route::prefix('prerequisites')->group(function () {
  **********************************************************************************************************************/
 Route::prefix('course')->group(function () {
     Route::patch('{course}', [CourseController::class, 'updateCourse']);
+    Route::patch('{course}', [CourseController::class, 'updateGeneralInformationCourse']);
+    Route::patch('{course}', [CourseController::class, 'assignCodeToCourse']);
+    Route::patch('{course}', [CourseController::class, 'approveCourse']);
+    Route::get('{course}', [CourseController::class, 'showInformCourseNeeds']);
+    Route::get('{course}', [CourseController::class, 'showCurricularDesign']);
+    Route::get('{course}', [CourseController::class, 'showFinalCourseReport']);
+    Route::get('{career}', [CourseController::class, 'getCoursesByCareer']);
+    Route::post('{course}', [CourseController::class, 'storeCourseNew']);
+});
+
+Route::prefix('courses')->group(function () {
+    Route::get('', [CourseController::class, 'getCourses']);
     Route::get('public-courses', [CourseController::class, 'getPublicCourses']);
     Route::get('public-courses-category', [CourseController::class, 'getPublicCoursesByCategory']);
     Route::get('public-courses-name', [CourseController::class, 'getPublicCoursesByName']);
@@ -112,22 +124,10 @@ Route::prefix('course')->group(function () {
     Route::get('private-courses-category', [CourseController::class, 'getPrivateCoursesByCategory']);
     Route::get('private-courses-name', [CourseController::class, 'getPrivateCoursesByName']);
     Route::get('courses-responsible', [CourseController::class, 'getCoursesByResponsibleCourse']);
-    Route::patch('{course}', [CourseController::class, 'updateGeneralInformationCourse']);
-    Route::get('', [CourseController::class, 'getCoursesByCoordinator']);
-    Route::get('', [CourseController::class, 'getCoursesKPI']);
-    Route::patch('', [CourseController::class, 'assignCodeToCourse']);
-    Route::patch('{course}', [CourseController::class, 'approveCourse']);
-    Route::get('{course}', [CourseController::class, 'showInformCourseNeeds']);
-    Route::get('', [CourseController::class, 'showYearSchedule']);
-    Route::get('{course}', [CourseController::class, 'showCurricularDesign']);
-    Route::get('{course}', [CourseController::class, 'showFinalCourseReport']);
-    Route::get('{career}', [CourseController::class, 'getCoursesByInstructor']);
-    Route::post('{course}', [CourseController::class, 'storeCourseNew']);
-});
-
-Route::prefix('courses')->group(function () {
-    Route::get('', [CourseController::class, 'getCourses']);
-    Route::get('', [CourseController::class, 'getCoursesByInstructor']);
+    Route::get('courses-instructor', [CourseController::class, 'getCoursesByInstructor']);
+    Route::get('courses-coodinator', [CourseController::class, 'getCoursesByCoordinator']);
+    Route::get('courses-kpi', [CourseController::class, 'getCoursesKPI']);
+    Route::get('year-schedule', [CourseController::class, 'showYearSchedule']);
 });
 
 /***********************************************************************************************************************

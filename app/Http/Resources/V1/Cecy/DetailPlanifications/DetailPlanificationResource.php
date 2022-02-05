@@ -21,15 +21,14 @@ class DetailPlanificationResource extends JsonResource
             'day' => CatalogueResource::make($this->day),
             'classroom' => ClassroomResource::make($this->classroom),
             'parallel' => CatalogueResource::make($this->parallel),
-            'planification' => PlanificationResource::make($this->planification),
-            // 'workday' => CatalogueResource::make($this->workday),
-            // 'state' => CatalogueResource::make($this->state),
-            // 'registrations' => RegistrationResource::collection($this->registrations),
-            // 'endedTime' => $this->ended_time,
-            // 'observations' => $this->observations,
-            // 'planEndedAt' => $this->plan_ended_at,
-            // 'registrationsLeft' => $this->registrations_left,
-            // 'startedTime' => $this->started_time
+            'workday' => CatalogueResource::make($this->workday),
+            'state' => CatalogueResource::make($this->state),
+            'registrations' => RegistrationResource::collection($this->registrations),
+            'endedTime' => $this->ended_time,
+            'observations' => $this->observations,
+            'planEndedAt' => $this->plan_ended_at,
+            'registrationsLeft' => $this->registrations_left,
+            'startedTime' => $this->started_time
         ];
     }
 }
