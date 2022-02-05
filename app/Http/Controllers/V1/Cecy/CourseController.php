@@ -34,6 +34,7 @@ use App\Models\Core\File;
 use App\Models\Core\Image;
 use App\Models\Core\State;
 use App\Models\Core\Career;
+use Exception;
 use Illuminate\Support\Facades\DB;
 
 class CourseController extends Controller
@@ -122,46 +123,74 @@ class CourseController extends Controller
     public function getPrivateCoursesByParticipantType(IndexPlanificationRequest $request)
     {
         $sorts = explode(',', $request->input('sort'));
+
         $courseApproved = $this->getApprovedCourses();
         $catalogues = Catalogue::get();
+        $publicCourses =  Course::customOrderBy($sorts)
+            ->public(true)
+            ->state($courseApproved->id)
+            ->get();
 
         $participant = Participant::where('user_id', $request->user()->id)->first();
         $typeParticipant = $participant->type_id;
 
-        // $courses = $catalogues->courses()->where([['catalogue_id', $typeParticipant], ['state_id', $courseApproved->id]])->get();
-        //echo ($courses);
-
+        $allowedCourses = [];
         foreach ($catalogues as $catalogue) {
-            $data = $catalogue->courses()->where([['catalogue_id', $typeParticipant], ['state_id', $courseApproved->id]])->get();
-            if ($data) {
-                echo ($data);
+            $cursos = $catalogue->courses()->where([['catalogue_id', $typeParticipant], ['state_id', $courseApproved->id]])->get();
+            foreach ($cursos as $curso) {
+                array_push($allowedCourses, $curso);
             }
         }
 
+        foreach ($publicCourses as $publicCourse) {
+            array_push($allowedCourses, $publicCourse);
+        }
 
-        // return (new CoursePublicPrivateCollection($allowedCourses))
-        //     ->additional([
-        //         'msg' => [
-        //             'summary' => 'success',
-        //             'detail' => '',
-        //             'code' => '200'
-        //         ]
-        //     ])->response()->setStatusCode(200);
+        return (new CoursePublicPrivateCollection($allowedCourses))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])->response()->setStatusCode(200);
     }
 
     // Obtiene los cursos privados aprobados por tipo de participante y filtrados por categoria
     public function getPrivateCoursesByCategory(getCoursesByCategoryRequest $request)
     {
-        $sorts = explode(',', $request->sort);
+        $sorts = explode(',', $request->input('sort'));
 
-        $courses = Course::customOrderBy($sorts)
-            ->category($request->input('category.id'))
-            ->paginate($request->input('per_page'));
+        $courseApproved = $this->getApprovedCourses();
+        $catalogues = Catalogue::get();
+        $publicCourses =  Course::customOrderBy($sorts)
+            ->public(true)
+            ->state($courseApproved->id)
+            ->get();
 
-        $private_courses = $courses->where('public', false)->get();
+        $participant = Participant::where('user_id', $request->user()->id)->first();
+        $typeParticipant = $participant->type_id;
+
+        $allowedCourses = [];
+        foreach ($catalogues as $catalogue) {
+            $cursos = $catalogue->courses()->where([['catalogue_id', $typeParticipant], ['state_id', $courseApproved->id]])->get();
+            foreach ($cursos as $curso) {
+                array_push($allowedCourses, $curso);
+            }
+        }
+
+        foreach ($publicCourses as $publicCourse) {
+            array_push($allowedCourses, $publicCourse);
+        }
+
+        // $filteredCourses =  $allowedCourses->customOrderBy($sorts)
+        //     ->name($request->input('name'))
+        //     ->public(true)
+        //     ->state($courseApproved->id)
+        //     ->get();
 
 
-        return (new CoursePublicPrivateCollection($private_courses))
+        return (new CoursePublicPrivateCollection($allowedCourses))
             ->additional([
                 'msg' => [
                     'summary' => 'success',
