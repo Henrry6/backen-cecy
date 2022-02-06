@@ -138,3 +138,13 @@ Route::prefix('detailAttendance')->group(function () {
     Route::get('course/{course}', [DetailAttendanceController::class, 'showAttedanceParticipant']);
     Route::patch('/{detailAttendance}', [DetailAttendanceController::class, 'updatDetailAttendanceTeacher']);
 });
+
+/***********************************************************************************************************************
+ * CERTIFICATES
+ **********************************************************************************************************************/
+Route::prefix('certificate')->group(function () {
+    Route::get('catalogue/{catalogue}/file/{file}', [CertificateController::class, 'downloadFileCertificates']);
+    Route::get('registration/{registration}/catalogue/{catalogue}/file/{file}', [CertificateController::class, 'downloadFileCertificates']);
+    Route::post('catalogue/{catalogue}', [CertificateController::class, 'uploadFileCertificate']);
+    Route::post('firm/catalogue/{catalogue}', [CertificateController::class, 'uploadFileCertificateFirm']);
+});
