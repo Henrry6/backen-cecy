@@ -110,7 +110,7 @@ class RegistrationController extends Controller
 
     /*DDRC-C: elimina una matricula de un participante en un curso especifico */
     // RegistrationController
-    public function nullifyRegistration(Registration $registration, Request $request)
+    public function nullifyRegistration(Request $request ,Registration $registration )
     {
         $registrations = Registration::whereIn('id', $request->input('id'))->get();
         $registrations->state()->associate(Catalogue::find($request->input('state.id')));
