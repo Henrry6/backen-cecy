@@ -28,9 +28,10 @@ class PlanificationController extends Controller
     /**
      * Get all planifications filtered by and course
      */
-    // PlanificationController ya esta
+    // PlanificationController ya esta, no vale el collection
     public function getPlanificationsByCourse(GetPlanificationsByCourseRequest $request, Course $course)
     {
+
         $sorts = explode(',', $request->sort);
 
         $planifications = $course->planifications()->customOrderBy($sorts)
@@ -91,17 +92,18 @@ class PlanificationController extends Controller
     /**
      * KPI of planifications
      */
-    // PlanificationController ya esta
-    // public function getKpi(ShowKpiRequest $request, Catalogue $state)
-    // {
-    //     $planifications = Planification::withCount([
-    //         'id' => function (Builder $query) {
-    //             $query->where(
-    //                 'state_id',
-    //                 $state->id
-    //             );
-    //         },
-    //     ])->get();
+    // PlanificationController ya esta, no trae la informacion .
+    public function getKpi(ShowKpiRequest $request, Catalogue $state)
+    {
+        
+        $planifications = Planification::withCount([
+            'id' => function (Builder $query) {
+                $query->where(
+                    'state_id',
+                    $state->id
+                );
+            },
+        ])->get();
 
     //     return (new KpiPlanificationResourse($planifications[0]))
     //         ->additional([
@@ -118,7 +120,8 @@ class PlanificationController extends Controller
     // PlanificationController ya esta
     public function getPlanitifications()
     {
-        $planifications = Planification::where(['state' => function ($state) {
+        return "hola";
+        $planifications = Planification::where(['state_id' => function ($state) {
             $state->where('code', State::APPROVED);
         }])->paginate();
 
@@ -135,7 +138,7 @@ class PlanificationController extends Controller
     }
 
     /*DDRC-C: Busca planificaciones vigentes por periodo asignadas al usuario logueado(responsable del CECY)*/
-    // PlanificationController ya esta
+    // PlanificationController ya esta, no vale el metodo
     public function getPlanificationsByPeriodState(InstructorRequest $request )
     {
         $instructor = Instructor::FirstWhere('user_id', $request->user()->id)->get();
@@ -156,7 +159,7 @@ class PlanificationController extends Controller
             ])->response()->setStatusCode(200);
     }
     /*DDRC-C: Trae una lista de nombres de cursos, paralelos y jornadas*/
-    // PlanificationController ya esta
+    // PlanificationController ya esta, no vale el metodo.
     public function getCoursesParallelsWorkdays(getCoursesByResponsibleRequest $request)
     {
         $sorts = explode(',', $request->sort);
