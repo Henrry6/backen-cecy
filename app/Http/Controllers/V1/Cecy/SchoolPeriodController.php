@@ -13,17 +13,13 @@ use App\Models\Cecy\Catalogue;
 use App\Models\Cecy\SchoolPeriod;
 use Illuminate\Support\Facades\Request;
 
-class ShoolPeriodController extends Controller
+class SchoolPeriodController extends Controller
 {
     //Obtiene todas los periodos escolares que hay
-    public function index(IndexSchoolPeriodsRequest $request)
+    public function index()
     {
-        $sorts = explode(',', $request->input('sort'));
 
-        $schooolperiod = SchoolPeriod::customOrderBy($sorts)
-            ->paginate($request->input('per_page'));
-
-        return (new SchoolPeriodsCollection($schooolperiod))
+        return (new SchoolPeriodsCollection(SchoolPeriod::paginate()))
             ->additional([
                 'msg' => [
                     'summary' => 'success',

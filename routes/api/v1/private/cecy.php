@@ -11,6 +11,8 @@ use App\Http\Controllers\V1\Cecy\InstitutionController;
 use App\Http\Controllers\V1\Cecy\TopicController;
 use App\Http\Controllers\V1\Cecy\PrerequisiteController;
 use App\Http\Controllers\V1\Cecy\PlanificationController;
+use App\Http\Controllers\V1\Cecy\SchoolPeriodController;
+
 
 /***********************************************************************************************************************
  * CATALOGUES
@@ -160,4 +162,13 @@ Route::prefix('certificate')->group(function () {
     Route::get('registration/{registration}/catalogue/{catalogue}/file/{file}', [CertificateController::class, 'downloadFileCertificates']);
     Route::post('catalogue/{catalogue}', [CertificateController::class, 'uploadFileCertificate']);
     Route::post('firm/catalogue/{catalogue}', [CertificateController::class, 'uploadFileCertificateFirm']);
+});
+/***********************************************************************************************************************
+ * SCHOOL PERIODS
+ **********************************************************************************************************************/
+
+Route::apiResource('schoolperiods', SchoolPeriodController::class);
+
+Route::prefix('schoolperiod')->group(function () {
+    Route::patch('{schoolperiod}', [SchoolPeriodController::class, 'destroys']);
 });
