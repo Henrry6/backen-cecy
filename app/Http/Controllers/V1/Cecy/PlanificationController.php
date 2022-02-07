@@ -92,27 +92,27 @@ class PlanificationController extends Controller
      * KPI of planifications
      */
     // PlanificationController ya esta
-    public function getKpi(ShowKpiRequest $request, Catalogue $state)
-    {
-        $planifications = Planification::withCount([
-            'id' => function (Builder $query) {
-                $query->where(
-                    'state_id',
-                    $state->id
-                );
-            },
-        ])->get();
+    // public function getKpi(ShowKpiRequest $request, Catalogue $state)
+    // {
+    //     $planifications = Planification::withCount([
+    //         'id' => function (Builder $query) {
+    //             $query->where(
+    //                 'state_id',
+    //                 $state->id
+    //             );
+    //         },
+    //     ])->get();
 
-        return (new KpiPlanificationResourse($planifications[0]))
-            ->additional([
-                'msg' => [
-                    'summary' => 'success',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ])
-            ->response()->setStatusCode(200);
-    }
+    //     return (new KpiPlanificationResourse($planifications[0]))
+    //         ->additional([
+    //             'msg' => [
+    //                 'summary' => 'success',
+    //                 'detail' => '',
+    //                 'code' => '200'
+    //             ]
+    //         ])
+    //         ->response()->setStatusCode(200);
+    // }
 
     //Trae todos los cursos
     // PlanificationController ya esta
