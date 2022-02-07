@@ -53,6 +53,7 @@ class DetailPlanificationController extends Controller
     }
 
 
+
      /**
      * Get all detail planifications filtered by responsible_course
      */
