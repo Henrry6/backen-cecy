@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\Cecy\Courses\CoordinatorCecy\GetCoursesByCoordinatorCecyRequest as CoordinatorCecyGetCoursesByCoordinatorCecyRequest;
 use App\Http\Requests\V1\Cecy\Courses\GetCoursesByCategoryRequest;
 use App\Http\Requests\V1\Cecy\Courses\GetCoursesByCoordinatorCecyRequest;
 use App\Http\Requests\V1\Cecy\Courses\GetCoursesByNameRequest;
@@ -119,7 +120,7 @@ class CourseController extends Controller
             ])->response()->setStatusCode(200);
     }
 
-    // Obtiene los cursos privados aprobados por tipo de participante
+    // Obtiene los cursos privados aprobados por tipo de participante (Done)
     public function getPrivateCoursesByParticipantType(IndexPlanificationRequest $request)
     {
         $sorts = explode(',', $request->input('sort'));
@@ -156,9 +157,10 @@ class CourseController extends Controller
             ])->response()->setStatusCode(200);
     }
 
-    // Obtiene los cursos privados aprobados por tipo de participante y filtrados por categoria
+    // Obtiene los cursos privados aprobados por tipo de participante y filtrados por categoria (Done)
     public function getPrivateCoursesByCategory(getCoursesByCategoryRequest $request)
     {
+        return ('getPrivateCoursesByCategory');
         $sorts = explode(',', $request->input('sort'));
 
         $courseApproved = $this->getApprovedCourses();
@@ -200,9 +202,10 @@ class CourseController extends Controller
             ])->response()->setStatusCode(200);
     }
 
-    // Obtiene los cursos privados aprobados por tipo de participante y filtrados por nombre
+    // Obtiene los cursos privados aprobados por tipo de participante y filtrados por nombre (Done)
     public function getPrivateCoursesByName(getCoursesByNameRequest $request)
     {
+        return ('getPrivateCoursesByName');
         $sorts = explode(',', $request->sort);
 
         $courses = Course::customOrderBy($sorts)
@@ -221,9 +224,10 @@ class CourseController extends Controller
             ])->response()->setStatusCode(200);
     }
 
-    // Actualiza la informacion del diseño curricular
+    // Actualiza la informacion del diseño curricular (Done)
     public function updateCourse(UpdateCourseRequest $request, Course $course)
     {
+        return "updateCourse";
         $course->area()->associate(Catalogue::find($request->input('area.id')));
         $course->speciality()->associate(Catalogue::find($request->input('speciality.id')));
         $course->alignment = $request->input('alignment');
@@ -247,9 +251,10 @@ class CourseController extends Controller
             ]);
     }
 
-    //visualizar todos los cursos
+    //visualizar todos los cursos (Done)
     public function getCourses()
     {
+        return "getCourses";
         $courses = Course::get();
 
         return (new CourseCollection($courses))
@@ -263,9 +268,11 @@ class CourseController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    //obtener los cursos asignados a un docente responsable logueado
+    //obtener los cursos asignados a un docente responsable logueado (Done)
     public function getCoursesByResponsibleCourse(getCoursesByResponsibleRequest $request)
     {
+        return "getCoursesByResponsibleCourse";
+
         $instructor = Instructor::FirstWhere('user_id', $request->user()->id);
         $courses = $instructor->courses()->get();
 
@@ -279,7 +286,7 @@ class CourseController extends Controller
             ]);
     }
 
-    //Trae toda la info de un curso seleccionado
+    //Trae toda la info de un curso seleccionado (?)
     public function show(Course $course)
     {
         return (new CourseResource($course))
@@ -292,9 +299,10 @@ class CourseController extends Controller
             ]);
     }
 
-    //actualiza datos generales de un curso seleccionado
+    //actualiza datos generales de un curso seleccionado  (Done)
     public function updateGeneralInformationCourse(UpdateCourseGeneralDataRequest $request, Course $course)
     {
+        return "updateGeneralInformationCourse";
         $course->category()->associate(Catalogue::find($request->input('category.id')));
         $course->certifiedType()->associate(Catalogue::find($request->input('certifiedType.id')));
         $course->courseType()->associate(Catalogue::find($request->input('courseType.id')));
@@ -317,9 +325,11 @@ class CourseController extends Controller
             ]);
     }
 
-    //Obtener cursos y Filtrarlos por peridos lectivos , carrera o estado
-    public function getCoursesByCoordinator(GetCoursesByCoordinatorCecyRequest $request)
+    //Obtener cursos y Filtrarlos por peridos lectivos , carrera o estado (Done)
+    public function getCoursesByCoordinator(CoordinatorCecyGetCoursesByCoordinatorCecyRequest $request)
     {
+
+        return "getCoursesByCoordinator";
         $sorts = explode(',', $request->sort);
 
         $courses = Course::customOrderBy($sorts)
@@ -339,9 +349,11 @@ class CourseController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    //MOSTRAR LOS KPI DE CURSOS APROBADOS, POR APROBAR Y EN PROCESO
+    //Mostrar los KPI de cursos aprobados, por aprobar y en proceso (Done)
     public function getCoursesKPI(Request $request)
     {
+        return "getCoursesKPI";
+
         $courses = DB::table('courses as cr')
             ->join('catalogue as ct', 'ct.id', '=', 'cr.state_id')
             ->where('ct.name', '=', 'APPROVED, TO_BE_APPROVED, IN_PROCESS')
@@ -353,9 +365,10 @@ class CourseController extends Controller
         echo $courses->course_count;
     }
 
-    //Asignar código al curso
-    public function assignCodeToCourse($request, Course $course)
+    //Asignar código al curso (Done)
+    public function assignCodeToCourse(Request $request, Course $course)
     {
+        return "assignCodeToCourse";
         $course->code = $request->input('code');
         $course->save();
 
@@ -370,9 +383,10 @@ class CourseController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    // Ingresar el motivo del por cual el curso no esta aprobado
-    public function approveCourse($request, Course $course)
+    // Ingresar el motivo del por cual el curso no esta aprobado (Done)
+    public function approveCourse(Request $request, Course $course)
     {
+        return "approveCourse";
         $course->state()->associate(Catalogue::firstWhere('code', State::APPROVED));
         $course->observation = $request->input('observation');
         $course->save();
@@ -388,8 +402,10 @@ class CourseController extends Controller
             ->response()->setStatusCode(200);
     }
 
+    // Mostrar las necesidades de un curso (Done)
     public function showInformCourseNeeds(Course $course)
     {
+        return "showInformCourseNeeds";
         //trae un informe de nececidades de una planificacion, un curso en especifico por el docente que se logea
 
 
@@ -407,9 +423,10 @@ class CourseController extends Controller
         $data = new InformCourseNeedsResource($planification);
     }
 
+    //Traer todos los cursos planificados de un año en especifico (Done)
     public function showYearSchedule(GetDateByshowYearScheduleRequest $request)
     {
-        //trae todos los cursos planificados de un año en especifico
+        return "showYearSchedule";
         $year = Planification::whereYear('started_at', $request->input('startedAt'))->get();
 
         $planificacion = $year
@@ -431,10 +448,10 @@ class CourseController extends Controller
             ->response()->setStatusCode(200);
     }
 
+    //Traer la informacion de diseño curricular (Done)
     public function showCurricularDesign(getCoursesByNameRequest $request, Course $course)
     {
-        // trae la informacion de diseño curricular
-
+        return "showCurricularDesign";
         $planification = $course->planifications()->get()
             ->detailPlanifications()
             ->planifications()
@@ -451,10 +468,10 @@ class CourseController extends Controller
             ]);
     }
 
-    public function showFinalCourseReport(getCoursesByNameRequest $request, Course $course)
+    // Traer la informacion del informe final del curso (Done)
+    public function showCourseFinalReport(getCoursesByNameRequest $request, Course $course)
     {
-        // trae la informacion del informe final del curso
-
+        return "showCourseFinalReport";
         $course = Course::where('course_id', $request->course()->id)->get();
 
         $detailPlanifications = $course
@@ -476,10 +493,10 @@ class CourseController extends Controller
             ]);
     }
 
-    //cursos de un docente instructor
+    //Traer cursos de un docente instructor (Deberia estar en planificacion dice cursos pero trae planificaciones)(Done)
     public function getCoursesByInstructor(GetPlanificationByResponsableCourseRequest $request)
     {
-
+        return "getCoursesByInstructor";
         $instructor = Instructor::FirstWhere('user_id', $request->user()->id);
         $planifications = $instructor->planifications()->get();
 
@@ -494,9 +511,10 @@ class CourseController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    //filtrar cursos por carrera
+    //Filtrar cursos por carrera (Done)
     public function getCoursesByCareer(GetCoursesByCareerRequest $request, Career $career)
     {
+        return "getCoursesByCareer";
         $sorts = explode(',', $request->sort);
         $course = Course::where('career.id', $career->id);
 
@@ -515,9 +533,10 @@ class CourseController extends Controller
             ]);
     }
 
-    //crear curso no existente
-    public function storeCourseNew(StoreCourseNewRequest $request, Course $course)
+    //Crear curso nuevo completamente (Done)
+    public function storeNewCourse(StoreCourseNewRequest $request, Course $course)
     {
+        return "storeNewCourse";
         $course = new Course();
         $course->name = $request->input('search');
         $course->participant_type = $request->input('search');
