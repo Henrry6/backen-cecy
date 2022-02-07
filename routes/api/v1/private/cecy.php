@@ -59,7 +59,7 @@ Route::prefix('institution')->group(function () {
  **********************************************************************************************************************/
 Route::prefix('planification')->group(function () {
     //prefix solo
-    Route::get('planifications',[PlanificationController::class,'getPlanitifications']);
+    Route::get('planifications', [PlanificationController::class, 'getPlanitifications']);
     Route::get('{course}', [PlanificationController::class, 'getPlanificationsByCourse']);
     Route::get('planifications', [PlanificationController::class, 'getPlanitifications']);
     Route::get('planfications-course/{course}', [PlanificationController::class, 'getPlanificationsByCourse']);
@@ -121,15 +121,15 @@ Route::prefix('prerequisites')->group(function () {
  * COURSE
  **********************************************************************************************************************/
 Route::prefix('course')->group(function () {
-    Route::patch('{course}', [CourseController::class, 'updateCourse']);
-    Route::patch('{course}', [CourseController::class, 'updateGeneralInformationCourse']);
-    Route::patch('{course}', [CourseController::class, 'assignCodeToCourse']);
-    Route::patch('{course}', [CourseController::class, 'approveCourse']);
-    Route::get('{course}', [CourseController::class, 'showInformCourseNeeds']);
-    Route::get('{course}', [CourseController::class, 'showCurricularDesign']);
-    Route::get('{course}', [CourseController::class, 'showFinalCourseReport']);
-    Route::get('{career}', [CourseController::class, 'getCoursesByCareer']);
-    Route::post('{course}', [CourseController::class, 'storeCourseNew']);
+    Route::put('update/{course}', [CourseController::class, 'updateCourse']);
+    Route::patch('general-information/{course}', [CourseController::class, 'updateGeneralInformationCourse']);
+    Route::patch('assign-code/{course}', [CourseController::class, 'assignCodeToCourse']);
+    Route::patch('approve/{course}', [CourseController::class, 'approveCourse']);
+    Route::get('inform-course-needs/{course}', [CourseController::class, 'showInformCourseNeeds']);
+    Route::get('curricular-design/{course}', [CourseController::class, 'showCurricularDesign']);
+    Route::get('final-report/{course}', [CourseController::class, 'showCourseFinalReport']);
+    Route::get('career/{career}', [CourseController::class, 'getCoursesByCareer']);
+    Route::post('store', [CourseController::class, 'storeNewCourse']);
 });
 
 Route::prefix('courses')->group(function () {
@@ -140,10 +140,10 @@ Route::prefix('courses')->group(function () {
     Route::get('private-courses-participant', [CourseController::class, 'getPrivateCoursesByParticipantType']);
     Route::get('private-courses-category', [CourseController::class, 'getPrivateCoursesByCategory']);
     Route::get('private-courses-name', [CourseController::class, 'getPrivateCoursesByName']);
-    Route::get('courses-responsible', [CourseController::class, 'getCoursesByResponsibleCourse']);
-    Route::get('courses-instructor', [CourseController::class, 'getCoursesByInstructor']);
-    Route::get('courses-coodinator', [CourseController::class, 'getCoursesByCoordinator']);
-    Route::get('courses-kpi', [CourseController::class, 'getCoursesKPI']);
+    Route::get('responsible', [CourseController::class, 'getCoursesByResponsibleCourse']);
+    Route::get('instructor', [CourseController::class, 'getCoursesByInstructor']);
+    Route::get('coodinator', [CourseController::class, 'getCoursesByCoordinator']);
+    Route::get('kpi', [CourseController::class, 'getCoursesKPI']);
     Route::get('year-schedule', [CourseController::class, 'showYearSchedule']);
 });
 
@@ -189,7 +189,7 @@ Route::prefix('classroom')->group(function () {
  **********************************************************************************************************************/
 
 Route::prefix('instructor')->group(function () {
-    Route::get('courses',[InstructorController::class,'getCourses']);
+    Route::get('courses', [InstructorController::class, 'getCourses']);
     Route::get('instructor-information', [InstructorController::class, 'getInstructorsInformationByCourse']);
     Route::get('type-instructor', [InstructorController::class, 'updateTypeInstructors']);
     Route::get('destroy/{instructor}', [InstructorController::class, 'destroyInstructors']);

@@ -13,7 +13,7 @@ class UpdateCourseGeneralDataRequest extends FormRequest
   public function rules()
   {
     return [
-     
+
       'career.id' => ['required', 'integer'],
       'category.id' => ['required', 'integer'],
       'certifiedType.id' => ['required', 'integer'],
@@ -26,14 +26,14 @@ class UpdateCourseGeneralDataRequest extends FormRequest
       'needs' => ['required', 'json'],
       'project' => ['required', 'string', 'max:1000'],
       'summary' => ['required',  'string', 'max:1000'],
-     
+
     ];
   }
 
   public function attributes()
   {
     return [
-     
+
       'career.id' => 'Id de la carrera',
       'category.id' => 'Id de la categoria',
       'certifiedType.id' => 'Id del tipo de certitificado',
