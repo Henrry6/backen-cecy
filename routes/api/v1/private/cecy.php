@@ -13,6 +13,7 @@ use App\Http\Controllers\V1\Cecy\TopicController;
 use App\Http\Controllers\V1\Cecy\PrerequisiteController;
 use App\Http\Controllers\V1\Cecy\PlanificationController;
 use App\Http\Controllers\V1\Cecy\SchoolPeriodController;
+use App\Http\Controllers\V1\Cecy\InstructorController;
 
 
 /***********************************************************************************************************************
@@ -181,4 +182,15 @@ Route::apiResource('classroom', ClassroomController::class);
 
 Route::prefix('classroom')->group(function () {
     Route::patch('/{classroom}', [ClassroomController::class, 'destroys']);
+});
+
+/***********************************************************************************************************************
+ * INSTRUCTOR
+ **********************************************************************************************************************/
+
+Route::prefix('instructor')->group(function () {
+    Route::get('courses',[InstructorController::class,'getCourses']);
+    Route::get('instructor-information', [InstructorController::class, 'getInstructorsInformationByCourse']);
+    Route::get('type-instructor', [InstructorController::class, 'updateTypeInstructors']);
+    Route::get('destroy/{instructor}', [InstructorController::class, 'destroyInstructors']);
 });
