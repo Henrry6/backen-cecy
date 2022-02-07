@@ -35,13 +35,14 @@ class DetailPlanificationController extends Controller
     /*
         Obtener los horarios de cada paralelo dado un curso
     */
-    // DetailController
-    public function getDetailPlanificationsByCourse(Course $course)
+    // DetailController (done) =>conflicto en controlador
+
+    public function getDetailPlanificationsByCourse(Course $course) //hecho
     {
+
         $planification = $course->planifications()->get();
         $detailPlanification = $planification
             ->detailPlanifications();
-
         return (new DetailPlanificationResource($detailPlanification))
             ->additional([
                 'msg' => [
@@ -54,11 +55,11 @@ class DetailPlanificationController extends Controller
 
 
 
-     /**
+    /**
      * Get all detail planifications filtered by responsible_course
      */
     // DetailPlanificationController
-    public function getDetailPlanificationsByResponsibleCourse(GetDetailPlanificationsByResponsibleCourseRequest $request)
+    public function getDetailPlanificationsByResponsibleCourse(GetDetailPlanificationsByResponsibleCourseRequest $request) 
     {
         $responsibleCourse = Instructor::where('user_id', $request->user()->id)->get();
 
@@ -79,8 +80,8 @@ class DetailPlanificationController extends Controller
     /**
      * Get all detail planifications filtered by planification
      */
-    // DetailPlanificationController
-    public function getDetailPlanificationsByPlanification(GetDetailPlanificationsByPlanificationRequest $request)
+    // DetailPlanificationController  
+    public function getDetailPlanificationsByPlanification(GetDetailPlanificationsByPlanificationRequest $request) //hecho
     {
         // $sorts = explode(',', $request->sort);
 
@@ -104,11 +105,11 @@ class DetailPlanificationController extends Controller
             ->response()->setStatusCode(200);
     }
 
-     /**
+    /**
      * Store a detail planification record
      */
     // DetailPlanificationController
-    public function registerDetailPlanification(RegisterDetailPlanificationRequest $request)
+    public function registerDetailPlanification(RegisterDetailPlanificationRequest $request) //hecho
     {
         $loggedInInstructor = Instructor::where('user_id', $request->user()->id)->get();
 
@@ -176,7 +177,7 @@ class DetailPlanificationController extends Controller
      * Return a detailPlanification record
      */
     // DetailPlanificationController
-    public function showDetailPlanification(ShowDetailPlanificationRequest $request, DetailPlanification $detailPlanification)
+    public function showDetailPlanification(ShowDetailPlanificationRequest $request, DetailPlanification $detailPlanification) //hecho
     {
         return (new DetailPlanificationResource($detailPlanification))
             ->additional([
@@ -193,7 +194,7 @@ class DetailPlanificationController extends Controller
      * Update a detail planification record
      */
     // DetailPlanificationController
-    public function updateDetailPlanification(UpdateDetailPlanificationRequest $request, DetailPlanification $detailPlanification)
+    public function updateDetailPlanification(UpdateDetailPlanificationRequest $request, DetailPlanification $detailPlanification) //hecho
     {
         $loggedInstructor = Instructor::where('user_id', $request->user()->id)->get();
         $planification = Planification::find($request->input('planification.id'));
@@ -241,11 +242,11 @@ class DetailPlanificationController extends Controller
             ])
             ->response()->setStatusCode(200);
     }
-/**
+    /**
      * Delete a detail planification record
      */
     // DetailPlanificationController
-    public function deleteDetailPlanification(DeleteDetailPlanificationRequest $request, DetailPlanification $detailPlanification)
+    public function deleteDetailPlanification(DeleteDetailPlanificationRequest $request, DetailPlanification $detailPlanification) //hecho
     {
         $detailPlanification->delete();
 
@@ -261,7 +262,7 @@ class DetailPlanificationController extends Controller
     }
 
     //actualizar informacion del detalle planificación
-    public function updatedetailPlanificationByCecy(UpdateDetailPlanificationRequest $request)
+    public function updatedetailPlanificationByCecy(UpdateDetailPlanificationRequest $request) //hecho
     {
         $loggedAuthority = Authority::where('user_id', $request->user()->id)->get();
         $classroom = Classroom::find($request->input('classroom.id'));
@@ -269,7 +270,7 @@ class DetailPlanificationController extends Controller
         $planification = Planification::find($request->input('planification.id'));
         $workday = Catalogue::find($request->input('workday.id'));
         $parallel = Catalogue::find($request->input('parallel.id'));
-        
+
         $detailPlanification = DetailPlanification::find($request->input('detailPlanification.id'));
 
         $detailPlanification->classroom()->associate($classroom);
@@ -285,7 +286,7 @@ class DetailPlanificationController extends Controller
         $detailPlanification->started_at = $request->input('started_at');
         $detailPlanification->save();
 
-        return (new DetailPlanificationResource ($detailPlanification))
+        return (new DetailPlanificationResource($detailPlanification))
             ->additional([
                 'msg' => [
                     'summary' => 'Actualizado correctamente',
@@ -299,7 +300,7 @@ class DetailPlanificationController extends Controller
      * Delete a detail planification record
      */
     // DetailPlanificationController
-    public function destroysDetailPlanifications(DestroysDetailPlanificationRequest $request)
+    public function destroysDetailPlanifications(DestroysDetailPlanificationRequest $request) //hecho
     {
         $detailPlanifications = DetailPlanification::whereIn('id', $request->input('ids'))->get();
         DetailPlanification::destroy($request->input('ids'));
@@ -314,5 +315,4 @@ class DetailPlanificationController extends Controller
             ])
             ->response()->setStatusCode(200);
     }
-
 }
