@@ -77,6 +77,8 @@ class DetailPlanificationController extends Controller
             ])
             ->response()->setStatusCode(200);
     }
+
+
     /**
      * Get all detail planifications filtered by planification
      */
