@@ -7,6 +7,7 @@ use App\Http\Controllers\V1\Cecy\GuanunaController;
 use App\Http\Controllers\V1\Cecy\PerezController;
 use App\Http\Controllers\V1\Cecy\CourseController;
 use App\Http\Controllers\V1\Cecy\DetailAttendanceController;
+use App\Http\Controllers\V1\Cecy\InstitutionController;
 use App\Http\Controllers\V1\Cecy\TopicController;
 use App\Http\Controllers\V1\Cecy\PrerequisiteController;
 use App\Http\Controllers\V1\Cecy\PlanificationController;
@@ -139,3 +140,13 @@ Route::prefix('detailAttendance')->group(function () {
     Route::patch('/{detailAttendance}',[DetailAttendanceController::class,'updatDetailAttendanceTeacher']);
 });
 
+/*****************************************
+ * Institution ROUTES
+ ****************************************/
+
+Route::apiResource('institutions', InstitutionController::class);
+
+
+Route::prefix('institution')->group(function () {
+    Route::patch('{institution}', [InstitutionController::class, 'destroys']);
+});

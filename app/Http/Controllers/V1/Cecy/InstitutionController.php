@@ -4,8 +4,8 @@ namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Cecy\Institutions\DestroysInstitutionsRequest;
-use App\Http\Requests\V1\Core\Institutions\StoreInstitutionRequest;
-use App\Http\Requests\V1\Core\Institutions\UpdateInstitutionRequest;
+use App\Http\Requests\V1\Cecy\Institutions\StoreInstitutionsRequest;
+use App\Http\Requests\V1\Cecy\Institutions\UpdateInstitutionsRequest;
 use App\Http\Resources\V1\Cecy\Institutions\InstitutionResource;
 use App\Http\Resources\V1\Core\InstitutionCollection;
 use App\Models\Cecy\Institution;
@@ -27,7 +27,7 @@ class InstitutionController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    public function store(StoreInstitutionRequest $request)
+    public function store(StoreInstitutionsRequest $request)
     {
         $institution = new Institution();
 
@@ -61,7 +61,7 @@ class InstitutionController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    public function update(UpdateInstitutionRequest $request, Institution $institution)
+    public function update(UpdateInstitutionsRequest $request, Institution $institution)
     {
         $institution->code = $request->input('code');
         $institution->name = $request->input('name');
