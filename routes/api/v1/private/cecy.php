@@ -43,6 +43,13 @@ Route::prefix('catalogue/{catalogue}')->group(function () {
  * INSTITUTIONS
  **********************************************************************************************************************/
 
+Route::apiResource('institutions', InstitutionController::class);
+
+
+Route::prefix('institution')->group(function () {
+    Route::patch('{institution}', [InstitutionController::class, 'destroys']);
+});
+
 /***********************************************************************************************************************
  * PLANIFICATIONS
  **********************************************************************************************************************/
@@ -153,15 +160,4 @@ Route::prefix('certificate')->group(function () {
     Route::get('registration/{registration}/catalogue/{catalogue}/file/{file}', [CertificateController::class, 'downloadFileCertificates']);
     Route::post('catalogue/{catalogue}', [CertificateController::class, 'uploadFileCertificate']);
     Route::post('firm/catalogue/{catalogue}', [CertificateController::class, 'uploadFileCertificateFirm']);
-});
-
-/*****************************************
- * Institution ROUTES
- ****************************************/
-
-Route::apiResource('institutions', InstitutionController::class);
-
-
-Route::prefix('institution')->group(function () {
-    Route::patch('{institution}', [InstitutionController::class, 'destroys']);
 });
