@@ -12,17 +12,17 @@ class StorePrerequisiteRequest extends FormRequest
     }
     public function rules()
     {
-        // return [
-        //     'course.id' => ['required', 'integer'],
-        //     'prerequisite.id' => ['required', 'max:240'],
-        // ];
+        return [
+            'course.id' => ['required', 'integer'],
+            'prerequisite.id' => ['required', 'max:240'],
+        ];
     }
 
     public function attributes()
     {
-        // return [
-        //     'course.id' => 'Id del curso al que pertenece el prerequisito',
-        //     'prerequisite.id' => 'Id del curso que prerequisito',
-        // ];
+        return [
+            'course.id' => 'Id del curso al que pertenece el prerequisito',
+            'prerequisite.id' => 'Id del curso que prerequisito',
+        ];
     }
 }

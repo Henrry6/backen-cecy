@@ -246,10 +246,17 @@ class Course extends Model implements Auditable
         }
     }
 
+    public function scopeCatalogue($query, $catalogue)
+    {
+        if ($catalogue) {
+            return $query->Where('catalogue_id', $catalogue);
+        }
+    }
+
     public function scopeCategory($query, $category)
     {
         if ($category) {
-            return $query->orWhere('category_id', $category->id);
+            return $query->Where('category_id', $category);
         }
     }
 
@@ -277,7 +284,7 @@ class Course extends Model implements Auditable
     public function scopeName($query, $name)
     {
         if ($name) {
-            return $query->orWhere('name', 'ilike', "%$name%");
+            return $query->Where('name', 'ilike', "%$name%");
         }
     }
 
@@ -319,7 +326,7 @@ class Course extends Model implements Auditable
     public function scopePublic($query, $public)
     {
         if ($public) {
-            return $query->orWhere('year', $public);
+            return $query->Where('public', $public);
         }
     }
 
@@ -333,7 +340,7 @@ class Course extends Model implements Auditable
     public function scopeState($query, $state)
     {
         if ($state) {
-            return $query->orWhere('state_id', $state->id);
+            return $query->Where('state_id', $state);
         }
     }
 

@@ -46,54 +46,6 @@ class ParticipantsSeeder extends Seeder
                 'name' => 'Por aprobar',
                 'type' => $catalogue['participant_state']['type'],
                 'description' => 'Estado del estudiante de reprobado en el curso'
-            ],
-            [
-                'code' => $catalogue['participant']['teacher'],
-                'name' => 'Docente',
-                'type' => $catalogue['participant']['type'],
-                'description' => 'Cuando un participante de un curso es un docente'
-            ],
-            [
-                'code' => $catalogue['participant']['private_company'],
-                'name' => 'Empresa privada',
-                'type' => $catalogue['participant']['type'],
-                'description' => 'Cuando un participante de un curso es parte de una empresa privada'
-            ],
-            [
-                'code' => $catalogue['participant']['public_company'],
-                'name' => 'Empresa pública',
-                'type' => $catalogue['participant']['type'],
-                'description' => 'Cuando un participante de un curso es parte de una empresa pública'
-            ],
-            [
-                'code' => $catalogue['participant']['training_company'],
-                'name' => 'Empresa formadora',
-                'type' => $catalogue['participant']['type'],
-                'description' => 'Cuando un participante del curso es parte de una empresa formadora'
-            ],
-            [
-                'code' => $catalogue['participant']['internal_student'],
-                'name' => 'Estudiante interno',
-                'type' => $catalogue['participant']['type'],
-                'description' => 'Cuando un participante de un curso es propio de la institución'
-            ],
-            [
-                'code' => $catalogue['participant']['external_student'],
-                'name' => 'Estudiante externo',
-                'type' => $catalogue['participant']['type'],
-                'description' => 'Cuando un participante de un curso es externo a la institución'
-            ],
-            [
-                'code' => $catalogue['participant']['senecyt_staff'],
-                'name' => 'Senecyt',
-                'type' => $catalogue['participant']['type'],
-                'description' => 'Cuando un participante de un curso es parte del personal de la senecyt'
-            ],
-            [
-                'code' => $catalogue['participant']['gad'],
-                'name' => 'GAD',
-                'type' => $catalogue['participant']['type'],
-                'description' => 'Cuando un participante de un curso es parte del GAD'
             ]
         )->create();
     }
