@@ -3,7 +3,7 @@
 namespace App\Http\Resources\V1\Cecy\Instructors;
 
 use App\Http\Resources\V1\Cecy\Catalogues\CatalogueResource;
-use App\Http\Resources\V1\Cecy\Users\UserResource;
+use App\Http\Resources\V1\Core\Users\UserResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class InstructorResource extends JsonResource

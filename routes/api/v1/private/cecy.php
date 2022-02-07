@@ -7,6 +7,7 @@ use App\Http\Controllers\V1\Cecy\GuanunaController;
 use App\Http\Controllers\V1\Cecy\PerezController;
 use App\Http\Controllers\V1\Cecy\CourseController;
 use App\Http\Controllers\V1\Cecy\DetailAttendanceController;
+use App\Http\Controllers\V1\Cecy\InstitutionController;
 use App\Http\Controllers\V1\Cecy\TopicController;
 use App\Http\Controllers\V1\Cecy\PrerequisiteController;
 use App\Http\Controllers\V1\Cecy\PlanificationController;
@@ -47,22 +48,27 @@ Route::prefix('catalogue/{catalogue}')->group(function () {
  **********************************************************************************************************************/
 Route::prefix('planification')->group(function () {
 
+<<<<<<< HEAD
     //prefix solo
     Route::get('planifications',[PlanificationController::class,'getPlanitifications']);
 
     Route::get('{course}', [PlanificationController::class, 'getPlanificationsByCourse']);
+=======
+    Route::get('planifications', [PlanificationController::class, 'getPlanitifications']);
+    Route::get('planfications-course/{course}', [PlanificationController::class, 'getPlanificationsByCourse']);
+>>>>>>> 55df63ce5b66bdf668d205b69e55432f3db26bd0
     Route::get('kpis/{state}', [PlanificationController::class, 'getKpi']);
     // tambien podria ser user/{users}/planification
-    Route::get('planifications-period-state',[PlanificationController::class, 'getPlanificationsByPeriodState']);
-    Route::get('course_parallels-works',[PlanificationController::class, 'getCoursesParallelsWorkdays']);
+    Route::get('planifications-period-state', [PlanificationController::class, 'getPlanificationsByPeriodState']);
+    Route::get('course_parallels-works', [PlanificationController::class, 'getCoursesParallelsWorkdays']);
 });
 
 Route::prefix('planification/{planification}')->group(function () {
     Route::put('dates-and-needs-planifications', [PlanificationController::class, 'updateDatesAndNeedsInPlanification']);
-    Route::post('create-planifications-course',[PlanificationController::class, 'storePlanificationByCourse']);
-    Route::put('planifications-cecy',[PlanificationController::class, 'updatePlanificationByCecy']);
-    Route::put('assign-code-planification',[PlanificationController::class, 'assignCodeToPlanification']);
-    Route::put('approve-planification',[PlanificationController::class, 'approvePlanification']);
+    Route::post('create-planifications-course', [PlanificationController::class, 'storePlanificationByCourse']);
+    Route::put('planifications-cecy', [PlanificationController::class, 'updatePlanificationByCecy']);
+    Route::put('assign-code-planification', [PlanificationController::class, 'assignCodeToPlanification']);
+    Route::put('approve-planification', [PlanificationController::class, 'approvePlanification']);
 });
 
 /***********************************************************************************************************************
@@ -85,9 +91,15 @@ Route::prefix('detailPlanification/{detailPlanification}')->group(function () {
  **********************************************************************************************************************/
 Route::prefix('topics')->group(function () {
     Route::get('{course}', [TopicController::class, 'getTopics']);
+<<<<<<< HEAD
     Route::post('{course}', [TopicController::class, 'storeTopic']);
     Route::put('{course}/{topic}', [TopicController::class, 'updateTopic']);
     Route::delete('{topic}', [TopicController::class, 'destroyTopic']);
+=======
+    Route::post('/{course}', [TopicController::class, 'storeTopic']);
+    Route::put('/{course}/{topic}', [TopicController::class, 'updateTopic']);
+    Route::delete('/{topic}', [TopicController::class, 'destroyTopic']);
+>>>>>>> 55df63ce5b66bdf668d205b69e55432f3db26bd0
     Route::patch('', [TopicController::class, 'destroysTopics']);
 });
 
@@ -107,30 +119,29 @@ Route::prefix('prerequisites')->group(function () {
  **********************************************************************************************************************/
 Route::prefix('course')->group(function () {
     Route::patch('{course}', [CourseController::class, 'updateCourse']);
-    Route::get('public', [CourseController::class, 'getPublicCourses']);
-    Route::get('', [CourseController::class, 'getPublicCoursesByCategory']);
-    Route::get('', [CourseController::class, 'getPublicCoursesByName']);
-    Route::get('', [CourseController::class, 'getPrivateCoursesByParticipantType']);
-    Route::get('', [CourseController::class, 'getPrivateCoursesByCategory']);
-    Route::get('', [CourseController::class, 'getPrivateCoursesByName']);
-    Route::get('', [CourseController::class, 'getCoursesByResponsibleCourse']);
-    Route::get('', [CourseController::class, '']);
     Route::patch('{course}', [CourseController::class, 'updateGeneralInformationCourse']);
-    Route::get('', [CourseController::class, 'getCoursesByCoordinator']);
-    Route::get('', [CourseController::class, 'getCoursesKPI']);
-    Route::patch('', [CourseController::class, 'assignCodeToCourse']);
+    Route::patch('{course}', [CourseController::class, 'assignCodeToCourse']);
     Route::patch('{course}', [CourseController::class, 'approveCourse']);
     Route::get('{course}', [CourseController::class, 'showInformCourseNeeds']);
-    Route::get('', [CourseController::class, 'showYearSchedule']);
     Route::get('{course}', [CourseController::class, 'showCurricularDesign']);
     Route::get('{course}', [CourseController::class, 'showFinalCourseReport']);
-    Route::get('{career}', [CourseController::class, 'getCoursesByInstructor']);
+    Route::get('{career}', [CourseController::class, 'getCoursesByCareer']);
     Route::post('{course}', [CourseController::class, 'storeCourseNew']);
 });
 
 Route::prefix('courses')->group(function () {
     Route::get('', [CourseController::class, 'getCourses']);
-    Route::get('', [CourseController::class, 'getCoursesByInstructor']);
+    Route::get('public-courses', [CourseController::class, 'getPublicCourses']);
+    Route::get('public-courses-category', [CourseController::class, 'getPublicCoursesByCategory']);
+    Route::get('public-courses-name', [CourseController::class, 'getPublicCoursesByName']);
+    Route::get('private-courses-participant', [CourseController::class, 'getPrivateCoursesByParticipantType']);
+    Route::get('private-courses-category', [CourseController::class, 'getPrivateCoursesByCategory']);
+    Route::get('private-courses-name', [CourseController::class, 'getPrivateCoursesByName']);
+    Route::get('courses-responsible', [CourseController::class, 'getCoursesByResponsibleCourse']);
+    Route::get('courses-instructor', [CourseController::class, 'getCoursesByInstructor']);
+    Route::get('courses-coodinator', [CourseController::class, 'getCoursesByCoordinator']);
+    Route::get('courses-kpi', [CourseController::class, 'getCoursesKPI']);
+    Route::get('year-schedule', [CourseController::class, 'showYearSchedule']);
 });
 
 /***********************************************************************************************************************
@@ -139,6 +150,26 @@ Route::prefix('courses')->group(function () {
 
 Route::prefix('detailAttendance')->group(function () {
     Route::get('course/{course}', [DetailAttendanceController::class, 'showAttedanceParticipant']);
-    Route::patch('/{detailAttendance}',[DetailAttendanceController::class,'updatDetailAttendanceTeacher']);
+    Route::patch('/{detailAttendance}', [DetailAttendanceController::class, 'updatDetailAttendanceTeacher']);
 });
 
+/***********************************************************************************************************************
+ * CERTIFICATES
+ **********************************************************************************************************************/
+Route::prefix('certificate')->group(function () {
+    Route::get('catalogue/{catalogue}/file/{file}', [CertificateController::class, 'downloadFileCertificates']);
+    Route::get('registration/{registration}/catalogue/{catalogue}/file/{file}', [CertificateController::class, 'downloadFileCertificates']);
+    Route::post('catalogue/{catalogue}', [CertificateController::class, 'uploadFileCertificate']);
+    Route::post('firm/catalogue/{catalogue}', [CertificateController::class, 'uploadFileCertificateFirm']);
+});
+
+/*****************************************
+ * Institution ROUTES
+ ****************************************/
+
+Route::apiResource('institutions', InstitutionController::class);
+
+
+Route::prefix('institution')->group(function () {
+    Route::patch('{institution}', [InstitutionController::class, 'destroys']);
+});
