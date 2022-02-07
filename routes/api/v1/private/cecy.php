@@ -47,16 +47,11 @@ Route::prefix('catalogue/{catalogue}')->group(function () {
  * PLANIFICATIONS
  **********************************************************************************************************************/
 Route::prefix('planification')->group(function () {
-
-<<<<<<< HEAD
     //prefix solo
     Route::get('planifications',[PlanificationController::class,'getPlanitifications']);
-
     Route::get('{course}', [PlanificationController::class, 'getPlanificationsByCourse']);
-=======
     Route::get('planifications', [PlanificationController::class, 'getPlanitifications']);
     Route::get('planfications-course/{course}', [PlanificationController::class, 'getPlanificationsByCourse']);
->>>>>>> 55df63ce5b66bdf668d205b69e55432f3db26bd0
     Route::get('kpis/{state}', [PlanificationController::class, 'getKpi']);
     // tambien podria ser user/{users}/planification
     Route::get('planifications-period-state', [PlanificationController::class, 'getPlanificationsByPeriodState']);
@@ -91,15 +86,12 @@ Route::prefix('detailPlanification/{detailPlanification}')->group(function () {
  **********************************************************************************************************************/
 Route::prefix('topics')->group(function () {
     Route::get('{course}', [TopicController::class, 'getTopics']);
-<<<<<<< HEAD
     Route::post('{course}', [TopicController::class, 'storeTopic']);
     Route::put('{course}/{topic}', [TopicController::class, 'updateTopic']);
     Route::delete('{topic}', [TopicController::class, 'destroyTopic']);
-=======
     Route::post('/{course}', [TopicController::class, 'storeTopic']);
     Route::put('/{course}/{topic}', [TopicController::class, 'updateTopic']);
     Route::delete('/{topic}', [TopicController::class, 'destroyTopic']);
->>>>>>> 55df63ce5b66bdf668d205b69e55432f3db26bd0
     Route::patch('', [TopicController::class, 'destroysTopics']);
 });
 
