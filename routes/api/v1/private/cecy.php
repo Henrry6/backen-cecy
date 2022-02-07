@@ -59,7 +59,6 @@ Route::prefix('institution')->group(function () {
  **********************************************************************************************************************/
 Route::prefix('planification')->group(function () {
     //prefix solo
-    Route::get('planifications',[PlanificationController::class,'getPlanitifications']);
     Route::get('{course}', [PlanificationController::class, 'getPlanificationsByCourse']);
     Route::get('planifications', [PlanificationController::class, 'getPlanitifications']);
     Route::get('planfications-course/{course}', [PlanificationController::class, 'getPlanificationsByCourse']);
@@ -76,6 +75,9 @@ Route::prefix('planification/{planification}')->group(function () {
     Route::put('assign-code-planification', [PlanificationController::class, 'assignCodeToPlanification']);
     Route::put('approve-planification', [PlanificationController::class, 'approvePlanification']);
 });
+
+Route::apiResource('planifications',[PlanificationController::class]);
+
 
 /***********************************************************************************************************************
  * DETAIL PLANIFICATIONS
