@@ -40,7 +40,6 @@ class CourseResource extends JsonResource
             'duration' => $this->duration,
             'evaluationMechanisms' => $this->evaluation_mechanisms,
             'expiredAt' => $this->expired_at,
-            'facilities' => $this->facilities,
             'free' => $this->free,
             'name' => $this->name,
             'needs' => $this->needs,
@@ -50,12 +49,17 @@ class CourseResource extends JsonResource
             'localProposal' => $this->local_proposal,
             'objective' => $this->objective,
             'observation' => $this->observation,
-            'practicalPhase' => $this->practical_phase,
             'practiceHours' => $this->practice_hours,
             'proposedAt' => $this->proposed_at,
             'project' => $this->project,
+            'public' => $this->public,
             'requiredInstallingSources' => $this->required_installing_sources,
             'setecName' => $this->setec_name,
+            'summary' => $this->summary,
+            'targetGroups' => $this->target_groups,
+            'teachingStrategies' => $this->teaching_strategies,
+            'techniquesRequisites' => $this->techniques_requisites,
+            'theoryHours' => $this->techniques_requisites,
         ];
     }
 }

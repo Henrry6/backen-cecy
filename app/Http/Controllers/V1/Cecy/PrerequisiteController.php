@@ -74,7 +74,7 @@ class PrerequisiteController extends Controller
 
     // Eliminda los prerequisitos para un curso
     // PrerequisteController
-    public function DestroyPrerequisite(Prerequisite $prerequisite)
+    public function destroyPrerequisite(Prerequisite $prerequisite)
     {
         $prerequisite->delete();
         return (new PrerequisiteResource($prerequisite))

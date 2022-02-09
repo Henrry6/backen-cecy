@@ -52,7 +52,7 @@ class StoreCourseRequest extends FormRequest
       'practiceHours' => ['required', 'integer'],
       'proposedAt' => ['required', 'date'],
       'project' => ['required', 'string', 'max:1000'],
-      'public' => ['required', 'string', 'boolean'],
+      'public' => ['required', 'boolean'],
       'requiredInstallingSources' => ['required', 'json'],
       'setecName' => ['required',  'string', 'max:100'],
       'summary' => ['required',  'string', 'max:1000'],

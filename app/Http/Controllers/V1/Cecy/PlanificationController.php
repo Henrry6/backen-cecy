@@ -95,7 +95,7 @@ class PlanificationController extends Controller
     // PlanificationController ya esta, no trae la informacion .
     public function getKpi(ShowKpiRequest $request, Catalogue $state)
     {
-
+        
         $planifications = Planification::withCount([
             'id' => function (Builder $query) {
                 $query->where(
@@ -105,16 +105,16 @@ class PlanificationController extends Controller
             },
         ])->get();
 
-        return (new KpiPlanificationResourse($planifications[0]))
-            ->additional([
-                'msg' => [
-                    'summary' => 'success',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ])
-            ->response()->setStatusCode(200);
-    }
+    //     return (new KpiPlanificationResourse($planifications[0]))
+    //         ->additional([
+    //             'msg' => [
+    //                 'summary' => 'success',
+    //                 'detail' => '',
+    //                 'code' => '200'
+    //             ]
+    //         ])
+    //         ->response()->setStatusCode(200);
+    // }
 
     //Trae todos los cursos
     // PlanificationController ya esta
