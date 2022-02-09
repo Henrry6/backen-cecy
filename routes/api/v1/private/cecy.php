@@ -104,7 +104,7 @@ Route::prefix('topics')->group(function () {
     Route::post('/{course}', [TopicController::class, 'storeTopic']);
     Route::put('/{course}/{topic}', [TopicController::class, 'updateTopic']);
     Route::delete('/{topic}', [TopicController::class, 'destroyTopic']);
-    Route::patch('', [TopicController::class, 'destroysTopics']);
+    Route::patch('/destroys', [TopicController::class, 'destroysTopics']);
 });
 
 /***********************************************************************************************************************
@@ -115,7 +115,7 @@ Route::prefix('prerequisites')->group(function () {
     Route::post('/{course}', [PrerequisiteController::class, 'storePrerequisite']);
     Route::put('/{course}/{prerequisite}', [PrerequisiteController::class, 'updatePrerequisite']);
     Route::delete('/{prerequisite}', [PrerequisiteController::class, 'DestroyPrerequisite']);
-    Route::patch('', [PrerequisiteController::class, 'destroysPrerequisites']);
+    Route::patch('/destroys', [PrerequisiteController::class, 'destroysPrerequisites']);
 });
 
 
