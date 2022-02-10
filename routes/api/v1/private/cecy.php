@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\V1\Cecy\CatalogueController;
+use App\Http\Controllers\V1\Cecy\CertificateController;
 use App\Http\Controllers\V1\Cecy\ClassroomController;
 use App\Http\Controllers\V1\Cecy\GuachagmiraController;
 use App\Http\Controllers\V1\Cecy\GuanunaController;
@@ -162,8 +163,8 @@ Route::prefix('detailAttendance')->group(function () {
  * CERTIFICATES
  **********************************************************************************************************************/
 Route::prefix('certificate')->group(function () {
+    Route::post('registration/{registration}/catalogue/{catalogue}/file/{file}', [CertificateController::class, 'downloadCertificateByParticipant']);
     Route::get('catalogue/{catalogue}/file/{file}', [CertificateController::class, 'downloadFileCertificates']);
-    Route::get('registration/{registration}/catalogue/{catalogue}/file/{file}', [CertificateController::class, 'downloadFileCertificates']);
     Route::post('catalogue/{catalogue}', [CertificateController::class, 'uploadFileCertificate']);
     Route::post('firm/catalogue/{catalogue}', [CertificateController::class, 'uploadFileCertificateFirm']);
 });
