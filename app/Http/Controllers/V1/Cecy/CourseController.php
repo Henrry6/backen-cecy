@@ -77,13 +77,14 @@ class CourseController extends Controller
     }
 
     // Obtiene los cursos públicos aprobados por categoria (Done)
-    public function getPublicCoursesByCategory(GetCoursesByCategoryRequest $request)
+    public function getPublicCoursesByCategory(GetCoursesByCategoryRequest $request,Catalogue $category)
     {
         $sorts = explode(',', $request->input('sort'));
 
         $courseApproved = $this->getApprovedCourses();
+
         $courses =  Course::customOrderBy($sorts)
-            ->category($request->input('category.id'))
+            ->category($category->id)
             ->public(true)
             ->state($courseApproved->id)
             ->get();

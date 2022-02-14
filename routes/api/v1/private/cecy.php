@@ -137,7 +137,7 @@ Route::prefix('course')->group(function () {
 Route::prefix('courses')->group(function () {
     Route::get('', [CourseController::class, 'getCourses']);
     Route::get('public-courses', [CourseController::class, 'getPublicCourses']);
-    Route::get('public-courses-category', [CourseController::class, 'getPublicCoursesByCategory']);
+    Route::get('public-courses-category/{category}', [CourseController::class, 'getPublicCoursesByCategory']);
     Route::get('public-courses-name', [CourseController::class, 'getPublicCoursesByName']);
     Route::get('private-courses-participant', [CourseController::class, 'getPrivateCoursesByParticipantType']);
     Route::get('private-courses-category', [CourseController::class, 'getPrivateCoursesByCategory']);
