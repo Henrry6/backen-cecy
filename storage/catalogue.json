@@ -255,5 +255,5 @@
         "type": "PERIOD_STATE",
         "current": "CURRENT",
         "past": "PAST"
-    },
+    }
 }
