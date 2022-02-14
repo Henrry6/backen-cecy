@@ -29,7 +29,8 @@ class TopicController extends Controller
     // TopicController
     public function getTopics(Course $course)
     {
-        $topics = $course->topics()->get();
+        $topics = Topic::Where('course_id', $course);
+        // $topics = $course->topics()->get();
         return (new TopicCollection($topics))
             ->additional([
                 'msg' => [
@@ -47,7 +48,7 @@ class TopicController extends Controller
         $topic = new Topic();
         $topic->course()->associate($course);
         $topic->level = $request->input('level');
-        $topic->parent()->associate($topic);
+        $topic->children()->associate($request->input('parent.id'));
         $topic->description = $request->input('description');
         $topic->save();
         return (new TopicResource($topic))

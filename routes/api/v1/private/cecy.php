@@ -97,10 +97,7 @@ Route::prefix('detailPlanification/{detailPlanification}')->group(function () {
  * TOPICS
  **********************************************************************************************************************/
 Route::prefix('topics')->group(function () {
-    Route::get('{course}', [TopicController::class, 'getTopics']);
-    Route::post('{course}', [TopicController::class, 'storeTopic']);
-    Route::put('{course}/{topic}', [TopicController::class, 'updateTopic']);
-    Route::delete('{topic}', [TopicController::class, 'destroyTopic']);
+    Route::get('/{course}', [TopicController::class, 'getTopics']);
     Route::post('/{course}', [TopicController::class, 'storeTopic']);
     Route::put('/{course}/{topic}', [TopicController::class, 'updateTopic']);
     Route::delete('/{topic}', [TopicController::class, 'destroyTopic']);

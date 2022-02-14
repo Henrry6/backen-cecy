@@ -10,6 +10,7 @@ class TopicResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            // 'course' => Course::make($this->course),
             'children' => TopicResource::make($this->children),
             'level' => $this->level,
             'description' => $this->description,
