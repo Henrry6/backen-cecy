@@ -2,9 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\V1\Cecy\CatalogueController;
+use App\Http\Controllers\V1\Cecy\CertificateController;
 use App\Http\Controllers\V1\Cecy\ClassroomController;
 use App\Http\Controllers\V1\Cecy\GuachagmiraController;
-use App\Http\Controllers\V1\Cecy\GuanunaController;
 use App\Http\Controllers\V1\Cecy\PerezController;
 use App\Http\Controllers\V1\Cecy\CourseController;
 use App\Http\Controllers\V1\Cecy\DetailAttendanceController;
@@ -134,7 +134,7 @@ Route::prefix('course')->group(function () {
 Route::prefix('courses')->group(function () {
     Route::get('', [CourseController::class, 'getCourses']);
     Route::get('public-courses', [CourseController::class, 'getPublicCourses']);
-    Route::get('public-courses-category', [CourseController::class, 'getPublicCoursesByCategory']);
+    Route::get('public-courses-category/{category}', [CourseController::class, 'getPublicCoursesByCategory']);
     Route::get('public-courses-name', [CourseController::class, 'getPublicCoursesByName']);
     Route::get('private-courses-participant', [CourseController::class, 'getPrivateCoursesByParticipantType']);
     Route::get('private-courses-category', [CourseController::class, 'getPrivateCoursesByCategory']);
@@ -159,8 +159,8 @@ Route::prefix('detailAttendance')->group(function () {
  * CERTIFICATES
  **********************************************************************************************************************/
 Route::prefix('certificate')->group(function () {
+    Route::post('registration/{registration}/catalogue/{catalogue}/file/{file}', [CertificateController::class, 'downloadCertificateByParticipant']);
     Route::get('catalogue/{catalogue}/file/{file}', [CertificateController::class, 'downloadFileCertificates']);
-    Route::get('registration/{registration}/catalogue/{catalogue}/file/{file}', [CertificateController::class, 'downloadFileCertificates']);
     Route::post('catalogue/{catalogue}', [CertificateController::class, 'uploadFileCertificate']);
     Route::post('firm/catalogue/{catalogue}', [CertificateController::class, 'uploadFileCertificateFirm']);
 });

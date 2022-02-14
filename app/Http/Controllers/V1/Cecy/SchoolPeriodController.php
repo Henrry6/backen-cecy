@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\V1\Cecy\DetailPlanifications\DestroysSchoolPeriodsRequest;
-use App\Http\Requests\V1\Cecy\DetailPlanifications\StoreSchoolPeriodsRequest;
-use App\Http\Requests\V1\Cecy\DetailPlanifications\UpdateSchoolPeriodsRequest;
-use App\Http\Requests\V1\Cecy\SchoolPeriods\IndexSchoolPeriodsRequest;
+use App\Http\Requests\V1\Cecy\SchoolPeriods\DestroysSchoolPeriodsRequest;
+use App\Http\Requests\V1\Cecy\SchoolPeriods\StoreSchoolPeriodsRequest;
+use App\Http\Requests\V1\Cecy\SchoolPeriods\UpdateSchoolPeriodsRequest;
 use App\Http\Resources\V1\Cecy\SchoolPeriods\SchoolPeriodResource;
 use App\Http\Resources\V1\Cecy\SchoolPeriods\SchoolPeriodsCollection;
 use App\Models\Cecy\Catalogue;
@@ -44,7 +43,7 @@ class SchoolPeriodController extends Controller
     }
     //Crea una periodo escolar
     public function store(StoreSchoolPeriodsRequest $request)
-    {        
+    {
         $schooolperiod = new SchoolPeriod();
         $schooolperiod->type()->associate(Catalogue::find($request->input('state.id')));
         $schooolperiod->code = $request->input('code');
@@ -88,7 +87,7 @@ class SchoolPeriodController extends Controller
     //Elimina un periodo escolar
     public function destroy (Request $request, SchoolPeriod $schooolperiod)
     {
-        
+
         $schooolperiod->delete();
 
         return (new SchoolPeriodResource($schooolperiod))

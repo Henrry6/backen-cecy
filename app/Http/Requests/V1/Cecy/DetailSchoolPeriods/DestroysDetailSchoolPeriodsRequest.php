@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\V1\Cecy\DetailPlanifications;
+namespace App\Http\Requests\V1\Cecy\DetailSchoolPeriods;
 
 use Illuminate\Foundation\Http\FormRequest;
 

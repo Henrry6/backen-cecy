@@ -26,7 +26,6 @@ class AdditionalInformationController extends Controller
     }
     public function index(IndexAdditionalInformationRequest $request)
     {
-
         $sorts = explode(',', $request->sort);
 
         $additionalInformations = AdditionalInformation::customOrderBy($sorts)
