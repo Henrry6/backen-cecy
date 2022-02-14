@@ -177,12 +177,6 @@
         "cancelled": "CANCELLED",
         "in_review": "IN_REVIEW"
     },
-    "registration_type": {
-        "type": "PARTICIPANT_TYPE",
-        "ordinary": "ORDINARY",
-        "extraordinary": "EXTRAORDINARY",
-        "special ": "SPECIAL"
-    },
     "participant_state": {
         "type": "PARTICIPANT_STATE",
         "approved": "APPROVED",
@@ -245,6 +239,12 @@
         "undergraduate": "UNDERGRADUATE",
         "mastery": "MASTERY",
         "doctorate": "DOCTORATE"
+    },
+    "registration": {
+        "type": "REGISTRATION",
+        "special": "SPECIAL",
+        "ordinary": "ORDINARY",
+        "extraordinary": "EXTRAORDINARY"
     },
     "requirement_state": {
         "type": "REQUIREMENT_STATE",
