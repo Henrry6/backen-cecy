@@ -37,7 +37,11 @@ class CreateCecyRegistrationsTable extends Migration
                 ->nullable()
                 ->comment('Tipo de matrícula: Ordinaria, extraordinaria, o especial')
                 ->constrained('cecy.catalogues');
-            
+
+            $table->foreignId('type_participant_id')
+                ->nullable()
+                ->comment('Tipo de participante: Externo, docente, GAD, senecyt')
+                ->constrained('cecy.catalogues');
 
             $table->unsignedFloat('final_grade')
                 ->nullable()

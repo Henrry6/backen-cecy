@@ -31,11 +31,11 @@ class CreateCecyDetailSchoolPeriodsTable extends Migration
             $table->date('extraordinary_started_at')
                 ->comment('fecha de inicio periodo extraordinario');
 
-            $table->date('invalidate_ended_at')
+            $table->date('nullification_ended_at')
                 ->nullable()
                 ->comment('fecha de inicio de anulación de matrícula');
 
-            $table->date('invalidate_started_at')
+            $table->date('nullification_started_at')
                 ->nullable()
                 ->comment('fecha de fin de anulación de matrícula');
 
