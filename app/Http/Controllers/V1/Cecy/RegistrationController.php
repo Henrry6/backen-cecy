@@ -6,8 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Cecy\Certificates\ShowParticipantsRequest;
 use App\Http\Requests\V1\Cecy\Courses\GetCoursesByNameRequest;
 use App\Http\Requests\V1\Cecy\Participants\GetCoursesByParticipantRequest;
+use App\Http\Requests\V1\Cecy\Registrations\RegisterStudentRequest;
 use App\Http\Requests\V1\Core\Files\UploadFileRequest;
 use App\Http\Resources\V1\Cecy\Registrations\RegisterStudentCollection;
+use App\Http\Resources\V1\Cecy\Registrations\RegisterStudentResource;
+use App\Models\Cecy\AdditionalInformation;
 use App\Models\Cecy\Course;
 use App\Http\Requests\V1\Cecy\Registrations\IndexRegistrationRequest;
 use App\Http\Resources\V1\Cecy\Certificates\CertificateResource;
@@ -22,6 +25,7 @@ use App\Models\Cecy\Participant;
 use App\Models\Cecy\Registration;
 use App\Models\Core\File;
 use http\Env\Request;
+use Illuminate\Support\Facades\DB;
 
 class RegistrationController extends Controller
 {
@@ -110,7 +114,7 @@ class RegistrationController extends Controller
 
     /*DDRC-C: elimina una matricula de un participante en un curso especifico */
     // RegistrationController
-    public function nullifyRegistration(Registration $registration, Request $request)
+    public function nullifyRegistration(Request $request ,Registration $registration )
     {
         $registrations = Registration::whereIn('id', $request->input('id'))->get();
         $registrations->state()->associate(Catalogue::find($request->input('state.id')));
@@ -199,6 +203,57 @@ class RegistrationController extends Controller
     public function destroyFile(Catalogue $catalogue, File $file)
     {
         return $catalogue->destroyFile($file);
+    }
+    // registrar estudiante al curso con la informacion adicional
+
+    public function registerStudent(RegisterStudentRequest $request)
+    {
+        $participant = Participant::firstWhere('user_id', $request->user()->id);
+
+        $registration = new Registration();
+        $registration->participant()->associate($participant);
+        $registration->type()->associate(Catalogue::find($request->input('type.id')));
+        $registration->state()->associate(Catalogue::find($request->input('state.id')));
+        $registration->typeParticipant()->associate(Catalogue::find($request->input('type_participant.id')));
+        $registration->number = $request->input('number');
+        $registration->registered_at = $request->input('registeredAt');
+
+        DB::transaction(function ($registration, $request) {
+            $registration->save();
+            $additionalInformation = $this->storeAdditionalInformation($request, $registration);
+            $additionalInformation->save();
+        });
+
+        return (new RegisterStudentResource($registration))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Registro Creado',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ]);
+    }
+
+    // llenar informacion adicional de la solicitud de matricula
+    private function storeAdditionalInformation(RegisterStudentRequest $request, Registration $registration)
+    {
+        $additionalInformation = new AdditionalInformation();
+
+        $additionalInformation->registration()->associate($registration);
+
+        $additionalInformation->levelInstruction()->associate(Catalogue::find($request->input('level_instruction.id')));
+        $additionalInformation->worked = $request->input('worked');
+        $additionalInformation->company_activity = $request->input('companyActivity');
+        $additionalInformation->company_address = $request->input('companyAddress');
+        $additionalInformation->company_email = $request->input('companyEmail');
+        $additionalInformation->company_name = $request->input('companyName');
+        $additionalInformation->company_phone = $request->input('companyPhone');
+        $additionalInformation->company_sponsored = $request->input('companySponsored');
+        $additionalInformation->contact_name = $request->input('contactName');
+        $additionalInformation->course_knows = $request->input('courseKnows');
+        $additionalInformation->course_follows = $request->input('courseFollows');
+
+        return $additionalInformation;
     }
 
 }

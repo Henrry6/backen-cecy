@@ -20,19 +20,18 @@ class RegistrationResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'detail_planification.id' => DetailPlanificationResource::make($this->detailPlanification),
-            'participant.id' => ParticipantResource::make($this->participant),
-            'state.id' => CatalogueResource::make($this->state),
-            'stateCourse.id' => Catalogue::make($this->stateCourse),
-            'type.id' => CatalogueResource::make($this->type),
-            'typeParticipant.id' => CatalogueResource::make($this->typeParticipant),
-            'participants' => ParticipantResource::collection($this->participants),
+            'id' => $this->id,
+            'participant' => ParticipantResource::make($this->participant),
+            'state' => CatalogueResource::make($this->state),
+            'stateCourse' => CatalogueResource::make($this->stateCourse),
+            'type' => CatalogueResource::make($this->type),
+            'typeParticipant' => CatalogueResource::make($this->typeParticipant),
             'finalGrade' => $this->final_grade,
             'grade1' => $this->grade1,
             'grade2' => $this->grade2,
             'number' => $this->number,
             'observations' => $this->observations,
-            'registeredAt' => $this->registered_at,
+            'registeredAt' => $this->registered_at
         ];
     }
 }

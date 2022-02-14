@@ -19,7 +19,7 @@ use App\Models\Core\File;
 
 class CertificateController extends Controller
 {
- //Descargar certificado del curso
+    //Descargar certificado del curso
     // CertificateController
     public function downloadCertificateByParticipant(IndexCertificateRequest $request, Registration $registration, Catalogue $catalogue, File $file)
     {
@@ -31,28 +31,24 @@ class CertificateController extends Controller
     }
 
     //Subir certificado Firmado
-// CerticateController
-public function uploadFileCertificateFirm(UploadFileRequest $request, Catalogue $catalogue)
-{
+    // CerticateController
+    public function uploadFileCertificateFirm(UploadFileRequest $request, Catalogue $catalogue)
+    {
 
-    return $catalogue->uploadFileCertificateFirm($request);
+        return $catalogue->uploadFileCertificateFirm($request);
+    }
+
+    //Carga de codigos certificado excel
+    // CerticateController
+    public function uploadFileCertificate(UploadFileRequest $request, Catalogue $catalogue)
+    {
+        return $catalogue->uploadFileCertificate($request);
+    }
+
+    //Descarga de certificados generados
+    // CerticateController
+    public function downloadFileCertificates(Catalogue $catalogue, File $file)
+    {
+        return $catalogue->downloadFileCertificates($file);
+    }
 }
-
-//Carga de codigos certificado excel
-// CerticateController
-public function uploadFileCertificate(UploadFileRequest $request, Catalogue $catalogue)
-{
-    return $catalogue->uploadFileCertificate($request);
-}
-
- //Descarga de certificados generados
-// CerticateController
-public function downloadFileCertificates(Catalogue $catalogue, File $file)
-{
-    return $catalogue->downloadFileCertificates($file);
-}
-
-
-}
-
-

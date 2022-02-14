@@ -17,8 +17,6 @@ class GetDateByshowYearScheduleRequest extends FormRequest
             'startedAt' => ['required', 'date'],
             'sector.id' => ['required', 'integer'],
             'area.id' => ['required', 'integer'],
-
-
         ];
     }
 
@@ -28,7 +26,6 @@ class GetDateByshowYearScheduleRequest extends FormRequest
             'startedAt' => 'fecha de la planificacion',
             'sector.id' => 'sector de la planificacion',
             'area.id' => 'area de la planificacion',
-
         ];
     }
 }

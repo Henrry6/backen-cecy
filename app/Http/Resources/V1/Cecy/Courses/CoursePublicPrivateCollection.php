@@ -6,6 +6,7 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class CoursePublicPrivateCollection extends ResourceCollection
 {
+
     public function toArray($request)
     {
         return [

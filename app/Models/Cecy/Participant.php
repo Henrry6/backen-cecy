@@ -22,6 +22,7 @@ class Participant extends Model implements Auditable
     protected $casts = [
         'observations' => 'array',
     ];
+
     // Relationships
 
     public function type()
@@ -33,15 +34,31 @@ class Participant extends Model implements Auditable
     {
         return $this->belongsTo(User::class);
     }
+
     public function state()
     {
         return $this->belongsTo(Catalogue::class);
     }
+
     public function registration()
     {
-        $this->hasMany(Registration::class);
+        return $this->hasMany(Registration::class);
     }
 
+    //Scopes
+    public function scopeType($query, $type)
+    {
+        if ($type) {
+            return $query->Where('type_id', $type->id);
+        }
+    }
+
+    public function scopeUser($query, $user)
+    {
+        if ($user) {
+            return $query->Where('user_id', $user->id);
+        }
+    }
 
     public function scopeCustomOrderBy($query, $sorts)
     {

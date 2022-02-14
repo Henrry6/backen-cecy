@@ -197,6 +197,12 @@ class CoursesSeeder extends Seeder
                 'description' => 'Cuando el curso esta dedicado para participantes de una empresa privada'
             ],
             [
+                'code' => $catalogue['participant']['training_company'],
+                'name' => 'Empresa formadora',
+                'type' => $catalogue['participant']['type'],
+                'description' => 'Cuando un participante del curso es parte de una empresa formadora'
+            ],
+            [
                 'code' => $catalogue['participant']['external_student'],
                 'name' => 'Estudiante externo',
                 'type' => $catalogue['participant']['type'],
@@ -250,25 +256,25 @@ class CoursesSeeder extends Seeder
             [
                 'name' => 'Administración General (Pública, Empresas, Microempresas, Cooperativas, Aduanera, Agrícola, Agropecuaria, Agroindustrial, Bancaria, Financiera, Forestal, Hospitalaria, Hotelera, Inmobiliaria, Pesquera, Minera, Etc.)',
                 'type' => $catalogue['speciality_area']['type'],
-//                'parent_id' => (Catalogue::firstWhere('code', $catalogue['area']['a']))->id
+                //                'parent_id' => (Catalogue::firstWhere('code', $catalogue['area']['a']))->id
                 'parent_id' => 1
             ],
             [
                 'name' => 'Gestión del Talento Humano (Manejo de Personal, Desempeño, Motivación, Liderazgo, Coaching, Trabajo en Equipo, Selección por Competencias, Plan Interno de Carrera, Comunicación Organizacional, Profesiogramas)',
                 'type' => $catalogue['speciality_area']['type'],
-//                'parent_id' => (Catalogue::firstWhere('code', $catalogue['area']['a']))->id
+                //                'parent_id' => (Catalogue::firstWhere('code', $catalogue['area']['a']))->id
                 'parent_id' => 2
             ],
             [
                 'name' => 'Administración de Costos',
                 'type' => $catalogue['speciality_area']['type'],
-//                'parent_id' => (Catalogue::firstWhere('code', $catalogue['area']['b']))->id
+                //                'parent_id' => (Catalogue::firstWhere('code', $catalogue['area']['b']))->id
                 'parent_id' => 3
             ],
             [
                 'name' => 'Administración Contable',
                 'type' => $catalogue['speciality_area']['type'],
-//                'parent_id' => (Catalogue::firstWhere('code', $catalogue['area']['b']))->id
+                //                'parent_id' => (Catalogue::firstWhere('code', $catalogue['area']['b']))->id
                 'parent_id' => 4
             ]
         )->create();

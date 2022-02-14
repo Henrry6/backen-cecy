@@ -4,6 +4,7 @@ namespace App\Http\Resources\V1\Cecy\Courses;
 
 use App\Http\Resources\V1\Cecy\Catalogues\CatalogueResource;
 use App\Http\Resources\V1\Cecy\Instructors\InstructorResource;
+use App\Http\Resources\V1\Cecy\Planifications\PlanificationResource;
 use App\Http\Resources\V1\Core\CareerResource;
 use App\Models\Cecy\Catalogue;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -16,7 +17,7 @@ class CourseResource extends JsonResource
             'id' => $this->id,
             'academicPeriod' => CatalogueResource::make($this->academicPeriod),
             'area' => CatalogueResource::make($this->area),
-            'entityCertification' => Catalogue::make($this->entityCertification),
+            'entityCertification' => CatalogueResource::make($this->entityCertification),
             'career' => CareerResource::make($this->career),
             'category' => CatalogueResource::make($this->category),
             'formationType' => CatalogueResource::make($this->formationType),
@@ -26,7 +27,7 @@ class CourseResource extends JsonResource
             'courseType' => CatalogueResource::make($this->courseType),
             'frequency' => CatalogueResource::make($this->frequency),
             'modality' => CatalogueResource::make($this->modality),
-            'meanVerification' => Catalogue::make($this->meanVerification),
+            'meanVerification' => CatalogueResource::make($this->meanVerification),
             'responsible' => InstructorResource::make($this->responsible),
             'speciality' => CatalogueResource::make($this->speciality),
             'state' => CatalogueResource::make($this->state),
@@ -39,7 +40,6 @@ class CourseResource extends JsonResource
             'duration' => $this->duration,
             'evaluationMechanisms' => $this->evaluation_mechanisms,
             'expiredAt' => $this->expired_at,
-            'facilities' => $this->facilities,
             'free' => $this->free,
             'name' => $this->name,
             'needs' => $this->needs,
@@ -49,18 +49,17 @@ class CourseResource extends JsonResource
             'localProposal' => $this->local_proposal,
             'objective' => $this->objective,
             'observation' => $this->observation,
-            'practicalPhase' => $this->practical_phase,
             'practiceHours' => $this->practice_hours,
             'proposedAt' => $this->proposed_at,
             'project' => $this->project,
+            'public' => $this->public,
             'requiredInstallingSources' => $this->required_installing_sources,
             'setecName' => $this->setec_name,
             'summary' => $this->summary,
-            'targetGroups' => $this->target_group,
+            'targetGroups' => $this->target_groups,
             'teachingStrategies' => $this->teaching_strategies,
             'techniquesRequisites' => $this->techniques_requisites,
-            'theoreticalPhase' => $this->theoretical_phase,
-            'theoryHours' => $this->theory_hours
+            'theoryHours' => $this->techniques_requisites,
         ];
     }
 }

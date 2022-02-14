@@ -27,12 +27,14 @@ class ParticipantCourseSeeder extends Seeder
     {
         $participant_types = Catalogue::where('type', 'PARTICIPANT')->get();
         $courses = Course::get();
-        //por cada curso le asigno entre 1 a 3 tipo de participante
+        //por cada curso le asigno entre 1 a 6 tipo de participante
 
         foreach ($courses as $course) {
-            $course->catalogues()->attach(
-                $participant_types->random(rand(1, 3))->pluck('id')->toArray()
-            );
+            if ($course->public != true) {
+                $course->catalogues()->attach(
+                    $participant_types->random(rand(1, 6))->pluck('id')->toArray()
+                );
+            }
         }
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\V1\Cecy\DetailPlanifications;
+namespace App\Http\Requests\V1\Cecy\DetailSchoolPeriods;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -37,7 +37,7 @@ class StoreDetailSchoolPeriodsRequest extends FormRequest
             'nullificationEndedAt'=>  'Fecha de fin para el periodo de anulación',
             'nullificationStartedAt'=>  'Fecha de inicio para el periodo de anulación',
             'ordinaryEndedAt'=>  'Fecha de fin para el periodo academico ordinario',
-            'ordinaryStartedAt'=>  'Fecha de inicio para el periodo academico ordinario',    
+            'ordinaryStartedAt'=>  'Fecha de inicio para el periodo academico ordinario',
         ];
     }
 }
