@@ -114,7 +114,7 @@ class PlanificationController extends Controller
     //             ]
     //         ])
     //         ->response()->setStatusCode(200);
-    // }
+     }
 
     //Trae todos los cursos
     // PlanificationController ya esta
@@ -183,11 +183,11 @@ class PlanificationController extends Controller
     {
         $planification ->responsibleCourse()->associate(Instructor::find($request->input('responsibleCourse.id')));
         $planification->course()->associate(Course::find($request->input('name')));
-        $planification->participant_type()->associate(Course::find($request->input('participant_type.id')));
+        $planification->participantType()->associate(Course::find($request->input('participant_type.id')));
         $planification->duration()->associate(Course::find($request->input('duration')));
-        $planification->ended_at = $request->input('fin de la planificación');
-        $planification->started_at = $request->input('inicio de la planificación');
-        $planification->state_id = $request->input('Estado de la planificacion');
+        $planification->endedAt = $request->input('fin de la planificación');
+        $planification->startedAt = $request->input('inicio de la planificación');
+        $planification->state = $request->input('Estado de la planificacion');
         $planification->save();
         return (new PlanificationResource($planification))
             ->additional([
@@ -207,11 +207,11 @@ class PlanificationController extends Controller
         $planification->responsibleCecy()->associate(Authority::find($request->input('responsibleCecy.id')));
 
         $planification->course()->associate(Course::find($request->input('course.id')));
-        $planification->detail_school_period()->associate(DetailSchoolPeriod::find($request->input('detail_school_period.id')));
+        $planification->detailSchoolPeriod()->associate(DetailSchoolPeriod::find($request->input('detail_school_period.id')));
         $planification->vicerrector()->associate(Authority::find($request->input('vicerrector.id')));
-        $planification->responsible_ocs()->associate(Authority::find($request->input('responsible_ocs.id')));
-        $planification->ended_at = $request->input('ended_at');
-        $planification->started_at = $request->input('started_at');
+        $planification->responsibleOcs()->associate(Authority::find($request->input('responsible_ocs.id')));
+        $planification->endedAt = $request->input('ended_at');
+        $planification->startedAt = $request->input('started_at');
         $planification->save();
         return (new PlanificationResource ($planification))
             ->additional([
