@@ -255,7 +255,7 @@ class CourseController extends Controller
     //visualizar todos los cursos (Done)
     public function getCourses()
     {
-        return "getCourses";
+        // return "getCourses";
         $courses = Course::get();
 
         return (new CourseCollection($courses))

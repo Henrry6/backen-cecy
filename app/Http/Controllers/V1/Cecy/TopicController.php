@@ -29,8 +29,7 @@ class TopicController extends Controller
     // TopicController
     public function getTopics(Course $course)
     {
-        $topics = Topic::Where('course_id', $course);
-        // $topics = $course->topics()->get();
+        $topics = $course->topics()->get();
         return (new TopicCollection($topics))
             ->additional([
                 'msg' => [

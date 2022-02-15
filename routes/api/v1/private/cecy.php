@@ -94,41 +94,33 @@ Route::prefix('detailPlanification/{detailPlanification}')->group(function () {
 });
 
 /***********************************************************************************************************************
- * TOPICS
- **********************************************************************************************************************/
-Route::prefix('topics')->group(function () {
-    Route::get('/{course}', [TopicController::class, 'getTopics']);
-    Route::post('/{course}', [TopicController::class, 'storeTopic']);
-    Route::put('/{course}/{topic}', [TopicController::class, 'updateTopic']);
-    Route::delete('/{topic}', [TopicController::class, 'destroyTopic']);
-    Route::patch('/destroys', [TopicController::class, 'destroysTopics']);
-});
-
-/***********************************************************************************************************************
- * PREREQUISITES
- **********************************************************************************************************************/
-Route::prefix('prerequisites')->group(function () {
-    Route::get('/{course}', [PrerequisiteController::class, 'getPrerequisites']);
-    Route::post('/{course}', [PrerequisiteController::class, 'storePrerequisite']);
-    Route::put('/{course}/{prerequisite}', [PrerequisiteController::class, 'updatePrerequisite']);
-    Route::delete('/{prerequisite}', [PrerequisiteController::class, 'DestroyPrerequisite']);
-    Route::patch('/destroys', [PrerequisiteController::class, 'destroysPrerequisites']);
-});
-
-
-/***********************************************************************************************************************
  * COURSE
  **********************************************************************************************************************/
-Route::prefix('course')->group(function () {
-    Route::put('update/{course}', [CourseController::class, 'updateCourse']);
-    Route::patch('general-information/{course}', [CourseController::class, 'updateGeneralInformationCourse']);
-    Route::patch('assign-code/{course}', [CourseController::class, 'assignCodeToCourse']);
-    Route::patch('approve/{course}', [CourseController::class, 'approveCourse']);
-    Route::get('inform-course-needs/{course}', [CourseController::class, 'showInformCourseNeeds']);
-    Route::get('curricular-design/{course}', [CourseController::class, 'showCurricularDesign']);
-    Route::get('final-report/{course}', [CourseController::class, 'showCourseFinalReport']);
-    Route::get('career/{career}', [CourseController::class, 'getCoursesByCareer']);
-    Route::post('store', [CourseController::class, 'storeNewCourse']);
+Route::prefix('courses/{course}')->group(function () {
+    Route::prefix('')->group(function () {
+        Route::get('/topics', [TopicController::class, 'getTopics']);
+        Route::post('/topics', [TopicController::class, 'storeTopic']);
+        Route::put('/topics/{topic}', [TopicController::class, 'updateTopic']);
+        Route::delete('/topics/{topic}', [TopicController::class, 'destroyTopic']);
+        Route::patch('/topics/destroys', [TopicController::class, 'destroysTopics']);
+    });
+    Route::prefix('')->group(function () {
+        Route::get('/prerequisites', [PrerequisiteController::class, 'getPrerequisites']);
+        Route::post('/prerequisites', [PrerequisiteController::class, 'storePrerequisite']);
+        Route::put('/prerequisites/{topic}', [PrerequisiteController::class, 'updatePrerequisite']);
+        Route::delete('/prerequisites/{topic}', [PrerequisiteController::class, 'destroyPrerequisite']);
+        Route::patch('/prerequisites/destroys', [PrerequisiteController::class, 'destroysPrerequisites']);
+    });
+    // Route::put('update/{course}', [CourseController::class, 'updateCourse']);
+    // Route::patch('general-information/{course}', [CourseController::class, 'updateGeneralInformationCourse']);
+    // Route::patch('assign-code/{course}', [CourseController::class, 'assignCodeToCourse']);
+    // Route::patch('approve/{course}', [CourseController::class, 'approveCourse']);
+    // Route::get('inform-course-needs/{course}', [CourseController::class, 'showInformCourseNeeds']);
+    // Route::get('curricular-design/{course}', [CourseController::class, 'showCurricularDesign']);
+    // Route::get('final-report/{course}', [CourseController::class, 'showCourseFinalReport']);
+    // Route::get('career/{career}', [CourseController::class, 'getCoursesByCareer']);
+    // Route::post('store', [CourseController::class, 'storeNewCourse']);
+
 });
 
 Route::prefix('courses')->group(function () {
