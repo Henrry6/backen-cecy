@@ -49,25 +49,53 @@ class CourseController extends Controller
     }
 
     // Función privada que permite obtener cursos aprobados
-    private function getApprovedCourses()
+    private function getApprovedPlanificationsId()
+    {
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+        $planificationsTypes = Catalogue::where('type',  $catalogue['planification_state']['type'])->get();
+        $planificationApproved = $planificationsTypes->where('code', $catalogue['planification_state']['approved'])->first();
+        return $planificationApproved;
+    }
+    private function getApprovedCoursesId()
     {
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
         $coursesTypes = Catalogue::where('type',  $catalogue['course_state']['type'])->get();
         $courseApproved = $coursesTypes->where('code', $catalogue['course_state']['approved'])->first();
-        return ($courseApproved);
+        return $courseApproved;
     }
     // Obtiene los cursos públicos aprobados (Done)
     public function getPublicCourses(IndexCourseRequest $request)
     {
         $sorts = explode(',', $request->input('sort'));
 
-        $courseApproved = $this->getApprovedCourses();
-        $courses =  Course::customOrderBy($sorts)
-            ->public(true)
-            ->state($courseApproved->id)
-            ->paginate($request->input('per_page'));
+        $courseApproved = $this->getApprovedCoursesId();
+        // $courses =  Course::customOrderBy($sorts)
+        //     ->public(true)
+        //     ->state($courseApproved->id)
+        //     ->paginate($request->input('per_page'));
 
-        return (new CoursePublicPrivateCollection($courses))
+        $planificationApproved = $this->getApprovedPlanificationsId();
+
+        $planifications =  Planification::customOrderBy($sorts)
+            ->state($planificationApproved->id)
+            ->get();
+
+        echo ($planifications);
+
+        for ($i = 0; $i < count($planifications); $i++) {
+            $courses[$i] = $planifications[$i]->course->first();
+        }
+        // echo ($courses);
+
+        $customIndex = 0;
+        for ($i = 0; $i < count($courses); $i++) {
+            if ($courses[$i]->public(true) and $courses[$i]->state(($courseApproved->id))) {
+                $publicCoursesApproved[$customIndex] = $courses[$i];
+            };
+        }
+        // $publicCoursesApproved  = $publicCoursesApproved->paginate($request->input('per_page'));
+
+        return (new CoursePublicPrivateCollection($publicCoursesApproved))
             ->additional([
                 'msg' => [
                     'summary' => 'success',
@@ -82,7 +110,7 @@ class CourseController extends Controller
     {
         $sorts = explode(',', $request->input('sort'));
 
-        $courseApproved = $this->getApprovedCourses();
+        $courseApproved = $this->getApprovedCoursesId();
 
         $courses =  Course::customOrderBy($sorts)
             ->category($category->id)
@@ -105,7 +133,7 @@ class CourseController extends Controller
     {
         $sorts = explode(',', $request->input('sort'));
 
-        $courseApproved = $this->getApprovedCourses();
+        $courseApproved = $this->getApprovedCoursesId();
         $courses =  Course::customOrderBy($sorts)
             ->name($request->input('search'))
             ->public(true)
@@ -127,7 +155,7 @@ class CourseController extends Controller
     {
         $sorts = explode(',', $request->input('sort'));
 
-        $courseApproved = $this->getApprovedCourses();
+        $courseApproved = $this->getApprovedCoursesId();
         $catalogues = Catalogue::get();
         $publicCourses =  Course::customOrderBy($sorts)
             ->public(true)
@@ -165,7 +193,7 @@ class CourseController extends Controller
         return ('getPrivateCoursesByCategory');
         $sorts = explode(',', $request->input('sort'));
 
-        $courseApproved = $this->getApprovedCourses();
+        $courseApproved = $this->getApprovedCoursesId();
         $catalogues = Catalogue::get();
         $publicCourses =  Course::customOrderBy($sorts)
             ->public(true)
@@ -256,7 +284,6 @@ class CourseController extends Controller
     //visualizar todos los cursos (Done)
     public function getCourses()
     {
-        // return "getCourses";
         $courses = Course::get();
 
         return (new CourseCollection($courses))
