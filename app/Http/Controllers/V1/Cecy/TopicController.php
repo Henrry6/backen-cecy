@@ -42,7 +42,7 @@ class TopicController extends Controller
 
     // Crea un nuevo tema o subtema para un curso
     // TopicController
-    public function storeTopic(StoreTopicRequest $request, Course $course )
+    public function storeTopic(StoreTopicRequest $request, Course $course)
     {
         $topic = new Topic();
         $topic->course()->associate($course);
