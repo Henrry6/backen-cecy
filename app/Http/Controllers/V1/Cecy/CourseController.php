@@ -20,6 +20,7 @@ use App\Models\Cecy\Catalogue;
 use App\Http\Resources\V1\Cecy\Courses\CourseResource;
 use App\Http\Resources\V1\Cecy\Courses\CourseCollection;
 use App\Http\Requests\V1\Cecy\Courses\UpdateCourseRequest;
+use App\Http\Requests\V1\Cecy\Courses\UpdateCurricularDesign;
 use App\Http\Requests\V1\Cecy\Courses\UploadCertificateOfApprovalRequest;
 use App\Http\Requests\V1\Cecy\Planifications\GetDateByshowYearScheduleRequest;
 use App\Http\Requests\V1\Cecy\Planifications\IndexPlanificationRequest;
@@ -226,7 +227,7 @@ class CourseController extends Controller
     }
 
     // Actualiza la informacion del diseño curricular (Done)
-    public function updateCourse(UpdateCourseRequest $request, Course $course)
+    public function updateCourse(UpdateCurricularDesign $request, Course $course)
     {
         return "updateCourse";
         $course->area()->associate(Catalogue::find($request->input('area.id')));

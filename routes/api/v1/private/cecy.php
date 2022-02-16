@@ -97,6 +97,7 @@ Route::prefix('detailPlanification/{detailPlanification}')->group(function () {
  * COURSE
  **********************************************************************************************************************/
 Route::prefix('courses/{course}')->group(function () {
+    Route::put('', [CourseController::class, 'updateCourse']);
     Route::prefix('')->group(function () {
         Route::get('/topics', [TopicController::class, 'getTopics']);
         Route::post('/topics', [TopicController::class, 'storeTopic']);
@@ -111,7 +112,6 @@ Route::prefix('courses/{course}')->group(function () {
         Route::delete('/prerequisites/{prerequisite}', [PrerequisiteController::class, 'destroyPrerequisite']);
         Route::patch('/prerequisites/destroys', [PrerequisiteController::class, 'destroysPrerequisites']);
     });
-    // Route::put('update/{course}', [CourseController::class, 'updateCourse']);
     // Route::patch('general-information/{course}', [CourseController::class, 'updateGeneralInformationCourse']);
     // Route::patch('assign-code/{course}', [CourseController::class, 'assignCodeToCourse']);
     // Route::patch('approve/{course}', [CourseController::class, 'approveCourse']);
