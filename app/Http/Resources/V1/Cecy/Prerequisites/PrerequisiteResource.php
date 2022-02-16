@@ -2,9 +2,8 @@
 
 namespace App\Http\Resources\V1\Cecy\Prerequisites;
 
-use App\Models\Cecy\Course;
 use Illuminate\Http\Resources\Json\JsonResource;
-// use Illuminate\Http\Re
+use App\Http\Resources\V1\Cecy\Courses\CourseResourceBasic;
 
 class PrerequisiteResource extends JsonResource
 {
@@ -12,8 +11,8 @@ class PrerequisiteResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'course' => Course::make($this->course),
-            'prerequisite' => Course::make($this->prerequisite)
+            'course' => CourseResourceBasic::make($this->course),
+            'prerequisite' => CourseResourceBasic::make($this->prerequisite),
         ];
     }
 }

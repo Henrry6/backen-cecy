@@ -13,16 +13,11 @@ class GetCoursesByCategoryRequest extends FormRequest
 
     public function rules()
     {
-        return [
-            'category.id' =>  ['integer', 'required'],
-        ];
+        return [];
     }
 
     public function attributes()
     {
-        return [
-
-            'category.id' => 'Id  de la categoria',
-        ];
+        return [];
     }
 }

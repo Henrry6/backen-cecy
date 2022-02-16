@@ -20,6 +20,7 @@ use App\Models\Cecy\Catalogue;
 use App\Http\Resources\V1\Cecy\Courses\CourseResource;
 use App\Http\Resources\V1\Cecy\Courses\CourseCollection;
 use App\Http\Requests\V1\Cecy\Courses\UpdateCourseRequest;
+use App\Http\Requests\V1\Cecy\Courses\UpdateCurricularDesign;
 use App\Http\Requests\V1\Cecy\Courses\UploadCertificateOfApprovalRequest;
 use App\Http\Requests\V1\Cecy\Planifications\GetDateByshowYearScheduleRequest;
 use App\Http\Requests\V1\Cecy\Planifications\IndexPlanificationRequest;
@@ -64,7 +65,7 @@ class CourseController extends Controller
         $courses =  Course::customOrderBy($sorts)
             ->public(true)
             ->state($courseApproved->id)
-            ->get();
+            ->paginate($request->input('per_page'));
 
         return (new CoursePublicPrivateCollection($courses))
             ->additional([
@@ -77,16 +78,17 @@ class CourseController extends Controller
     }
 
     // Obtiene los cursos públicos aprobados por categoria (Done)
-    public function getPublicCoursesByCategory(GetCoursesByCategoryRequest $request)
+    public function getPublicCoursesByCategory(GetCoursesByCategoryRequest $request, Catalogue $category)
     {
         $sorts = explode(',', $request->input('sort'));
 
         $courseApproved = $this->getApprovedCourses();
+
         $courses =  Course::customOrderBy($sorts)
-            ->category($request->input('category.id'))
+            ->category($category->id)
             ->public(true)
             ->state($courseApproved->id)
-            ->get();
+            ->paginate($request->input('per_page'));
 
         return (new CoursePublicPrivateCollection($courses))
             ->additional([
@@ -105,10 +107,10 @@ class CourseController extends Controller
 
         $courseApproved = $this->getApprovedCourses();
         $courses =  Course::customOrderBy($sorts)
-            ->name($request->input('name'))
+            ->name($request->input('search'))
             ->public(true)
             ->state($courseApproved->id)
-            ->get();
+            ->paginate($request->input('per_page'));
 
         return (new CoursePublicPrivateCollection($courses))
             ->additional([
@@ -158,7 +160,7 @@ class CourseController extends Controller
     }
 
     // Obtiene los cursos privados aprobados por tipo de participante y filtrados por categoria (Done)
-    public function getPrivateCoursesByCategory(getCoursesByCategoryRequest $request)
+    public function getPrivateCoursesByCategory(getCoursesByCategoryRequest $request, Catalogue $category)
     {
         return ('getPrivateCoursesByCategory');
         $sorts = explode(',', $request->input('sort'));
@@ -209,7 +211,7 @@ class CourseController extends Controller
         $sorts = explode(',', $request->sort);
 
         $courses = Course::customOrderBy($sorts)
-            ->name($request->input('name'))
+            ->name($request->input('search'))
             ->paginate($request->input('per_page'));
 
         $private_courses = $courses->where('public', false)->get();
@@ -225,9 +227,9 @@ class CourseController extends Controller
     }
 
     // Actualiza la informacion del diseño curricular (Done)
-    public function updateCourse(UpdateCourseRequest $request, Course $course)
+    public function updateCurricularDesignCourse(UpdateCurricularDesign $request, Course $course)
     {
-        return "updateCourse";
+        return "updateCurricularDesignCourse";
         $course->area()->associate(Catalogue::find($request->input('area.id')));
         $course->speciality()->associate(Catalogue::find($request->input('speciality.id')));
         $course->alignment = $request->input('alignment');
@@ -254,7 +256,7 @@ class CourseController extends Controller
     //visualizar todos los cursos (Done)
     public function getCourses()
     {
-        return "getCourses";
+        // return "getCourses";
         $courses = Course::get();
 
         return (new CourseCollection($courses))
@@ -326,6 +328,7 @@ class CourseController extends Controller
     }
 
     //Obtener cursos y Filtrarlos por peridos lectivos , carrera o estado (Done)
+    //el que hizo esto debe cambiar lo que se envia por json a algo que se envia por params
     public function getCoursesByCoordinator(CoordinatorCecyGetCoursesByCoordinatorCecyRequest $request)
     {
 
@@ -384,9 +387,9 @@ class CourseController extends Controller
     }
 
     // Ingresar el motivo del por cual el curso no esta aprobado (Done)
-    public function approveCourse(Request $request, Course $course)
+    public function notApproveCourseReason(Request $request, Course $course)
     {
-        return "approveCourse";
+        return "notApproveCourseReason";
         $course->state()->associate(Catalogue::firstWhere('code', State::APPROVED));
         $course->observation = $request->input('observation');
         $course->save();
@@ -424,6 +427,8 @@ class CourseController extends Controller
     }
 
     //Traer todos los cursos planificados de un año en especifico (Done)
+    // el que hizo esto debe enviar el año en especifico bien por el url 
+    // o por params
     public function showYearSchedule(GetDateByshowYearScheduleRequest $request)
     {
         return "showYearSchedule";
@@ -511,7 +516,7 @@ class CourseController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    //Filtrar cursos por carrera (Done)
+    // Filtrar cursos por carrera (Done)
     public function getCoursesByCareer(GetCoursesByCareerRequest $request, Career $career)
     {
         return "getCoursesByCareer";
@@ -533,8 +538,8 @@ class CourseController extends Controller
             ]);
     }
 
-    //Crear curso nuevo completamente (Done)
-    public function storeNewCourse(StoreCourseNewRequest $request, Course $course)
+    // Crear curso nuevo completamente (Done)
+    public function storeNewCourse(StoreCourseNewRequest $request)
     {
         return "storeNewCourse";
         $course = new Course();
@@ -556,7 +561,7 @@ class CourseController extends Controller
             ]);
     }
 
-    //Adjuntar el acta de aprobación
+    // Adjuntar el acta de aprobación
     public function uploadCertificateOfApproval(UploadCertificateOfApprovalRequest $request, File $file)
     {
         return $file->uploadFile($request);
