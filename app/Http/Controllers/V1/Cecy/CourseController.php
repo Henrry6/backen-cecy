@@ -65,7 +65,7 @@ class CourseController extends Controller
         $courses =  Course::customOrderBy($sorts)
             ->public(true)
             ->state($courseApproved->id)
-            ->get();
+            ->paginate($request->input('per_page'));
 
         return (new CoursePublicPrivateCollection($courses))
             ->additional([
@@ -88,7 +88,7 @@ class CourseController extends Controller
             ->category($category->id)
             ->public(true)
             ->state($courseApproved->id)
-            ->get();
+            ->paginate($request->input('per_page'));
 
         return (new CoursePublicPrivateCollection($courses))
             ->additional([
@@ -110,7 +110,7 @@ class CourseController extends Controller
             ->name($request->input('search'))
             ->public(true)
             ->state($courseApproved->id)
-            ->get();
+            ->paginate($request->input('per_page'));
 
         return (new CoursePublicPrivateCollection($courses))
             ->additional([
@@ -387,9 +387,9 @@ class CourseController extends Controller
     }
 
     // Ingresar el motivo del por cual el curso no esta aprobado (Done)
-    public function approveCourse(Request $request, Course $course)
+    public function notApproveCourseReason(Request $request, Course $course)
     {
-        return "approveCourse";
+        return "notApproveCourseReason";
         $course->state()->associate(Catalogue::firstWhere('code', State::APPROVED));
         $course->observation = $request->input('observation');
         $course->save();
@@ -516,7 +516,7 @@ class CourseController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    //Filtrar cursos por carrera (Done)
+    // Filtrar cursos por carrera (Done)
     public function getCoursesByCareer(GetCoursesByCareerRequest $request, Career $career)
     {
         return "getCoursesByCareer";
@@ -538,7 +538,7 @@ class CourseController extends Controller
             ]);
     }
 
-    //Crear curso nuevo completamente (Done)
+    // Crear curso nuevo completamente (Done)
     public function storeNewCourse(StoreCourseNewRequest $request)
     {
         return "storeNewCourse";
@@ -561,7 +561,7 @@ class CourseController extends Controller
             ]);
     }
 
-    //Adjuntar el acta de aprobación
+    // Adjuntar el acta de aprobación
     public function uploadCertificateOfApproval(UploadCertificateOfApprovalRequest $request, File $file)
     {
         return $file->uploadFile($request);

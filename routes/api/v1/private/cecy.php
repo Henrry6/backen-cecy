@@ -114,7 +114,7 @@ Route::prefix('courses/{course}')->group(function () {
     Route::put('curricular-design', [CourseController::class, 'updateCurricularDesignCourse']);
     Route::patch('general-information', [CourseController::class, 'updateGeneralInformationCourse']);
     Route::patch('assign-code', [CourseController::class, 'assignCodeToCourse']);
-    Route::patch('approve', [CourseController::class, 'approveCourse']);
+    Route::patch('not-approve-reason', [CourseController::class, 'notApproveCourseReason']);
     Route::get('inform-course-needs', [CourseController::class, 'showInformCourseNeeds']);
     Route::get('curricular-design', [CourseController::class, 'showCurricularDesign']);
     Route::get('final-report', [CourseController::class, 'showCourseFinalReport']);
@@ -122,7 +122,7 @@ Route::prefix('courses/{course}')->group(function () {
 
 Route::prefix('courses')->group(function () {
     Route::get('', [CourseController::class, 'getCourses']);
-    Route::post('store', [CourseController::class, 'storeNewCourse']);
+    Route::post('', [CourseController::class, 'storeNewCourse']);
     Route::get('public-courses', [CourseController::class, 'getPublicCourses']);
     Route::get('public-courses-category/{category}', [CourseController::class, 'getPublicCoursesByCategory']);
     Route::get('public-courses-name', [CourseController::class, 'getPublicCoursesByName']);
