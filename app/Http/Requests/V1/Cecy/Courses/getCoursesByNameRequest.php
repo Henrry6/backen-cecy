@@ -13,16 +13,11 @@ class GetCoursesByNameRequest extends FormRequest
 
     public function rules()
     {
-        return [
-            'name' =>  ['string', 'required'],
-        ];
+        return [];
     }
 
     public function attributes()
     {
-        return [
-
-            'name' => 'Nombre del curso',
-        ];
+        return [];
     }
 }

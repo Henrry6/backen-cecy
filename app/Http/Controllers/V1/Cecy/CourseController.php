@@ -78,7 +78,7 @@ class CourseController extends Controller
     }
 
     // Obtiene los cursos públicos aprobados por categoria (Done)
-    public function getPublicCoursesByCategory(GetCoursesByCategoryRequest $request,Catalogue $category)
+    public function getPublicCoursesByCategory(GetCoursesByCategoryRequest $request, Catalogue $category)
     {
         $sorts = explode(',', $request->input('sort'));
 
@@ -107,7 +107,7 @@ class CourseController extends Controller
 
         $courseApproved = $this->getApprovedCourses();
         $courses =  Course::customOrderBy($sorts)
-            ->name($request->input('name'))
+            ->name($request->input('search'))
             ->public(true)
             ->state($courseApproved->id)
             ->get();
@@ -160,7 +160,7 @@ class CourseController extends Controller
     }
 
     // Obtiene los cursos privados aprobados por tipo de participante y filtrados por categoria (Done)
-    public function getPrivateCoursesByCategory(getCoursesByCategoryRequest $request)
+    public function getPrivateCoursesByCategory(getCoursesByCategoryRequest $request, Catalogue $category)
     {
         return ('getPrivateCoursesByCategory');
         $sorts = explode(',', $request->input('sort'));
@@ -211,7 +211,7 @@ class CourseController extends Controller
         $sorts = explode(',', $request->sort);
 
         $courses = Course::customOrderBy($sorts)
-            ->name($request->input('name'))
+            ->name($request->input('search'))
             ->paginate($request->input('per_page'));
 
         $private_courses = $courses->where('public', false)->get();
@@ -227,9 +227,9 @@ class CourseController extends Controller
     }
 
     // Actualiza la informacion del diseño curricular (Done)
-    public function updateCourse(UpdateCurricularDesign $request, Course $course)
+    public function updateCurricularDesignCourse(UpdateCurricularDesign $request, Course $course)
     {
-        return "updateCourse";
+        return "updateCurricularDesignCourse";
         $course->area()->associate(Catalogue::find($request->input('area.id')));
         $course->speciality()->associate(Catalogue::find($request->input('speciality.id')));
         $course->alignment = $request->input('alignment');
@@ -328,6 +328,7 @@ class CourseController extends Controller
     }
 
     //Obtener cursos y Filtrarlos por peridos lectivos , carrera o estado (Done)
+    //el que hizo esto debe cambiar lo que se envia por json a algo que se envia por params
     public function getCoursesByCoordinator(CoordinatorCecyGetCoursesByCoordinatorCecyRequest $request)
     {
 
@@ -426,6 +427,8 @@ class CourseController extends Controller
     }
 
     //Traer todos los cursos planificados de un año en especifico (Done)
+    // el que hizo esto debe enviar el año en especifico bien por el url 
+    // o por params
     public function showYearSchedule(GetDateByshowYearScheduleRequest $request)
     {
         return "showYearSchedule";
@@ -536,7 +539,7 @@ class CourseController extends Controller
     }
 
     //Crear curso nuevo completamente (Done)
-    public function storeNewCourse(StoreCourseNewRequest $request, Course $course)
+    public function storeNewCourse(StoreCourseNewRequest $request)
     {
         return "storeNewCourse";
         $course = new Course();
