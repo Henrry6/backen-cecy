@@ -13,7 +13,7 @@ class DestroysDetailPlanificationRequest extends FormRequest
     public function rules()
     {
         return [
-            // 'detailPlanification.id' => ['required', 'integer'],
+            'ids' => ['required', 'integer'],
         ];
     }
 

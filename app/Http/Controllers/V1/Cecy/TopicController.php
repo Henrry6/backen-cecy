@@ -29,8 +29,7 @@ class TopicController extends Controller
     // TopicController
     public function getTopics(Course $course)
     {
-        $topics = Topic::Where('course_id', $course);
-        // $topics = $course->topics()->get();
+        $topics = $course->topics()->get();
         return (new TopicCollection($topics))
             ->additional([
                 'msg' => [
@@ -43,7 +42,7 @@ class TopicController extends Controller
 
     // Crea un nuevo tema o subtema para un curso
     // TopicController
-    public function storeTopic(StoreTopicRequest $request, Course $course )
+    public function storeTopic(StoreTopicRequest $request, Course $course)
     {
         $topic = new Topic();
         $topic->course()->associate($course);

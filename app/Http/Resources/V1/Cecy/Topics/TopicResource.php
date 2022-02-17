@@ -3,6 +3,7 @@
 namespace App\Http\Resources\V1\Cecy\Topics;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\V1\Cecy\Courses\CourseResourceBasic;
 
 class TopicResource extends JsonResource
 {
@@ -10,8 +11,8 @@ class TopicResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            // 'course' => Course::make($this->course),
-            'children' => TopicResource::make($this->children),
+            'course' => CourseResourceBasic::make($this->course),
+            'children' => TopicResource::collection($this->children),
             'level' => $this->level,
             'description' => $this->description,
         ];

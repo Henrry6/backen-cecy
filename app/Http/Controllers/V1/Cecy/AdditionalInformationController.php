@@ -5,6 +5,7 @@ namespace App\Http\Controllers\V1\Cecy;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Cecy\AdditionalInformations\IndexAdditionalInformationRequest;
 use App\Http\Requests\V1\Cecy\AdditionalInformations\StoreAdditionalInformationRequest;
+use App\Http\Requests\V1\Cecy\AdditionalInformations\UpdateAdditionalInformationRequest;
 use App\Http\Requests\V1\Core\Files\DestroysFileRequest;
 use App\Http\Requests\V1\Core\Files\IndexFileRequest;
 use App\Http\Requests\V1\Core\Files\UpdateFileRequest;
@@ -20,9 +21,9 @@ class AdditionalInformationController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('permission:store-additionalInformations')->only(['store']);
-        $this->middleware('permission:update-additionalInformations')->only(['update']);
-        $this->middleware('permission:delete-additionalInformations')->only(['destroy', 'destroys']);
+        //$this->middleware('permission:store-additionalInformations')->only(['store']);
+        //$this->middleware('permission:update-additionalInformations')->only(['update']);
+        //$this->middleware('permission:delete-additionalInformations')->only(['destroy', 'destroys']);
     }
     public function index(IndexAdditionalInformationRequest $request)
     {
@@ -45,7 +46,8 @@ class AdditionalInformationController extends Controller
                     'detail' => '',
                     'code' => '200'
                 ]
-            ]);
+            ])
+            ->response()->setStatusCode(200);
     }
 
     /**
@@ -83,7 +85,8 @@ class AdditionalInformationController extends Controller
                     'detail' => '',
                     'code' => '200'
                 ]
-            ]);
+            ])
+            ->response()->setStatusCode(201);
     }
 
     /**
@@ -101,7 +104,8 @@ class AdditionalInformationController extends Controller
                     'detail' => '',
                     'code' => '200'
                 ]
-            ]);
+            ])
+            ->response()->setStatusCode(201);
     }
 
     /**
@@ -138,7 +142,8 @@ class AdditionalInformationController extends Controller
                     'detail' => '',
                     'code' => '200'
                 ]
-            ]);
+            ])
+            ->response()->setStatusCode(201);
     }
 
     /**
@@ -157,7 +162,8 @@ class AdditionalInformationController extends Controller
                     'detail' => '',
                     'code' => '201'
                 ]
-            ]);
+            ])
+            ->response()->setStatusCode(201);
     }
     /**
      * Remove the specified resource from storage.
