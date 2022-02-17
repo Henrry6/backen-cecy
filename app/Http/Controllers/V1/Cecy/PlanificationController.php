@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\Cecy\Courses\getCoursesByResponsibleRequest;
 use App\Http\Requests\V1\Cecy\KPI\Planifications\ShowKpiRequest;
+use App\Http\Requests\V1\Cecy\Participants\InstructorRequest;
+use App\Http\Requests\V1\Cecy\Planifications\IndexPlanificationRequest;
 use App\Http\Requests\V1\Cecy\Planifications\UpdateAssignResponsibleCecyRequest;
 use App\Http\Requests\V1\Cecy\Planifications\UpdateDatesinPlanificationRequest;
 use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\GetPlanificationsByCourseRequest;
@@ -37,15 +40,15 @@ class PlanificationController extends Controller
         $planifications = $course->planifications()->customOrderBy($sorts)
             ->paginate($request->input('per_page'));
 
-        return (new PlanificationByCourseCollection($planifications))
-            ->additional([
-                'msg' => [
-                    'summary' => 'success',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ])
-            ->response()->setStatusCode(200);
+        // return (new PlanificationByCourseCollection($planifications))
+        //     ->additional([
+        //         'msg' => [
+        //             'summary' => 'success',
+        //             'detail' => '',
+        //             'code' => '200'
+        //         ]
+        //     ])
+        //     ->response()->setStatusCode(200);
     }
     /*
     * Asignar docente responsable de cecy de la planificación
@@ -96,14 +99,14 @@ class PlanificationController extends Controller
     public function getKpi(ShowKpiRequest $request, Catalogue $state)
     {
         
-        $planifications = Planification::withCount([
-            'id' => function (Builder $query) {
-                $query->where(
-                    'state_id',
-                    $state->id
-                );
-            },
-        ])->get();
+        // $planifications = Planification::withCount([
+        //     'id' => function (Builder $query) {
+        //         $query->where(
+        //             'state_id',
+        //             $state->id
+        //         );
+        //     },
+        // ])->get();
 
     //     return (new KpiPlanificationResourse($planifications[0]))
     //         ->additional([
@@ -139,9 +142,10 @@ class PlanificationController extends Controller
 
     /*DDRC-C: Busca planificaciones vigentes por periodo asignadas al usuario logueado(responsable del CECY)*/
     // PlanificationController ya esta, no vale el metodo
-    public function getPlanificationsByPeriodState(InstructorRequest $request )
+    public function getPlanificationsByPeriodState(IndexPlanificationRequest $request)
     {
-        $instructor = Instructor::FirstWhere('user_id', $request->user()->id)->get();
+        
+        $instructor = Instructor::firstWhere('user_id', $request->user()->id)->get();
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
         $planifications = $instructor
             ->planifications()
@@ -162,20 +166,20 @@ class PlanificationController extends Controller
     // PlanificationController ya esta, no vale el metodo.
     public function getCoursesParallelsWorkdays(getCoursesByResponsibleRequest $request)
     {
-        $sorts = explode(',', $request->sort);
-        $courseParallelWorkday = Planification::customOrderBy($sorts)
-//            ->detailplanifications()
-//            ->course()
-            ->get();
+//         $sorts = explode(',', $request->sort);
+//         $courseParallelWorkday = Planification::customOrderBy($sorts)
+// //            ->detailplanifications()
+// //            ->course()
+//             ->get();
 
-        return (new CourseParallelWorkdayResource($courseParallelWorkday))
-            ->additional([
-                'msg' => [
-                    'summary' => 'success',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ])->response()->setStatusCode(201);
+//         return (new CourseParallelWorkdayResource($courseParallelWorkday))
+//             ->additional([
+//                 'msg' => [
+//                     'summary' => 'success',
+//                     'detail' => '',
+//                     'code' => '200'
+//                 ]
+//             ])->response()->setStatusCode(201);
     }
 
     // asignar docente responsable de curso a una planificacion ya esta

@@ -5,7 +5,7 @@ use App\Http\Controllers\V1\Cecy\CatalogueController;
 use App\Http\Controllers\V1\Cecy\CertificateController;
 use App\Http\Controllers\V1\Cecy\ClassroomController;
 use App\Http\Controllers\V1\Cecy\GuachagmiraController;
-use App\Http\Controllers\V1\Cecy\PerezController;
+
 use App\Http\Controllers\V1\Cecy\CourseController;
 use App\Http\Controllers\V1\Cecy\DetailAttendanceController;
 use App\Http\Controllers\V1\Cecy\InstitutionController;
@@ -60,11 +60,11 @@ Route::prefix('institution')->group(function () {
 //Route::apiResource('planifications',[PlanificationController::class]);
 
 Route::prefix('planification')->group(function () {
+    Route::get('planifications-period-state', [PlanificationController::class, 'getPlanificationsByPeriodState']);
+    Route::get('course_parallels-works', [PlanificationController::class, 'getCoursesParallelsWorkdays']);
     Route::get('{course}', [PlanificationController::class, 'getPlanificationsByCourse']);
     Route::get('planfications-course/{course}', [PlanificationController::class, 'getPlanificationsByCourse']);
     Route::get('kpis/{state}', [PlanificationController::class, 'getKpi']);
-    Route::get('planifications-period-state', [PlanificationController::class, 'getPlanificationsByPeriodState']);
-    Route::get('course_parallels-works', [PlanificationController::class, 'getCoursesParallelsWorkdays']);
 });
 
 Route::prefix('planification/{planification}')->group(function () {
@@ -78,20 +78,7 @@ Route::prefix('planification/{planification}')->group(function () {
 
 
 
-/***********************************************************************************************************************
- * DETAIL PLANIFICATIONS
- **********************************************************************************************************************/
-Route::prefix('detailPlanification')->group(function () {
-    Route::get('', [PerezController::class, 'getDetailPlanificationsByPlanification']);
-    Route::post('', [PerezController::class, 'registerDetailPlanification']);
-    Route::patch('', [PerezController::class, 'destroysDetailPlanifications']);
-});
 
-Route::prefix('detailPlanification/{detailPlanification}')->group(function () {
-    Route::get('', [PerezController::class, 'showDetailPlanification']);
-    Route::put('', [PerezController::class, 'updateDetailPlanification']);
-    Route::delete('', [PerezController::class, 'deleteDetailPlanification']);
-});
 
 /***********************************************************************************************************************
  * TOPICS
