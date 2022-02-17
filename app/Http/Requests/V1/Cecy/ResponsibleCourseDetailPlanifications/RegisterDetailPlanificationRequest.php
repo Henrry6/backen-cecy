@@ -18,8 +18,8 @@ class RegisterDetailPlanificationRequest extends FormRequest
             'planification.id' => ['required', 'integer'],
             'workday.id' => ['required', 'integer'],
             'parallel.id' => ['required', 'integer'],
-            'endedTime' => ['required', 'time'],
-            'startedTime' => ['required', 'time'],
+            'endedTime' => ['required', 'timezone'],
+            'startedTime' => ['required', 'timezone'],
             'observations' => ['required'],
         ];
     }
@@ -32,8 +32,8 @@ class RegisterDetailPlanificationRequest extends FormRequest
             'planification.id' => 'Planificación',
             'workday.id' => 'Jornada',
             'paralel.id' => 'Paralelo del aula o clase',
-            'endedTime' => ['required', 'time'],
-            'startedTime' => ['required', 'time'],
+            'endedTime' => 'Hora inicio',
+            'startedTime' => 'Hora fin',
         ];
     }
 }
