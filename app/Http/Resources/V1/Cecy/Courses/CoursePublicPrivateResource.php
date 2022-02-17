@@ -29,7 +29,7 @@ class CoursePublicPrivateResource extends JsonResource
             // 'meanVerification' => CatalogueResource::make($this->meanVerification),
             // 'responsible' => InstructorResource::make($this->responsible),
             // 'speciality' => CatalogueResource::make($this->speciality),
-            // 'state' => CatalogueResource::make($this->state),
+            'state' => CatalogueResource::make($this->state),
             'planifications' => PlanificationResource::collection($this->planifications),
             // 'catalogues' => CatalogueResource::collection($this->catalogues),
             // 'abbreviation' => $this->abbreviation,
