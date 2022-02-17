@@ -26,11 +26,8 @@ class PlanificationByCourseResource extends JsonResource
             'schoolPeriod' => DetailSchoolPeriodResource::collection($this->detailSchoolPeriod),
             'state' => CatalogueResource::make($this->state),
             'code' => $this->code,
+            'endedAt' => $this->ended_at,
             'startedAt' => $this->started_at,
-            'startTime' => $this->started_at,
-            // 'instructors'=>'',
-            // 'endedAt' => $this->ended_at,
-            // 'endTime' => $this->ended_at,
             'detailPlanifications' => DetailPlanificationResource::collection($this->dedetailPlanifications),
         ];
     }
