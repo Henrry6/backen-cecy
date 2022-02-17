@@ -12,6 +12,7 @@ use App\Http\Controllers\V1\Cecy\InstitutionController;
 use App\Http\Controllers\V1\Cecy\TopicController;
 use App\Http\Controllers\V1\Cecy\PrerequisiteController;
 use App\Http\Controllers\V1\Cecy\PlanificationController;
+use App\Http\Controllers\V1\Cecy\RequirementController;
 use App\Http\Controllers\V1\Cecy\SchoolPeriodController;
 use App\Http\Controllers\V1\Cecy\InstructorController;
 
@@ -184,3 +185,22 @@ Route::prefix('instructor')->group(function () {
     Route::get('type-instructor', [InstructorController::class, 'updateTypeInstructors']);
     Route::get('destroy/{instructor}', [InstructorController::class, 'destroyInstructors']);
 });
+
+/*
+******************************************************************************************************************
+ * REQUERIMENTS
+ **********************************************************************************************************************/
+
+
+Route::prefix('requirement')->group(function(){
+    Route::get('',[RequirementController::class, 'getAllRequirement']);
+   Route::get('/{requirements}',[RequirementController::class, 'getRequirement']);
+    Route::post('/{requirements}',[RequirementController::class, 'storeRequirement']);
+     Route::put('/{requirements}',[RequirementController::class, 'updateRequirement']);
+     Route::delete('/{requirements}',[RequirementController::class, 'destroy']);
+ });
+
+ Route::prefix('requirement')->group(function () {
+    Route::get('file', [RequirementController::class, 'showFile']);
+    Route::get('image', [RequirementController::class, 'showImage']);
+ });
