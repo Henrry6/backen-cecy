@@ -159,10 +159,6 @@ class CreateCecyCoursesTable extends Migration
                 ->comment('Observación de curso')
                 ->nullable();
 
-            // $table->json('practical_phases')
-            // ->comment('Fase práctica')
-            // ->nullable();
-
             $table->integer('practice_hours')
                 ->comment('Cantidad de horas practicas del curso')
                 ->nullable();
@@ -177,10 +173,6 @@ class CreateCecyCoursesTable extends Migration
 
             $table->boolean('public')
                 ->comment('Si el curso el público o no');
-
-            // $table->string('required_installing_sources')
-            //     ->comment('Fuentes de instalación necesaria')
-            //     ->nullable();
 
             $table->string('setec_name')
                 ->comment('Nombre del setec')
@@ -202,9 +194,6 @@ class CreateCecyCoursesTable extends Migration
                 ->comment('Requisitos técnicos y generales del curso')
                 ->nullable();
 
-            // $table->json('theoretical_phases')
-            // ->comment('Fase teórica')
-            // ->nullable();
 
             $table->integer('theory_hours')
                 ->comment('Cantidad de horas del curso en teoria')

@@ -44,7 +44,7 @@ class PrerequisiteController extends Controller
     {
         $prerequisite = new Prerequisite();
         $prerequisite->course()->associate($course);
-        $prerequisite->prerequisite()->associate($prerequisite);
+        $prerequisite->prerequisite()->associate($request->input('prerequisite.id'));
         $prerequisite->save();
         return (new PrerequisiteResource($prerequisite))
             ->additional([
@@ -60,7 +60,7 @@ class PrerequisiteController extends Controller
     // PrerequisteController
     public function updatePrerequisite(UpdatePrerequisiteRequest $request, Course $course, Prerequisite $prerequisite)
     {
-        $prerequisite->prerequisite()->associate($prerequisite);
+        $prerequisite->prerequisite()->associate($request->input('prerequisite.id'));
         $prerequisite->save();
         return (new PrerequisiteResource($prerequisite))
             ->additional([
@@ -74,7 +74,7 @@ class PrerequisiteController extends Controller
 
     // Eliminda los prerequisitos para un curso
     // PrerequisteController
-    public function DestroyPrerequisite(Prerequisite $prerequisite)
+    public function destroyPrerequisite(Course $course, Prerequisite $prerequisite)
     {
         $prerequisite->delete();
         return (new PrerequisiteResource($prerequisite))

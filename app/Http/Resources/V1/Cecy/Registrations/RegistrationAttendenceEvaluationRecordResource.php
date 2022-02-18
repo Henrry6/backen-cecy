@@ -4,7 +4,7 @@ namespace App\Http\Resources\V1\Cecy\Registrations;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class RegistrationAttendeEvaluationRecordResource extends JsonResource
+class RegistrationAttendenceEvaluationRecordResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

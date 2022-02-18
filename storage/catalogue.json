@@ -250,5 +250,10 @@
         "type": "REQUIREMENT_STATE",
         "enabled": "ENABLED",
         "disabled": "DISABLED"
+    },
+    "period_state": {
+        "type": "PERIOD_STATE",
+        "current": "CURRENT",
+        "past": "PAST"
     }
 }

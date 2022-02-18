@@ -16,11 +16,11 @@ class AuthResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'tokens' => PersonalAccessTokenResource::collection($this->tokens),
             'roles' => RoleResource::collection($this->roles),
             'permissions' => PermissionResource::collection($this->permissions),
-            'user' => UserResource::make($this->resource),
-            'tokens' => PersonalAccessTokenResource::collection($this->tokens),
 //            'professional' => ProfessionalResource::make($this->professional),
+            'user' => UserResource::make($this->resource),
         ];
     }
 }

@@ -48,18 +48,15 @@ class UpdateCourseRequest extends FormRequest
       'localProposal' => ['required', 'string', 'max:1000'],
       'objective' => ['required', 'string', 'max:1000'],
       'observation' => ['required', 'string', 'max:1000'],
-      'practicalPhases' => ['required', 'json'],
       'practiceHours' => ['required', 'integer'],
       'proposedAt' => ['required', 'date'],
       'project' => ['required', 'string', 'max:1000'],
       'public' => ['required', 'boolean'],
-      'requiredInstallingSources' => ['required', 'json'],
       'setecName' => ['required',  'string', 'max:100'],
       'summary' => ['required',  'string', 'max:1000'],
       'targetGroups' => ['required',  'json'],
       'teachingStrategies' => ['required', 'json'],
       'techniquesRequisites' => ['required', 'json'],
-      'theoreticalPhases' => ['required', 'json'],
       'theoryHours' => ['required', 'json'],
     ];
   }
@@ -102,18 +99,15 @@ class UpdateCourseRequest extends FormRequest
       'localProposal' => 'Proposito local',
       'objective' => 'Objetivo',
       'observation' => 'Observación',
-      'practicalPhases' => 'Fase práctica',
       'practiceHours' => 'Horas prácticas',
       'proposedAt' => 'Fecha de propuesta',
       'project' => 'Proyecto',
       'public' => 'Publico',
-      'requiredInstallingSources' => 'Fuentes de instalación requeridas',
       'setecName' => 'Nombre de la setec',
       'summary' => 'Sumario',
       'targetGroups' => 'Grupos destinatorios',
       'teachingStrategies' => 'Estrategias de enseñanza',
       'techniquesRequisites' => 'Requistos ténicos',
-      'theoreticalPhases' => 'Fases teóricas',
       'theoryHours' => 'Horas teóricas'
     ];
   }

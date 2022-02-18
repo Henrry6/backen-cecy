@@ -113,12 +113,13 @@ class DetailPlanificationController extends Controller
     // DetailPlanificationController
     public function registerDetailPlanification(RegisterDetailPlanificationRequest $request) //hecho
     {
+        return 'works!';
         $loggedInInstructor = Instructor::where('user_id', $request->user()->id)->get();
 
         $planification = Planification::find($request->input('planification.id'));
         $responsibleCourse = $planification->reponsibleCourse();
 
-        //validar que la planification le pertenezca al docente logeado
+        // validar que la planification le pertenezca al docente logeado
         // if ($loggedInInstructor->id !== $responsibleCourse->id) {
         //     return response()->json([
         //         'msg' => [
@@ -304,6 +305,7 @@ class DetailPlanificationController extends Controller
     // DetailPlanificationController
     public function destroysDetailPlanifications(DestroysDetailPlanificationRequest $request) //hecho
     {
+        return 'works!';
         $detailPlanifications = DetailPlanification::whereIn('id', $request->input('ids'))->get();
         DetailPlanification::destroy($request->input('ids'));
 
