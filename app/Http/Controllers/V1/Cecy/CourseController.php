@@ -178,10 +178,10 @@ class CourseController extends Controller
 
         $catalogue = Catalogue::find($participant->type_id);
 
-        $courses = $catalogue->courses()->get();
+        $courses = $catalogue->courses()->paginate();
 
-        $courses = new CourseCollection($courses);
-        return ($courses);
+        // $courses = new CourseCollection($courses);
+        // return ($courses);
 
         // $allowedCourses = [];
         // foreach ($catalogues as $catalogue) {
@@ -208,39 +208,14 @@ class CourseController extends Controller
     // Obtiene los cursos privados aprobados por tipo de participante y filtrados por categoria (Done)
     public function getPrivateCoursesByCategory(getCoursesByCategoryRequest $request, Catalogue $category)
     {
-        return ('getPrivateCoursesByCategory');
-        $sorts = explode(',', $request->input('sort'));
-
-        $courseApproved = $this->getApprovedCoursesId();
-        $catalogues = Catalogue::get();
-        $publicCourses =  Course::customOrderBy($sorts)
-            ->public(true)
-            ->state($courseApproved->id)
-            ->get();
 
         $participant = Participant::where('user_id', $request->user()->id)->first();
-        $typeParticipant = $participant->type_id;
 
-        $allowedCourses = [];
-        foreach ($catalogues as $catalogue) {
-            $cursos = $catalogue->courses()->where([['catalogue_id', $typeParticipant], ['state_id', $courseApproved->id]])->get();
-            foreach ($cursos as $curso) {
-                array_push($allowedCourses, $curso);
-            }
-        }
+        $catalogue = Catalogue::find($participant->type_id);
 
-        foreach ($publicCourses as $publicCourse) {
-            array_push($allowedCourses, $publicCourse);
-        }
+        $courses = $catalogue->courses()->paginate();
 
-        // $filteredCourses =  $allowedCourses->customOrderBy($sorts)
-        //     ->name($request->input('name'))
-        //     ->public(true)
-        //     ->state($courseApproved->id)
-        //     ->get();
-
-
-        return (new CoursePublicPrivateCollection($allowedCourses))
+        return (new CoursePublicPrivateCollection($courses))
             ->additional([
                 'msg' => [
                     'summary' => 'success',
@@ -253,16 +228,14 @@ class CourseController extends Controller
     // Obtiene los cursos privados aprobados por tipo de participante y filtrados por nombre (Done)
     public function getPrivateCoursesByName(getCoursesByNameRequest $request)
     {
-        return ('getPrivateCoursesByName');
-        $sorts = explode(',', $request->sort);
 
-        $courses = Course::customOrderBy($sorts)
-            ->name($request->input('search'))
-            ->paginate($request->input('per_page'));
+        $participant = Participant::where('user_id', $request->user()->id)->first();
 
-        $private_courses = $courses->where('public', false)->get();
+        $catalogue = Catalogue::find($participant->type_id);
 
-        return (new CoursePublicPrivateCollection($private_courses))
+        $courses = $catalogue->courses()->paginate();
+
+        return (new CoursePublicPrivateCollection($courses))
             ->additional([
                 'msg' => [
                     'summary' => 'success',

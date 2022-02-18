@@ -3,20 +3,18 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\Cecy\DetailPlanifications\DetailPlanificationRequest;
 use App\Http\Requests\V1\Cecy\Participants\StoreUserAndParticipantRequest;
-use App\Http\Requests\V1\Cecy\Topics\DestroysTopicRequest;
+use App\Http\Requests\V1\Cecy\Registrations\IndexRegistrationRequest;
+use App\Http\Requests\V1\Cecy\Registrations\UpdateRegistrationRequest;
 use Illuminate\Http\Request;
-use App\Models\Cecy\Topic;
-use App\Models\Cecy\Course;
 use App\Models\Cecy\Catalogue;
-use App\Http\Resources\V1\Cecy\Topics\TopicResource;
-use App\Http\Resources\V1\Cecy\Topics\TopicCollection;
-use App\Http\Requests\V1\Cecy\Topics\StoreTopicRequest;
-use App\Http\Requests\V1\Cecy\Topics\UpdateTopicRequest;
-use App\Http\Resources\V1\Cecy\Courses\TopicsByCourseCollection;
+use App\Http\Resources\V1\Cecy\Registrations\RegistrationResource;
 use App\Http\Resources\V1\Cecy\Users\UserResource;
 use App\Models\Authentication\User;
 use App\Models\Cecy\Participant;
+use App\Models\Cecy\Planification;
+use App\Models\Cecy\Registration;
 use App\Models\Core\File;
 use App\Models\Core\Image;
 use Illuminate\Support\Facades\DB;
@@ -29,7 +27,7 @@ class ParticipantController extends Controller
 
 
     // ParticipantController
-    public function registerParticipant(StoreUserAndParticipantRequest $request)
+    public function registerUserParticipant(StoreUserAndParticipantRequest $request)
     {
         $user = User::where('username', $request->input('username'))
             ->orWhere('email', $request->input('email'))->first();
@@ -76,7 +74,7 @@ class ParticipantController extends Controller
             $user->save();
             $user->addPhones($request->input('phones'));
             $user->addEmails($request->input('emails'));
-            $participant = $this->storeParticipant($request, $user);
+            $participant = $this->createParticipant($request, $user);
             $participant->save();
         });
 
@@ -90,7 +88,6 @@ class ParticipantController extends Controller
             ])
             ->response()->setStatusCode(200);
     }
-
 
     private function createParticipant(StoreUserAndParticipantRequest $request, User $user)
     {
@@ -131,7 +128,7 @@ class ParticipantController extends Controller
                 ]
             ])->response()->setStatusCode(200);
     }
-/*DDRC-C: Busca informacion de un participante(datos del usuario) y de registro a un curso especifico(informacion adicional y archivos)*/
+    /*DDRC-C: Busca informacion de un participante(datos del usuario) y de registro a un curso especifico(informacion adicional y archivos)*/
     // ParticipantController
     public function getParticipantInformation(IndexRegistrationRequest $request, Registration $registration)
     {
