@@ -28,7 +28,7 @@ use App\Http\Resources\V1\Cecy\Courses\CourseByCoordinatorCecyCollection;
 use App\Http\Resources\V1\Cecy\Courses\CoursePublicPrivateCollection;
 use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationInformNeedResource;
 use App\Http\Resources\V1\Cecy\Planifications\InformCourseNeedsResource;
-use App\Http\Resources\V1\Cecy\Prerequisites\CoursesByResponsibleCollection;
+use App\Http\Resources\V1\Cecy\Courses\CoursesByResponsibleCollection;
 use App\Models\Cecy\Instructor;
 use App\Models\Cecy\Participant;
 use App\Models\Cecy\Planification;
@@ -300,10 +300,10 @@ class CourseController extends Controller
     //obtener los cursos asignados a un docente responsable logueado (Done)
     public function getCoursesByResponsibleCourse(getCoursesByResponsibleRequest $request)
     {
-        // return "getCoursesByResponsibleCourse";
 
         $instructor = Instructor::FirstWhere('user_id', $request->user()->id);
-        $courses = $instructor->courses()->get();
+        $courses = Course::where('responsible_id', $instructor->id)->get();
+        // return response()->json($courses);
 
         return (new CoursesByResponsibleCollection($courses))
             ->additional([

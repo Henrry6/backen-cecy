@@ -14,7 +14,7 @@ class getCoursesByResponsibleRequest extends FormRequest
     public function rules()
     {
         return [
-            'responsible.id' =>  ['integer', 'required'],
+          
         ];
     }
 
@@ -22,7 +22,7 @@ class getCoursesByResponsibleRequest extends FormRequest
     {
         return [
 
-            'responsible.id' => 'Id  del docente responsable del curso',
+           
         ];
     }
 }

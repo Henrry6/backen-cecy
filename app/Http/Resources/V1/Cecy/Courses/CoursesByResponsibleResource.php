@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\V1\Cecy\Planifications;
+namespace App\Http\Resources\V1\Cecy\Courses;
 
 use App\Http\Resources\V1\Cecy\Authorities\AuthorityResource;
 use App\Http\Resources\V1\Cecy\Catalogues\CatalogueResource;
@@ -16,7 +16,8 @@ class CoursesByResponsibleResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'responsibleCourseId' => InstructorResource::make($this->responsibleCourseId), 
+            'name' => $this->name,
+            'responsibleCourseId' => InstructorResource::make($this->responsible), 
             // 'course' => CourseResource::make($this->course),
             'state' => CatalogueResource::make($this->state),
             'photoId' => CourseResource::make($this->photoId)

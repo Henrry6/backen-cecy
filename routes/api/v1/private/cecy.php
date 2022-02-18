@@ -118,7 +118,9 @@ Route::prefix('detailPlanification/{detailPlanification}')->group(function () {
  * COURSE
  **********************************************************************************************************************/
 Route::prefix('courses/{course}')->group(function () {
+    Route::get('',[ CourseController::class, 'show']);
     Route::prefix('')->group(function () {
+        
         Route::get('/topics', [TopicController::class, 'getTopics']);
         Route::post('/topics', [TopicController::class, 'storeTopic']);
         Route::put('/topics/{topic}', [TopicController::class, 'updateTopic']);
@@ -150,7 +152,7 @@ Route::prefix('courses')->group(function () {
     Route::get('private-courses-participant', [CourseController::class, 'getPrivateCoursesByParticipantType']);
     Route::get('private-courses-category/{category}', [CourseController::class, 'getPrivateCoursesByCategory']);
     Route::get('private-courses-name', [CourseController::class, 'getPrivateCoursesByName']);
-    Route::get('by-responsible/{responsible}', [CourseController::class, 'getCoursesByResponsibleCourse']);
+    Route::get('by-responsible', [CourseController::class, 'getCoursesByResponsibleCourse']);
     Route::get('by-instructor/{instructor}', [CourseController::class, 'getCoursesByInstructor']);
     Route::get('by-coodinator/{coodinator}', [CourseController::class, 'getCoursesByCoordinator']);
     Route::get('kpi', [CourseController::class, 'getCoursesKPI']);
