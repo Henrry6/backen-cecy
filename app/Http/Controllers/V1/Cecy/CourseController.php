@@ -37,7 +37,6 @@ use App\Models\Core\Image;
 use App\Models\Core\State;
 use App\Models\Core\Career;
 use Exception;
-use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
 
 class CourseController extends Controller
@@ -64,10 +63,16 @@ class CourseController extends Controller
         $courseApproved = $coursesTypes->where('code', $catalogue['course_state']['approved'])->first();
         return $courseApproved;
     }
-
-    private function getApprovedCoursesByApprovedPlanifications(IndexCourseRequest $request)
+    // Obtiene los cursos públicos aprobados (Done)
+    public function getPublicCourses(IndexCourseRequest $request)
     {
         $sorts = explode(',', $request->input('sort'));
+
+        $courseApproved = $this->getApprovedCoursesId();
+        // $courses =  Course::customOrderBy($sorts)
+        //     ->public(true)
+        //     ->state($courseApproved->id)
+        //     ->paginate($request->input('per_page'));
 
         $planificationApproved = $this->getApprovedPlanificationsId();
 
@@ -75,28 +80,20 @@ class CourseController extends Controller
             ->state($planificationApproved->id)
             ->get();
 
+        echo ($planifications);
 
         for ($i = 0; $i < count($planifications); $i++) {
-            $courses[$i] = $planifications[$i]->course;
+            $courses[$i] = $planifications[$i]->course->first();
         }
-        return $courses;
-    }
-    // Obtiene los cursos públicos aprobados (Done)
-    public function getPublicCourses(IndexCourseRequest $request)
-    {
-        $courseApproved = $this->getApprovedCoursesId();
+        // echo ($courses);
 
-        $courses = $this->getApprovedCoursesByApprovedPlanifications($request);
-        $publicCoursesApproved = [];
         $customIndex = 0;
         for ($i = 0; $i < count($courses); $i++) {
-            if ($courses[$i]->public === true and $courses[$i]->state_id === $courseApproved->id) {
+            if ($courses[$i]->public(true) and $courses[$i]->state(($courseApproved->id))) {
                 $publicCoursesApproved[$customIndex] = $courses[$i];
-                $customIndex = $customIndex + 1;
             };
         }
-
-        $publicCoursesApproved  =  new Paginator($publicCoursesApproved, $request->input('per_page'));
+        // $publicCoursesApproved  = $publicCoursesApproved->paginate($request->input('per_page'));
 
         return (new CoursePublicPrivateCollection($publicCoursesApproved))
             ->additional([
@@ -109,24 +106,19 @@ class CourseController extends Controller
     }
 
     // Obtiene los cursos públicos aprobados por categoria (Done)
-    public function getPublicCoursesByCategory(IndexCourseRequest $request, Catalogue $category)
+    public function getPublicCoursesByCategory(GetCoursesByCategoryRequest $request, Catalogue $category)
     {
+        $sorts = explode(',', $request->input('sort'));
 
         $courseApproved = $this->getApprovedCoursesId();
 
-        $courses = $this->getApprovedCoursesByApprovedPlanifications($request);
-        $publicCoursesApproved = [];
-        $customIndex = 0;
-        for ($i = 0; $i < count($courses); $i++) {
-            if ($courses[$i]->public === true  and $courses[$i]->state_id === $courseApproved->id and  $courses[$i]->category_id === $category->id) {
-                $publicCoursesApproved[$customIndex] = $courses[$i];
-                $customIndex = $customIndex + 1;
-            };
-        }
+        $courses =  Course::customOrderBy($sorts)
+            ->category($category->id)
+            ->public(true)
+            ->state($courseApproved->id)
+            ->paginate($request->input('per_page'));
 
-        $publicCoursesApproved  =  new Paginator($publicCoursesApproved, $request->input('per_page'));
-
-        return (new CoursePublicPrivateCollection($publicCoursesApproved))
+        return (new CoursePublicPrivateCollection($courses))
             ->additional([
                 'msg' => [
                     'summary' => 'success',
