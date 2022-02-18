@@ -15,7 +15,7 @@ use App\Http\Controllers\V1\Cecy\PlanificationController;
 use App\Http\Controllers\V1\Cecy\RequirementController;
 use App\Http\Controllers\V1\Cecy\SchoolPeriodController;
 use App\Http\Controllers\V1\Cecy\InstructorController;
-
+use App\Http\Resources\V1\Cecy\Courses\CourseResource;
 
 /***********************************************************************************************************************
  * CATALOGUES
@@ -117,8 +117,27 @@ Route::prefix('detailPlanification/{detailPlanification}')->group(function () {
 /***********************************************************************************************************************
  * COURSE
  **********************************************************************************************************************/
+
+Route::prefix('courses')->group(function () {
+    Route::get('', [CourseController::class, 'getCourses']);
+    Route::post('', [CourseController::class, 'storeNewCourse']);
+    Route::get('public-courses', [CourseController::class, 'getPublicCourses']);
+    Route::get('public-courses-category/{category}', [CourseController::class, 'getPublicCoursesByCategory']);
+    Route::get('public-courses-name', [CourseController::class, 'getPublicCoursesByName']);
+    Route::get('private-courses-participant', [CourseController::class, 'getPrivateCoursesByParticipantType']);
+    Route::get('private-courses-category/{category}', [CourseController::class, 'getPrivateCoursesByCategory']);
+    Route::get('private-courses-name', [CourseController::class, 'getPrivateCoursesByName']);
+    Route::get('by-responsible', [CourseController::class, 'getCoursesByResponsibleCourse']);
+    Route::get('by-instructor/{instructor}', [CourseController::class, 'getCoursesByInstructor']);
+    Route::get('by-coodinator/{coodinator}', [CourseController::class, 'getCoursesByCoordinator']);
+    Route::get('kpi', [CourseController::class, 'getCoursesKPI']);
+    Route::get('year-schedule', [CourseController::class, 'showYearSchedule']);
+    Route::get('career/{career}', [CourseController::class, 'getCoursesByCareer']);
+    
+});
+
 Route::prefix('courses/{course}')->group(function () {
-    Route::get('',[ CourseController::class, 'show']);
+    Route::get('', [CourseController::class, 'show']);
     Route::prefix('')->group(function () {
         
         Route::get('/topics', [TopicController::class, 'getTopics']);
@@ -141,23 +160,6 @@ Route::prefix('courses/{course}')->group(function () {
     Route::get('inform-course-needs', [CourseController::class, 'showInformCourseNeeds']);
     Route::get('curricular-design', [CourseController::class, 'showCurricularDesign']);
     Route::get('final-report', [CourseController::class, 'showCourseFinalReport']);
-});
-
-Route::prefix('courses')->group(function () {
-    Route::get('', [CourseController::class, 'getCourses']);
-    Route::post('', [CourseController::class, 'storeNewCourse']);
-    Route::get('public-courses', [CourseController::class, 'getPublicCourses']);
-    Route::get('public-courses-category/{category}', [CourseController::class, 'getPublicCoursesByCategory']);
-    Route::get('public-courses-name', [CourseController::class, 'getPublicCoursesByName']);
-    Route::get('private-courses-participant', [CourseController::class, 'getPrivateCoursesByParticipantType']);
-    Route::get('private-courses-category/{category}', [CourseController::class, 'getPrivateCoursesByCategory']);
-    Route::get('private-courses-name', [CourseController::class, 'getPrivateCoursesByName']);
-    Route::get('by-responsible', [CourseController::class, 'getCoursesByResponsibleCourse']);
-    Route::get('by-instructor/{instructor}', [CourseController::class, 'getCoursesByInstructor']);
-    Route::get('by-coodinator/{coodinator}', [CourseController::class, 'getCoursesByCoordinator']);
-    Route::get('kpi', [CourseController::class, 'getCoursesKPI']);
-    Route::get('year-schedule', [CourseController::class, 'showYearSchedule']);
-    Route::get('career/{career}', [CourseController::class, 'getCoursesByCareer']);
 });
 
 /***********************************************************************************************************************

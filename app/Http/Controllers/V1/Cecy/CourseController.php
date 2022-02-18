@@ -24,7 +24,6 @@ use App\Http\Requests\V1\Cecy\Courses\UpdateCurricularDesign;
 use App\Http\Requests\V1\Cecy\Courses\UploadCertificateOfApprovalRequest;
 use App\Http\Requests\V1\Cecy\Planifications\GetDateByshowYearScheduleRequest;
 use App\Http\Requests\V1\Cecy\Planifications\IndexPlanificationRequest;
-use App\Http\Requests\V1\Core\Images\UploadImageRequest;
 use App\Http\Resources\V1\Cecy\Courses\CourseByCoordinatorCecyCollection;
 use App\Http\Resources\V1\Cecy\Courses\CoursePublicPrivateCollection;
 use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationInformNeedResource;
@@ -301,10 +300,11 @@ class CourseController extends Controller
     //obtener los cursos asignados a un docente responsable logueado (Done)
     public function getCoursesByResponsibleCourse(getCoursesByResponsibleRequest $request)
     {
+        // return 'xd';
 
         $instructor = Instructor::FirstWhere('user_id', $request->user()->id);
         $courses = Course::where('responsible_id', $instructor->id)->get();
-        // return response()->json($courses);
+
 
         return (new CoursesByResponsibleCollection($courses))
             ->additional([
@@ -604,9 +604,5 @@ class CourseController extends Controller
     public function showImageCourse(Course $courses, Image $image)
     {
         return $courses->showImage($image);
-    }
-    public function uploadImage(UploadImageRequest $request, Catalogue $catalogue)
-    {
-        return $catalogue->uploadImage($request);
     }
 }
