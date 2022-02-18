@@ -27,7 +27,6 @@ class ParticipantController extends Controller
     {
     }
 
-
     // ParticipantController
     public function registerUserParticipant(StoreUserAndParticipantRequest $request)
     {
