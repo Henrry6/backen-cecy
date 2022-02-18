@@ -5,7 +5,6 @@ use App\Http\Controllers\V1\Cecy\CatalogueController;
 use App\Http\Controllers\V1\Cecy\CertificateController;
 use App\Http\Controllers\V1\Cecy\ClassroomController;
 use App\Http\Controllers\V1\Cecy\GuachagmiraController;
-use App\Http\Controllers\V1\Cecy\DetailPlanificationController;
 use App\Http\Controllers\V1\Cecy\CourseController;
 use App\Http\Controllers\V1\Cecy\DetailAttendanceController;
 use App\Http\Controllers\V1\Cecy\DetailPlanificationController;
