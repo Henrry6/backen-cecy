@@ -300,7 +300,7 @@ class CourseController extends Controller
     //obtener los cursos asignados a un docente responsable logueado (Done)
     public function getCoursesByResponsibleCourse(getCoursesByResponsibleRequest $request)
     {
-        return "getCoursesByResponsibleCourse";
+        // return "getCoursesByResponsibleCourse";
 
         $instructor = Instructor::FirstWhere('user_id', $request->user()->id);
         $courses = $instructor->courses()->get();
