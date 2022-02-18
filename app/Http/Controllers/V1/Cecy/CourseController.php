@@ -28,9 +28,7 @@ use App\Http\Resources\V1\Cecy\Courses\CourseByCoordinatorCecyCollection;
 use App\Http\Resources\V1\Cecy\Courses\CoursePublicPrivateCollection;
 use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationInformNeedResource;
 use App\Http\Resources\V1\Cecy\Planifications\InformCourseNeedsResource;
-use App\Http\Resources\V1\Cecy\Planifications\PlanificationCollection;
-use App\Http\Resources\V1\Cecy\Planifications\PlanificationResource;
-use App\Http\Resources\V1\Cecy\Prerequisites\CoursesByResponsibleCollection;
+use App\Http\Resources\V1\Cecy\Courses\CoursesByResponsibleCollection;
 use App\Models\Cecy\Instructor;
 use App\Models\Cecy\Participant;
 use App\Models\Cecy\Planification;
@@ -73,9 +71,10 @@ class CourseController extends Controller
 
         $planifications =  Planification::where('state_id', $planificationApproved->id)->get();
 
+        echo ($planifications);
 
         for ($i = 0; $i < count($planifications); $i++) {
-            $courses[$i] = $planifications[$i]->course;
+            $courses[$i] = $planifications[$i]->course->first();
         }
 
         return new CourseCollection($courses);
@@ -90,13 +89,11 @@ class CourseController extends Controller
         $publicCoursesApproved = [];
         $customIndex = 0;
         for ($i = 0; $i < count($courses); $i++) {
-            if ($courses[$i]->public === true and $courses[$i]->state_id === $courseApproved->id) {
+            if ($courses[$i]->public(true) and $courses[$i]->state(($courseApproved->id))) {
                 $publicCoursesApproved[$customIndex] = $courses[$i];
-                $customIndex = $customIndex + 1;
             };
         }
-
-        $publicCoursesApproved  =  new Paginator($publicCoursesApproved, $request->input('per_page'));
+        // $publicCoursesApproved  = $publicCoursesApproved->paginate($request->input('per_page'));
 
         return (new CoursePublicPrivateCollection($publicCoursesApproved))
             ->additional([
@@ -109,24 +106,19 @@ class CourseController extends Controller
     }
 
     // Obtiene los cursos públicos aprobados por categoria (Done)
-    public function getPublicCoursesByCategory(IndexCourseRequest $request, Catalogue $category)
+    public function getPublicCoursesByCategory(GetCoursesByCategoryRequest $request, Catalogue $category)
     {
+        $sorts = explode(',', $request->input('sort'));
 
         $courseApproved = $this->getApprovedCoursesId();
 
-        $courses = $this->getApprovedCoursesByApprovedPlanifications($request);
-        $publicCoursesApproved = [];
-        $customIndex = 0;
-        for ($i = 0; $i < count($courses); $i++) {
-            if ($courses[$i]->public === true  and $courses[$i]->state_id === $courseApproved->id and  $courses[$i]->category_id === $category->id) {
-                $publicCoursesApproved[$customIndex] = $courses[$i];
-                $customIndex = $customIndex + 1;
-            };
-        }
+        $courses =  Course::customOrderBy($sorts)
+            ->category($category->id)
+            ->public(true)
+            ->state($courseApproved->id)
+            ->paginate($request->input('per_page'));
 
-        $publicCoursesApproved  =  new Paginator($publicCoursesApproved, $request->input('per_page'));
-
-        return (new CoursePublicPrivateCollection($publicCoursesApproved))
+        return (new CoursePublicPrivateCollection($courses))
             ->additional([
                 'msg' => [
                     'summary' => 'success',
@@ -320,10 +312,11 @@ class CourseController extends Controller
     //obtener los cursos asignados a un docente responsable logueado (Done)
     public function getCoursesByResponsibleCourse(getCoursesByResponsibleRequest $request)
     {
-        return "getCoursesByResponsibleCourse";
+        // return 'xd';
 
         $instructor = Instructor::FirstWhere('user_id', $request->user()->id);
-        $courses = $instructor->courses()->get();
+        $courses = Course::where('responsible_id', $instructor->id)->get();
+
 
         return (new CoursesByResponsibleCollection($courses))
             ->additional([
