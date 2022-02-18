@@ -7,6 +7,8 @@ use App\Http\Requests\V1\Cecy\DetailPlanifications\DetailPlanificationRequest;
 use App\Http\Requests\V1\Cecy\Participants\StoreUserAndParticipantRequest;
 use App\Http\Requests\V1\Cecy\Registrations\IndexRegistrationRequest;
 use App\Http\Requests\V1\Cecy\Registrations\UpdateRegistrationRequest;
+use App\Http\Resources\V1\Cecy\Participants\ParticipantInformationResource;
+use App\Http\Resources\V1\Cecy\Planifications\PlanificationParticipantCollection;
 use Illuminate\Http\Request;
 use App\Models\Cecy\Catalogue;
 use App\Http\Resources\V1\Cecy\Registrations\RegistrationResource;
