@@ -95,7 +95,7 @@ class PlanificationController extends Controller
     // PlanificationController ya esta, no trae la informacion .
     public function getKpi(ShowKpiRequest $request, Catalogue $state)
     {
-        
+
         $planifications = Planification::withCount([
             'id' => function (Builder $query) {
                 $query->where(
@@ -105,16 +105,16 @@ class PlanificationController extends Controller
             },
         ])->get();
 
-    //     return (new KpiPlanificationResourse($planifications[0]))
-    //         ->additional([
-    //             'msg' => [
-    //                 'summary' => 'success',
-    //                 'detail' => '',
-    //                 'code' => '200'
-    //             ]
-    //         ])
-    //         ->response()->setStatusCode(200);
-     }
+        //     return (new KpiPlanificationResourse($planifications[0]))
+        //         ->additional([
+        //             'msg' => [
+        //                 'summary' => 'success',
+        //                 'detail' => '',
+        //                 'code' => '200'
+        //             ]
+        //         ])
+        //         ->response()->setStatusCode(200);
+    }
 
     //Trae todos los cursos
     // PlanificationController ya esta
@@ -134,12 +134,11 @@ class PlanificationController extends Controller
                 ]
             ])
             ->response()->setStatusCode(200);
-
     }
 
     /*DDRC-C: Busca planificaciones vigentes por periodo asignadas al usuario logueado(responsable del CECY)*/
     // PlanificationController ya esta, no vale el metodo
-    public function getPlanificationsByPeriodState(InstructorRequest $request )
+    public function getPlanificationsByPeriodState(InstructorRequest $request)
     {
         $instructor = Instructor::FirstWhere('user_id', $request->user()->id)->get();
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
@@ -164,8 +163,8 @@ class PlanificationController extends Controller
     {
         $sorts = explode(',', $request->sort);
         $courseParallelWorkday = Planification::customOrderBy($sorts)
-//            ->detailplanifications()
-//            ->course()
+            //            ->detailplanifications()
+            //            ->course()
             ->get();
 
         return (new CourseParallelWorkdayResource($courseParallelWorkday))
@@ -181,7 +180,7 @@ class PlanificationController extends Controller
     // asignar docente responsable de curso a una planificacion ya esta
     public function storePlanificationByCourse(StorePlanificationByCourseRequest $request, Planification $planification)
     {
-        $planification ->responsibleCourse()->associate(Instructor::find($request->input('responsibleCourse.id')));
+        $planification->responsibleCourse()->associate(Instructor::find($request->input('responsibleCourse.id')));
         $planification->course()->associate(Course::find($request->input('name')));
         $planification->participantType()->associate(Course::find($request->input('participant_type.id')));
         $planification->duration()->associate(Course::find($request->input('duration')));
@@ -213,7 +212,7 @@ class PlanificationController extends Controller
         $planification->endedAt = $request->input('ended_at');
         $planification->startedAt = $request->input('started_at');
         $planification->save();
-        return (new PlanificationResource ($planification))
+        return (new PlanificationResource($planification))
             ->additional([
                 'msg' => [
                     'summary' => 'Actualizado correctamente',
@@ -235,7 +234,6 @@ class PlanificationController extends Controller
                     'code' => '200'
                 ]
             ]);
-
     }
 
     //Aprobacion de planificacion ya esta
@@ -254,7 +252,4 @@ class PlanificationController extends Controller
                 ]
             ]);
     }
-
 }
-
-

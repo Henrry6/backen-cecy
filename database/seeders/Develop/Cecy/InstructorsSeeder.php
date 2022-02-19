@@ -2,6 +2,7 @@
 
 namespace Database\Seeders\Develop\Cecy;
 
+use App\Models\Authentication\User;
 use App\Models\Cecy\Catalogue;
 use App\Models\Cecy\Instructor;
 use Faker\Factory;
@@ -61,18 +62,20 @@ class InstructorsSeeder extends Seeder
     }
     public function  createInstructors()
     {
+        $faker = Factory::create();
 
         $states = Catalogue::where('type', 'INSTRUCTOR_STATE')->get();
         $types = Catalogue::where('type', 'INSTRUCTOR')->get();
+        $users = User::where('id', '>=', 6)->where('id', '<=', 35)->get();
 
-        for ($i = 6; $i <= 35; $i++) {
+        foreach ( $users as $user) {
             Instructor::factory()->create(
                 [
-                    'state_id' =>  $states[rand(0, sizeof($states) - 1)],
-                    'type_id' => $types[rand(0, sizeof($types) - 1)],
-                    'user_id' => $i
+                    'state_id' =>   $faker->randomElement($states),
+                    'type_id' =>  $faker->randomElement($types),
+                    'user_id' => $user
                 ]
-            )->create();
+                );
         }
     }
 }
