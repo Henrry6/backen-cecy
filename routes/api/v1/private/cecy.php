@@ -100,10 +100,11 @@ Route::prefix('courses/{course}')->group(function () {
     Route::put('', [CourseController::class, 'updateCourse']);
     Route::prefix('')->group(function () {
         Route::get('/topics', [TopicController::class, 'getTopics']);
-        Route::post('/topics', [TopicController::class, 'storeTopic']);
-        Route::put('/topics/{topic}', [TopicController::class, 'updateTopic']);
+        Route::get('/topics/all', [TopicController::class, 'getAllTopics']);
+        Route::post('/topics', [TopicController::class, 'storesTopics']);
+        Route::put('/topics', [TopicController::class, 'updateTopics']);
         Route::delete('/topics/{topic}', [TopicController::class, 'destroyTopic']);
-        Route::patch('/topics/destroys', [TopicController::class, 'destroysTopics']);
+        Route::get('/instructors', [TopicController::class, 'getInstructors']);
     });
     Route::prefix('')->group(function () {
         Route::get('/prerequisites', [PrerequisiteController::class, 'getPrerequisites']);
