@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\V1\Cecy\Planifications;
+namespace App\Http\Resources\V1\Cecy\Planifications\ResponsibleCoursePlanifications;
 
 use App\Http\Resources\V1\Cecy\Catalogues\CatalogueCollection;
 use App\Http\Resources\V1\Cecy\Catalogues\CatalogueResource;
@@ -17,18 +17,18 @@ class PlanificationByCourseResource extends JsonResource
     public function toArray($request)
     {
         $course = $request->input('course.id');
-        $partipantTypes = $course->participantType();
+        // $partipantTypes = $course->participantType();
         
         return [
             'id' => $this->id,
-            'participantTypes' => new CatalogueCollection($partipantTypes),
+            'detailPlanifications' => DetailPlanificationResource::collection($this->detailPlanifications),
+            // 'participantTypes' => new CatalogueCollection($partipantTypes),
             'responsibleCourse' => InstructorResource::make($this->responsibleCourse),
-            'schoolPeriod' => DetailSchoolPeriodResource::collection($this->detailSchoolPeriod),
+            // 'schoolPeriod' => DetailSchoolPeriodResource::collection($this->detailSchoolPeriod),
             'state' => CatalogueResource::make($this->state),
             'code' => $this->code,
             'endedAt' => $this->ended_at,
             'startedAt' => $this->started_at,
-            'detailPlanifications' => DetailPlanificationResource::collection($this->dedetailPlanifications),
         ];
     }
 }
