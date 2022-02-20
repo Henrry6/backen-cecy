@@ -13,15 +13,15 @@ class DetailSchoolPeriodResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'schoolPeriod' => SchoolPeriodResource::make($this->detailSchoolPeriods),
-            'especialEndedAt' => $this->especialEndedAt,
-            'especialStartedAt' => $this->especialStartedAt,
-            'extraordinaryEndedAt' => $this->extraordinaryEndedAt,
-            'extraordinaryStartedAt' => $this->extraordinaryStartedAt,
-            'nullificationEndedAt' => $this->nullificationEndedAt,
-            'nullificationStartedAt' => $this->nullificationStartedAt,
-            'ordinaryEndedAt' => $this->ordinaryEndedAt,
-            'ordinaryStartedAt' => $this->ordinaryStartedAt,
+            'schoolPeriod' => SchoolPeriodResource::make($this->schoolPeriod),
+            'especialEndedAt' => $this->especial_ended_at,
+            'especialStartedAt' => $this->especial_started_at,
+            'extraordinaryEndedAt' => $this->extraordinary_ended_at,
+            'extraordinaryStartedAt' => $this->extraordinary_started_at,
+            'nullificationEndedAt' => $this->nullification_ended_at,
+            'nullificationStartedAt' => $this->nullification_started_at,
+            'ordinaryEndedAt' => $this->ordinary_ended_at,
+            'ordinaryStartedAt' => $this->ordinary_started_at,
         ];
     }
 }

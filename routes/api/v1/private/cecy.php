@@ -133,13 +133,12 @@ Route::prefix('courses')->group(function () {
     Route::get('kpi', [CourseController::class, 'getCoursesKPI']);
     Route::get('year-schedule', [CourseController::class, 'showYearSchedule']);
     Route::get('career/{career}', [CourseController::class, 'getCoursesByCareer']);
-    
 });
 
 Route::prefix('courses/{course}')->group(function () {
     Route::get('', [CourseController::class, 'show']);
     Route::prefix('')->group(function () {
-        
+
         Route::get('/topics', [TopicController::class, 'getTopics']);
         Route::get('/topics/all', [TopicController::class, 'getAllTopics']);
         Route::post('/topics', [TopicController::class, 'storesTopics']);
@@ -217,15 +216,15 @@ Route::prefix('instructor')->group(function () {
  **********************************************************************************************************************/
 
 
-Route::prefix('requirement')->group(function(){
-    Route::get('',[RequirementController::class, 'getAllRequirement']);
-   Route::get('/{requirements}',[RequirementController::class, 'getRequirement']);
-    Route::post('/{requirements}',[RequirementController::class, 'storeRequirement']);
-     Route::put('/{requirements}',[RequirementController::class, 'updateRequirement']);
-     Route::delete('/{requirements}',[RequirementController::class, 'destroy']);
- });
+Route::prefix('requirement')->group(function () {
+    Route::get('', [RequirementController::class, 'getAllRequirement']);
+    Route::get('/{requirements}', [RequirementController::class, 'getRequirement']);
+    Route::post('/{requirements}', [RequirementController::class, 'storeRequirement']);
+    Route::put('/{requirements}', [RequirementController::class, 'updateRequirement']);
+    Route::delete('/{requirements}', [RequirementController::class, 'destroy']);
+});
 
- Route::prefix('requirement')->group(function () {
+Route::prefix('requirement')->group(function () {
     Route::get('file', [RequirementController::class, 'showFile']);
     Route::get('image', [RequirementController::class, 'showImage']);
- });
+});

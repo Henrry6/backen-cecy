@@ -59,6 +59,7 @@ class CourseController extends Controller
             ->where('code', $catalogue['planification_state']['approved'])->first();
         return $planificationApproved;
     }
+
     private function getApprovedCourses()
     {
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
@@ -71,11 +72,12 @@ class CourseController extends Controller
     {
         $planificationApproved = $this->getApprovedPlanifications();
         $planifications = $planificationApproved->planifications()
-            ->whereHas('course', function ($course) {
+            ->whereHas('course', function ($course) use ($request) {
                 $course
+                    ->name($request->input('search'))
+                    ->category($request->input('category'))
                     ->where('public', true);
-            })
-            ->paginate($request->input('per_page'));
+            })->paginate($request->input('per_page'));
 
         return (new PlanificationCollection($planifications))
             ->additional([
