@@ -16,7 +16,7 @@
     },
     "entity_certification": {
         "type": "ENTITY_CERTIFICATION",
-        "senecyt": "SENECYT",
+        "senecyt": "SENESCYT",
         "setec": "SETECT",
         "cecy": "CECY"
     },

@@ -345,11 +345,13 @@ class CourseController extends Controller
     public function updateGeneralInformationCourse(UpdateCourseGeneralDataRequest $request, Course $course)
     {
         return "updateGeneralInformationCourse";
-        $course->category()->associate(Catalogue::find($request->input('category.id')));
-        $course->certifiedType()->associate(Catalogue::find($request->input('certifiedType.id')));
-        $course->courseType()->associate(Catalogue::find($request->input('courseType.id')));
-        $course->modality()->associate(Catalogue::find($request->input('modality.id')));
-        $course->speciality()->associate(Catalogue::find($request->input('speciality.id')));
+        $course->category()->associate(Catalogue::find($request->input('category.id'))); //categoria de curso, arte, tecnico, patrimocio,etc.
+        $course->certifiedType()->associate(Catalogue::find($request->input('certifiedType.id'))); //tipo de certificado asistencia, aprobacion
+        $course->courseType()->associate(Catalogue::find($request->input('courseType.id'))); //tipo de curso tecnico, administrativo
+        $course->modality()->associate(Catalogue::find($request->input('modality.id'))); //modalidad presencial, virtual
+        $course->speciality()->associate(Catalogue::find($request->input('speciality.id'))); //tecinoc administrativo, ponencia
+        $course->entity_certification()->associate(Catalogue::find($request->input("entity_certification_id"))); //entidad que valida SENESCYT SETEC< CECY
+        //campos propios
         $course->abbreviation = $request->input('abbreviation');
         $course->duration = $request->input('duration');
         $course->needs = $request->input('needs');
