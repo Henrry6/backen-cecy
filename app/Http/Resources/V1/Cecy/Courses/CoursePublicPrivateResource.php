@@ -43,7 +43,7 @@ class CoursePublicPrivateResource extends JsonResource
             // 'expiredAt' => $this->expired_at,
             // 'facilities' => $this->facilities,
             'free' => $this->free,
-            // 'name' => $this->name,
+            'name' => $this->name,
             // 'needs' => $this->needs,
             // 'neededAt' => $this->needed_at,
             // 'recordNumber' => $this->record_number,
