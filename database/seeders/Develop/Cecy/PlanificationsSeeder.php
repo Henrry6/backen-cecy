@@ -85,12 +85,12 @@ class PlanificationsSeeder extends Seeder
         $responsablesCourse = Instructor::get();
         $detailSchoolPeriods = DetailSchoolPeriod::get();
 
-        for ($i = 0; $i <= 4; $i++) {
+        for ($i = 0; $i <= 19; $i++) {
 
             Planification::factory()->create(
                 [
                     'course_id' => $courses[$i],
-                    'detail_school_period_id' => $detailSchoolPeriods[$i],
+                    'detail_school_period_id' =>  $faker->randomElement($detailSchoolPeriods),
                     'vicerector_id' => $vicerector,
                     'responsible_course_id' => $responsablesCourse[rand(0, sizeof($responsablesCourse) - 1)],
                     'responsible_ocs_id' => $responsableOcs,

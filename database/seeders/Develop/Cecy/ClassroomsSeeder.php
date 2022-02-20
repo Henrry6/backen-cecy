@@ -51,7 +51,7 @@ class ClassroomsSeeder extends Seeder
 
     public function createClassrooms()
     {
-        Classroom::factory(10)->create();
+        Classroom::factory(40)->create();
 
         // DB::select("insert into cecy.classroom(state_id, description, capacity, code, name)VALUES('','Este aula esta en el edificio del Yavirac','40','A001','Aula1')");
         // DB::select("insert into cecy.classroom(state_id, description, capacity, code, name)VALUES('','Este aula esta en el cenepa','20','A002','Aula2')");

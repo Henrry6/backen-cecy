@@ -282,6 +282,6 @@ class CoursesSeeder extends Seeder
 
     public function createCourses()
     {
-        Course::factory(6)->create();
+        Course::factory(20)->create();
     }
 }
