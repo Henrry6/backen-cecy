@@ -4,8 +4,7 @@ namespace App\Http\Resources\V1\Cecy\Planifications\ResponsibleCoursePlanificati
 
 use App\Http\Resources\V1\Cecy\Catalogues\CatalogueCollection;
 use App\Http\Resources\V1\Cecy\Catalogues\CatalogueResource;
-use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationCollection;
-use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationResource;
+use App\Http\Resources\V1\Cecy\DetailPlanifications\ResponsibleCourseDetailPlanifications\DetailPlanificationResource;
 use App\Http\Resources\V1\Cecy\DetailSchoolPeriods\DetailSchoolPeriodResource;
 use App\Http\Resources\V1\Cecy\Instructors\InstructorResource;
 use App\Http\Resources\V1\Cecy\SchoolPeriods\SchoolPeriodResource;
