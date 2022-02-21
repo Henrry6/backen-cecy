@@ -13,6 +13,10 @@ class UpdateTopicRequest extends FormRequest
     public function rules()
     {
         return [
+            'course.id' => ['integer'],
+            'parent.id' => ['integer'],
+            'level' => ['integer'],
+            'children' => ['json'],
             'description' => ['required', 'max:240'],
         ];
     }
@@ -20,6 +24,10 @@ class UpdateTopicRequest extends FormRequest
     public function attributes()
     {
         return [
+            'course.id' => 'Id del tema principa',
+            'parent.id' => 'Id del tema principa',
+            'children' => 'json',
+            'level' => 'Tipo de nivel, tema o subtema',
             'description' => 'Descripción del tema o subtemas',
         ];
     }

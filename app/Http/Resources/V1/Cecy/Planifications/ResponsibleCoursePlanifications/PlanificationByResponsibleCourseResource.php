@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\V1\Cecy\Planifications;
+namespace App\Http\Resources\V1\Cecy\Planifications\ResponsibleCoursePlanifications;
 
 use App\Http\Resources\V1\Cecy\Authorities\AuthorityResource;
 use App\Http\Resources\V1\Cecy\Courses\CourseResource;

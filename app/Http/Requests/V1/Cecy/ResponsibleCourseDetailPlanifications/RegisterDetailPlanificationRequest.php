@@ -13,27 +13,27 @@ class RegisterDetailPlanificationRequest extends FormRequest
     public function rules()
     {
         return [
-            'classroom.id' => ['required', 'integer'],
-            'day.id' => ['required', 'integer'],
-            'planification.id' => ['required', 'integer'],
-            'workday.id' => ['required', 'integer'],
-            'parallel.id' => ['required', 'integer'],
-            'endedTime' => ['required', 'time'],
-            'startedTime' => ['required', 'time'],
-            'observations' => ['required'],
+            // 'classroom.id' => ['required', 'integer'],
+            // 'day.id' => ['required', 'integer'],
+            // 'planification.id' => ['required', 'integer'],
+            // 'workday.id' => ['required', 'integer'],
+            // 'parallel.id' => ['required', 'integer'],
+            // 'endedTime' => ['required', 'timezone'],
+            // 'startedTime' => ['required', 'timezone'],
+            // 'observations' => ['required'],
         ];
     }
 
     public function attributes()
     {
         return [
-            'classroom.id' => 'Aula',
-            'day.id' => 'Días de clase',
-            'planification.id' => 'Planificación',
-            'workday.id' => 'Jornada',
-            'paralel.id' => 'Paralelo del aula o clase',
-            'endedTime' => ['required', 'time'],
-            'startedTime' => ['required', 'time'],
+            // 'classroom.id' => 'Aula',
+            // 'day.id' => 'Días de clase',
+            // 'planification.id' => 'Planificación',
+            // 'workday.id' => 'Jornada',
+            // 'paralel.id' => 'Paralelo del aula o clase',
+            // 'endedTime' => 'Hora inicio',
+            // 'startedTime' => 'Hora fin',
         ];
     }
 }
