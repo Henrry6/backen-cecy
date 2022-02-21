@@ -17,7 +17,7 @@ class PlanificationByCourseResource extends JsonResource
     {
         $course = $request->input('course.id');
         // $partipantTypes = $course->participantType();
-        
+        //no vale lo comentado
         return [
             'id' => $this->id,
             'detailPlanifications' => DetailPlanificationResource::collection($this->detailPlanifications),

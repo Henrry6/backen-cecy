@@ -34,7 +34,7 @@ class PlanificationController extends Controller
 
         $planifications = $course->planifications()->customOrderBy($sorts)
             ->paginate($request->input('per_page'));
-
+        
         return (new PlanificationByCourseCollection($planifications))
             ->additional([
                 'msg' => [
