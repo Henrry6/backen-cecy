@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\V1\Cecy\AuthorityController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\V1\Cecy\CatalogueController;
 use App\Http\Controllers\V1\Cecy\CertificateController;
@@ -17,6 +18,7 @@ use App\Http\Controllers\V1\Cecy\SchoolPeriodController;
 use App\Http\Controllers\V1\Cecy\InstructorController;
 use \App\Http\Controllers\V1\Cecy\RegistrationController;
 use \App\Http\Controllers\V1\Cecy\DetailSchoolPeriodController;
+use App\Http\Controllers\V1\Cecy\ParticipantController;
 use App\Http\Resources\V1\Cecy\Courses\CourseResource;
 
 /***********************************************************************************************************************
@@ -228,3 +230,16 @@ Route::prefix('requirement')->group(function () {
     Route::get('file', [RequirementController::class, 'showFile']);
     Route::get('image', [RequirementController::class, 'showImage']);
 });
+/***********************************************************************************************************************
+ * AUTHORITY
+ **********************************************************************************************************************/
+
+Route::apiResource('authorities', AuthorityController::class);
+
+
+Route::prefix('authority')->group(function () {
+    Route::patch('{authority}', [AuthorityController::class, 'destroys']);
+});
+
+/*
+
