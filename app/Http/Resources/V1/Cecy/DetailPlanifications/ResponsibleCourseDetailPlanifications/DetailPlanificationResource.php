@@ -15,15 +15,12 @@ class DetailPlanificationResource extends JsonResource
             'id' => $this->id,
             'classroom' => ClassroomResource::make($this->classroom),
             'days' => CatalogueResource::make($this->day),
-            'paralel' => CatalogueResource::make($this->paralel),
+            'parallel' => CatalogueResource::make($this->parallel),
             'state' => CatalogueResource::make($this->state),
             'workday' => CatalogueResource::make($this->workday),
             'instructors' => InstructorFullnameResource::collection($this->instructors),
-            'endTime' => $this->endTime,
-            'endedAt' => $this->endedAt,
             'observations' => $this->observations,
-            'startTime' => $this->startTime,
-            'startedAt' => $this->startedAt,
+            'schedule' => $this->started_time . '-' . $this->ended_time,
         ];
     }
 }
