@@ -50,18 +50,12 @@ class DetailPlanificationController extends Controller
      * Get all detail planifications filtered by planification
      */
     // DetailPlanificationController
-    public function getDetailPlanificationsByPlanification(GetDetailPlanificationsByPlanificationRequest $request)
+    public function getDetailPlanificationsByPlanification(GetDetailPlanificationsByPlanificationRequest $request, Planification $planification)
     {
-        // $sorts = explode(',', $request->sort);
-
-        // $detailPlanifications = DetailPlanification::customOrderBy($sorts)
-        // ->planification($request->input('planification.id'))
-        // ->paginate($request->input('per_page'));
-
-        $planification = Planification::find($request->input('planification.id'));
         $detailPlanifications = $planification
             ->detailPlanifications()
             ->paginate($request->input('per_page'));
+
 
         return (new ResponsibleCourseDetailPlanificationCollection($detailPlanifications))
             ->additional([
