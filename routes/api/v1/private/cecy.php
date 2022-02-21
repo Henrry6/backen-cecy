@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\V1\Cecy\AuthorityController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\V1\Cecy\CatalogueController;
 use App\Http\Controllers\V1\Cecy\CertificateController;
@@ -15,6 +16,9 @@ use App\Http\Controllers\V1\Cecy\PlanificationController;
 use App\Http\Controllers\V1\Cecy\RequirementController;
 use App\Http\Controllers\V1\Cecy\SchoolPeriodController;
 use App\Http\Controllers\V1\Cecy\InstructorController;
+use \App\Http\Controllers\V1\Cecy\RegistrationController;
+use \App\Http\Controllers\V1\Cecy\DetailSchoolPeriodController;
+use App\Http\Controllers\V1\Cecy\ParticipantController;
 use App\Http\Resources\V1\Cecy\Courses\CourseResource;
 
 /***********************************************************************************************************************
@@ -170,10 +174,10 @@ Route::prefix('certificate')->group(function () {
  * SCHOOL PERIODS
  **********************************************************************************************************************/
 
-Route::apiResource('schoolperiods', SchoolPeriodController::class);
+Route::apiResource('school-periods', SchoolPeriodController::class);
 
-Route::prefix('schoolperiod')->group(function () {
-    Route::patch('{schoolperiod}', [SchoolPeriodController::class, 'destroys']);
+Route::prefix('school-period')->group(function () {
+    Route::patch('{school-period}', [SchoolPeriodController::class, 'destroys']);
 });
 /***********************************************************************************************************************
  * CLASSROOMS
@@ -196,6 +200,18 @@ Route::prefix('instructor')->group(function () {
     Route::get('destroy/{instructor}', [InstructorController::class, 'destroyInstructors']);
 });
 
+/***********************************************************************************************************************
+ * REGISTRATION
+ **********************************************************************************************************************/
+Route::prefix('registration')->group(function () {
+    Route::post('register-student', [RegistrationController::class, 'registerStudent']);
+});
+/***********************************************************************************************************************
+ * DETAIL SCHOOL PERIOD
+ **********************************************************************************************************************/
+Route::apiResource('detail-school-periods', DetailSchoolPeriodController::class);
+
+
 /*
 ******************************************************************************************************************
  * REQUERIMENTS
@@ -214,3 +230,16 @@ Route::prefix('requirement')->group(function () {
     Route::get('file', [RequirementController::class, 'showFile']);
     Route::get('image', [RequirementController::class, 'showImage']);
 });
+/***********************************************************************************************************************
+ * AUTHORITY
+ **********************************************************************************************************************/
+
+Route::apiResource('authorities', AuthorityController::class);
+
+
+Route::prefix('authority')->group(function () {
+    Route::patch('{authority}', [AuthorityController::class, 'destroys']);
+});
+
+/*
+

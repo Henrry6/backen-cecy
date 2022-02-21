@@ -19,7 +19,6 @@ class DetailPlanificationResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'course' => CourseResource::make($this->course),
             'day' => CatalogueResource::make($this->day),
             'classroom' => ClassroomResource::make($this->classroom),
             'parallel' => CatalogueResource::make($this->parallel),
