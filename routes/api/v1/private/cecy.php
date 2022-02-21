@@ -15,13 +15,9 @@ use App\Http\Controllers\V1\Cecy\PlanificationController;
 use App\Http\Controllers\V1\Cecy\RequirementController;
 use App\Http\Controllers\V1\Cecy\SchoolPeriodController;
 use App\Http\Controllers\V1\Cecy\InstructorController;
-<<<<<<< HEAD
 use \App\Http\Controllers\V1\Cecy\RegistrationController;
 use \App\Http\Controllers\V1\Cecy\DetailSchoolPeriodController;
-
-=======
 use App\Http\Resources\V1\Cecy\Courses\CourseResource;
->>>>>>> 637807eae15323d7c5f0f3795f0f76b594f13690
 
 /***********************************************************************************************************************
  * CATALOGUES
@@ -201,7 +197,7 @@ Route::prefix('instructor')->group(function () {
     Route::get('type-instructor', [InstructorController::class, 'updateTypeInstructors']);
     Route::get('destroy/{instructor}', [InstructorController::class, 'destroyInstructors']);
 });
-<<<<<<< HEAD
+
 /***********************************************************************************************************************
  * REGISTRATION
  **********************************************************************************************************************/
@@ -212,7 +208,7 @@ Route::prefix('registration')->group(function () {
  * DETAIL SCHOOL PERIOD
  **********************************************************************************************************************/
 Route::apiResource('detail-school-periods', DetailSchoolPeriodController::class);
-=======
+
 
 /*
 ******************************************************************************************************************
@@ -232,4 +228,3 @@ Route::prefix('requirement')->group(function () {
     Route::get('file', [RequirementController::class, 'showFile']);
     Route::get('image', [RequirementController::class, 'showImage']);
 });
->>>>>>> 637807eae15323d7c5f0f3795f0f76b594f13690
