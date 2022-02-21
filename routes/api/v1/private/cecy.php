@@ -14,6 +14,8 @@ use App\Http\Controllers\V1\Cecy\PrerequisiteController;
 use App\Http\Controllers\V1\Cecy\PlanificationController;
 use App\Http\Controllers\V1\Cecy\SchoolPeriodController;
 use App\Http\Controllers\V1\Cecy\InstructorController;
+use \App\Http\Controllers\V1\Cecy\RegistrationController;
+use \App\Http\Controllers\V1\Cecy\DetailSchoolPeriodController;
 
 
 /***********************************************************************************************************************
@@ -159,10 +161,10 @@ Route::prefix('certificate')->group(function () {
  * SCHOOL PERIODS
  **********************************************************************************************************************/
 
-Route::apiResource('schoolperiods', SchoolPeriodController::class);
+Route::apiResource('school-periods', SchoolPeriodController::class);
 
-Route::prefix('schoolperiod')->group(function () {
-    Route::patch('{schoolperiod}', [SchoolPeriodController::class, 'destroys']);
+Route::prefix('school-period')->group(function () {
+    Route::patch('{school-period}', [SchoolPeriodController::class, 'destroys']);
 });
 /***********************************************************************************************************************
  * CLASSROOMS
@@ -184,3 +186,13 @@ Route::prefix('instructor')->group(function () {
     Route::get('type-instructor', [InstructorController::class, 'updateTypeInstructors']);
     Route::get('destroy/{instructor}', [InstructorController::class, 'destroyInstructors']);
 });
+/***********************************************************************************************************************
+ * REGISTRATION
+ **********************************************************************************************************************/
+Route::prefix('registration')->group(function () {
+    Route::post('register-student', [RegistrationController::class, 'registerStudent']);
+});
+/***********************************************************************************************************************
+ * DETAIL SCHOOL PERIOD
+ **********************************************************************************************************************/
+Route::apiResource('detail-school-periods', DetailSchoolPeriodController::class);
