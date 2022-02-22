@@ -87,7 +87,7 @@ Route::prefix('planification/{planification}')->group(function () {
  * DETAIL PLANIFICATIONS
  **********************************************************************************************************************/
 Route::prefix('detailPlanification')->group(function () {
-    Route::get('', [DetailPlanificationController::class, 'getDetailPlanificationsByPlanification']);
+    Route::get('{planification}', [DetailPlanificationController::class, 'getDetailPlanificationsByPlanification']);
     Route::get('/detail-course/{course}', [DetailPlanificationController::class, 'getDetailPlanificationsByCourse']);
     Route::post('', [DetailPlanificationController::class, 'registerDetailPlanification']);
     Route::patch('', [DetailPlanificationController::class, 'destroysDetailPlanifications']);

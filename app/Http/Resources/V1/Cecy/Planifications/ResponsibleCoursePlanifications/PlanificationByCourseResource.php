@@ -4,8 +4,13 @@ namespace App\Http\Resources\V1\Cecy\Planifications\ResponsibleCoursePlanificati
 
 use App\Http\Resources\V1\Cecy\Catalogues\CatalogueCollection;
 use App\Http\Resources\V1\Cecy\Catalogues\CatalogueResource;
+use App\Http\Resources\V1\Cecy\Courses\CourseResource;
+use App\Http\Resources\V1\Cecy\Courses\CourseResourceBasic;
 use App\Http\Resources\V1\Cecy\DetailPlanifications\ResponsibleCourseDetailPlanifications\DetailPlanificationResource;
+use App\Http\Resources\V1\Cecy\DetailPlanifications\ResponsibleCourseDetailPlanifications\InstructorsOfPlanificationResource;
 use App\Http\Resources\V1\Cecy\DetailSchoolPeriods\DetailSchoolPeriodResource;
+use App\Http\Resources\V1\Cecy\DetailSchoolPeriods\DetailSchoolPeriodShortResource;
+use App\Http\Resources\V1\Cecy\Instructors\InstructorFullnameResource;
 use App\Http\Resources\V1\Cecy\Instructors\InstructorResource;
 use App\Http\Resources\V1\Cecy\SchoolPeriods\SchoolPeriodResource;
 use App\Models\Cecy\Instructor;
@@ -15,15 +20,15 @@ class PlanificationByCourseResource extends JsonResource
 {
     public function toArray($request)
     {
-        $course = $request->input('course.id');
-        // $partipantTypes = $course->participantType();
-        //no vale lo comentado
+        $responsibleCourse = $this->responsibleCourse;
+        $responsibleCourseFullname = $responsibleCourse->user->name . '' . $responsibleCourse->user->lastname;
+
         return [
             'id' => $this->id,
-            'detailPlanifications' => DetailPlanificationResource::collection($this->detailPlanifications),
-            // 'participantTypes' => new CatalogueCollection($partipantTypes),
-            'responsibleCourse' => InstructorResource::make($this->responsibleCourse),
-            // 'schoolPeriod' => DetailSchoolPeriodResource::collection($this->detailSchoolPeriod),
+            'detailPlanifications' => InstructorsOfPlanificationResource::collection($this->detailPlanifications),
+            // 'participantTypes' => CourseResourceBasic::make($this->course),
+            'responsibleCourse' => $responsibleCourseFullname,
+            'detailSchoolPeriod' => DetailSchoolPeriodShortResource::make($this->detailSchoolPeriod),
             'state' => CatalogueResource::make($this->state),
             'code' => $this->code,
             'endedAt' => $this->ended_at,
