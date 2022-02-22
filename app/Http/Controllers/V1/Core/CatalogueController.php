@@ -12,13 +12,15 @@ class CatalogueController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('permission:store-catalogues')->only(['store']);
-        $this->middleware('permission:update-catalogues')->only(['update']);
-        $this->middleware('permission:delete-catalogues')->only(['destroy', 'destroys']);
+        // $this->middleware('permission:store-catalogues')->only(['store']);
+        // $this->middleware('permission:update-catalogues')->only(['update']);
+        // $this->middleware('permission:delete-catalogues')->only(['destroy', 'destroys']);
     }
 
     public function index(IndexCatalogueRequest $request)
     {
+        return 'hola';
+
         $sorts = explode(',', $request->sort);
 
         $catalogues = Catalogue::customOrderBy($sorts)
