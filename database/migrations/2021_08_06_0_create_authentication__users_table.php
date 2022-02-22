@@ -48,7 +48,7 @@ class CreateAuthenticationUsersTable extends Migration
                 ->nullable()
                 ->constrained('core.catalogues');
 
-            $table->foreignId('location_id')
+            $table->foreignId('nationality_id')
                 ->nullable()
                 ->constrained('core.locations');
 

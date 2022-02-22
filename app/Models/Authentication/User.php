@@ -130,7 +130,7 @@ class User extends Authenticatable implements Auditable, MustVerifyEmail
         return $this->belongsTo(Catalogue::class);
     }
 
-    public function location()
+    public function nationality()
     {
         return $this->belongsTo(Location::class);
     }

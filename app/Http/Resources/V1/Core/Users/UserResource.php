@@ -31,7 +31,7 @@ class UserResource extends JsonResource
             'emails' => EmailResource::collection($this->emails),
             'phones' => PhoneResource::collection($this->phones),
             'identificationType' => CatalogueResource::make($this->identificationType),
-            'location' => LocationResource::make($this->location),
+            'nationality' => LocationResource::make($this->nationality),
             'sex' => CatalogueResource::make($this->sex),
             'adress' => AddressResource::make($this->address),
             'bloodType' => CatalogueResource::make($this->bloodType),
