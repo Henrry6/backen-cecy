@@ -1,8 +1,8 @@
 <?php
 
+use App\Http\Controllers\V1\Cecy\CatalogueController;
 use App\Http\Controllers\V1\Cecy\ParticipantController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\V1\Core\CatalogueController;
 
 /***********************************************************************************************************************
  * CATALOGUES
