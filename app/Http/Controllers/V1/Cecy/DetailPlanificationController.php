@@ -74,7 +74,6 @@ class DetailPlanificationController extends Controller
     // Algo mal pasa con el request
     public function registerDetailPlanification(RegisterDetailPlanificationRequest $request)
     {
-        return 'works!';
         // $loggedInInstructor = Instructor::where('user_id', $request->user()->id)->get();
 
         $planification = Planification::find($request->input('planification.id'));
@@ -119,6 +118,7 @@ class DetailPlanificationController extends Controller
 
         $detailPlanification->ended_time = $request->input('endedTime');
         $detailPlanification->started_time = $request->input('startedTime');
+        $detailPlanification->plan_ended_at = $request->input('planEndedAt');
 
         if ($request->has('observations')) {
             $detailPlanification->observations = $request->input('observations');
