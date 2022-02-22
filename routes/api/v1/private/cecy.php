@@ -124,8 +124,12 @@ Route::prefix('courses')->group(function () {
     Route::get('career/{career}', [CourseController::class, 'getCoursesByCareer']);
 });
 
+Route::prefix('courses')->group(function () {
+    Route::get('', [CourseController::class, 'getCourses']);
+});
+
 Route::prefix('courses/{course}')->group(function () {
-    Route::get('', [CourseController::class, 'show']);
+    Route::get('', [CourseController::class, 'show']); 
     Route::prefix('')->group(function () {
 
         Route::get('/topics', [TopicController::class, 'getTopics']);
@@ -136,6 +140,7 @@ Route::prefix('courses/{course}')->group(function () {
         Route::get('/instructors', [TopicController::class, 'getInstructors']);
     });
     Route::prefix('')->group(function () {
+        Route::get('/prerequisites/all', [PrerequisiteController::class, 'getPrerequisitesAll']);
         Route::get('/prerequisites', [PrerequisiteController::class, 'getPrerequisites']);
         Route::post('/prerequisites', [PrerequisiteController::class, 'storePrerequisite']);
         Route::put('/prerequisites/{prerequisite}', [PrerequisiteController::class, 'updatePrerequisite']);

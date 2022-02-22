@@ -228,17 +228,14 @@ class CourseController extends Controller
     //visualizar todos los cursos (Done)
     public function getCourses()
     {
-        $courses = Course::get()->paginate();
-
-        return (new CourseCollection($courses))
+        return (new CourseCollection(Course::paginate(100)))
             ->additional([
                 'msg' => [
                     'summary' => 'Me trae los cursos',
                     'detail' => '',
                     'code' => '200'
                 ]
-            ])
-            ->response()->setStatusCode(200);
+            ]);
     }
 
     //obtener los cursos asignados a un docente responsable logueado (Done)
