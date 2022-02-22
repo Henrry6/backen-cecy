@@ -12,9 +12,7 @@ class InstructorsOfPlanificationResource extends JsonResource
     public function toArray($request)
     {
         $instructors = InstructorFullnameResource::collection($this->instructors);
-        // $instructorNames = $instructors->mapToGroups(function ($item, $key) {
-        //     return ['names' => $item['user.fullname']];
-        // });
+
         return [
             'id' => $this->id,
             'instructors' => $instructors,

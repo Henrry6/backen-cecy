@@ -32,6 +32,8 @@ class PlanificationByCourseResource extends JsonResource
             'state' => CatalogueResource::make($this->state),
             'code' => $this->code,
             'endedAt' => $this->ended_at,
+            'observations' => $this->observations,
+            'needs' => $this->needs,
             'startedAt' => $this->started_at,
         ];
     }
