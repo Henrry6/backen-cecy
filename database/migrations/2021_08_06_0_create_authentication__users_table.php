@@ -19,11 +19,20 @@ class CreateAuthenticationUsersTable extends Migration
             $table->softDeletes();
             $table->rememberToken();
 
+
+            $table->foreignId('address_id')
+                ->nullable()
+                ->constrained('core.address');
+
             $table->foreignId('blood_type_id')
                 ->nullable()
                 ->constrained('core.catalogues');
 
             $table->foreignId('civil_status_id')
+                ->nullable()
+                ->constrained('core.catalogues');
+
+            $table->foreignId('disability_id')
                 ->nullable()
                 ->constrained('core.catalogues');
 
@@ -38,6 +47,10 @@ class CreateAuthenticationUsersTable extends Migration
             $table->foreignId('identification_type_id')
                 ->nullable()
                 ->constrained('core.catalogues');
+
+            $table->foreignId('location_id')
+                ->nullable()
+                ->constrained('core.locations');
 
             $table->foreignId('sex_id')
                 ->nullable()
