@@ -3,29 +3,23 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\V1\Cecy\DetailPlanifications\UpdateDetailPlanificationRequest;
-use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\DeleteDetailPlanificationRequest;
-use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\DestroysDetailPlanificationRequest;
-use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\GetDetailPlanificationsByPlanificationRequest;
-use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\GetDetailPlanificationsByResponsibleCourseRequest;
-use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\RegisterDetailPlanificationRequest;
-use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\ShowDetailPlanificationRequest;
-use Illuminate\Http\Request;
-use App\Models\Cecy\Topic;
-use App\Models\Cecy\Course;
-use App\Models\Cecy\Catalogue;
-use App\Http\Resources\V1\Cecy\Topics\TopicResource;
-use App\Http\Resources\V1\Cecy\Topics\TopicCollection;
-use App\Http\Requests\V1\Cecy\Topics\StoreTopicRequest;
-use App\Http\Requests\V1\Cecy\Topics\UpdateTopicRequest;
-use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationCollection;
-use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationResource;
 use App\Models\Cecy\Authority;
+use App\Models\Cecy\Catalogue;
 use App\Models\Cecy\Classroom;
+use App\Models\Cecy\Course;
 use App\Models\Cecy\DetailPlanification;
 use App\Models\Cecy\Instructor;
 use App\Models\Cecy\Planification;
 use App\Models\Core\State;
+use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationResource;
+use App\Http\Resources\V1\Cecy\DetailPlanifications\ResponsibleCourseDetailPlanifications\DetailPlanificationCollection as ResponsibleCourseDetailPlanificationCollection;
+use App\Http\Resources\V1\Cecy\DetailPlanifications\ResponsibleCourseDetailPlanifications\DetailPlanificationResource as ResponsibleCourseDetailPlanificationResource;
+use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\DeleteDetailPlanificationRequest;
+use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\DestroysDetailPlanificationRequest;
+use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\GetDetailPlanificationsByPlanificationRequest;
+use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\RegisterDetailPlanificationRequest;
+use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\ShowDetailPlanificationRequest;
+use App\Http\Requests\V1\Cecy\DetailPlanifications\UpdateDetailPlanificationRequest;
 
 class DetailPlanificationController extends Controller
 {
@@ -53,6 +47,7 @@ class DetailPlanificationController extends Controller
             ])->response()->setStatusCode(200);
     }
 
+<<<<<<< HEAD
 
 
     /**
@@ -84,19 +79,20 @@ class DetailPlanificationController extends Controller
      */
     // DetailPlanificationController  
     public function getDetailPlanificationsByPlanification(GetDetailPlanificationsByPlanificationRequest $request) //hecho
+=======
+    /**
+     * Get all detail planifications filtered by planification
+     */
+    // DetailPlanificationController
+    public function getDetailPlanificationsByPlanification(GetDetailPlanificationsByPlanificationRequest $request, Planification $planification)
+>>>>>>> develop
     {
-        // $sorts = explode(',', $request->sort);
-
-        // $detailPlanifications = DetailPlanification::customOrderBy($sorts)
-        // ->planification($request->input('planification.id'))
-        // ->paginate($request->input('per_page'));
-
-        $planification = Planification::find($request->input('planification.id'));
         $detailPlanifications = $planification
             ->detailPlanifications()
             ->paginate($request->input('per_page'));
 
-        return (new DetailPlanificationCollection($detailPlanifications))
+
+        return (new ResponsibleCourseDetailPlanificationCollection($detailPlanifications))
             ->additional([
                 'msg' => [
                     'summary' => 'success',
@@ -110,14 +106,18 @@ class DetailPlanificationController extends Controller
     /**
      * Store a detail planification record
      */
+<<<<<<< HEAD
     // DetailPlanificationController
     public function registerDetailPlanification(RegisterDetailPlanificationRequest $request) //hecho
+=======
+    // Algo mal pasa con el request
+    public function registerDetailPlanification(RegisterDetailPlanificationRequest $request)
+>>>>>>> develop
     {
-        return 'works!';
-        $loggedInInstructor = Instructor::where('user_id', $request->user()->id)->get();
+        // $loggedInInstructor = Instructor::where('user_id', $request->user()->id)->get();
 
         $planification = Planification::find($request->input('planification.id'));
-        $responsibleCourse = $planification->reponsibleCourse();
+        // $responsibleCourse = $planification->reponsibleCourse();
 
         // validar que la planification le pertenezca al docente logeado
         // if ($loggedInInstructor->id !== $responsibleCourse->id) {
@@ -131,15 +131,15 @@ class DetailPlanificationController extends Controller
         // }
 
         //validar que la planification ha culminado
-        if ($planification->state()->first()->code === State::CULMINATED) {
-            return response()->json([
-                'msg' => [
-                    'summary' => 'La planificación ha culminado.',
-                    'detail' => '',
-                    'code' => '400'
-                ]
-            ], 400);
-        }
+        // if ($planification->state()->first()->code === State::CULMINATED) {
+        //     return response()->json([
+        //         'msg' => [
+        //             'summary' => 'La planificación ha culminado.',
+        //             'detail' => '',
+        //             'code' => '400'
+        //         ]
+        //     ], 400);
+        // }
 
         $state = Catalogue::firstWhere('code', State::TO_BE_APPROVED);
         $classroom = Classroom::find($request->input('classroom.id'));
@@ -158,6 +158,7 @@ class DetailPlanificationController extends Controller
 
         $detailPlanification->ended_time = $request->input('endedTime');
         $detailPlanification->started_time = $request->input('startedTime');
+        $detailPlanification->plan_ended_at = $request->input('planEndedAt');
 
         if ($request->has('observations')) {
             $detailPlanification->observations = $request->input('observations');
@@ -165,7 +166,7 @@ class DetailPlanificationController extends Controller
 
         $detailPlanification->save();
 
-        return (new DetailPlanificationResource($detailPlanification))
+        return (new ResponsibleCourseDetailPlanificationResource($detailPlanification))
             ->additional([
                 'msg' => [
                     'summary' => 'Registro Creado',
@@ -182,7 +183,7 @@ class DetailPlanificationController extends Controller
     // DetailPlanificationController
     public function showDetailPlanification(ShowDetailPlanificationRequest $request, DetailPlanification $detailPlanification) //hecho
     {
-        return (new DetailPlanificationResource($detailPlanification))
+        return (new ResponsibleCourseDetailPlanificationResource($detailPlanification))
             ->additional([
                 'msg' => [
                     'summary' => 'success',
@@ -235,7 +236,7 @@ class DetailPlanificationController extends Controller
 
         $detailPlanification->save();
 
-        return (new DetailPlanificationResource($detailPlanification))
+        return (new ResponsibleCourseDetailPlanificationResource($detailPlanification))
             ->additional([
                 'msg' => [
                     'summary' => 'Registro actualizado',
@@ -253,7 +254,7 @@ class DetailPlanificationController extends Controller
     {
         $detailPlanification->delete();
 
-        return (new DetailPlanificationResource($detailPlanification))
+        return (new ResponsibleCourseDetailPlanificationResource($detailPlanification))
             ->additional([
                 'msg' => [
                     'summary' => 'Registro eliminado',
@@ -309,7 +310,7 @@ class DetailPlanificationController extends Controller
         $detailPlanifications = DetailPlanification::whereIn('id', $request->input('ids'))->get();
         DetailPlanification::destroy($request->input('ids'));
 
-        return (new DetailPlanificationCollection($detailPlanifications))
+        return (new ResponsibleCourseDetailPlanificationCollection($detailPlanifications))
             ->additional([
                 'msg' => [
                     'summary' => 'Registros eliminados',

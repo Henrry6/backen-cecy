@@ -17,8 +17,8 @@ class TopicFactory extends Factory
 
         return [
             'course_id' => $this->faker->randomElement($courses),
-            'parent_id' => $this->faker->randomElement(null, $topics),
-            'level' => $this->faker->randomElement([1, 2]),
+            'parent_id' => null,
+            'level' => 1,
             'description' => $this->faker->word(),
         ];
     }

@@ -5,6 +5,7 @@ use App\Http\Controllers\V1\Core\InstitutionController;
 use App\Http\Controllers\V1\Core\UserController;
 use App\Http\Controllers\V1\Core\FileController;
 use App\Http\Controllers\V1\Core\CareerController;
+use App\Http\Controllers\V1\Core\CatalogueController;
 
 /***********************************************************************************************************************
  * USERS
@@ -72,3 +73,8 @@ Route::prefix('file')->group(function () {
 Route::prefix('file/{file}')->group(function () {
     Route::get('download', [FileController::class, 'download']);
 });
+
+/***********************************************************************************************************************
+ * CATALOGUE
+ **********************************************************************************************************************/
+Route::apiResource('core-catalogue/catalogue', CatalogueController::class);

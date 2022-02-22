@@ -11,7 +11,7 @@ use App\Http\Requests\V1\Cecy\Planifications\StorePlanificationByCourseRequest;
 use App\Http\Requests\V1\Cecy\Planifications\UpdatePlanificationRequest;
 use App\Http\Resources\V1\Cecy\Courses\CourseCollection;
 use App\Http\Resources\V1\Cecy\Planifications\Kpi\KpiPlanificationResourse;
-use App\Http\Resources\V1\Cecy\Planifications\PlanificationByCourseCollection;
+use App\Http\Resources\V1\Cecy\Planifications\ResponsibleCoursePlanifications\PlanificationByCourseCollection;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationResource;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationCollection;
 use App\Models\Cecy\Authority;
@@ -28,10 +28,8 @@ class PlanificationController extends Controller
     /**
      * Get all planifications filtered by and course
      */
-    // PlanificationController ya esta, no vale el collection
     public function getPlanificationsByCourse(GetPlanificationsByCourseRequest $request, Course $course)
     {
-
         $sorts = explode(',', $request->sort);
 
         $planifications = $course->planifications()->customOrderBy($sorts)
@@ -76,7 +74,7 @@ class PlanificationController extends Controller
         $planification->ended_at = $request->input('endedAt');
         $planification->needs = $request->input('needs');
 
-        return (new PlanificationResource($planification))
+        return (new PlanificationByCourseCollection($planification))
             ->additional([
                 'msg' => [
                     'summary' => 'Registro actualizado',
@@ -96,14 +94,14 @@ class PlanificationController extends Controller
     public function getKpi(ShowKpiRequest $request, Catalogue $state)
     {
 
-        $planifications = Planification::withCount([
-            'id' => function (Builder $query) {
-                $query->where(
-                    'state_id',
-                    $state->id
-                );
-            },
-        ])->get();
+        // $planifications = Planification::withCount([
+        //     'id' => function (Builder $query) {
+        //         $query->where(
+        //             'state_id',
+        //             $state->id
+        //         );
+        //     },
+        // ])->get();
 
         //     return (new KpiPlanificationResourse($planifications[0]))
         //         ->additional([

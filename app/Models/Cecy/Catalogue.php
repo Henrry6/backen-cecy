@@ -58,7 +58,7 @@ class Catalogue extends Model implements Auditable
 
     public function planifications()
     {
-        return $this->hasMany(Planification::class);
+        return $this->hasMany(Planification::class, 'state_id');
     }
 
     // Mutators

@@ -13,8 +13,9 @@ class StoreTopicRequest extends FormRequest
     public function rules()
     {
         return [
-            // 'course.id' => ['required', 'integer'],
+            'course.id' => ['integer'],
             'parent.id' => ['integer'],
+            'children' => ['json'],
             'level' => ['required', 'integer'],
             'description' => ['required', 'max:240'],
         ];
@@ -23,8 +24,9 @@ class StoreTopicRequest extends FormRequest
     public function attributes()
     {
         return [
-            // 'course.id' => 'Id del curso',
+            'course.id' => 'Id del curso',
             'parent.id' => 'Id del tema principa',
+            'children' => 'subtemas',
             'level' => 'Tipo de nivel, tema o subtema',
             'description' => 'Descripción del tema o subtemas',
         ];

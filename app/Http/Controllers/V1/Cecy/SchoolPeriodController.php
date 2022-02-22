@@ -7,7 +7,7 @@ use App\Http\Requests\V1\Cecy\SchoolPeriods\DestroysSchoolPeriodsRequest;
 use App\Http\Requests\V1\Cecy\SchoolPeriods\StoreSchoolPeriodsRequest;
 use App\Http\Requests\V1\Cecy\SchoolPeriods\UpdateSchoolPeriodsRequest;
 use App\Http\Resources\V1\Cecy\SchoolPeriods\SchoolPeriodResource;
-use App\Http\Resources\V1\Cecy\SchoolPeriods\SchoolPeriodsCollection;
+use App\Http\Resources\V1\Cecy\SchoolPeriods\SchoolPeriodCollection;
 use App\Models\Cecy\Catalogue;
 use App\Models\Cecy\SchoolPeriod;
 use Illuminate\Support\Facades\Request;
@@ -18,7 +18,7 @@ class SchoolPeriodController extends Controller
     public function index()
     {
 
-        return (new SchoolPeriodsCollection(SchoolPeriod::paginate()))
+        return (new SchoolPeriodCollection(SchoolPeriod::paginate()))
             ->additional([
                 'msg' => [
                     'summary' => 'success',
@@ -107,7 +107,7 @@ class SchoolPeriodController extends Controller
 
         SchoolPeriod::destroy($request->input('ids'));
 
-        return (new SchoolPeriodsCollection($schooolperiod))
+        return (new SchoolPeriodCollection($schooolperiod))
             ->additional([
                 'msg' => [
                     'summary' => 'Periodos Eliminados',

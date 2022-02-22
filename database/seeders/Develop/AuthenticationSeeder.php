@@ -38,6 +38,7 @@ class AuthenticationSeeder extends Seeder
         $this->createSectorTypeCatalogues();
         $this->createPhoneOperatorCatalogues();
         $this->createPhoneTypeCatalogues();
+        $this->createDisabilityCatalogues();
 
         $this->createLocations();
 
@@ -160,30 +161,8 @@ class AuthenticationSeeder extends Seeder
 
     private function assignUserRoles()
     {
-
-        // $roles = Role::where([
-        //     'name' => 'public_company',
-        //     'name' => 'private_company',
-        //     'name' => 'training_company',
-        //     'name' => 'external_student',
-        //     'name' => 'internal_student',
-        //     'name' => 'senecyt_staff',
-        //     'name' => 'gad'
-        // ])->get();
-        // $roles = Role::all();
         $user = User::find(1);
         $user->assignRole('admin');
-
-        // for ($i = 6; $i <= 35; $i++) {
-        //     $user = User::find($i);
-        //     $user->assignRole('teacher');
-        // }
-
-
-        // for ($i = 36; $i <= 85; $i++) {
-        //     $user = User::find($i);
-        //     $user->assignRole(rand(0, $roles->count() - 1));
-        // }
     }
 
     private function createLocationCatalogues()
@@ -962,6 +941,32 @@ class AuthenticationSeeder extends Seeder
         )->create();
     }
 
+    private function createDisabilityCatalogues()
+    {
+        $catalogues = json_decode(file_get_contents(storage_path() . "/catalogues.json"), true);
+        Catalogue::factory(4)->sequence(
+            [
+                'code' => $catalogues['catalogue']['disability']['visual_disability'],
+                'name' => 'DISCAPACIDAD VISUAL',
+                'type' => $catalogues['catalogue']['disability']['type'],
+            ],
+            [
+                'code' => $catalogues['catalogue']['disability']['intellectual_disability'],
+                'name' => 'DISCAPACIDAD INTELECTUAL',
+                'type' => $catalogues['catalogue']['disability']['type'],
+            ],
+            [
+                'code' => $catalogues['catalogue']['disability']['motor_disability'],
+                'name' => 'DISCAPACIDAD MOTRIZ',
+                'type' => $catalogues['catalogue']['disability']['type'],
+            ],
+            [
+                'code' => $catalogues['catalogue']['disability']['hearing_disability'],
+                'name' => 'DISCAPACIDAD AUDITIVA',
+                'type' => $catalogues['catalogue']['disability']['type'],
+            ],
+        )->create();
+    }
     private function createStates()
     {
         $catalogues = json_decode(file_get_contents(storage_path() . "/catalogues.json"), true);
