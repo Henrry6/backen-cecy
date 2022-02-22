@@ -52,9 +52,11 @@ class CreateCecyDetailPlanificationsTable extends Migration
                 ->comment('Observaciones necesaria si las horas de duración de curso no son alcanzadas por las horas de clase');
 
             $table->date('plan_ended_at')
+                ->nullable()
                 ->comment('Fecha final real de la planificación (que puede variar a la planificación)');
 
             $table->integer('registrations_left')
+                ->nullable()
                 ->comment('Capacidad restante del paralelo');
 
             $table->time('started_time')
