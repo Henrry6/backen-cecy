@@ -28,7 +28,7 @@ class CareerController extends Controller
     {
         $sorts = explode(',', $request->input('sort'));
         $careers = Career::
-            ssacronym($request->input('search'))
+            acronym($request->input('search'))
             ->description($request->input('search'))
             ->name($request->input('search'))
             ->resolutionNumber($request->input('search'))
