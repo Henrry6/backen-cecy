@@ -312,10 +312,21 @@ class CourseController extends Controller
     //obtener los cursos asignados a un docente responsable logueado (Done)
     public function getCoursesByResponsibleCourse(getCoursesByResponsibleRequest $request)
     {
-        // return 'xd';
 
-        $instructor = Instructor::FirstWhere('user_id', $request->user()->id);
+        $instructor = Instructor::FirstWhere('user_id', $request->user()->id); //TodoList: validar
+        if(!isset($instructor)){
+            return response()->json([
+                'msg'=> [
+                    'summary' => 'El usuario no es un instructor',
+                    'detail' => '',
+                    'code' => '404'
+                ],
+                'data'=> null
+            ],404);
+        }
+
         $courses = Course::where('responsible_id', $instructor->id)->get();
+        
 
 
         return (new CoursesByResponsibleCollection($courses))
@@ -349,8 +360,12 @@ class CourseController extends Controller
         $course->certifiedType()->associate(Catalogue::find($request->input('certifiedType.id'))); //tipo de certificado asistencia, aprobacion
         $course->courseType()->associate(Catalogue::find($request->input('courseType.id'))); //tipo de curso tecnico, administrativo
         $course->modality()->associate(Catalogue::find($request->input('modality.id'))); //modalidad presencial, virtual
-        $course->speciality()->associate(Catalogue::find($request->input('speciality.id'))); //tecinoc administrativo, ponencia
-        $course->entity_certification()->associate(Catalogue::find($request->input("entity_certification_id"))); //entidad que valida SENESCYT SETEC< CECY
+        $course->formationType()->associate(Catalogue::find($request->input('formation_type.id'))); //tecinoc administrativo, ponencia ????
+        $course->entity_certification()->associate(Catalogue::find($request->input("entity_certification.id"))); //entidad que valida SENESCYT SETEC< CECY
+        $course->target_groups()->associate(Catalogue::find($request->input("target_groups.id"))); //poblacion a la que va dirigda
+        //falta añadir campo de carrera
+        //falta campo de sector al que va drigido
+        
         //campos propios
         $course->abbreviation = $request->input('abbreviation');
         $course->duration = $request->input('duration');

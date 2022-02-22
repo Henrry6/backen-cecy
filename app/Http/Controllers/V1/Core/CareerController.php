@@ -27,8 +27,8 @@ class CareerController extends Controller
     function catalogue(CatalogueCareerRequest $request)
     {
         $sorts = explode(',', $request->input('sort'));
-        $careers = Career::customOrderBy($sorts)
-            ->acronym($request->input('search'))
+        $careers = Career::
+            ssacronym($request->input('search'))
             ->description($request->input('search'))
             ->name($request->input('search'))
             ->resolutionNumber($request->input('search'))

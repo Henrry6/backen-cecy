@@ -255,5 +255,11 @@
         "type": "PERIOD_STATE",
         "current": "CURRENT",
         "past": "PAST"
+    },
+    "target_groups": {
+        "type":"TARGET_GROUPS",
+        "student":"STUDENT",
+        "teacher":"TEACHER",
+        "external_student": "EXTERNAL_STUDENT"
     }
 }
