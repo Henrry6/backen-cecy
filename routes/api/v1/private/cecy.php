@@ -5,7 +5,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\V1\Cecy\CatalogueController;
 use App\Http\Controllers\V1\Cecy\CertificateController;
 use App\Http\Controllers\V1\Cecy\ClassroomController;
-use App\Http\Controllers\V1\Cecy\GuachagmiraController;
 use App\Http\Controllers\V1\Cecy\DetailPlanificationController;
 use App\Http\Controllers\V1\Cecy\CourseController;
 use App\Http\Controllers\V1\Cecy\DetailAttendanceController;
@@ -178,6 +177,7 @@ Route::apiResource('school-periods', SchoolPeriodController::class);
 Route::prefix('school-period')->group(function () {
     Route::patch('{school-period}', [SchoolPeriodController::class, 'destroys']);
 });
+
 /***********************************************************************************************************************
  * CLASSROOMS
  **********************************************************************************************************************/
