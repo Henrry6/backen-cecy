@@ -2,6 +2,7 @@
 
 namespace App\Models\Core;
 
+use App\Models\Authentication\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -26,14 +27,22 @@ class Address extends Model implements Auditable
         'reference',
     ];
 
+
     function location()
     {
         return $this->belongsTo(Location::class);
     }
+
     function sector()
     {
         return $this->belongsTo(Catalogue::class);
     }
+
+    function user()
+    {
+        return $this->hasOne(User::class);
+    }
+
     // Mutators
     public function setMainStreetAttribute($value)
     {

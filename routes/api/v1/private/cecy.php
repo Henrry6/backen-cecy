@@ -19,13 +19,12 @@ use App\Http\Controllers\V1\Cecy\InstructorController;
 use \App\Http\Controllers\V1\Cecy\RegistrationController;
 use \App\Http\Controllers\V1\Cecy\DetailSchoolPeriodController;
 use App\Http\Controllers\V1\Cecy\ParticipantController;
+use App\Http\Controllers\V1\Core\CatalogueController as CoreCatalogueController;
 use App\Http\Resources\V1\Cecy\Courses\CourseResource;
 
 /***********************************************************************************************************************
  * CATALOGUES
  **********************************************************************************************************************/
-Route::apiResource('catalogues', CatalogueController::class);
-
 Route::prefix('catalogue/{catalogue}')->group(function () {
     Route::prefix('file')->group(function () {
         Route::get('{file}/download', [CatalogueController::class, 'downloadFile']);

@@ -1,13 +1,13 @@
 <?php
 
+use App\Http\Controllers\V1\Cecy\CatalogueController;
 use App\Http\Controllers\V1\Cecy\ParticipantController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\V1\Core\CatalogueController;
 
 /***********************************************************************************************************************
  * CATALOGUES
  **********************************************************************************************************************/
-Route::prefix('catalogue')->group(function () {
+Route::prefix('cecy-catalogue')->group(function () {
     Route::get('catalogue', [CatalogueController::class, 'catalogue']);
 });
 

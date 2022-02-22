@@ -260,6 +260,13 @@
         },
         "phone_type": {
             "type": "PHONE_TYPE"
+        },
+        "disability": {
+            "type": "DISABILITY",
+            "visual_disability": "VISUAL_DISABILITY",
+            "intellectual_disability": "INTELLECTUAL_DISABILITY",
+            "motor_disability": "MOTOR_DISABILITY",
+            "hearing_disability": "HEARING_DISABILITY"
         }
     }
 }

@@ -37,12 +37,17 @@ class Location extends Model implements Auditable
         return $this->hasMany(Location::class, 'parent_id');
     }
 
+    function user()
+    {
+        return $this->hasOne(User::class);
+    }
+
     public function scopeType($query, $type)
     {
         if ($type) {
             $catalogues = json_decode(file_get_contents(storage_path() . "/catalogues.json"), true);
             $type = Catalogue::where('type', $catalogues['catalogue']['location']['type'])
-            ->where('code',$type)->first();
+                ->where('code', $type)->first();
             return $query->where('type_id', $type->id);
         }
     }
