@@ -241,5 +241,5 @@ Route::prefix('authority')->group(function () {
     Route::patch('{authority}', [AuthorityController::class, 'destroys']);
 });
 
-/*
+
 
