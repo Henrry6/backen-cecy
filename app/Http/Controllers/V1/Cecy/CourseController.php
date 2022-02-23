@@ -31,6 +31,7 @@ use App\Http\Resources\V1\Cecy\Planifications\InformCourseNeedsResource;
 use App\Http\Resources\V1\Cecy\Courses\CoursesByResponsibleCollection;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationCollection;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationResource;
+use App\Http\Resources\V1\Cecy\Certificates\CertificateResource;
 use App\Models\Cecy\Instructor;
 use App\Models\Cecy\Participant;
 use App\Models\Cecy\Planification;
@@ -38,6 +39,7 @@ use App\Models\Core\File;
 use App\Models\Core\Image;
 use App\Models\Core\State;
 use App\Models\Core\Career;
+use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 use Exception;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
@@ -528,6 +530,24 @@ class CourseController extends Controller
                     'code' => '200'
                 ]
             ]);
+    }
+
+
+    //traer participante de un curso 
+
+    public function certificateParticipants(Course $course){
+        
+        $planification = $course->planifications()->get();
+
+        $data = new CertificateResource($planification);
+        $pdf = PDF::loadView('certificate-student', ['registrations'=>$data]);
+        $pdf->setOptions([
+            'orientation' => 'landscape',
+    
+            'page-size' => 'a4'
+        ]);
+        return $pdf->stream('certificate.pdf');
+     
     }
 
     // Adjuntar el acta de aprobación
