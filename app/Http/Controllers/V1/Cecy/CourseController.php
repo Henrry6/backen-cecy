@@ -292,11 +292,13 @@ class CourseController extends Controller
         $course->certifiedType()->associate(Catalogue::find($request->input('certifiedType.id'))); //tipo de certificado asistencia, aprobacion
         $course->courseType()->associate(Catalogue::find($request->input('courseType.id'))); //tipo de curso tecnico, administrativo
         $course->modality()->associate(Catalogue::find($request->input('modality.id'))); //modalidad presencial, virtual
-        $course->formationType()->associate(Catalogue::find($request->input('formation_type.id'))); //tecinoc administrativo, ponencia ????
-        $course->entity_certification()->associate(Catalogue::find($request->input("entity_certification.id"))); //entidad que valida SENESCYT SETEC< CECY
-        $course->target_groups()->associate(Catalogue::find($request->input("target_groups.id"))); //poblacion a la que va dirigda
-        //falta añadir campo de carrera
-        //falta campo de sector al que va drigido
+        $course->formationType()->associate(Catalogue::find($request->input('formationType.id'))); //tecinoc administrativo, ponencia ????
+        $course->entity_certification()->associate(Catalogue::find($request->input("entityCertification.id"))); //entidad que valida SENESCYT SETEC< CECY
+        $course->target_groups()->associate(Catalogue::find($request->input("targetGroups.id"))); //poblacion a la que va dirigda
+        $course->career()->associate(Career::find($request->input("career.id")));
+
+        //añadir tipo de participante pendiente
+        //ver en participant controller
         
         //campos propios
         $course->abbreviation = $request->input('abbreviation');

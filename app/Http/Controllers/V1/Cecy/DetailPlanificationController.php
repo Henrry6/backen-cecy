@@ -47,45 +47,11 @@ class DetailPlanificationController extends Controller
             ])->response()->setStatusCode(200);
     }
 
-<<<<<<< HEAD
-
-
-    /**
-     * Get all detail planifications filtered by responsible_course
-     */
-    // DetailPlanificationController
-    public function getDetailPlanificationsByResponsibleCourse(GetDetailPlanificationsByResponsibleCourseRequest $request) 
-    {
-        $responsibleCourse = Instructor::where('user_id', $request->user()->id)->get();
-
-        $detailPlanifications = $responsibleCourse
-            ->detailPlanifications()
-            ->paginate($request->input('per_page'));
-
-        return (new DetailPlanificationCollection($detailPlanifications))
-            ->additional([
-                'msg' => [
-                    'summary' => 'success',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ])
-            ->response()->setStatusCode(200);
-    }
-
-
-    /**
-     * Get all detail planifications filtered by planification
-     */
-    // DetailPlanificationController  
-    public function getDetailPlanificationsByPlanification(GetDetailPlanificationsByPlanificationRequest $request) //hecho
-=======
     /**
      * Get all detail planifications filtered by planification
      */
     // DetailPlanificationController
     public function getDetailPlanificationsByPlanification(GetDetailPlanificationsByPlanificationRequest $request, Planification $planification)
->>>>>>> develop
     {
         $detailPlanifications = $planification
             ->detailPlanifications()
@@ -106,13 +72,8 @@ class DetailPlanificationController extends Controller
     /**
      * Store a detail planification record
      */
-<<<<<<< HEAD
-    // DetailPlanificationController
-    public function registerDetailPlanification(RegisterDetailPlanificationRequest $request) //hecho
-=======
     // Algo mal pasa con el request
     public function registerDetailPlanification(RegisterDetailPlanificationRequest $request)
->>>>>>> develop
     {
         // $loggedInInstructor = Instructor::where('user_id', $request->user()->id)->get();
 
