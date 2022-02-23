@@ -6,6 +6,7 @@ use App\Http\Resources\V1\Cecy\Authorities\AuthorityResource;
 use App\Http\Resources\V1\Cecy\Catalogues\CatalogueResource;
 use App\Http\Resources\V1\Cecy\Courses\CourseResource;
 use App\Http\Resources\V1\Cecy\Instructors\InstructorResource;
+use App\Http\Resources\V1\Core\CareerResource;
 use App\Models\Cecy\Authority;
 use App\Models\Cecy\SchoolPeriod;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -17,10 +18,22 @@ class CoursesByResponsibleResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'responsibleCourseId' => InstructorResource::make($this->responsible), 
-            // 'course' => CourseResource::make($this->course),
+            'entityCertification' => CatalogueResource::make($this->entityCertification),
+            'career' => CareerResource::make($this->career),
+            'category' => CatalogueResource::make($this->category),
+            'formationType' => CatalogueResource::make($this->formationType),
+            'certifiedType' => CatalogueResource::make($this->certifiedType),
+            'courseType' => CatalogueResource::make($this->courseType),
+            'modality' => CatalogueResource::make($this->modality),
             'state' => CatalogueResource::make($this->state),
-            'photoId' => CourseResource::make($this->photoId)
+            'abbreviation' => $this->abbreviation,
+            'code' => $this->code,
+            'duration' => $this->duration,
+          
+            'needs' => $this->needs,
+            'project' => $this->project,
+            'summary' => $this->summary,
+            'targetGroups' => $this->target_groups,
         ];
     }
 }

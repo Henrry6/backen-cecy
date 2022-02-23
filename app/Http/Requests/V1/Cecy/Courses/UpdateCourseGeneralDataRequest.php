@@ -14,15 +14,16 @@ class UpdateCourseGeneralDataRequest extends FormRequest
   {
     return [
 
-      'career.id' => ['required', 'integer'],
       'category.id' => ['required', 'integer'],
+      'career.id' => ['required', 'integer'],
       'certifiedType.id' => ['required', 'integer'],
       'courseType.id' => ['required', 'integer'],
+      'entityCertification.id' => ['required', 'integer'],
+      'formationType.id' => ['required', 'integer'],
       'modality.id' => ['required', 'integer'],
-      'speciality.id' => ['required', 'integer'],
+      'targetGroups.id' => ['required', 'integer'],
       'abbreviation' => ['required', 'string', 'max:100'],
       'duration' => ['required', 'integer'],
-      // 'name' => ['required', 'string', 'max:200'],
       'needs' => ['required', 'json'],
       'project' => ['required', 'string', 'max:1000'],
       'summary' => ['required',  'string', 'max:1000'],
@@ -34,14 +35,16 @@ class UpdateCourseGeneralDataRequest extends FormRequest
   {
     return [
 
-      'career.id' => 'Id de la carrera',
       'category.id' => 'Id de la categoria',
+      'career.id' => 'Id de la carrera',
       'certifiedType.id' => 'Id del tipo de certitificado',
       'courseType.id' => 'Id del tipo de curso',
+      'entityCertification.id' => 'Id de entidad que valida',
+      'formationType.id' => 'Id del tipo de formacion',
       'modality.id' => 'Id  de la modalidad',
+      'targetGroups.id' => 'Id del grupo al que va dirigido',
       'abbreviation' => 'Abreviación',
       'duration' => 'Duración',
-      // 'name' => 'Nombre',
       'needs' => 'Necesidades',
       'project' => 'Proyecto',
       'summary' => 'Sumario',

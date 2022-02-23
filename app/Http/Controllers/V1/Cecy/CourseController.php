@@ -256,11 +256,7 @@ class CourseController extends Controller
                 'data'=> null
             ],404);
         }
-
         $courses = Course::where('responsible_id', $instructor->id)->get();
-        
-
-
         return (new CoursesByResponsibleCollection($courses))
             ->additional([
                 'msg' => [
@@ -289,16 +285,20 @@ class CourseController extends Controller
     {
         return "updateGeneralInformationCourse";
         $course->category()->associate(Catalogue::find($request->input('category.id'))); //categoria de curso, arte, tecnico, patrimocio,etc.
+        $course->career()->associate(Career::find($request->input("career.id")));
         $course->certifiedType()->associate(Catalogue::find($request->input('certifiedType.id'))); //tipo de certificado asistencia, aprobacion
         $course->courseType()->associate(Catalogue::find($request->input('courseType.id'))); //tipo de curso tecnico, administrativo
-        $course->modality()->associate(Catalogue::find($request->input('modality.id'))); //modalidad presencial, virtual
+        $course->entityCertification()->associate(Catalogue::find($request->input("entityCertification.id"))); //entidad que valida SENESCYT SETEC< CECY
         $course->formationType()->associate(Catalogue::find($request->input('formationType.id'))); //tecinoc administrativo, ponencia ????
-        $course->entity_certification()->associate(Catalogue::find($request->input("entityCertification.id"))); //entidad que valida SENESCYT SETEC< CECY
-        $course->target_groups()->associate(Catalogue::find($request->input("targetGroups.id"))); //poblacion a la que va dirigda
-        $course->career()->associate(Career::find($request->input("career.id")));
+        $course->modality()->associate(Catalogue::find($request->input('modality.id'))); //modalidad presencial, virtual
+        $course->targetGroups()->associate($request->input("targetGroups")); //poblacion a la que va dirigda
 
         //añadir tipo de participante pendiente
-        //ver en participant controller
+
+       foreach($request->input('participantTypes') as $participantType) {
+        $participantType = Catalogue::find($participantType['id']);   
+        $course->catalogues()->attach($participantType);
+       } 
         
         //campos propios
         $course->abbreviation = $request->input('abbreviation');
