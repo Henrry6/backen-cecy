@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\Cecy\Authorities\IndexAuthorityRequest;
 use App\Http\Requests\V1\Cecy\Courses\getCoursesByResponsibleRequest;
 use App\Http\Requests\V1\Cecy\KPI\Planifications\ShowKpiRequest;
-use App\Http\Requests\V1\Cecy\Participants\InstructorRequest;
+use App\Http\Requests\V1\Cecy\Instructors\InstructorRequest;
 use App\Http\Requests\V1\Cecy\Planifications\IndexPlanificationRequest;
 use App\Http\Requests\V1\Cecy\Planifications\UpdateAssignResponsibleCecyRequest;
 use App\Http\Requests\V1\Cecy\Planifications\UpdateDatesinPlanificationRequest;
@@ -23,11 +24,21 @@ use App\Models\Cecy\Course;
 use App\Models\Cecy\DetailSchoolPeriod;
 use App\Models\Cecy\Instructor;
 use App\Models\Cecy\Planification;
+use App\Models\Cecy\SchoolPeriod;
 use App\Models\Core\State;
 use Illuminate\Database\Eloquent\Builder;
 
 class PlanificationController extends Controller
 {
+    // Función privada que permite obtener cursos aprobados
+    private function getApprovedPlanificationsId()
+    {
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+        $planificationsTypes = Catalogue::where('type',  $catalogue['planification_state']['type'])->get();
+        $planificationApproved = $planificationsTypes->where('code', $catalogue['planification_state']['approved'])->first();
+        return $planificationApproved;
+    }
+
     /**
      * Get all planifications filtered by and course
      */
@@ -99,14 +110,14 @@ class PlanificationController extends Controller
     public function getKpi(ShowKpiRequest $request, Catalogue $state)
     {
 
-        $planifications = Planification::withCount([
-            'id' => function (Builder $query) {
-                $query->where(
-                    'state_id',
-                    $state->id
-                );
-            },
-        ])->get();
+        // $planifications = Planification::withCount([
+        //     'id' => function (Builder $query) {
+        //         $query->where(
+        //             'state_id',
+        //             $state->id
+        //         );
+        //     },
+        // ])->get();
 
         //     return (new KpiPlanificationResourse($planifications[0]))
         //         ->additional([
@@ -139,19 +150,25 @@ class PlanificationController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    /*DDRC-C: Busca planificaciones vigentes por periodo asignadas al usuario logueado(responsable del CECY)*/
+    /*DDRC-C: Busca planificaciones y el curso vigentes por periodo asignadas al usuario logueado(responsable del CECY)*/
     // PlanificationController ya esta, no vale el metodo
-    public function getPlanificationsByPeriodState(InstructorRequest $request)
+    public function getPlanificationsByPeriodState(IndexAuthorityRequest $request)
     {
         
-        $instructor = Instructor::firstWhere('user_id', $request->user()->id)->get();
+        $sorts = explode(',', $request->input('sort'));
+        
+        $authority = Authority::FirstWhere('user_id', $request->user()->id);
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
-        $planifications = $instructor
-            ->planifications()
-            ->period($request->input('period.id'))
-            ->where('state', $catalogue['planification_state']['approved'])
-            ->paginate($request->input('per_page'));
-
+        $schoolPeriod = SchoolPeriod::firstWhere('code',  $catalogue['school_period_state']['current']);
+        
+        
+        
+        $planifications= Planification::whereHas('detailSchoolPeriod',function($detailSchoolPeriod) use($schoolPeriod) {
+            $detailSchoolPeriod->where('school_period_id',$schoolPeriod->id)->get();
+        })
+        ->customOrderBy($sorts)
+        ->get();
+        
         return (new PlanificationCollection($planifications))
             ->additional([
                 'msg' => [
@@ -160,25 +177,34 @@ class PlanificationController extends Controller
                     'code' => '200'
                 ]
             ])->response()->setStatusCode(200);
+        // $instructor = Instructor::firstWhere('user_id', $request->user()->id)->get();
+        // // return $instructor;
+        // $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+        // $planifications = $instructor
+        //     ->planifications()
+        //     ->period($request->input('period.id'))
+        //     ->where('state', $catalogue['planification_state']['approved'])
+        //     ->paginate($request->input('per_page'));
     }
     /*DDRC-C: Trae una lista de nombres de cursos, paralelos y jornadas*/
     // PlanificationController ya esta, no vale el metodo.
     public function getCoursesParallelsWorkdays(getCoursesByResponsibleRequest $request)
     {
+        
         $sorts = explode(',', $request->sort);
         $courseParallelWorkday = Planification::customOrderBy($sorts)
             //            ->detailplanifications()
             //            ->course()
             ->get();
 
-//         return (new CourseParallelWorkdayResource($courseParallelWorkday))
-//             ->additional([
-//                 'msg' => [
-//                     'summary' => 'success',
-//                     'detail' => '',
-//                     'code' => '200'
-//                 ]
-//             ])->response()->setStatusCode(201);
+        //         return (new CourseParallelWorkdayResource($courseParallelWorkday))
+        //             ->additional([
+        //                 'msg' => [
+        //                     'summary' => 'success',
+        //                     'detail' => '',
+        //                     'code' => '200'
+        //                 ]
+        //             ])->response()->setStatusCode(201);
     }
 
     // asignar docente responsable de curso a una planificacion ya esta

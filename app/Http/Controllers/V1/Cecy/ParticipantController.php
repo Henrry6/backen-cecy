@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\Cecy\DetailPlanifications\DetailPlanificationRequest;
 use App\Http\Requests\V1\Cecy\Participants\StoreUserAndParticipantRequest;
 use App\Http\Requests\V1\Cecy\Topics\DestroysTopicRequest;
 use Illuminate\Http\Request;
@@ -17,6 +18,8 @@ use App\Http\Resources\V1\Cecy\Courses\TopicsByCourseCollection;
 use App\Http\Resources\V1\Cecy\Users\UserResource;
 use App\Models\Authentication\User;
 use App\Models\Cecy\Participant;
+use App\Models\Cecy\Planification;
+use App\Models\Cecy\Registration;
 use App\Models\Core\File;
 use App\Models\Core\Image;
 use Illuminate\Support\Facades\DB;
