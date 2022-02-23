@@ -151,24 +151,21 @@ class PlanificationController extends Controller
     }
 
     /*DDRC-C: Busca planificaciones y el curso vigentes por periodo asignadas al usuario logueado(responsable del CECY)*/
-    // PlanificationController ya esta, no vale el metodo
     public function getPlanificationsByPeriodState(IndexAuthorityRequest $request)
     {
-        
+
         $sorts = explode(',', $request->input('sort'));
-        
-        $authority = Authority::FirstWhere('user_id', $request->user()->id);
+
+        $authority = Authority::firstWhere('user_id', $request->user()->id);
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
-        $schoolPeriod = SchoolPeriod::firstWhere('code',  $catalogue['school_period_state']['current']);
-        
-        
-        
-        $planifications= Planification::whereHas('detailSchoolPeriod',function($detailSchoolPeriod) use($schoolPeriod) {
-            $detailSchoolPeriod->where('school_period_id',$schoolPeriod->id)->get();
-        })
-        ->customOrderBy($sorts)
-        ->get();
-        
+        $currentState = Catalogue::firstWhere('code', $catalogue['school_period_state']['current']);
+        $schoolPeriod = SchoolPeriod::firstWhere('state_id', $currentState->id);
+
+        $planifications = $authority->planifications()->whereHas('detailSchoolPeriod', function ($detailSchoolPeriod) use ($schoolPeriod) {
+            $detailSchoolPeriod->where('school_period_id', $schoolPeriod->id);
+        })->customOrderBy($sorts)
+            ->get();
+
         return (new PlanificationCollection($planifications))
             ->additional([
                 'msg' => [
@@ -177,20 +174,12 @@ class PlanificationController extends Controller
                     'code' => '200'
                 ]
             ])->response()->setStatusCode(200);
-        // $instructor = Instructor::firstWhere('user_id', $request->user()->id)->get();
-        // // return $instructor;
-        // $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
-        // $planifications = $instructor
-        //     ->planifications()
-        //     ->period($request->input('period.id'))
-        //     ->where('state', $catalogue['planification_state']['approved'])
-        //     ->paginate($request->input('per_page'));
     }
     /*DDRC-C: Trae una lista de nombres de cursos, paralelos y jornadas*/
     // PlanificationController ya esta, no vale el metodo.
     public function getCoursesParallelsWorkdays(getCoursesByResponsibleRequest $request)
     {
-        
+
         $sorts = explode(',', $request->sort);
         $courseParallelWorkday = Planification::customOrderBy($sorts)
             //            ->detailplanifications()
