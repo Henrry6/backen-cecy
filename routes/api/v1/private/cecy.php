@@ -20,6 +20,9 @@ use \App\Http\Controllers\V1\Cecy\DetailSchoolPeriodController;
 use App\Http\Controllers\V1\Cecy\ParticipantController;
 use App\Http\Controllers\V1\Core\CatalogueController as CoreCatalogueController;
 use App\Http\Resources\V1\Cecy\Courses\CourseResource;
+use App\Models\Authentication\User;
+use App\Models\Cecy\Course;
+use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 
 /***********************************************************************************************************************
  * CATALOGUES
@@ -155,6 +158,16 @@ Route::prefix('courses/{course}')->group(function () {
     Route::get('final-report', [CourseController::class, 'showCourseFinalReport']);
 });
 
+Route::get('/inform', function () {
+    $pdf = PDF::loadView('reports/informe-final');
+    $pdf->setOptions([
+        'page-size' => 'a4'
+    ]);
+
+    return $pdf->inline('Informe.pdf');
+
+});
+
 /***********************************************************************************************************************
  * DETAIL ATTENDANCES
  **********************************************************************************************************************/
@@ -172,6 +185,16 @@ Route::prefix('certificate')->group(function () {
     Route::get('catalogue/{catalogue}/file/{file}', [CertificateController::class, 'downloadFileCertificates']);
     Route::post('catalogue/{catalogue}', [CertificateController::class, 'uploadFileCertificate']);
     Route::post('firm/catalogue/{catalogue}', [CertificateController::class, 'uploadFileCertificateFirm']);
+});
+
+Route::get('/certificate-student', function () {
+    $pdf = PDF::loadView('reports/certificate-student');
+    $pdf->setOptions([
+        'orientation' => 'landscape',
+        'page-size' => 'a4'
+    ]);
+
+    return $pdf->inline('Certificado.pdf');
 });
 /***********************************************************************************************************************
  * SCHOOL PERIODS
