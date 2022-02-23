@@ -11,6 +11,6 @@ Route::prefix('cecy-catalogue')->group(function () {
     Route::get('catalogue', [CatalogueController::class, 'catalogue']);
 });
 
-Route::prefix('user')->group(function () {
-    Route::post('registration', [ParticipantController::class, 'registerUserParticipant']);
+Route::prefix('participant-user')->group(function () {
+    Route::post('registration', [ParticipantController::class, 'registerParticipantUser']);
 });

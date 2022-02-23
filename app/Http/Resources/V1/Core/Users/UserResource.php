@@ -44,14 +44,4 @@ class UserResource extends JsonResource
             'updatedAt' => $this->updated_at,
         ];
     }
-
-    //    public function with($request)
-    //    {
-    //        return [
-    //            'message' => [
-    //                'summary' => '',
-    //                'detail' => ''
-    //            ]
-    //        ];
-    //    }
 }

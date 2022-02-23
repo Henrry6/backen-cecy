@@ -22,6 +22,7 @@ class LocationController extends Controller
 
         $locations = Location::customOrderBy($sorts)
             ->type($request->input('type'))
+            ->parent($request->input('parent'))
             ->paginate(1000);
 
         return (new LocationCollection($locations))
