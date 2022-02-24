@@ -4,7 +4,7 @@ namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Cecy\DetailPlanifications\DetailPlanificationRequest;
-use App\Http\Requests\V1\Cecy\Participants\StoreUserAndParticipantRequest;
+use App\Http\Requests\V1\Cecy\Participants\StoreParticipantUserRequest;
 use App\Http\Requests\V1\Cecy\Registrations\IndexRegistrationRequest;
 use App\Http\Requests\V1\Cecy\Registrations\UpdateRegistrationRequest;
 use App\Http\Resources\V1\Cecy\Participants\ParticipantInformationResource;
@@ -12,13 +12,16 @@ use App\Http\Resources\V1\Cecy\Planifications\PlanificationParticipantCollection
 use Illuminate\Http\Request;
 use App\Models\Cecy\Catalogue;
 use App\Http\Resources\V1\Cecy\Registrations\RegistrationResource;
-use App\Http\Resources\V1\Cecy\Users\UserResource;
+use App\Http\Resources\V1\Core\Users\UserResource;
 use App\Models\Authentication\User;
 use App\Models\Cecy\Participant;
 use App\Models\Cecy\Planification;
 use App\Models\Cecy\Registration;
+use App\Models\Core\Address;
+use App\Models\Core\Catalogue as CoreCatalogue;
 use App\Models\Core\File;
 use App\Models\Core\Image;
+use App\Models\Core\Location;
 use Illuminate\Support\Facades\DB;
 
 class ParticipantController extends Controller
@@ -28,8 +31,9 @@ class ParticipantController extends Controller
     }
 
     // ParticipantController
-    public function registerUserParticipant(StoreUserAndParticipantRequest $request)
+    public function registerParticipantUser(StoreParticipantUserRequest $request)
     {
+
         $user = User::where('username', $request->input('username'))
             ->orWhere('email', $request->input('email'))->first();
 
@@ -57,25 +61,28 @@ class ParticipantController extends Controller
         }
 
         $user = new User();
-        $user->identificationType()->associate(Catalogue::find($request->input('identificationType.id')));
-        $user->sex()->associate(Catalogue::find($request->input('sex.id')));
-        $user->gender()->associate(Catalogue::find($request->input('gender.id')));
-        $user->bloodType()->associate(Catalogue::find($request->input('bloodType.id')));
-        $user->ethnicOrigin()->associate(Catalogue::find($request->input('ethnicOrigin.id')));
-        $user->civilStatus()->associate(Catalogue::find($request->input('civilStatus.id')));
+        $user->identificationType()->associate(CoreCatalogue::find($request->input('identificationType.id')));
+        $user->disability()->associate(CoreCatalogue::find($request->input('disability.id')));
+        $user->gender()->associate(CoreCatalogue::find($request->input('gender.id')));
+        $user->nationality()->associate(Location::find($request->input('nationality.id')));
+        $user->ethnicOrigin()->associate(CoreCatalogue::find($request->input('ethnicOrigin.id')));
+        $user->address()->associate($this->createUserAddress($request->input('address')));
+        // $user->bloodType()->associate(Catalogue::find($request->input('bloodType.id')));
+        // $user->civilStatus()->associate(Catalogue::find($request->input('civilStatus.id')));
+        // $user->sex()->associate(Catalogue::find($request->input('sex.id')));
 
         $user->username = $request->input('username');
-        $user->password = $request->input('password');
         $user->name = $request->input('name');
-        $user->lastname = $request->input('lastname');
+        $user->lastname =  $request->input('lastname');
         $user->birthdate = $request->input('birthdate');
         $user->email = $request->input('email');
+        $user->password =  '12345678';
 
         DB::transaction(function () use ($request, $user) {
             $user->save();
             $user->addPhones($request->input('phones'));
             $user->addEmails($request->input('emails'));
-            $participant = $this->createParticipant($request, $user);
+            $participant = $this->createParticipant($request->input('participantType.id'), $user);
             $participant->save();
         });
 
@@ -90,14 +97,26 @@ class ParticipantController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    private function createParticipant(StoreUserAndParticipantRequest $request, User $user)
+
+    private function createUserAddress($addressUser)
+    {
+        $address =  new Address();
+        $address->location()->associate(Location::find($addressUser['cantonLocation']['id']));
+        $address->sector()->associate(CoreCatalogue::find(1));
+        $address->main_street =  $addressUser['mainStreet'];
+        $address->secondary_street =  $addressUser['secondaryStreet'];
+        return $address;
+    }
+
+    private function createParticipant($participantTipeId, User $user)
     {
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
-        $state = Catalogue::where('code', $catalogue['participant_state']['to_be_approved'])->get();
+        $state = Catalogue::where('type',  $catalogue['participant_state']['type'])
+            ->where('code', $catalogue['participant_state']['to_be_approved'])->first();
 
         $participant = new Participant();
         $participant->user()->associate($user);
-        $participant->type()->associate(Catalogue::find($request->input('type.id')));
+        $participant->type()->associate(Catalogue::find($participantTipeId));
         $participant->state()->associate($state);
         return $participant;
     }
