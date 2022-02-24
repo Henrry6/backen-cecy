@@ -132,9 +132,9 @@ class Course extends Model implements Auditable
         return $this->belongsTo(Catalogue::class);
     }
 
-    public function participants()
+    public function participantTypes()
     {
-        return $this->belongsToMany(Participant::class);
+        return $this->belongsToMany(Catalogue::class);
     }
     
     public function planifications()

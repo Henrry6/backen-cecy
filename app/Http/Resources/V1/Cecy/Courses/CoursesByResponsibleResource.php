@@ -6,6 +6,7 @@ use App\Http\Resources\V1\Cecy\Authorities\AuthorityResource;
 use App\Http\Resources\V1\Cecy\Catalogues\CatalogueResource;
 use App\Http\Resources\V1\Cecy\Courses\CourseResource;
 use App\Http\Resources\V1\Cecy\Instructors\InstructorResource;
+use App\Http\Resources\V1\Cecy\Participants\ParticipantResource;
 use App\Http\Resources\V1\Core\CareerResource;
 use App\Models\Cecy\Authority;
 use App\Models\Cecy\SchoolPeriod;
@@ -29,7 +30,7 @@ class CoursesByResponsibleResource extends JsonResource
             'abbreviation' => $this->abbreviation,
             'code' => $this->code,
             'duration' => $this->duration,
-          
+            'participantTypes' => CatalogueResource::collection($this->partipantTypes),
             'needs' => $this->needs,
             'project' => $this->project,
             'summary' => $this->summary,
