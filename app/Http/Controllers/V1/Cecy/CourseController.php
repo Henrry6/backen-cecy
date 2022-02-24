@@ -77,7 +77,6 @@ class CourseController extends Controller
             ->whereHas('course', function ($course) use ($request) {
                 $course
                     ->name($request->input('search'))
-                    ->category($request->input('category'))
                     ->where('public', true);
             })->paginate($request->input('per_page'));
 
@@ -384,9 +383,9 @@ class CourseController extends Controller
         $planification = $course->planifications()->get();
 
         $data =  new InformCourseNeedsResource($planification);
-         $pdf = PDF::loadView('reports/report-needs', ['planifications'=>$data]);
-    
-        return $pdf->stream('informNeeds.pdf');  
+        $pdf = PDF::loadView('reports/report-needs', ['planifications' => $data]);
+
+        return $pdf->stream('informNeeds.pdf');
     }
 
     //Traer todos los cursos planificados de un año en especifico (Done)
@@ -514,19 +513,19 @@ class CourseController extends Controller
 
     //traer participante de un curso 
 
-    public function certificateParticipants(Course $course){
-        
+    public function certificateParticipants(Course $course)
+    {
+
         $planification = $course->planifications()->get();
 
         $data = new CertificateResource($planification);
-        $pdf = PDF::loadView('certificate-student', ['registrations'=>$data]);
+        $pdf = PDF::loadView('certificate-student', ['registrations' => $data]);
         $pdf->setOptions([
             'orientation' => 'landscape',
-    
+
             'page-size' => 'a4'
         ]);
         return $pdf->stream('certificate.pdf');
-     
     }
 
     // Adjuntar el acta de aprobación

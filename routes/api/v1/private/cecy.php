@@ -20,6 +20,7 @@ use \App\Http\Controllers\V1\Cecy\DetailSchoolPeriodController;
 use App\Http\Controllers\V1\Cecy\ParticipantController;
 use App\Http\Controllers\V1\Core\CatalogueController as CoreCatalogueController;
 use App\Http\Resources\V1\Cecy\Courses\CourseResource;
+use App\Http\Controllers\V1\Cecy\AttendanceController;
 use App\Models\Authentication\User;
 use App\Models\Cecy\Course;
 use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
@@ -133,7 +134,7 @@ Route::prefix('courses')->group(function () {
 });
 
 Route::prefix('courses/{course}')->group(function () {
-    Route::get('', [CourseController::class, 'show']); 
+    Route::get('', [CourseController::class, 'show']);
     Route::prefix('')->group(function () {
 
         Route::get('/topics', [TopicController::class, 'getTopics']);
@@ -272,6 +273,21 @@ Route::apiResource('authorities', AuthorityController::class);
 
 Route::prefix('authority')->group(function () {
     Route::patch('{authority}', [AuthorityController::class, 'destroys']);
+});
+
+/***********************************************************************************************************************
+ * AUTHORITY
+ **********************************************************************************************************************/
+
+Route::apiResource('attendances', AttendanceController::class);
+
+
+Route::prefix('attendance')->group(function () {
+    Route::get('detail/{detail}', [AttendanceController::class, 'getDetails']);
+    Route::get('record/{record}', [AttendanceController::class, 'getRecords']);
+    Route::get('records/{records}', [AttendanceController::class, 'getRecord']);
+    Route::get('by-detail/{detaill}', [AttendanceController::class, 'getRecordDetails']);
+    Route::patch('', [AttendanceController::class, 'destroys']);
 });
 
 

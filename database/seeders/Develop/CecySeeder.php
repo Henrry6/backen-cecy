@@ -20,7 +20,7 @@ use Database\Seeders\Develop\Cecy\InstructorsSeeder;
 use Database\Seeders\Develop\Cecy\NotificationsSeeder;
 use Database\Seeders\Develop\Cecy\ParticipantCourseSeeder;
 use Database\Seeders\Develop\Cecy\ParticipantsSeeder;
-use Database\Seeders\Develop\Cecy\PhotograficRecordsSeeder;
+use Database\Seeders\Develop\Cecy\PhotographicRecordsSeeder;
 use Database\Seeders\Develop\Cecy\PlanificationsSeeder;
 use Database\Seeders\Develop\Cecy\PrerequisitesSeeder;
 use Database\Seeders\Develop\Cecy\ProfileInstructorCoursesSeeder;
@@ -61,7 +61,7 @@ class CecySeeder extends Seeder
             // AuthorizedInstructorsSeeder::class,
             //CertificatesSeeder::class,
             //NotificationsSeeder::class,
-            //PhotograficRecordsSeeder::class,
+            PhotographicRecordsSeeder::class,
         ]);
     }
 }
