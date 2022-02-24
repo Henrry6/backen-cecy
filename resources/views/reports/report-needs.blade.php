@@ -21,7 +21,7 @@
 					<div class="stl_01" style="top: 18.6243em; left:6.0125em;"><span class="stl_15 stl_08" style="word-spacing:0.07em;">Nombre del Docente: </span></div>
 
 					<div class="stl_01" style="top: 21.1243em; left:6.0125em;"><span class="stl_15 stl_08" 
-					style="word-spacing:0.06em;">Nombre del Curso:{{ $planifications('name') }}</span></div>
+					style="word-spacing:0.06em;">Nombre del Curso:</span></div>
 
 					<div class="stl_01" style="top: 23.6243em; left:6.0125em;"><span class="stl_15 stl_08" style="word-spacing:0.04em;">Tipo de curso: </span></div>
 					<div class="stl_01" style="top: 18.7095em; left:17.95em;"><span class="stl_16 stl_08" style="word-spacing:0.02em;">LUIS PATRICIO VICENTE</span></div>

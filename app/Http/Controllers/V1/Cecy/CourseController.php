@@ -377,24 +377,16 @@ class CourseController extends Controller
     }
 
     // Mostrar las necesidades de un curso (Done)
-    public function showInformCourseNeeds(Course $course)
+    public function informCourseNeeds(Course $course)
     {
-        return "showInformCourseNeeds";
         //trae un informe de nececidades de una planificacion, un curso en especifico por el docente que se logea
 
+        $planification = $course->planifications()->get();
 
-        $planification = $course->planifications()->first();
-        //            ->detailPlanifications()
-        //            ->instructors()
-        //            ->classrooms();
-        /*         ->planifications() */
-        //->course()
-
-        /*             $planification = $course->planifications()->instructors()->users()->get()
-                    ->detailPlanifications()
-                    ->classrooms(); */
-
-        $data = new InformCourseNeedsResource($planification);
+        $data =  new InformCourseNeedsResource($planification);
+         $pdf = PDF::loadView('reports/report-needs', ['planifications'=>$data]);
+    
+        return $pdf->stream('informNeeds.pdf');  
     }
 
     //Traer todos los cursos planificados de un año en especifico (Done)
