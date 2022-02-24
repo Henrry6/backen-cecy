@@ -281,6 +281,10 @@ Route::prefix('authority')->group(function () {
 
 Route::apiResource('attendances', AttendanceController::class);
 
+Route::prefix('attendance')->group(function () {
+    Route::get('detail/{detailPlanification}', [AttendanceController::class, 'getAttendancesByDetailPlanification']);
+});
+
 Route::apiResource('records', PhotographicRecordController::class);
 
 Route::prefix('record')->group(function () {
