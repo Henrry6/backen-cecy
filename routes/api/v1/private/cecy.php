@@ -292,7 +292,7 @@ Route::prefix('attendance')->group(function () {
 
 Route::apiResource('records', PhotographicRecordController::class);
 
-Route::prefix('record/{record}')->group(function () {
+Route::prefix('record/{photographicRecord}')->group(function () {
     Route::get('', [PhotographicRecordController::class, 'show']);
 });
 
