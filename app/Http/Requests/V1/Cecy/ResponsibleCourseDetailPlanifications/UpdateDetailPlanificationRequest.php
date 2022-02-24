@@ -18,13 +18,13 @@ class UpdateDetailPlanificationRequest extends FormRequest
             'day.id' => ['required', 'integer'],
             'planification.id' => ['required', 'integer'],
             'workday.id' => ['required', 'integer'],
-            'paralel.id' => ['required', 'integer'],
-            'endedTime' => ['required', 'time'],
-            'startedTime' => ['required', 'time'],
+            'parallel.id' => ['required', 'integer'],
+            'endedTime' => ['required',],
+            'startedTime' => ['required',],
             'observations' => ['required'],
         ];
     }
-    
+
     public function attributes()
     {
         return [
@@ -34,7 +34,6 @@ class UpdateDetailPlanificationRequest extends FormRequest
             'workday.id' => 'Jornada',
             'paralel.id' => 'Paralelo del aula o clase',
             'endedTime' => ['required', 'time'],
-            // 'planEndedAt' => 'Fecha real de finalización de clases',
             'startedTime' => ['required', 'time'],
         ];
     }
