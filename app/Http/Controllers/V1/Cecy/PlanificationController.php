@@ -155,8 +155,20 @@ class PlanificationController extends Controller
     {
 
         $sorts = explode(',', $request->input('sort'));
-
+        
         $authority = Authority::firstWhere('user_id', $request->user()->id);
+        //verificar que el usuario logeado es una autoridad de Authority
+        if (!$authority) {
+            return response()->json([
+                'data' => '',
+                'msg' => [
+                    'summary' => 'failed',
+                    'detail' => 'No se encontró al usuario: no es una autoridad o no está registrado.',
+                    'code' => '400'
+                ]
+            ], 400);
+        }
+
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
         $currentState = Catalogue::firstWhere('code', $catalogue['school_period_state']['current']);
         $schoolPeriod = SchoolPeriod::firstWhere('state_id', $currentState->id);
