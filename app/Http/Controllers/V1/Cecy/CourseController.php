@@ -245,7 +245,7 @@ class CourseController extends Controller
     public function getCoursesByResponsibleCourse(getCoursesByResponsibleRequest $request)
     {
 
-        $instructor = Instructor::FirstWhere('user_id', $request->user()->id); //TodoList: validar
+        $instructor = Instructor::FirstWhere('user_id', $request->user()->id); 
         if(!isset($instructor)){
             return response()->json([
                 'msg'=> [
@@ -283,17 +283,15 @@ class CourseController extends Controller
     //actualiza datos generales de un curso seleccionado  (Done)
     public function updateGeneralInformationCourse(UpdateCourseGeneralDataRequest $request, Course $course)
     {
-        return "updateGeneralInformationCourse";
-        $course->category()->associate(Catalogue::find($request->input('category.id'))); //categoria de curso, arte, tecnico, patrimocio,etc.
+        // return "updateGeneralInformationCourse";
         $course->career()->associate(Career::find($request->input("career.id")));
+        $course->category()->associate(Catalogue::find($request->input('category.id'))); //categoria de curso, arte, tecnico, patrimocio,etc.
         $course->certifiedType()->associate(Catalogue::find($request->input('certifiedType.id'))); //tipo de certificado asistencia, aprobacion
         $course->courseType()->associate(Catalogue::find($request->input('courseType.id'))); //tipo de curso tecnico, administrativo
         $course->entityCertification()->associate(Catalogue::find($request->input("entityCertification.id"))); //entidad que valida SENESCYT SETEC< CECY
         $course->formationType()->associate(Catalogue::find($request->input('formationType.id'))); //tecinoc administrativo, ponencia ????
         $course->modality()->associate(Catalogue::find($request->input('modality.id'))); //modalidad presencial, virtual
         $course->targetGroups()->associate($request->input("targetGroups")); //poblacion a la que va dirigda
-
-        //añadir tipo de participante pendiente
 
        foreach($request->input('participantTypes') as $participantType) {
         $participantType = Catalogue::find($participantType['id']);   
