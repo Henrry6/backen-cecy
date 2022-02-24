@@ -289,11 +289,8 @@ class CourseController extends Controller
         $course->entityCertification()->associate(Catalogue::find($request->input("entityCertification.id"))); //entidad que valida SENESCYT SETEC< CECY
         $course->formationType()->associate(Catalogue::find($request->input('formationType.id'))); //tecinoc administrativo, ponencia ????
         $course->modality()->associate(Catalogue::find($request->input('modality.id'))); //modalidad presencial, virtual
+        $course->catalogues()->sync($request->input('participantTypes.ids'));
         
-        $course->catalogues()->attach($request->input('partipantTypes.ids'));
-        
-        // $detailPlanification->instructors()->attach($request->input('instructors.id'));
-
         // foreach($request->input('participantTypes') as $participantType) {
         //     $participantType = Catalogue::find($participantType['id']);   
         //     $course->catalogues()->attach($participantType);
@@ -305,7 +302,7 @@ class CourseController extends Controller
         $course->needs = $request->input('needs');
         // $course->target_groups->associate($request->input("targetGroups.ids")); //poblacion a la que va dirigda
         $course->project = $request->input('project');
-        $course->sumary = $request->input('sumary');
+        $course->summary = $request->input('summary');
         $course->save();
 
         return (new CourseResource($course))

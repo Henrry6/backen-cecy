@@ -60,6 +60,7 @@ class CourseResource extends JsonResource
             'teachingStrategies' => $this->teaching_strategies,
             'techniquesRequisites' => $this->techniques_requisites,
             'theoryHours' => $this->techniques_requisites,
+            'participantTypes' => CatalogueResource::collection($this->catalogues),
         ];
     }
 }
