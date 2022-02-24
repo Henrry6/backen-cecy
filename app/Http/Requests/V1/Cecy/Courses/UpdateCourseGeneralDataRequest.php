@@ -21,13 +21,12 @@ class UpdateCourseGeneralDataRequest extends FormRequest
       'entityCertification.id' => ['required', 'integer'],
       'formationType.id' => ['required', 'integer'],
       'modality.id' => ['required', 'integer'],
-      'targetGroups.id' => ['required', 'integer'],
       'abbreviation' => ['required', 'string', 'max:100'],
       'duration' => ['required', 'integer'],
       'needs' => ['required', 'json'],
       'project' => ['required', 'string', 'max:1000'],
+      // 'targetGroups' => ['required'],
       'summary' => ['required',  'string', 'max:1000'],
-
     ];
   }
 
@@ -42,11 +41,11 @@ class UpdateCourseGeneralDataRequest extends FormRequest
       'entityCertification.id' => 'Id de entidad que valida',
       'formationType.id' => 'Id del tipo de formacion',
       'modality.id' => 'Id  de la modalidad',
-      'targetGroups.id' => 'Id del grupo al que va dirigido',
       'abbreviation' => 'Abreviación',
       'duration' => 'Duración',
       'needs' => 'Necesidades',
       'project' => 'Proyecto',
+      // 'targetGroups' => 'Ids de grupos al que va dirigido el curso',
       'summary' => 'Sumario',
     ];
   }

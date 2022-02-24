@@ -289,17 +289,21 @@ class CourseController extends Controller
         $course->entityCertification()->associate(Catalogue::find($request->input("entityCertification.id"))); //entidad que valida SENESCYT SETEC< CECY
         $course->formationType()->associate(Catalogue::find($request->input('formationType.id'))); //tecinoc administrativo, ponencia ????
         $course->modality()->associate(Catalogue::find($request->input('modality.id'))); //modalidad presencial, virtual
-        $course->targetGroups()->associate($request->input("targetGroups")); //poblacion a la que va dirigda
+        
+        $course->catalogues()->attach($request->input('partipantTypes.ids'));
+        
+        // $detailPlanification->instructors()->attach($request->input('instructors.id'));
 
-       foreach($request->input('participantTypes') as $participantType) {
-        $participantType = Catalogue::find($participantType['id']);   
-        $course->catalogues()->attach($participantType);
-       } 
+        // foreach($request->input('participantTypes') as $participantType) {
+        //     $participantType = Catalogue::find($participantType['id']);   
+        //     $course->catalogues()->attach($participantType);
+        // } 
         
         //campos propios
         $course->abbreviation = $request->input('abbreviation');
         $course->duration = $request->input('duration');
         $course->needs = $request->input('needs');
+        // $course->target_groups->associate($request->input("targetGroups.ids")); //poblacion a la que va dirigda
         $course->project = $request->input('project');
         $course->sumary = $request->input('sumary');
         $course->save();
