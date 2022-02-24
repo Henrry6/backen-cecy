@@ -5,7 +5,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\V1\Cecy\CatalogueController;
 use App\Http\Controllers\V1\Cecy\CertificateController;
 use App\Http\Controllers\V1\Cecy\ClassroomController;
-use App\Http\Controllers\V1\Cecy\GuachagmiraController;
 use App\Http\Controllers\V1\Cecy\CourseController;
 use App\Http\Controllers\V1\Cecy\DetailAttendanceController;
 use App\Http\Controllers\V1\Cecy\DetailPlanificationController;
@@ -21,6 +20,11 @@ use \App\Http\Controllers\V1\Cecy\DetailSchoolPeriodController;
 use App\Http\Controllers\V1\Cecy\ParticipantController;
 use App\Http\Controllers\V1\Core\CatalogueController as CoreCatalogueController;
 use App\Http\Resources\V1\Cecy\Courses\CourseResource;
+use App\Http\Controllers\V1\Cecy\AttendanceController;
+use App\Http\Controllers\V1\Cecy\PhotographicRecordController;
+use App\Models\Authentication\User;
+use App\Models\Cecy\Course;
+use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 
 /***********************************************************************************************************************
  * CATALOGUES
@@ -124,6 +128,12 @@ Route::prefix('courses')->group(function () {
     Route::get('career/{career}', [CourseController::class, 'getCoursesByCareer']);
 });
 
+Route::prefix('courses')->group(function () {
+    Route::get('', [CourseController::class, 'getCourses']);
+    // Route::get('inform-course-needs/{course}', [CourseController::class, 'informCourseNeeds']);
+
+});
+
 Route::prefix('courses/{course}')->group(function () {
     Route::get('', [CourseController::class, 'show']);
     Route::prefix('')->group(function () {
@@ -136,6 +146,7 @@ Route::prefix('courses/{course}')->group(function () {
         Route::get('/instructors', [TopicController::class, 'getInstructors']);
     });
     Route::prefix('')->group(function () {
+        Route::get('/prerequisites/all', [PrerequisiteController::class, 'getPrerequisitesAll']);
         Route::get('/prerequisites', [PrerequisiteController::class, 'getPrerequisites']);
         Route::post('/prerequisites', [PrerequisiteController::class, 'storePrerequisite']);
         Route::put('/prerequisites/{prerequisite}', [PrerequisiteController::class, 'updatePrerequisite']);
@@ -146,9 +157,22 @@ Route::prefix('courses/{course}')->group(function () {
     Route::patch('general-information', [CourseController::class, 'updateGeneralInformationCourse']);
     Route::patch('assign-code', [CourseController::class, 'assignCodeToCourse']);
     Route::patch('not-approve-reason', [CourseController::class, 'notApproveCourseReason']);
-    Route::get('inform-course-needs', [CourseController::class, 'showInformCourseNeeds']);
+    // Route::get('inform-course-needs/{course}', 'App\Http\Controllers\V1\Cecy\CourseController@informCourseNeeds');
+     Route::get('inform-course-needs', [CourseController::class, 'informCourseNeeds']);
     Route::get('curricular-design', [CourseController::class, 'showCurricularDesign']);
     Route::get('final-report', [CourseController::class, 'showCourseFinalReport']);
+});
+
+
+
+Route::get('/inform', function () {
+    $pdf = PDF::loadView('reports/informe-final');
+    $pdf->setOptions([
+        'page-size' => 'a4'
+    ]);
+
+    return $pdf->inline('Informe.pdf');
+
 });
 
 /***********************************************************************************************************************
@@ -169,6 +193,16 @@ Route::prefix('certificate')->group(function () {
     Route::post('catalogue/{catalogue}', [CertificateController::class, 'uploadFileCertificate']);
     Route::post('firm/catalogue/{catalogue}', [CertificateController::class, 'uploadFileCertificateFirm']);
 });
+
+Route::get('/certificate-student', function () {
+    $pdf = PDF::loadView('reports/certificate-student');
+    $pdf->setOptions([
+        'orientation' => 'landscape',
+        'page-size' => 'a4'
+    ]);
+
+    return $pdf->inline('Certificado.pdf');
+});
 /***********************************************************************************************************************
  * SCHOOL PERIODS
  **********************************************************************************************************************/
@@ -178,6 +212,7 @@ Route::apiResource('school-periods', SchoolPeriodController::class);
 Route::prefix('school-period')->group(function () {
     Route::patch('{school-period}', [SchoolPeriodController::class, 'destroys']);
 });
+
 /***********************************************************************************************************************
  * CLASSROOMS
  **********************************************************************************************************************/
@@ -240,5 +275,20 @@ Route::prefix('authority')->group(function () {
     Route::patch('{authority}', [AuthorityController::class, 'destroys']);
 });
 
+/***********************************************************************************************************************
+ * AUTHORITY
+ **********************************************************************************************************************/
 
+Route::apiResource('attendances', AttendanceController::class);
+
+Route::prefix('attendance')->group(function () {
+    Route::get('detail/{detailPlanification}', [AttendanceController::class, 'getAttendancesByDetailPlanification']);
+});
+
+Route::apiResource('records', PhotographicRecordController::class);
+
+Route::prefix('record')->group(function () {
+    Route::get('{photographicRecord}', [PhotographicRecordController::class, 'show']);
+    Route::get('detail/{detailPlanification}', [PhotographicRecordController::class, 'getDetails']);
+});
 

@@ -27,8 +27,25 @@ class PrerequisiteController extends Controller
     // PrerequisteController
     public function getPrerequisites(Course $course)
     {
+        // return $course->id;
+        // $prerequisites = $course->prerequisites()->Where('course_id', $course->id)->get();
         $prerequisites = $course->prerequisites()->get();
+        // return $prerequisites;
+        // $prerequisites = Prerequisite::find($course->id)->get();
+        // $topics = $course->topics()->Where('level', 1)->get();
         return (new PrerequisiteCollection($prerequisites))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ]);
+    }
+
+    public function getPrerequisitesAll(Course $course)
+    {
+        return (new PrerequisiteCollection(Prerequisite::paginate(100)))
             ->additional([
                 'msg' => [
                     'summary' => 'success',

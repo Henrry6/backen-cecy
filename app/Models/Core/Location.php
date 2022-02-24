@@ -52,6 +52,13 @@ class Location extends Model implements Auditable
         }
     }
 
+    public function scopeParent($query, $parent)
+    {
+        if ($parent) {
+            return $query->Where('parent_id', $parent);
+        }
+    }
+
     public function scopeCustomOrderBy($query, $sorts)
     {
         if (!empty($sorts[0])) {

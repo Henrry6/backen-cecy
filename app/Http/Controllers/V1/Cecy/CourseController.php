@@ -31,6 +31,7 @@ use App\Http\Resources\V1\Cecy\Planifications\InformCourseNeedsResource;
 use App\Http\Resources\V1\Cecy\Courses\CoursesByResponsibleCollection;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationCollection;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationResource;
+use App\Http\Resources\V1\Cecy\Certificates\CertificateResource;
 use App\Models\Cecy\Instructor;
 use App\Models\Cecy\Participant;
 use App\Models\Cecy\Planification;
@@ -38,6 +39,7 @@ use App\Models\Core\File;
 use App\Models\Core\Image;
 use App\Models\Core\State;
 use App\Models\Core\Career;
+use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 use Exception;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
@@ -75,7 +77,6 @@ class CourseController extends Controller
             ->whereHas('course', function ($course) use ($request) {
                 $course
                     ->name($request->input('search'))
-                    ->category($request->input('category'))
                     ->where('public', true);
             })->paginate($request->input('per_page'));
 
@@ -228,17 +229,14 @@ class CourseController extends Controller
     //visualizar todos los cursos (Done)
     public function getCourses()
     {
-        $courses = Course::get()->paginate();
-
-        return (new CourseCollection($courses))
+        return (new CourseCollection(Course::paginate(100)))
             ->additional([
                 'msg' => [
                     'summary' => 'Me trae los cursos',
                     'detail' => '',
                     'code' => '200'
                 ]
-            ])
-            ->response()->setStatusCode(200);
+            ]);
     }
 
     //obtener los cursos asignados a un docente responsable logueado (Done)
@@ -395,24 +393,16 @@ class CourseController extends Controller
     }
 
     // Mostrar las necesidades de un curso (Done)
-    public function showInformCourseNeeds(Course $course)
+    public function informCourseNeeds(Course $course)
     {
-        return "showInformCourseNeeds";
         //trae un informe de nececidades de una planificacion, un curso en especifico por el docente que se logea
 
+        $planification = $course->planifications()->get();
 
-        $planification = $course->planifications()->first();
-        //            ->detailPlanifications()
-        //            ->instructors()
-        //            ->classrooms();
-        /*         ->planifications() */
-        //->course()
+        $data =  new InformCourseNeedsResource($planification);
+        $pdf = PDF::loadView('reports/report-needs', ['planifications' => $data]);
 
-        /*             $planification = $course->planifications()->instructors()->users()->get()
-                    ->detailPlanifications()
-                    ->classrooms(); */
-
-        $data = new InformCourseNeedsResource($planification);
+        return $pdf->stream('informNeeds.pdf');
     }
 
     //Traer todos los cursos planificados de un año en especifico (Done)
@@ -548,6 +538,24 @@ class CourseController extends Controller
                     'code' => '200'
                 ]
             ]);
+    }
+
+
+    //traer participante de un curso 
+
+    public function certificateParticipants(Course $course)
+    {
+
+        $planification = $course->planifications()->get();
+
+        $data = new CertificateResource($planification);
+        $pdf = PDF::loadView('certificate-student', ['registrations' => $data]);
+        $pdf->setOptions([
+            'orientation' => 'landscape',
+
+            'page-size' => 'a4'
+        ]);
+        return $pdf->stream('certificate.pdf');
     }
 
     // Adjuntar el acta de aprobación

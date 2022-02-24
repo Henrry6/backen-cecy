@@ -13,7 +13,7 @@ use App\Http\Requests\V1\Core\Images\DownloadImageRequest;
 use App\Http\Requests\V1\Core\Images\IndexImageRequest;
 use App\Http\Requests\V1\Core\Images\UpdateImageRequest;
 use App\Http\Requests\V1\Core\Images\UploadImageRequest;
-use App\Http\Resources\V1\Core\Catalogues\CatalogueCollection;
+use App\Http\Resources\V1\Cecy\Catalogues\CatalogueCollection;
 use App\Models\Cecy\Catalogue;
 use App\Models\Core\File;
 use App\Models\Core\Image;
