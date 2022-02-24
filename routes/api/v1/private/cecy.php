@@ -281,18 +281,10 @@ Route::prefix('authority')->group(function () {
 
 Route::apiResource('attendances', AttendanceController::class);
 
-
-Route::prefix('attendance')->group(function () {
-    Route::get('detail/{detail}', [AttendanceController::class, 'getDetails']);
-    Route::get('record/{record}', [AttendanceController::class, 'getRecords']);
-    Route::get('records/{records}', [AttendanceController::class, 'getRecord']);
-    Route::get('by-detail/{detaill}', [AttendanceController::class, 'getRecordDetails']);
-    Route::patch('', [AttendanceController::class, 'destroys']);
-});
-
 Route::apiResource('records', PhotographicRecordController::class);
 
-Route::prefix('record/{photographicRecord}')->group(function () {
-    Route::get('', [PhotographicRecordController::class, 'show']);
+Route::prefix('record')->group(function () {
+    Route::get('{photographicRecord}', [PhotographicRecordController::class, 'show']);
+    Route::get('detail/{$detailPlanification}', [PhotographicRecordController::class, 'getDetails']);
 });
 

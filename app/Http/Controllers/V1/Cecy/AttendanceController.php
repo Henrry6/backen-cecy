@@ -245,18 +245,7 @@ class AttendanceController extends Controller
             ])
             ->response()->setStatusCode(200);
     }
-    public function getDetails(DetailPlanification $detailPlanification){
-        $photographicRecords = $detailPlanification->photographicRecords()->get();
-        return(new PhotographicRecordCollection($photographicRecords))
-            ->additional([
-                'msg' => [
-                    'summary' => 'success',
-                    'records' => '',
-                    'code' => '200'
-                ]
-            ])
-            ->response()->setStatusCode(200);
-    }
+
     public function getRecord(){
         return(new PhotographicRecordCollection(PhotographicRecord::get()))
             ->additional([
