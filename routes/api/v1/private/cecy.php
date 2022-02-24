@@ -285,6 +285,6 @@ Route::apiResource('records', PhotographicRecordController::class);
 
 Route::prefix('record')->group(function () {
     Route::get('{photographicRecord}', [PhotographicRecordController::class, 'show']);
-    Route::get('detail/{$detailPlanification}', [PhotographicRecordController::class, 'getDetails']);
+    Route::get('detail/{detailPlanification}', [PhotographicRecordController::class, 'getDetails']);
 });
 
