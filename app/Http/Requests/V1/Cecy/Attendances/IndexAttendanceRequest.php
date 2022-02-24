@@ -1,5 +1,5 @@
 <?php
-namespace App\Http\Requests\V1\Cecy\Participants;
+namespace App\Http\Requests\V1\Cecy\Attendances;
 
 use Illuminate\Foundation\Http\FormRequest;
 

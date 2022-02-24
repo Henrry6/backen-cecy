@@ -21,6 +21,7 @@ use App\Http\Controllers\V1\Cecy\ParticipantController;
 use App\Http\Controllers\V1\Core\CatalogueController as CoreCatalogueController;
 use App\Http\Resources\V1\Cecy\Courses\CourseResource;
 use App\Http\Controllers\V1\Cecy\AttendanceController;
+use App\Http\Controllers\V1\Cecy\PhotographicRecordController;
 use App\Models\Authentication\User;
 use App\Models\Cecy\Course;
 use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
@@ -280,14 +281,14 @@ Route::prefix('authority')->group(function () {
 
 Route::apiResource('attendances', AttendanceController::class);
 
-
 Route::prefix('attendance')->group(function () {
-    Route::get('detail/{detail}', [AttendanceController::class, 'getDetails']);
-    Route::get('record/{record}', [AttendanceController::class, 'getRecords']);
-    Route::get('records/{records}', [AttendanceController::class, 'getRecord']);
-    Route::get('by-detail/{detaill}', [AttendanceController::class, 'getRecordDetails']);
-    Route::patch('', [AttendanceController::class, 'destroys']);
+    Route::get('detail/{detailPlanification}', [AttendanceController::class, 'getAttendancesByDetailPlanification']);
 });
 
+Route::apiResource('records', PhotographicRecordController::class);
 
+Route::prefix('record')->group(function () {
+    Route::get('{photographicRecord}', [PhotographicRecordController::class, 'show']);
+    Route::get('detail/{detailPlanification}', [PhotographicRecordController::class, 'getDetails']);
+});
 
