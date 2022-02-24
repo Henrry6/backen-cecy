@@ -30,7 +30,7 @@ class CoursesByResponsibleResource extends JsonResource
             'abbreviation' => $this->abbreviation,
             'code' => $this->code,
             'duration' => $this->duration,
-            'participantTypes' => CatalogueResource::collection($this->participantTypes),
+            'participantTypes' => CatalogueResource::collection($this->catalogues),
             'needs' => $this->needs,
             'project' => $this->project,
             'summary' => $this->summary,
