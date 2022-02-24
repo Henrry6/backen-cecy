@@ -2,6 +2,7 @@
 
 namespace Database\Seeders\Develop\Cecy;
 
+use Faker\Factory;
 use App\Models\Cecy\Catalogue;
 use App\Models\Cecy\Course;
 use Illuminate\Database\Seeder;
@@ -61,11 +62,13 @@ class CoursesSeeder extends Seeder
                 'description' => 'Septimo semestre'
             ],
             [
+                'code' => $catalogue['area']['a'],
                 'name' => 'ADMINISTRACIÓN Y LEGISLACIÓN',
                 'type' => $catalogue['area']['type'],
                 'description' => null
             ],
             [
+                'code' => $catalogue['area']['b'],
                 'name' => 'AGRONOMÍA',
                 'type' => $catalogue['area']['type'],
                 'description' => null
@@ -252,36 +255,39 @@ class CoursesSeeder extends Seeder
             ]
         )->create();
 
+        $faker = Factory::create();
+
+        $area_type = Catalogue::Where('type', 'AREA')->get();
         Catalogue::factory(4)->sequence(
             [
+                'code' => $catalogue['speciality_area']['a.1'],  
                 'name' => 'Administración General (Pública, Empresas, Microempresas, Cooperativas, Aduanera, Agrícola, Agropecuaria, Agroindustrial, Bancaria, Financiera, Forestal, Hospitalaria, Hotelera, Inmobiliaria, Pesquera, Minera, Etc.)',
                 'type' => $catalogue['speciality_area']['type'],
-                //                'parent_id' => (Catalogue::firstWhere('code', $catalogue['area']['a']))->id
-                'parent_id' => 1
+                'parent_id' => $faker->randomElement($area_type)
             ],
             [
+                'code' => $catalogue['speciality_area']['a.2'],  
                 'name' => 'Gestión del Talento Humano (Manejo de Personal, Desempeño, Motivación, Liderazgo, Coaching, Trabajo en Equipo, Selección por Competencias, Plan Interno de Carrera, Comunicación Organizacional, Profesiogramas)',
                 'type' => $catalogue['speciality_area']['type'],
-                //                'parent_id' => (Catalogue::firstWhere('code', $catalogue['area']['a']))->id
-                'parent_id' => 2
+                'parent_id' => $faker->randomElement($area_type)
             ],
             [
+                'code' => $catalogue['speciality_area']['b.1'],  
                 'name' => 'Administración de Costos',
                 'type' => $catalogue['speciality_area']['type'],
-                //                'parent_id' => (Catalogue::firstWhere('code', $catalogue['area']['b']))->id
-                'parent_id' => 3
+                'parent_id' => $faker->randomElement($area_type)
             ],
             [
+                'code' => $catalogue['speciality_area']['b.2'],  
                 'name' => 'Administración Contable',
                 'type' => $catalogue['speciality_area']['type'],
-                //                'parent_id' => (Catalogue::firstWhere('code', $catalogue['area']['b']))->id
-                'parent_id' => 4
+                'parent_id' => $faker->randomElement($area_type)
             ]
         )->create();
     }
 
     public function createCourses()
     {
-        Course::factory(6)->create();
+        Course::factory(30)->create();
     }
 }

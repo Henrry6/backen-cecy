@@ -3,18 +3,21 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\V1\Cecy\Attendance\DestroysAttendanceRequest;
-use App\Http\Requests\V1\Cecy\Attendance\GetAttendancesByParticipantRequest;
-use App\Http\Requests\V1\Cecy\Attendance\GetAttendanceTeacherRequest;
-use App\Http\Requests\V1\Cecy\Attendance\SaveDetailAttendanceRequest;
-use App\Http\Requests\V1\Cecy\Attendance\ShowAttendanceTeacherRequest;
-use App\Http\Requests\V1\Cecy\Attendance\StoreAttendanceRequest;
+use App\Http\Requests\V1\Cecy\Attendances\DestroysAttendanceRequest;
+use App\Http\Requests\V1\Cecy\Attendances\GetAttendancesByParticipantRequest;
+use App\Http\Requests\V1\Cecy\Attendances\GetAttendanceTeacherRequest;
+use App\Http\Requests\V1\Cecy\Attendances\SaveDetailAttendanceRequest;
+use App\Http\Requests\V1\Cecy\Attendances\ShowAttendanceTeacherRequest;
+use App\Http\Requests\V1\Cecy\Attendances\StoreAttendanceRequest;
 use App\Http\Requests\V1\Cecy\Courses\GetCoursesByNameRequest;
 use App\Http\Requests\V1\Core\Images\UploadImageRequest;
 use App\Http\Resources\V1\Cecy\Attendances\AttendanceCollection;
 use App\Http\Resources\V1\Cecy\Attendances\AttendanceResource;
 use App\Http\Resources\V1\Cecy\Authorities\DetailAttendanceCollection;
+use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationCollection;
+use App\Http\Resources\V1\Cecy\PhotographicRecords\PhotographicRecordCollection;
 use App\Models\Cecy\DetailPlanification;
+use App\Models\Cecy\PhotographicRecord;
 use Illuminate\Http\Request;
 use App\Models\Cecy\Course;
 use App\Models\Cecy\Catalogue;
@@ -36,7 +39,7 @@ class AttendanceController extends Controller
 {
  //Ver todas las asistencias del estudiante
     // AttendanceController
-    public function getAttendancesByParticipant(GetAttendancesByParticipantRequest $request, Registration $registration)
+    public function getAttendancesByParticipant(GetAttendanceDetailPlanificationRequest $request, Registration $registration)
     {
         $detailPlanification = $registration->detailPlanification()->first();
         $attendances = $detailPlanification
@@ -133,11 +136,11 @@ class AttendanceController extends Controller
     }
     //ver todas las asistencias de un detalle planification
     // AttendanceController
-    public function getAttendancesByDetailPlanification(GetAttendanceTeacherRequest $request, DetailPlanification $detailPlanification)
+    public function getAttendancesByDetailPlanification(DetailPlanification $detailPlanification)
     {
         $attendances = $detailPlanification->attendances()->get();
 
-        return (new DetailAttendanceCollection($attendances))
+        return (new AttendanceCollection($attendances))
             ->additional([
                 'msg' => [
                     'sumary' => 'consulta exitosa',
@@ -206,6 +209,29 @@ class AttendanceController extends Controller
             ])
             ->response()->setStatusCode(200);
 
+    }
+    public function index(){
+        return(new AttendanceCollection(Attendance::paginate()))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'Institution' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
+    public function show(Attendance $attendance){
+
+        return(new AttendanceResource($attendance))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'Institution' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
     }
     /*******************************************************************************************************************
      * IMAGES

@@ -4,10 +4,12 @@ namespace App\Models\Authentication;
 
 use App\Models\Cecy\Authority;
 use App\Models\Cecy\Instructor;
+use App\Models\Core\Address;
 use App\Models\Core\Catalogue;
 use App\Models\Core\Email;
 use App\Models\Core\File;
 use App\Models\Core\Image;
+use App\Models\Core\Location;
 use App\Models\Core\Phone;
 use App\Traits\EmailTrait;
 use App\Traits\FileTrait;
@@ -83,12 +85,22 @@ class User extends Authenticatable implements Auditable, MustVerifyEmail
 
     // Relationships
 
+    public function address()
+    {
+        return $this->belongsTo(Address::class);
+    }
+
     public function bloodType()
     {
         return $this->belongsTo(Catalogue::class);
     }
 
     public function civilStatus()
+    {
+        return $this->belongsTo(Catalogue::class);
+    }
+
+    public function disability()
     {
         return $this->belongsTo(Catalogue::class);
     }
@@ -116,6 +128,11 @@ class User extends Authenticatable implements Auditable, MustVerifyEmail
     public function identificationType()
     {
         return $this->belongsTo(Catalogue::class);
+    }
+
+    public function nationality()
+    {
+        return $this->belongsTo(Location::class);
     }
 
     public function images()

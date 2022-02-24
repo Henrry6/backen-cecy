@@ -63,13 +63,13 @@ class DetailPlanificationsSeeder extends Seeder
             //days
             [
                 'code' => $catalogue['day']['monday_friday'],
-                'name' => 'LUNES_VIERNES',
+                'name' => 'LUNES A VIERNES',
                 'type' => $catalogue['day']['type'],
                 'description' => 'Falta poner una descripción'
             ],
             [
                 'code' => $catalogue['day']['monday_sunday'],
-                'name' => 'LUNES_DOMINGO',
+                'name' => 'LUNES A DOMINGO',
                 'type' => $catalogue['day']['type'],
                 'description' => 'Falta poner una descripción'
             ],

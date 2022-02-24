@@ -11,6 +11,7 @@ class CatalogueResource extends JsonResource
         return [
             'id' => $this->id,
             // 'parent' => CatalogueResource::make($this->parent),
+            'children' => CatalogueResource::collection($this->children),
             'code' => $this->code,
             'description' => $this->description,
             'icon' => $this->icon,

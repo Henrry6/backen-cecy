@@ -20,7 +20,7 @@ class RegisterDetailPlanificationRequest extends FormRequest
             'parallel.id' => ['required', 'integer'],
             'endedTime' => ['required', 'timezone'],
             'startedTime' => ['required', 'timezone'],
-            'observations' => ['required'],
+            // 'observations' => ['required'],
         ];
     }
 

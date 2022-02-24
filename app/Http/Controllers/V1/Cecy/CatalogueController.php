@@ -13,7 +13,7 @@ use App\Http\Requests\V1\Core\Images\DownloadImageRequest;
 use App\Http\Requests\V1\Core\Images\IndexImageRequest;
 use App\Http\Requests\V1\Core\Images\UpdateImageRequest;
 use App\Http\Requests\V1\Core\Images\UploadImageRequest;
-use App\Http\Resources\V1\Core\Catalogues\CatalogueCollection;
+use App\Http\Resources\V1\Cecy\Catalogues\CatalogueCollection;
 use App\Models\Cecy\Catalogue;
 use App\Models\Core\File;
 use App\Models\Core\Image;
@@ -33,7 +33,7 @@ class CatalogueController extends Controller
         $state = Catalogue::where('code', 'INACTIVE');
         $state = Catalogue::where('name', 'INACTIVO');
         if ($request->input('gender.code') == $catalogue['gender']['male']) {
-// PARA PONER UN AVATAR DE HOMBRE
+            // PARA PONER UN AVATAR DE HOMBRE
         }
 
         $request->input('gender.id');
@@ -47,7 +47,7 @@ class CatalogueController extends Controller
 
         $catalogues = Catalogue::customOrderBy($sorts)
             ->type($request->input('type'))
-            ->paginate();
+            ->paginate($request->input('per_page'));
 
         return (new CatalogueCollection($catalogues))
             ->additional([
@@ -66,7 +66,7 @@ class CatalogueController extends Controller
             ->description($request->input('description'))
             ->name($request->input('name'))
             ->type($request->input('type'))
-            ->paginate($request->input('per_page'));
+            ->paginate();
 
         return (new CatalogueCollection($catalogues))
             ->additional([
@@ -78,6 +78,20 @@ class CatalogueController extends Controller
             ]);
     }
 
+    public function getCatalogueCourseCategory()
+    {
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+        $courseCategories = Catalogue::where('type',  $catalogue['category']['type']);
+
+        return (new CatalogueCollection($courseCategories))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ]);
+    }
     /*******************************************************************************************************************
      * FILES
      ******************************************************************************************************************/

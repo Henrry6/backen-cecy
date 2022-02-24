@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Resources\V1\Cecy\DetailPlanifications;
+namespace App\Http\Resources\V1\Cecy\DetailPlanifications\ResponsibleCourseDetailPlanifications;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\V1\Cecy\Catalogues\CatalogueResource;
 use App\Http\Resources\V1\Cecy\Classrooms\ClassroomResource;
-use App\Http\Resources\V1\Cecy\Instructors\InstructorResource;
-use App\Models\Cecy\Instructor;
+use App\Http\Resources\V1\Cecy\Instructors\InstructorFullnameResource;
+use App\Http\Resources\V1\Cecy\Planifications\PlanificationShortResource;
 
 class DetailPlanificationResource extends JsonResource
 {
@@ -16,15 +16,13 @@ class DetailPlanificationResource extends JsonResource
             'id' => $this->id,
             'classroom' => ClassroomResource::make($this->classroom),
             'days' => CatalogueResource::make($this->day),
-            'paralel' => CatalogueResource::make($this->paralel),
+            'parallel' => CatalogueResource::make($this->parallel),
+            'planification' => PlanificationShortResource::make($this->planification),
             'state' => CatalogueResource::make($this->state),
             'workday' => CatalogueResource::make($this->workday),
-            'instructors' => InstructorResource::collection($this->instructors),
-            'endTime' => $this->endTime,
-            'endedAt' => $this->endedAt,
+            'instructors' => InstructorFullnameResource::collection($this->instructors),
             'observations' => $this->observations,
-            'startTime' => $this->startTime,
-            'startedAt' => $this->startedAt,
+            'schedule' => $this->started_time . '-' . $this->ended_time,
         ];
     }
 }

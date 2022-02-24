@@ -8,7 +8,7 @@ class CreateCecyPhotographicRecordsTable extends Migration
 {
     public function up()
     {
-        Schema::connection(env('DB_CONNECTION_CECY'))->create('photografic_records', function (Blueprint $table) {
+        Schema::connection(env('DB_CONNECTION_CECY'))->create('photographic_records', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->softDeletes();
@@ -35,6 +35,6 @@ class CreateCecyPhotographicRecordsTable extends Migration
 
     public function down()
     {
-        Schema::connection(env('DB_CONNECTION_CECY'))->dropIfExists('photografic_records');
+        Schema::connection(env('DB_CONNECTION_CECY'))->dropIfExists('photographic_records');
     }
 }

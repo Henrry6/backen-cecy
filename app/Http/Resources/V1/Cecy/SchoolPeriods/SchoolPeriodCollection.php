@@ -4,7 +4,7 @@ namespace App\Http\Resources\V1\Cecy\SchoolPeriods;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class SchoolPeriodsCollection extends ResourceCollection
+class SchoolPeriodCollection extends ResourceCollection
 {
     public function toArray($request)
     {

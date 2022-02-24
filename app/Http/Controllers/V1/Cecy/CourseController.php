@@ -28,7 +28,10 @@ use App\Http\Resources\V1\Cecy\Courses\CourseByCoordinatorCecyCollection;
 use App\Http\Resources\V1\Cecy\Courses\CoursePublicPrivateCollection;
 use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationInformNeedResource;
 use App\Http\Resources\V1\Cecy\Planifications\InformCourseNeedsResource;
-use App\Http\Resources\V1\Cecy\Prerequisites\CoursesByResponsibleCollection;
+use App\Http\Resources\V1\Cecy\Courses\CoursesByResponsibleCollection;
+use App\Http\Resources\V1\Cecy\Planifications\PlanificationCollection;
+use App\Http\Resources\V1\Cecy\Planifications\PlanificationResource;
+use App\Http\Resources\V1\Cecy\Certificates\CertificateResource;
 use App\Models\Cecy\Instructor;
 use App\Models\Cecy\Participant;
 use App\Models\Cecy\Planification;
@@ -36,6 +39,7 @@ use App\Models\Core\File;
 use App\Models\Core\Image;
 use App\Models\Core\State;
 use App\Models\Core\Career;
+use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 use Exception;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
@@ -50,55 +54,33 @@ class CourseController extends Controller
     }
 
     // Función privada que permite obtener cursos aprobados
-    private function getApprovedPlanificationsId()
+    private function getApprovedPlanifications()
     {
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
-        $planificationsTypes = Catalogue::where('type',  $catalogue['planification_state']['type'])->get();
-        $planificationApproved = $planificationsTypes->where('code', $catalogue['planification_state']['approved'])->first();
+        $planificationApproved = Catalogue::where('type',  $catalogue['planification_state']['type'])
+            ->where('code', $catalogue['planification_state']['approved'])->first();
         return $planificationApproved;
     }
-    private function getApprovedCoursesId()
+
+    private function getApprovedCourses()
     {
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
-        $coursesTypes = Catalogue::where('type',  $catalogue['course_state']['type'])->get();
-        $courseApproved = $coursesTypes->where('code', $catalogue['course_state']['approved'])->first();
+        $courseApproved = Catalogue::where('type',  $catalogue['course_state']['type'])
+            ->where('code', $catalogue['course_state']['approved'])->first();
         return $courseApproved;
-    }
-
-    private function getApprovedCoursesByApprovedPlanifications(IndexCourseRequest $request)
-    {
-        $sorts = explode(',', $request->input('sort'));
-
-        $planificationApproved = $this->getApprovedPlanificationsId();
-
-        $planifications =  Planification::customOrderBy($sorts)
-            ->state($planificationApproved->id)
-            ->get();
-
-
-        for ($i = 0; $i < count($planifications); $i++) {
-            $courses[$i] = $planifications[$i]->course;
-        }
-        return $courses;
     }
     // Obtiene los cursos públicos aprobados (Done)
     public function getPublicCourses(IndexCourseRequest $request)
     {
-        $courseApproved = $this->getApprovedCoursesId();
+        $planificationApproved = $this->getApprovedPlanifications();
+        $planifications = $planificationApproved->planifications()
+            ->whereHas('course', function ($course) use ($request) {
+                $course
+                    ->name($request->input('search'))
+                    ->where('public', true);
+            })->paginate($request->input('per_page'));
 
-        $courses = $this->getApprovedCoursesByApprovedPlanifications($request);
-        $publicCoursesApproved = [];
-        $customIndex = 0;
-        for ($i = 0; $i < count($courses); $i++) {
-            if ($courses[$i]->public === true and $courses[$i]->state_id === $courseApproved->id) {
-                $publicCoursesApproved[$customIndex] = $courses[$i];
-                $customIndex = $customIndex + 1;
-            };
-        }
-
-        $publicCoursesApproved  =  new Paginator($publicCoursesApproved, $request->input('per_page'));
-
-        return (new CoursePublicPrivateCollection($publicCoursesApproved))
+        return (new PlanificationCollection($planifications))
             ->additional([
                 'msg' => [
                     'summary' => 'success',
@@ -111,22 +93,16 @@ class CourseController extends Controller
     // Obtiene los cursos públicos aprobados por categoria (Done)
     public function getPublicCoursesByCategory(IndexCourseRequest $request, Catalogue $category)
     {
+        $planificationApproved = $this->getApprovedPlanifications();
+        $planifications = $planificationApproved->planifications()
+            ->whereHas('course', function ($course) use ($category) {
+                $course
+                    ->category($category)
+                    ->where('public', true);
+            })
+            ->paginate($request->input('per_page'));
 
-        $courseApproved = $this->getApprovedCoursesId();
-
-        $courses = $this->getApprovedCoursesByApprovedPlanifications($request);
-        $publicCoursesApproved = [];
-        $customIndex = 0;
-        for ($i = 0; $i < count($courses); $i++) {
-            if ($courses[$i]->public === true  and $courses[$i]->state_id === $courseApproved->id and  $courses[$i]->category_id === $category->id) {
-                $publicCoursesApproved[$customIndex] = $courses[$i];
-                $customIndex = $customIndex + 1;
-            };
-        }
-
-        $publicCoursesApproved  =  new Paginator($publicCoursesApproved, $request->input('per_page'));
-
-        return (new CoursePublicPrivateCollection($publicCoursesApproved))
+        return (new PlanificationCollection($planifications))
             ->additional([
                 'msg' => [
                     'summary' => 'success',
@@ -137,18 +113,19 @@ class CourseController extends Controller
     }
 
     // Obtiene los cursos públicos aprobados por nombre (Done)
-    public function getPublicCoursesByName(GetCoursesByNameRequest $request)
+    public function getPublicCoursesByName(IndexCourseRequest $request)
     {
-        $sorts = explode(',', $request->input('sort'));
 
-        $courseApproved = $this->getApprovedCoursesId();
-        $courses =  Course::customOrderBy($sorts)
-            ->name($request->input('search'))
-            ->public(true)
-            ->state($courseApproved->id)
+        $planificationApproved = $this->getApprovedPlanifications();
+        $planifications = $planificationApproved->planifications()
+            ->whereHas('course', function ($course) use ($request) {
+                $course
+                    ->name($request->input('search'))
+                    ->where('public', true);
+            })
             ->paginate($request->input('per_page'));
 
-        return (new CoursePublicPrivateCollection($courses))
+        return (new PlanificationCollection($planifications))
             ->additional([
                 'msg' => [
                     'summary' => 'success',
@@ -164,28 +141,15 @@ class CourseController extends Controller
         $sorts = explode(',', $request->input('sort'));
 
         $courseApproved = $this->getApprovedCoursesId();
-        $catalogues = Catalogue::get();
-        $publicCourses =  Course::customOrderBy($sorts)
-            ->public(true)
-            ->state($courseApproved->id)
-            ->get();
+
 
         $participant = Participant::where('user_id', $request->user()->id)->first();
-        $typeParticipant = $participant->type_id;
 
-        $allowedCourses = [];
-        foreach ($catalogues as $catalogue) {
-            $cursos = $catalogue->courses()->where([['catalogue_id', $typeParticipant], ['state_id', $courseApproved->id]])->get();
-            foreach ($cursos as $curso) {
-                array_push($allowedCourses, $curso);
-            }
-        }
+        $catalogue = Catalogue::find($participant->type_id);
 
-        foreach ($publicCourses as $publicCourse) {
-            array_push($allowedCourses, $publicCourse);
-        }
+        $courses = $catalogue->courses()->paginate($request->input('per_page'));
 
-        return (new CoursePublicPrivateCollection($allowedCourses))
+        return (new CoursePublicPrivateCollection($courses))
             ->additional([
                 'msg' => [
                     'summary' => 'success',
@@ -198,39 +162,14 @@ class CourseController extends Controller
     // Obtiene los cursos privados aprobados por tipo de participante y filtrados por categoria (Done)
     public function getPrivateCoursesByCategory(getCoursesByCategoryRequest $request, Catalogue $category)
     {
-        return ('getPrivateCoursesByCategory');
-        $sorts = explode(',', $request->input('sort'));
-
-        $courseApproved = $this->getApprovedCoursesId();
-        $catalogues = Catalogue::get();
-        $publicCourses =  Course::customOrderBy($sorts)
-            ->public(true)
-            ->state($courseApproved->id)
-            ->get();
 
         $participant = Participant::where('user_id', $request->user()->id)->first();
-        $typeParticipant = $participant->type_id;
 
-        $allowedCourses = [];
-        foreach ($catalogues as $catalogue) {
-            $cursos = $catalogue->courses()->where([['catalogue_id', $typeParticipant], ['state_id', $courseApproved->id]])->get();
-            foreach ($cursos as $curso) {
-                array_push($allowedCourses, $curso);
-            }
-        }
+        $catalogue = Catalogue::find($participant->type_id);
 
-        foreach ($publicCourses as $publicCourse) {
-            array_push($allowedCourses, $publicCourse);
-        }
+        $courses = $catalogue->courses()->paginate();
 
-        // $filteredCourses =  $allowedCourses->customOrderBy($sorts)
-        //     ->name($request->input('name'))
-        //     ->public(true)
-        //     ->state($courseApproved->id)
-        //     ->get();
-
-
-        return (new CoursePublicPrivateCollection($allowedCourses))
+        return (new CoursePublicPrivateCollection($courses))
             ->additional([
                 'msg' => [
                     'summary' => 'success',
@@ -243,16 +182,14 @@ class CourseController extends Controller
     // Obtiene los cursos privados aprobados por tipo de participante y filtrados por nombre (Done)
     public function getPrivateCoursesByName(getCoursesByNameRequest $request)
     {
-        return ('getPrivateCoursesByName');
-        $sorts = explode(',', $request->sort);
 
-        $courses = Course::customOrderBy($sorts)
-            ->name($request->input('search'))
-            ->paginate($request->input('per_page'));
+        $participant = Participant::where('user_id', $request->user()->id)->first();
 
-        $private_courses = $courses->where('public', false)->get();
+        $catalogue = Catalogue::find($participant->type_id);
 
-        return (new CoursePublicPrivateCollection($private_courses))
+        $courses = $catalogue->courses()->paginate();
+
+        return (new CoursePublicPrivateCollection($courses))
             ->additional([
                 'msg' => [
                     'summary' => 'success',
@@ -292,26 +229,24 @@ class CourseController extends Controller
     //visualizar todos los cursos (Done)
     public function getCourses()
     {
-        $courses = Course::get();
-
-        return (new CourseCollection($courses))
+        return (new CourseCollection(Course::paginate(100)))
             ->additional([
                 'msg' => [
                     'summary' => 'Me trae los cursos',
                     'detail' => '',
                     'code' => '200'
                 ]
-            ])
-            ->response()->setStatusCode(200);
+            ]);
     }
 
     //obtener los cursos asignados a un docente responsable logueado (Done)
     public function getCoursesByResponsibleCourse(getCoursesByResponsibleRequest $request)
     {
-        return "getCoursesByResponsibleCourse";
+        // return 'xd';
 
         $instructor = Instructor::FirstWhere('user_id', $request->user()->id);
-        $courses = $instructor->courses()->get();
+        $courses = Course::where('responsible_id', $instructor->id)->get();
+
 
         return (new CoursesByResponsibleCollection($courses))
             ->additional([
@@ -441,24 +376,16 @@ class CourseController extends Controller
     }
 
     // Mostrar las necesidades de un curso (Done)
-    public function showInformCourseNeeds(Course $course)
+    public function informCourseNeeds(Course $course)
     {
-        return "showInformCourseNeeds";
         //trae un informe de nececidades de una planificacion, un curso en especifico por el docente que se logea
 
+        $planification = $course->planifications()->get();
 
-        $planification = $course->planifications()->first();
-        //            ->detailPlanifications()
-        //            ->instructors()
-        //            ->classrooms();
-        /*         ->planifications() */
-        //->course()
+        $data =  new InformCourseNeedsResource($planification);
+        $pdf = PDF::loadView('reports/report-needs', ['planifications' => $data]);
 
-        /*             $planification = $course->planifications()->instructors()->users()->get()
-                    ->detailPlanifications()
-                    ->classrooms(); */
-
-        $data = new InformCourseNeedsResource($planification);
+        return $pdf->stream('informNeeds.pdf');
     }
 
     //Traer todos los cursos planificados de un año en especifico (Done)
@@ -594,6 +521,24 @@ class CourseController extends Controller
                     'code' => '200'
                 ]
             ]);
+    }
+
+
+    //traer participante de un curso 
+
+    public function certificateParticipants(Course $course)
+    {
+
+        $planification = $course->planifications()->get();
+
+        $data = new CertificateResource($planification);
+        $pdf = PDF::loadView('certificate-student', ['registrations' => $data]);
+        $pdf->setOptions([
+            'orientation' => 'landscape',
+
+            'page-size' => 'a4'
+        ]);
+        return $pdf->stream('certificate.pdf');
     }
 
     // Adjuntar el acta de aprobación

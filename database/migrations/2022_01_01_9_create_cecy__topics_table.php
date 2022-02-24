@@ -14,13 +14,14 @@ class CreateCecyTopicsTable extends Migration
             $table->softDeletes();
 
             $table->foreignId('course_id')
+                ->nullable()
                 ->comment('Id del curso al que pertenece')
                 ->constrained('cecy.courses');
 
             $table->foreignId('parent_id')
-            ->nullable()
-            ->comment('Id del tema principal')
-            ->constrained('cecy.topics');
+                ->nullable()
+                ->comment('Id del tema principal')
+                ->constrained('cecy.topics');
 
             $table->integer('level')
                 ->nullable()

@@ -1,10 +1,10 @@
 <?php
 
+use App\Http\Controllers\V1\Cecy\AuthorityController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\V1\Cecy\CatalogueController;
 use App\Http\Controllers\V1\Cecy\CertificateController;
 use App\Http\Controllers\V1\Cecy\ClassroomController;
-use App\Http\Controllers\V1\Cecy\GuachagmiraController;
 use App\Http\Controllers\V1\Cecy\DetailPlanificationController;
 use App\Http\Controllers\V1\Cecy\CourseController;
 use App\Http\Controllers\V1\Cecy\DetailAttendanceController;
@@ -15,13 +15,20 @@ use App\Http\Controllers\V1\Cecy\PlanificationController;
 use App\Http\Controllers\V1\Cecy\RequirementController;
 use App\Http\Controllers\V1\Cecy\SchoolPeriodController;
 use App\Http\Controllers\V1\Cecy\InstructorController;
-
+use \App\Http\Controllers\V1\Cecy\RegistrationController;
+use \App\Http\Controllers\V1\Cecy\DetailSchoolPeriodController;
+use App\Http\Controllers\V1\Cecy\ParticipantController;
+use App\Http\Controllers\V1\Core\CatalogueController as CoreCatalogueController;
+use App\Http\Resources\V1\Cecy\Courses\CourseResource;
+use App\Http\Controllers\V1\Cecy\AttendanceController;
+use App\Http\Controllers\V1\Cecy\PhotographicRecordController;
+use App\Models\Authentication\User;
+use App\Models\Cecy\Course;
+use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 
 /***********************************************************************************************************************
  * CATALOGUES
  **********************************************************************************************************************/
-Route::apiResource('catalogues', CatalogueController::class);
-
 Route::prefix('catalogue/{catalogue}')->group(function () {
     Route::prefix('file')->group(function () {
         Route::get('{file}/download', [CatalogueController::class, 'downloadFile']);
@@ -82,22 +89,8 @@ Route::prefix('planification/{planification}')->group(function () {
 /***********************************************************************************************************************
  * DETAIL PLANIFICATIONS
  **********************************************************************************************************************/
-
-
-//  Route::prefix('detailPlanification')->group(function () {
-//     Route::get('', [PerezController::class, 'getDetailPlanificationsByPlanification']);
-//     Route::post('', [PerezController::class, 'registerDetailPlanification']);
-//     Route::patch('', [PerezController::class, 'destroysDetailPlanifications']);
-// });
-
-// Route::prefix('detailPlanification/{detailPlanification}')->group(function () {
-//     Route::get('', [PerezController::class, 'showDetailPlanification']);
-//     Route::put('', [PerezController::class, 'updateDetailPlanification']);
-//     Route::delete('', [PerezController::class, 'deleteDetailPlanification']);
-// });
-
 Route::prefix('detailPlanification')->group(function () {
-    Route::get('', [DetailPlanificationController::class, 'getDetailPlanificationsByPlanification']);
+    Route::get('{planification}', [DetailPlanificationController::class, 'getDetailPlanificationsByPlanification']);
     Route::get('/detail-course/{course}', [DetailPlanificationController::class, 'getDetailPlanificationsByCourse']);
     Route::post('', [DetailPlanificationController::class, 'registerDetailPlanification']);
     Route::patch('', [DetailPlanificationController::class, 'destroysDetailPlanifications']);
@@ -117,29 +110,6 @@ Route::prefix('detailPlanification/{detailPlanification}')->group(function () {
 /***********************************************************************************************************************
  * COURSE
  **********************************************************************************************************************/
-Route::prefix('courses/{course}')->group(function () {
-    Route::prefix('')->group(function () {
-        Route::get('/topics', [TopicController::class, 'getTopics']);
-        Route::post('/topics', [TopicController::class, 'storeTopic']);
-        Route::put('/topics/{topic}', [TopicController::class, 'updateTopic']);
-        Route::delete('/topics/{topic}', [TopicController::class, 'destroyTopic']);
-        Route::patch('/topics/destroys', [TopicController::class, 'destroysTopics']);
-    });
-    Route::prefix('')->group(function () {
-        Route::get('/prerequisites', [PrerequisiteController::class, 'getPrerequisites']);
-        Route::post('/prerequisites', [PrerequisiteController::class, 'storePrerequisite']);
-        Route::put('/prerequisites/{prerequisite}', [PrerequisiteController::class, 'updatePrerequisite']);
-        Route::delete('/prerequisites/{prerequisite}', [PrerequisiteController::class, 'destroyPrerequisite']);
-        Route::patch('/prerequisites/destroys', [PrerequisiteController::class, 'destroysPrerequisites']);
-    });
-    Route::put('curricular-design', [CourseController::class, 'updateCurricularDesignCourse']);
-    Route::patch('general-information', [CourseController::class, 'updateGeneralInformationCourse']);
-    Route::patch('assign-code', [CourseController::class, 'assignCodeToCourse']);
-    Route::patch('not-approve-reason', [CourseController::class, 'notApproveCourseReason']);
-    Route::get('inform-course-needs', [CourseController::class, 'showInformCourseNeeds']);
-    Route::get('curricular-design', [CourseController::class, 'showCurricularDesign']);
-    Route::get('final-report', [CourseController::class, 'showCourseFinalReport']);
-});
 
 Route::prefix('courses')->group(function () {
     Route::get('', [CourseController::class, 'getCourses']);
@@ -150,12 +120,59 @@ Route::prefix('courses')->group(function () {
     Route::get('private-courses-participant', [CourseController::class, 'getPrivateCoursesByParticipantType']);
     Route::get('private-courses-category/{category}', [CourseController::class, 'getPrivateCoursesByCategory']);
     Route::get('private-courses-name', [CourseController::class, 'getPrivateCoursesByName']);
-    Route::get('by-responsible/{responsible}', [CourseController::class, 'getCoursesByResponsibleCourse']);
+    Route::get('by-responsible', [CourseController::class, 'getCoursesByResponsibleCourse']);
     Route::get('by-instructor/{instructor}', [CourseController::class, 'getCoursesByInstructor']);
     Route::get('by-coodinator/{coodinator}', [CourseController::class, 'getCoursesByCoordinator']);
     Route::get('kpi', [CourseController::class, 'getCoursesKPI']);
     Route::get('year-schedule', [CourseController::class, 'showYearSchedule']);
     Route::get('career/{career}', [CourseController::class, 'getCoursesByCareer']);
+});
+
+Route::prefix('courses')->group(function () {
+    Route::get('', [CourseController::class, 'getCourses']);
+    // Route::get('inform-course-needs/{course}', [CourseController::class, 'informCourseNeeds']);
+
+});
+
+Route::prefix('courses/{course}')->group(function () {
+    Route::get('', [CourseController::class, 'show']);
+    Route::prefix('')->group(function () {
+
+        Route::get('/topics', [TopicController::class, 'getTopics']);
+        Route::get('/topics/all', [TopicController::class, 'getAllTopics']);
+        Route::post('/topics', [TopicController::class, 'storesTopics']);
+        Route::put('/topics', [TopicController::class, 'updateTopics']);
+        Route::delete('/topics/{topic}', [TopicController::class, 'destroyTopic']);
+        Route::get('/instructors', [TopicController::class, 'getInstructors']);
+    });
+    Route::prefix('')->group(function () {
+        Route::get('/prerequisites/all', [PrerequisiteController::class, 'getPrerequisitesAll']);
+        Route::get('/prerequisites', [PrerequisiteController::class, 'getPrerequisites']);
+        Route::post('/prerequisites', [PrerequisiteController::class, 'storePrerequisite']);
+        Route::put('/prerequisites/{prerequisite}', [PrerequisiteController::class, 'updatePrerequisite']);
+        Route::delete('/prerequisites/{prerequisite}', [PrerequisiteController::class, 'destroyPrerequisite']);
+        Route::patch('/prerequisites/destroys', [PrerequisiteController::class, 'destroysPrerequisites']);
+    });
+    Route::put('curricular-design', [CourseController::class, 'updateCurricularDesignCourse']);
+    Route::patch('general-information', [CourseController::class, 'updateGeneralInformationCourse']);
+    Route::patch('assign-code', [CourseController::class, 'assignCodeToCourse']);
+    Route::patch('not-approve-reason', [CourseController::class, 'notApproveCourseReason']);
+    // Route::get('inform-course-needs/{course}', 'App\Http\Controllers\V1\Cecy\CourseController@informCourseNeeds');
+     Route::get('inform-course-needs', [CourseController::class, 'informCourseNeeds']);
+    Route::get('curricular-design', [CourseController::class, 'showCurricularDesign']);
+    Route::get('final-report', [CourseController::class, 'showCourseFinalReport']);
+});
+
+
+
+Route::get('/inform', function () {
+    $pdf = PDF::loadView('reports/informe-final');
+    $pdf->setOptions([
+        'page-size' => 'a4'
+    ]);
+
+    return $pdf->inline('Informe.pdf');
+
 });
 
 /***********************************************************************************************************************
@@ -176,15 +193,26 @@ Route::prefix('certificate')->group(function () {
     Route::post('catalogue/{catalogue}', [CertificateController::class, 'uploadFileCertificate']);
     Route::post('firm/catalogue/{catalogue}', [CertificateController::class, 'uploadFileCertificateFirm']);
 });
+
+Route::get('/certificate-student', function () {
+    $pdf = PDF::loadView('reports/certificate-student');
+    $pdf->setOptions([
+        'orientation' => 'landscape',
+        'page-size' => 'a4'
+    ]);
+
+    return $pdf->inline('Certificado.pdf');
+});
 /***********************************************************************************************************************
  * SCHOOL PERIODS
  **********************************************************************************************************************/
 
-Route::apiResource('schoolperiods', SchoolPeriodController::class);
+Route::apiResource('school-periods', SchoolPeriodController::class);
 
-Route::prefix('schoolperiod')->group(function () {
-    Route::patch('{schoolperiod}', [SchoolPeriodController::class, 'destroys']);
+Route::prefix('school-period')->group(function () {
+    Route::patch('{school-period}', [SchoolPeriodController::class, 'destroys']);
 });
+
 /***********************************************************************************************************************
  * CLASSROOMS
  **********************************************************************************************************************/
@@ -206,21 +234,61 @@ Route::prefix('instructor')->group(function () {
     Route::get('destroy/{instructor}', [InstructorController::class, 'destroyInstructors']);
 });
 
+/***********************************************************************************************************************
+ * REGISTRATION
+ **********************************************************************************************************************/
+Route::prefix('registration')->group(function () {
+    Route::post('register-student', [RegistrationController::class, 'registerStudent']);
+});
+/***********************************************************************************************************************
+ * DETAIL SCHOOL PERIOD
+ **********************************************************************************************************************/
+Route::apiResource('detail-school-periods', DetailSchoolPeriodController::class);
+
+
 /*
 ******************************************************************************************************************
  * REQUERIMENTS
  **********************************************************************************************************************/
 
 
-Route::prefix('requirement')->group(function(){
-    Route::get('',[RequirementController::class, 'getAllRequirement']);
-   Route::get('/{requirements}',[RequirementController::class, 'getRequirement']);
-    Route::post('/{requirements}',[RequirementController::class, 'storeRequirement']);
-     Route::put('/{requirements}',[RequirementController::class, 'updateRequirement']);
-     Route::delete('/{requirements}',[RequirementController::class, 'destroy']);
- });
+Route::prefix('requirement')->group(function () {
+    Route::get('', [RequirementController::class, 'getAllRequirement']);
+    Route::get('/{requirements}', [RequirementController::class, 'getRequirement']);
+    Route::post('/{requirements}', [RequirementController::class, 'storeRequirement']);
+    Route::put('/{requirements}', [RequirementController::class, 'updateRequirement']);
+    Route::delete('/{requirements}', [RequirementController::class, 'destroy']);
+});
 
- Route::prefix('requirement')->group(function () {
+Route::prefix('requirement')->group(function () {
     Route::get('file', [RequirementController::class, 'showFile']);
     Route::get('image', [RequirementController::class, 'showImage']);
- });
+});
+/***********************************************************************************************************************
+ * AUTHORITY
+ **********************************************************************************************************************/
+
+Route::apiResource('authorities', AuthorityController::class);
+
+
+Route::prefix('authority')->group(function () {
+    Route::patch('{authority}', [AuthorityController::class, 'destroys']);
+});
+
+/***********************************************************************************************************************
+ * AUTHORITY
+ **********************************************************************************************************************/
+
+Route::apiResource('attendances', AttendanceController::class);
+
+Route::prefix('attendance')->group(function () {
+    Route::get('detail/{detailPlanification}', [AttendanceController::class, 'getAttendancesByDetailPlanification']);
+});
+
+Route::apiResource('records', PhotographicRecordController::class);
+
+Route::prefix('record')->group(function () {
+    Route::get('{photographicRecord}', [PhotographicRecordController::class, 'show']);
+    Route::get('detail/{detailPlanification}', [PhotographicRecordController::class, 'getDetails']);
+});
+

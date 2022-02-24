@@ -43,7 +43,7 @@ class Catalogue extends Model implements Auditable
 
     public function children()
     {
-        return $this->hasMany(Catalogue::class, 'parent_id', 'cecy.catalogues');
+        return $this->hasMany(Catalogue::class, 'parent_id');
     }
 
     public function files()
@@ -58,7 +58,7 @@ class Catalogue extends Model implements Auditable
 
     public function planifications()
     {
-        return $this->hasMany(Planification::class);
+        return $this->hasMany(Planification::class, 'state_id');
     }
 
     // Mutators

@@ -13,9 +13,7 @@ use App\Http\Requests\V1\Core\Files\UploadFileRequest;
 use App\Http\Resources\V1\Cecy\AdditionalInformations\AdditionalInformationCollection;
 use App\Http\Resources\V1\Cecy\AdditionalInformations\AdditionalInformationResource;
 use App\Models\Cecy\AdditionalInformation;
-use App\Models\Cecy\Registration;
 use App\Models\Core\File;
-use Illuminate\Http\Request;
 
 class AdditionalInformationController extends Controller
 {
