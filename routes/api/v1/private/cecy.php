@@ -157,6 +157,7 @@ Route::prefix('courses/{course}')->group(function () {
     Route::patch('not-approve-reason', [CourseController::class, 'notApproveCourseReason']);
     // Route::get('inform-course-needs/{course}', 'App\Http\Controllers\V1\Cecy\CourseController@informCourseNeeds');
      Route::get('inform-course-needs', [CourseController::class, 'informCourseNeeds']);
+     Route::get('year-schedule', [CourseController::class, 'showYearSchedule']);
     Route::get('curricular-design', [CourseController::class, 'showCurricularDesign']);
     Route::get('final-report', [CourseController::class, 'showCourseFinalReport']);
 });

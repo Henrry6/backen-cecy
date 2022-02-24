@@ -394,26 +394,13 @@ class CourseController extends Controller
     // o por params
     public function showYearSchedule(GetDateByshowYearScheduleRequest $request)
     {
-        return "showYearSchedule";
         $year = Planification::whereYear('started_at', $request->input('startedAt'))->get();
 
-        $planificacion = $year
-            ->instructors()
-            ->detailPlanifications()
-            ->classrooms()
-            ->planifications()
-            ->courses()
-            ->paginate($request->input('per_page'));
-
-        return (new DetailPlanificationInformNeedResource($planificacion))
-            ->additional([
-                'msg' => [
-                    'summary' => 'success',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ])
-            ->response()->setStatusCode(200);
+        $data = new DetailPlanificationInformNeedResource($year);
+        $pdf = PDF::loadView('reports/report-year-schedule', ['years'=>$data]);
+    
+        return $pdf->stream('programacion anual.pdf');
+   
     }
 
     //Traer la informacion de diseño curricular (Done)

@@ -31,6 +31,8 @@ use App\Http\Resources\V1\Cecy\PhotographicRecords\PhotographicRecordResource;
 use App\Http\Resources\V1\Cecy\Registrations\RegistrationRecordCompetitorResource;
 use App\Models\Cecy\Attendance;
 use App\Models\Cecy\Registration;
+use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
+
 
 class AttendanceController extends Controller
 {
@@ -75,38 +77,18 @@ class AttendanceController extends Controller
       {
           //trae el registro fotografico de un curso en especifico por el docente que se loguea
 
-          /*         $planification = $course->planifications()->get();
-                  $detailPlanification = $planification->detailPlanifications()->get();
-                  $detailPlanificationInstructor = $detailPlanification->instructors()->get();
-                  $instructor = $detailPlanificationInstructor->users()->get(); */
-
+ 
           $planification = $course->planifications()->get();
           $detailPlanification = $planification->detailPlanifications()->get();
           $photograpicRecord = $detailPlanification->photograpicRecord()->get();
 
 
-          /* $detailPlanificationInstructor = $detailPlanification->certificateable()->get; */
-
-          /*       $Planifications = $responsibleCourse
-                    ->detailPlanifications()
-                    ->photographicRecords()
-                    ->paginate($request->input('per_page')); */
-          /*    $responsibleCourse = Instructor::where('user_id', $request->user()->id)->get();
-
-             $Planifications = $responsibleCourse
-                 ->detailPlanifications()
-                 ->photographicRecords()
-                 ->paginate($request->input('per_page')); */
-
-          return (new PhotographicRecordResource($photograpicRecord))
-              ->additional([
-                  'msg' => [
-                      'summary' => 'success',
-                      'detail' => '',
-                      'code' => '200'
-                  ]
-              ])
-              ->response()->setStatusCode(200);
+          $data = new PhotographicRecordResource($photograpicRecord);
+          $pdf = PDF::loadView('reports/photographic-record', ['photograpicRecords'=>$data]);
+    
+          return $pdf->stream('Registro fotográfico.pdf');
+     
+       
       }
 
       public function showAttendenceEvaluationRecord(GetCoursesByNameRequest $request ,Course $course)
