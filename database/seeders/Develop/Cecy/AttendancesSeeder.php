@@ -4,7 +4,7 @@ namespace Database\Seeders\Develop\Cecy;
 
 use App\Models\Cecy\Attendance;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+
 
 class AttendancesSeeder extends Seeder
 {

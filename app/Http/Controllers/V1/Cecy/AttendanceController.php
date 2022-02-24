@@ -14,7 +14,10 @@ use App\Http\Requests\V1\Core\Images\UploadImageRequest;
 use App\Http\Resources\V1\Cecy\Attendances\AttendanceCollection;
 use App\Http\Resources\V1\Cecy\Attendances\AttendanceResource;
 use App\Http\Resources\V1\Cecy\Authorities\DetailAttendanceCollection;
+use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationCollection;
+use App\Http\Resources\V1\Cecy\PhotographicRecords\PhotographicRecordCollection;
 use App\Models\Cecy\DetailPlanification;
+use App\Models\Cecy\PhotographicRecord;
 use Illuminate\Http\Request;
 use App\Models\Cecy\Course;
 use App\Models\Cecy\Catalogue;
@@ -206,6 +209,77 @@ class AttendanceController extends Controller
             ])
             ->response()->setStatusCode(200);
 
+    }
+    public function index(){
+        return(new AttendanceCollection(Attendance::paginate()))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'Institution' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
+    public function show(Attendance $attendance){
+
+        return(new AttendanceResource($attendance))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'Institution' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
+    public function getRecords(PhotographicRecord $photographicRecords){
+        $detailPlanification = $photographicRecords->detailPlanifaction()->get();
+        return(new PhotographicRecordCollection($detailPlanification))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'records' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
+    public function getDetails(DetailPlanification $detailPlanification){
+        $photographicRecords = $detailPlanification->photographicRecords()->get();
+        return(new PhotographicRecordCollection($photographicRecords))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'records' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
+    public function getRecord(){
+        return(new PhotographicRecordCollection(PhotographicRecord::get()))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'Institution' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
+    public function getRecordDetails(DetailPlanification $detailPlanification)
+    {
+        $photographicRecords = $detailPlanification->photographicRecords()->get();
+
+        return (new PhotographicRecordCollection($photographicRecords))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ]);
     }
     /*******************************************************************************************************************
      * IMAGES
