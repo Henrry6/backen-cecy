@@ -24,7 +24,7 @@ class PhotographicRecord extends Model implements Auditable
     ];
 
     // Relationships
-    public function detailPlanifaction()
+    public function detailPlanification()
     {
         return $this->belongsTo(DetailPlanification::class);
     }
