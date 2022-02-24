@@ -43,7 +43,6 @@ use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 use Exception;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
-use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 
 class CourseController extends Controller
 {
@@ -378,14 +377,14 @@ class CourseController extends Controller
     }
 
     // Mostrar las necesidades de un curso (Done)
-    public function showInformCourseNeeds(Course $course)
+    public function informCourseNeeds(Course $course)
     {
         //trae un informe de nececidades de una planificacion, un curso en especifico por el docente que se logea
 
         $planification = $course->planifications()->get();
 
         $data =  new InformCourseNeedsResource($planification);
-         $pdf = PDF::loadView('report-needs', ['planifications'=>$data]);
+         $pdf = PDF::loadView('reports/report-needs', ['planifications'=>$data]);
     
         return $pdf->stream('informNeeds.pdf');  
     }
