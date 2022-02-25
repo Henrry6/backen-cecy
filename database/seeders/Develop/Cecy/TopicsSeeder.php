@@ -17,8 +17,8 @@ class TopicsSeeder extends Seeder
 
 
         foreach ($courses as $course) {
-            for ($i = 0; $i < 2; $i++) {
-                Topic::factory(3)->create([
+            for ($i = 0; $i <= 3; $i++) {
+                Topic::factory(1)->create([
                     'course_id' => $course,
                     'parent_id' => null,
                     'level' => 1,
@@ -30,8 +30,8 @@ class TopicsSeeder extends Seeder
         $topics = Topic::get();
 
         foreach ($topics as $topic) {
-            for ($i = 0; $i < 2; $i++) {
-                Topic::factory(3)->create([
+            for ($i = 0; $i <= 2; $i++) {
+                Topic::factory(1)->create([
                     'course_id' => null,
                     'parent_id' => $topic,
                     'level' => 2,
