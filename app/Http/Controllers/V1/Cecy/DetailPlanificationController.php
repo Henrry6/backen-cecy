@@ -80,7 +80,7 @@ class DetailPlanificationController extends Controller
             return response()->json([
                 'data' => '',
                 'msg' => [
-                    'summary' => 'Failed',
+                    'summary' => 'failed',
                     'detail' => 'No es instructor o no se encuentra registrado',
                     'code' => '400'
                 ]
@@ -94,7 +94,7 @@ class DetailPlanificationController extends Controller
             return response()->json([
                 'data' => '',
                 'msg' => [
-                    'summary' => 'Failed',
+                    'summary' => 'failed',
                     'detail' => 'No le pertece esta planificación',
                     'code' => '400'
                 ]
@@ -108,8 +108,8 @@ class DetailPlanificationController extends Controller
         ) {
             return response()->json([
                 'msg' => [
-                    'summary' => 'La planificación ha culminado o no fue aprovada.',
-                    'detail' => '',
+                    'summary' => 'failed',
+                    'detail' => 'La planificación ha culminado o no fue aprobada.',
                     'code' => '400'
                 ]
             ], 400);
@@ -117,7 +117,7 @@ class DetailPlanificationController extends Controller
 
         $state = Catalogue::firstWhere('code', State::TO_BE_APPROVED);
         $classroom = Classroom::find($request->input('classroom.id'));
-        $days = Catalogue::find($request->input('day.id'));
+        $day = Catalogue::find($request->input('day.id'));
         $workday = Catalogue::find($request->input('workday.id'));
         $parallel = Catalogue::find($request->input('parallel.id'));
 
@@ -125,7 +125,7 @@ class DetailPlanificationController extends Controller
 
         $detailPlanification->state()->associate($state);
         $detailPlanification->classroom()->associate($classroom);
-        $detailPlanification->day()->associate($days);
+        $detailPlanification->day()->associate($day);
         $detailPlanification->planification()->associate($planification);
         $detailPlanification->workday()->associate($workday);
         $detailPlanification->parallel()->associate($parallel);
@@ -142,8 +142,8 @@ class DetailPlanificationController extends Controller
         return (new ResponsibleCourseDetailPlanificationResource($detailPlanification))
             ->additional([
                 'msg' => [
-                    'summary' => 'Registro Creado',
-                    'detail' => '',
+                    'summary' => 'success',
+                    'detail' => 'Registro Creado',
                     'code' => '200'
                 ]
             ])
@@ -179,7 +179,7 @@ class DetailPlanificationController extends Controller
             return response()->json([
                 'data' => '',
                 'msg' => [
-                    'summary' => 'Failed',
+                    'summary' => 'failed',
                     'detail' => 'No es instructor o no se encuentra registrado',
                     'code' => '400'
                 ]
@@ -193,7 +193,7 @@ class DetailPlanificationController extends Controller
             return response()->json([
                 'data' => '',
                 'msg' => [
-                    'summary' => 'Failed',
+                    'summary' => 'failed',
                     'detail' => 'No le pertece esta planificación',
                     'code' => '400'
                 ]
@@ -207,21 +207,21 @@ class DetailPlanificationController extends Controller
         ) {
             return response()->json([
                 'msg' => [
-                    'summary' => 'La planificación ha culminado o no fue aprovada.',
-                    'detail' => '',
+                    'summary' => 'failed',
+                    'detail' => 'La planificación ha culminado o no fue aprovada.',
                     'code' => '400'
                 ]
             ], 400);
         }
 
         $classroom = Classroom::find($request->input('classroom.id'));
-        $days = Catalogue::find($request->input('day.id'));
+        $day = Catalogue::find($request->input('day.id'));
         $planification = Planification::find($request->input('planification.id'));
         $workday = Catalogue::find($request->input('workday.id'));
         $parallel = Catalogue::find($request->input('parallel.id'));
 
         $detailPlanification->classroom()->associate($classroom);
-        $detailPlanification->day()->associate($days);
+        $detailPlanification->day()->associate($day);
         $detailPlanification->planification()->associate($planification);
         $detailPlanification->workday()->associate($workday);
         $detailPlanification->parallel()->associate($parallel);
@@ -235,12 +235,11 @@ class DetailPlanificationController extends Controller
 
         $detailPlanification->save();
 
-
         return (new ResponsibleCourseDetailPlanificationResource($detailPlanification))
             ->additional([
                 'msg' => [
-                    'summary' => 'Registro actualizado',
-                    'detail' => '',
+                    'summary' => 'success',
+                    'detail' => 'Registro actualizado',
                     'code' => '200'
                 ]
             ])
@@ -259,7 +258,7 @@ class DetailPlanificationController extends Controller
             return response()->json([
                 'data' => '',
                 'msg' => [
-                    'summary' => 'Failed',
+                    'summary' => 'failed',
                     'detail' => 'No es instructor o no se encuentra registrado',
                     'code' => '400'
                 ]
@@ -270,7 +269,7 @@ class DetailPlanificationController extends Controller
             return response()->json([
                 'data' => '',
                 'msg' => [
-                    'summary' => 'Failed',
+                    'summary' => 'failed',
                     'detail' => 'No le pertece esta planificación',
                     'code' => '400'
                 ]
@@ -284,8 +283,8 @@ class DetailPlanificationController extends Controller
         ) {
             return response()->json([
                 'msg' => [
-                    'summary' => 'La planificación ha culminado o no fue aprovada.',
-                    'detail' => '',
+                    'summary' => 'failed',
+                    'detail' => 'La planificación ha culminado o no fue aprobada.',
                     'code' => '400'
                 ]
             ], 400);
@@ -296,8 +295,8 @@ class DetailPlanificationController extends Controller
         return (new ResponsibleCourseDetailPlanificationResource($detailPlanification))
             ->additional([
                 'msg' => [
-                    'summary' => 'Registro eliminado',
-                    'detail' => '',
+                    'summary' => 'success',
+                    'detail' => 'Registro eliminado',
                     'code' => '200'
                 ]
             ])
@@ -309,7 +308,7 @@ class DetailPlanificationController extends Controller
     {
         $loggedAuthority = Authority::where('user_id', $request->user()->id)->get();
         $classroom = Classroom::find($request->input('classroom.id'));
-        $days = Catalogue::find($request->input('day.id'));
+        $day = Catalogue::find($request->input('day.id'));
         $planification = Planification::find($request->input('planification.id'));
         $workday = Catalogue::find($request->input('workday.id'));
         $parallel = Catalogue::find($request->input('parallel.id'));
@@ -318,7 +317,7 @@ class DetailPlanificationController extends Controller
 
         $detailPlanification->classroom()->associate($classroom);
         $detailPlanification->planification()->associate($planification);
-        $detailPlanification->day()->associate($days);
+        $detailPlanification->day()->associate($day);
         $detailPlanification->workday()->associate($workday);
         $detailPlanification->parallel()->associate($parallel);
 
@@ -344,15 +343,15 @@ class DetailPlanificationController extends Controller
      */
     public function destroysDetailPlanifications(DestroysDetailPlanificationRequest $request)
     {
-        return 'works!';
+        // return 'works!';
         $detailPlanifications = DetailPlanification::whereIn('id', $request->input('ids'))->get();
         DetailPlanification::destroy($request->input('ids'));
 
         return (new ResponsibleCourseDetailPlanificationCollection($detailPlanifications))
             ->additional([
                 'msg' => [
-                    'summary' => 'Registros eliminados',
-                    'detail' => '',
+                    'summary' => 'success',
+                    'detail' => 'Registros eliminados',
                     'code' => '200'
                 ]
             ])
