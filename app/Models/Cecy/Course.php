@@ -4,6 +4,8 @@ namespace App\Models\Cecy;
 
 use App\Models\Core\Career;
 use App\Models\Core\Image;
+use App\Traits\FileTrait;
+use App\Traits\ImageTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -15,6 +17,8 @@ class Course extends Model implements Auditable
     use HasFactory;
     use Auditing;
     use SoftDeletes;
+    use ImageTrait;
+    use FileTrait;
 
     protected $table = 'cecy.courses';
 
