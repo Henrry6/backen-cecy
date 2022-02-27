@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\V1\Cecy\Courses;
 
+use App\Http\Resources\V1\Cecy\Catalogues\CatalogueResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class CourseResourceBasic extends JsonResource
@@ -11,7 +12,8 @@ class CourseResourceBasic extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'description' => $this->description
+            'summary' => $this->summary,
+            'participantTypes' => CatalogueResource::collection($this->catalogues)
         ];
     }
 }
