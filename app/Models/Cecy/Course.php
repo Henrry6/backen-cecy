@@ -3,6 +3,7 @@
 namespace App\Models\Cecy;
 
 use App\Models\Core\Career;
+use App\Models\Core\Image;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use OwenIt\Auditing\Contracts\Auditable;
