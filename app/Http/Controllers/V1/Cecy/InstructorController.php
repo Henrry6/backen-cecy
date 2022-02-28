@@ -3,7 +3,15 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\Cecy\Courses\getCoursesByResponsibleRequest;
 use App\Http\Requests\V1\Cecy\Instructor\DestroysInstructorRequest;
+use App\Http\Resources\V1\Cecy\Courses\CoursesByInstructorResource;
+use App\Http\Resources\V1\Cecy\Courses\CoursesByResponsibleCollection;
+use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationByInstructorCollection;
+use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationByInstructorResource;
+use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationCollection;
+use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationResource;
+use App\Models\Cecy\DetailPlanification;
 use Illuminate\Http\Request;
 use App\Models\Cecy\Instructor;
 use App\Http\Resources\V1\Cecy\Courses\CourseResource;
@@ -12,6 +20,7 @@ use App\Http\Resources\V1\Cecy\Instructors\InstructorResource;
 use App\Http\Resources\V1\Core\Users\UserCollection;
 use App\Models\Cecy\Catalogue;
 use App\Models\Cecy\Course;
+use Illuminate\Support\Facades\DB;
 
 class InstructorController extends Controller
 {
@@ -90,5 +99,21 @@ class InstructorController extends Controller
             ])
             ->response()->setStatusCode(200);
 
+    }
+    //obtener los cursos asignados a un isntructor logueado (Done)
+    public function getInstructorByCourses(getCoursesByResponsibleRequest $request)
+    {
+
+        $instructor = Instructor::FirstWhere('user_id', $request->user()->id)->first();
+        $detailPlanification = $instructor->detailPlanifications()->get();
+
+        return (new DetailPlanificationByInstructorCollection($detailPlanification))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Consulta exitosa',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ]);
     }
 }
