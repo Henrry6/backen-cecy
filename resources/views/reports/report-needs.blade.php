@@ -21,15 +21,15 @@
 					<div class="stl_01" style="top: 18.6243em; left:6.0125em;"><span class="stl_15 stl_08" style="word-spacing:0.07em;">Nombre del Docente: </span></div>
 
 					<div class="stl_01" style="top: 21.1243em; left:6.0125em;"><span class="stl_15 stl_08" 
-					style="word-spacing:0.06em;">Nombre del Curso: {{ $planification->code }}</span></div>
+					style="word-spacing:0.06em;">Nombre del Curso:</span></div>
 
 					<div class="stl_01" style="top: 23.6243em; left:6.0125em;"><span class="stl_15 stl_08" style="word-spacing:0.04em;">Tipo de curso: </span></div>
 					<div class="stl_01" style="top: 18.7095em; left:17.95em;"><span class="stl_16 stl_08" style="word-spacing:0.02em;">LUIS PATRICIO VICENTE</span></div>
-					<div class="stl_01" style="top: 21.2095em; left:17.95em;"><span class="stl_16 stl_08" style="word-spacing:0.04em;">FORMADOR DE FORMADORES PARA MODALIDAD DUAL </span></div>
+					<div class="stl_01" style="top: 21.2095em; left:17.95em;"><span class="stl_16 stl_08" style="word-spacing:0.04em;"> {{ $planification->name }} </span></div>
 					<div class="stl_01" style="top: 23.5813em; left:39.825em;"><span class="stl_16">x</span></div>
 					<div class="stl_01" style="top: 26.0813em; left:39.825em;"><span class="stl_16">x</span></div>
-					<div class="stl_01" style="top: 23.7095em; left:17.95em;"><span class="stl_17 stl_10">Administrativo</span></div>
-					<div class="stl_01" style="top: 26.2095em; left:17.95em;"><span class="stl_17 stl_10">Presencial:</span></div>
+					<div class="stl_01" style="top: 23.7095em; left:17.95em;"><span class="stl_17 stl_10">{{ $planification->course_type_id }} </span></div>
+					<div class="stl_01" style="top: 26.2095em; left:17.95em;"><span class="stl_17 stl_10">{{ $planification->modality_id }}</span></div>
 					<div class="stl_01" style="top: 23.7095em; left:34.075em;"><span class="stl_17 stl_10">Técnico:</span></div>
 					<div class="stl_01" style="top: 26.2095em; left:34.075em;"><span class="stl_17 stl_10">Virtual:
 					</span></div>

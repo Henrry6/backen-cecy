@@ -378,12 +378,12 @@ class CourseController extends Controller
     {
         //trae un informe de nececidades de una planificacion, un curso en especifico por el docente que se logea
 
-        $planification = $course->planifications()->get();
+/*         $planification = $course->planifications()->get();
+ */
+        $data = new InformCourseNeedsResource($course);
+     $pdf = PDF::loadView('reports/report-needs', ['planification' => $data]);
 
-        return  new InformCourseNeedsCollection($planification);
-    /*     $pdf = PDF::loadView('reports/report-needs', ['planifications' => $data]);
-
-        return $pdf->stream('informNeeds.pdf'); */
+        return $pdf->stream('informNeeds.pdf'); 
     }
 
     //Traer todos los cursos planificados de un año en especifico (Done)
@@ -391,7 +391,7 @@ class CourseController extends Controller
     // o por params
     public function showYearSchedule(GetDateByshowYearScheduleRequest $request)
     {
-        $year = Planification::whereYear('started_at', $request->input('startedAt'))->get();
+        $year = Planification::whereYear('started_at')->get();
 
         $data = new DetailPlanificationInformNeedResource($year);
         $pdf = PDF::loadView('reports/photographic-record', ['years'=>$data]);

@@ -25,8 +25,8 @@ class InformCourseNeedsResource extends JsonResource
 
         return [
             'id' => $this->id,
-/*             'course' => CourseResource::make($this->course),
- */           /*  'planification' => new PlanificationsInformNeedResource($planification), */
+            'course' => CourseResource::make($this->course),
+           /*  'planification' => new PlanificationsInformNeedResource($planification), */
            'planification' => PlanificationsInformNeedResource::make($this->planification),
             'courseType' => CatalogueResource::make($this->course_type),
             'modality' => CatalogueResource::make($this->modality),
