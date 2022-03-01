@@ -32,6 +32,8 @@ use App\Http\Resources\V1\Cecy\Courses\CoursesByResponsibleCollection;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationCollection;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationResource;
 use App\Http\Resources\V1\Cecy\Certificates\CertificateResource;
+use App\Http\Resources\V1\Cecy\Planifications\InformCourseNeedCollection;
+use App\Http\Resources\V1\Cecy\Planifications\InformCourseNeedsCollection;
 use App\Models\Cecy\Instructor;
 use App\Models\Cecy\Participant;
 use App\Models\Cecy\Planification;
@@ -382,10 +384,10 @@ class CourseController extends Controller
 
         $planification = $course->planifications()->get();
 
-        $data =  new InformCourseNeedsResource($planification);
-        $pdf = PDF::loadView('reports/report-needs', ['planifications' => $data]);
+        return  new InformCourseNeedsCollection($planification);
+    /*     $pdf = PDF::loadView('reports/report-needs', ['planifications' => $data]);
 
-        return $pdf->stream('informNeeds.pdf');
+        return $pdf->stream('informNeeds.pdf'); */
     }
 
     //Traer todos los cursos planificados de un año en especifico (Done)
@@ -396,7 +398,7 @@ class CourseController extends Controller
         $year = Planification::whereYear('started_at', $request->input('startedAt'))->get();
 
         $data = new DetailPlanificationInformNeedResource($year);
-        $pdf = PDF::loadView('reports/report-year-schedule', ['years'=>$data]);
+        $pdf = PDF::loadView('reports/photographic-record', ['years'=>$data]);
     
         return $pdf->stream('programacion anual.pdf');
    
