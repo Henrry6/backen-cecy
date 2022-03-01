@@ -6,6 +6,7 @@ use App\Http\Resources\V1\Core\AddressResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\V1\Core\Catalogues\CatalogueResource;
 use App\Http\Resources\V1\Core\EmailResource;
+use App\Http\Resources\V1\Core\ImageResource;
 use App\Http\Resources\V1\Core\LocationResource;
 use App\Http\Resources\V1\Core\PhoneResource;
 
@@ -30,6 +31,7 @@ class UserResource extends JsonResource
             'birthdate' => $this->birthdate,
             'emails' => EmailResource::collection($this->emails),
             'phones' => PhoneResource::collection($this->phones),
+            'images' => ImageResource::collection($this->images),
             'identificationType' => CatalogueResource::make($this->identificationType),
             'nationality' => LocationResource::make($this->nationality),
             'sex' => CatalogueResource::make($this->sex),

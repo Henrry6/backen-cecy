@@ -18,8 +18,8 @@ class PrerequisitesSeeder extends Seeder
         $courses = Course::get();
 
         foreach ($courses as $course) {
-            for ($i = 0; $i < 3; $i++) {
-                Prerequisite::factory(4)->create([
+            for ($i = 0; $i <= 4; $i++) {
+                Prerequisite::factory(1)->create([
                     'course_id' => $course,
                     'prerequisite_id' => $faker->randomElement($courses),
                 ]);
