@@ -5,7 +5,6 @@ namespace App\Http\Controllers\V1\Cecy;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Cecy\Courses\CoordinatorCecy\GetCoursesByCoordinatorCecyRequest as CoordinatorCecyGetCoursesByCoordinatorCecyRequest;
 use App\Http\Requests\V1\Cecy\Courses\GetCoursesByCategoryRequest;
-use App\Http\Requests\V1\Cecy\Courses\GetCoursesByCoordinatorCecyRequest;
 use App\Http\Requests\V1\Cecy\Courses\GetCoursesByNameRequest;
 use App\Http\Requests\V1\Cecy\Courses\getCoursesByResponsibleRequest;
 use App\Http\Requests\V1\Cecy\Courses\IndexCourseRequest;
@@ -19,18 +18,17 @@ use App\Models\Cecy\Course;
 use App\Models\Cecy\Catalogue;
 use App\Http\Resources\V1\Cecy\Courses\CourseResource;
 use App\Http\Resources\V1\Cecy\Courses\CourseCollection;
-use App\Http\Requests\V1\Cecy\Courses\UpdateCourseRequest;
 use App\Http\Requests\V1\Cecy\Courses\UpdateCurricularDesign;
 use App\Http\Requests\V1\Cecy\Courses\UploadCertificateOfApprovalRequest;
 use App\Http\Requests\V1\Cecy\Planifications\GetDateByshowYearScheduleRequest;
 use App\Http\Requests\V1\Cecy\Planifications\IndexPlanificationRequest;
+use App\Http\Requests\V1\Core\Images\UploadImageRequest;
 use App\Http\Resources\V1\Cecy\Courses\CourseByCoordinatorCecyCollection;
 use App\Http\Resources\V1\Cecy\Courses\CoursePublicPrivateCollection;
 use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationInformNeedResource;
 use App\Http\Resources\V1\Cecy\Planifications\InformCourseNeedsResource;
 use App\Http\Resources\V1\Cecy\Courses\CoursesByResponsibleCollection;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationCollection;
-use App\Http\Resources\V1\Cecy\Planifications\PlanificationResource;
 use App\Http\Resources\V1\Cecy\Certificates\CertificateResource;
 use App\Http\Resources\V1\Cecy\Planifications\InformCourseNeedCollection;
 use App\Http\Resources\V1\Cecy\Planifications\InformCourseNeedsCollection;
@@ -42,8 +40,6 @@ use App\Models\Core\Image;
 use App\Models\Core\State;
 use App\Models\Core\Career;
 use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
-use Exception;
-use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
 
 class CourseController extends Controller
@@ -537,13 +533,18 @@ class CourseController extends Controller
     }
 
     // Files
-    public function showFileCourse(Course $courses, File $file)
+    public function showFileCourse(Course $course, File $file)
     {
-        return $courses->showFile($file);
+        return $course->showFile($file);
+    }
+    //Images
+    public function showImageCourse(Course $course, Image $image)
+    {
+        return $course->showImage($image);
     }
 
-    public function showImageCourse(Course $courses, Image $image)
+    public function uploadImageCourse(UploadImageRequest $request, Course $course)
     {
-        return $courses->showImage($image);
+        return $course->uploadImage($request);
     }
 }
