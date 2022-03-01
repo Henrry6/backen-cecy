@@ -21,6 +21,7 @@ use App\Http\Resources\V1\Cecy\Courses\CourseCollection;
 use App\Http\Requests\V1\Cecy\Courses\UpdateCurricularDesign;
 use App\Http\Requests\V1\Cecy\Courses\UploadCertificateOfApprovalRequest;
 use App\Http\Requests\V1\Cecy\Planifications\GetDateByshowYearScheduleRequest;
+use App\Http\Requests\V1\Cecy\Planifications\GetPlanificationsByResponsibleCecyRequest;
 use App\Http\Requests\V1\Cecy\Planifications\IndexPlanificationRequest;
 use App\Http\Requests\V1\Core\Images\UploadImageRequest;
 use App\Http\Resources\V1\Cecy\Courses\CourseByCoordinatorCecyCollection;
@@ -30,6 +31,8 @@ use App\Http\Resources\V1\Cecy\Planifications\InformCourseNeedsResource;
 use App\Http\Resources\V1\Cecy\Courses\CoursesByResponsibleCollection;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationCollection;
 use App\Http\Resources\V1\Cecy\Certificates\CertificateResource;
+use App\Http\Resources\V1\Cecy\Planifications\PlanificationsResponsibleCecyCollection;
+use App\Models\Cecy\Authority;
 use App\Models\Cecy\Instructor;
 use App\Models\Cecy\Participant;
 use App\Models\Cecy\Planification;
@@ -536,6 +539,25 @@ class CourseController extends Controller
         ]);
         return $pdf->stream('certificate.pdf');
     }
+
+     //obtener los cursos asignados a un Responsable logueado (Done)
+     public function getResponsibleCecyByCourses(GetPlanificationsByResponsibleCecyRequest $request)
+     {
+        
+         $authority = Authority::FirstWhere('user_id', $request->user()->id);
+        //  $planification = $authority->planifications()->get();
+         $planification = Planification::where('responsible_cecy_id', $authority->id)->get();
+ 
+
+         return (new PlanificationsResponsibleCecyCollection($planification))
+             ->additional([
+                 'msg' => [
+                     'summary' => 'Consulta exitosa',
+                     'detail' => '',
+                     'code' => '200'
+                 ]
+             ]);
+     }
 
     // Adjuntar el acta de aprobación
     public function uploadCertificateOfApproval(UploadCertificateOfApprovalRequest $request, File $file)

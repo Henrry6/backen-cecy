@@ -14,9 +14,7 @@ class ShowParticipantsRequest extends FormRequest
     {
         return [
             'course_id' => ['required','integer'],
-            'certificateType' => ['required','integer'],
-            'state.id' => ['required','integer'],
-            'code' => ['required']
+           
         ];
     }
 
@@ -24,9 +22,7 @@ class ShowParticipantsRequest extends FormRequest
     {
         return [
             'course_id' => 'id del curso',
-            'certificateType' => 'Tipo de certificado',
-            'state.id' => 'Estado del certificado',
-            'code' => 'codigo del certificado'
+           
         ];
     }
 }
