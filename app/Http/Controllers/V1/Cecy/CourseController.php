@@ -147,7 +147,7 @@ class CourseController extends Controller
     }
 
     // Obtiene los cursos privados aprobados por tipo de participante y filtrados por categoria (Done)
-    public function getPrivateCoursesByCategory(getCoursesByCategoryRequest $request, Catalogue $category)
+    public function getPrivateCoursesByParticipantTypeAndCategory(getCoursesByCategoryRequest $request, Catalogue $category)
     {
         $sorts = explode(',', $request->input('sort'));
 
