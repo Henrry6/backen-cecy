@@ -14,10 +14,10 @@ class StoreClassroomRequest extends FormRequest
   {
     return [
       'type.id' => ['required', 'integer'],
-      'description' => ['required', 'integer'],
+      'description' => ['required', 'string'],
       'capacity' => ['required', 'integer'],
-      'code' => ['required', 'integer'],
-      'name' => ['required', 'integer'],
+      'code' => ['required', 'string'],
+      'name' => ['required', 'string'],
     ];
   }
 

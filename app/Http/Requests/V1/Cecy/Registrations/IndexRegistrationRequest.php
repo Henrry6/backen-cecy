@@ -13,7 +13,7 @@ class IndexRegistrationRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,16 +23,11 @@ class IndexRegistrationRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-           
-
-        ];
+        return [];
     }
 
     public function attributes()
     {
-        return [
-         
-        ];
+        return [];
     }
 }
