@@ -12,6 +12,7 @@ use App\Http\Requests\V1\Cecy\Planifications\UpdatePlanificationRequest;
 use App\Http\Resources\V1\Cecy\Courses\CourseCollection;
 use App\Http\Resources\V1\Cecy\Planifications\Kpi\KpiPlanificationResourse;
 use App\Http\Resources\V1\Cecy\Planifications\ResponsibleCoursePlanifications\PlanificationByCourseCollection;
+use App\Http\Resources\V1\Cecy\Planifications\ResponsibleCoursePlanifications\PlanificationByCourseResource;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationResource;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationCollection;
 use App\Models\Cecy\Authority;
@@ -73,8 +74,9 @@ class PlanificationController extends Controller
         $planification->started_at = $request->input('startedAt');
         $planification->ended_at = $request->input('endedAt');
         $planification->needs = $request->input('needs');
+        $planification->save();
 
-        return (new PlanificationByCourseCollection($planification))
+        return (new PlanificationByCourseResource($planification))
             ->additional([
                 'msg' => [
                     'summary' => 'Registro actualizado',

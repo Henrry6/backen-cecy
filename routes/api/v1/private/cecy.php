@@ -125,6 +125,9 @@ Route::prefix('courses')->group(function () {
 
 Route::prefix('courses')->group(function () {
     Route::get('', [CourseController::class, 'getCourses']);
+    Route::get('year-schedule/{year}', [CourseController::class, 'showYearSchedule']);
+    // Route::get('inform-course-needs/{course}', 'App\Http\Controllers\V1\Cecy\CourseController@informCourseNeeds');
+
     // Route::get('inform-course-needs/{course}', [CourseController::class, 'informCourseNeeds']);
 
 });
@@ -188,6 +191,7 @@ Route::prefix('detailAttendance')->group(function () {
  * CERTIFICATES
  **********************************************************************************************************************/
 Route::prefix('certificate')->group(function () {
+    Route::get('students', [CourseController::class, 'getResponsibleCecyByCourses']);
     Route::post('registration/{registration}/catalogue/{catalogue}/file/{file}', [CertificateController::class, 'downloadCertificateByParticipant']);
     Route::get('catalogue/{catalogue}/file/{file}', [CertificateController::class, 'downloadFileCertificates']);
     Route::post('catalogue/{catalogue}', [CertificateController::class, 'uploadFileCertificate']);
@@ -229,6 +233,7 @@ Route::prefix('classroom')->group(function () {
 
 Route::prefix('instructor')->group(function () {
     Route::get('courses', [InstructorController::class, 'getCourses']);
+    Route::get('instructor-courses', [InstructorController::class, 'getInstructorByCourses']);
     Route::get('instructor-information', [InstructorController::class, 'getInstructorsInformationByCourse']);
     Route::get('type-instructor', [InstructorController::class, 'updateTypeInstructors']);
     Route::get('destroy/{instructor}', [InstructorController::class, 'destroyInstructors']);
