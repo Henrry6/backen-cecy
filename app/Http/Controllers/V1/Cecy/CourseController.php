@@ -136,6 +136,23 @@ class CourseController extends Controller
     {
         $sorts = explode(',', $request->input('sort'));
 
+        $planificationApproved = $this->getApprovedPlanifications();
+        $planifications = $planificationApproved->planifications()
+            ->whereHas('course', function ($course) use ($request) {
+                $course
+                    ->name($request->input('search'))
+                    ->where('public', true);
+            })->paginate($request->input('per_page'));
+
+
+        $planificationsIds = [];
+
+        foreach ($planifications as $planification) {
+            array_push($planificationsIds, $planification->id);
+            echo $planification->id;
+        }
+
+
         $courseApproved = $this->getApprovedCoursesId();
 
 
@@ -143,7 +160,8 @@ class CourseController extends Controller
 
         $catalogue = Catalogue::find($participant->type_id);
 
-        $courses = $catalogue->courses()->paginate($request->input('per_page'));
+        $courses = $catalogue->courses()
+            ->paginate($request->input('per_page'));
 
         return (new CoursePublicPrivateCollection($courses))
             ->additional([
@@ -549,6 +567,7 @@ class CourseController extends Controller
         return $course->showFile($file);
     }
     //Images
+
     public function showImageCourse(Course $course, Image $image)
     {
         return $course->showImage($image);
