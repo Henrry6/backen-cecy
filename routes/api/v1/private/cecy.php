@@ -232,6 +232,7 @@ Route::prefix('classroom')->group(function () {
  **********************************************************************************************************************/
 
 Route::prefix('instructor')->group(function () {
+    Route::post('create', [InstructorController::class, 'storeInstructor']);
     Route::get('courses', [InstructorController::class, 'getCourses']);
     Route::get('instructor-courses', [InstructorController::class, 'getInstructorByCourses']);
     Route::get('instructor-information', [InstructorController::class, 'getInstructorsInformationByCourse']);
