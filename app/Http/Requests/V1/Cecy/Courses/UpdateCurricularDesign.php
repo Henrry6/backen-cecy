@@ -16,14 +16,14 @@ class UpdateCurricularDesign extends FormRequest
       'area.id' => ['required', 'integer'],
       'speciality.id' => ['required', 'integer'],
       'alignment' => ['required', 'string', 'max:1000'],
-      'bibliographies' => ['required', 'json'],
-      'evaluationMechanisms' => ['required', 'json'],
-      'learningEnvironments' => ['required', 'json'],
+      'bibliographies' => ['required'],
+      'evaluationMechanisms' => ['required'],
+      'learningEnvironments' => ['required'],
       'objective' => ['required', 'string', 'max:1000'],
       'practiceHours' => ['required', 'integer'],
-      'teachingStrategies' => ['required', 'json'],
-      'techniquesRequisites' => ['required', 'json'],
-      'theoryHours' => ['required', 'json'],
+      'teachingStrategies' => ['required'],
+      'techniquesRequisites' => ['required'],
+      'theoryHours' => ['required'],
     ];
   }
 

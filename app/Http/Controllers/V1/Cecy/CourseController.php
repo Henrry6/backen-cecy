@@ -201,15 +201,15 @@ class CourseController extends Controller
     // Actualiza la informacion del diseño curricular (Done)
     public function updateCurricularDesignCourse(UpdateCurricularDesign $request, Course $course)
     {
-        return "updateCurricularDesignCourse";
+        // return "updateCurricularDesignCourse";
         $course->area()->associate(Catalogue::find($request->input('area.id')));
         $course->speciality()->associate(Catalogue::find($request->input('speciality.id')));
         $course->alignment = $request->input('alignment');
         $course->objective = $request->input('objective');
         $course->techniques_requisites = $request->input('techniquesRequisites');
         $course->teaching_strategies = $request->input('teachingStrategies');
-        $course->evaluation_mechanism = $request->input('evaluationMechanisms');
-        $course->learning_environment = $request->input('learningEnvironments');
+        $course->evaluation_mechanisms = $request->input('evaluationMechanisms');
+        $course->learning_environments = $request->input('learningEnvironments');
         $course->practice_hours = $request->input('practiceHours');
         $course->theory_hours = $request->input('theoryHours');
         $course->bibliographies = $request->input('bibliographies');
@@ -247,7 +247,7 @@ class CourseController extends Controller
         $courses = Course::where('responsible_id', $instructor->id)->get();
 
 
-        return (new CoursesByResponsibleCollection($courses))
+        return (new CoursesByResponsibleCollection(Instructor::paginate(100)))
             ->additional([
                 'msg' => [
                     'summary' => 'Consulta exitosa',

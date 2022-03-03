@@ -115,7 +115,7 @@ Route::prefix('courses')->group(function () {
     Route::get('private-courses-participant', [CourseController::class, 'getPrivateCoursesByParticipantType']);
     Route::get('private-courses-category/{category}', [CourseController::class, 'getPrivateCoursesByCategory']);
     Route::get('private-courses-name', [CourseController::class, 'getPrivateCoursesByName']);
-    Route::get('by-responsible', [CourseController::class, 'getCoursesByResponsibleCourse']);
+    Route::get('/by-responsible', [CourseController::class, 'getCoursesByResponsibleCourse']);
     Route::get('by-instructor/{instructor}', [CourseController::class, 'getCoursesByInstructor']);
     Route::get('by-coodinator/{coodinator}', [CourseController::class, 'getCoursesByCoordinator']);
     Route::get('kpi', [CourseController::class, 'getCoursesKPI']);
@@ -146,7 +146,7 @@ Route::prefix('courses/{course}')->group(function () {
         Route::delete('/prerequisites/{prerequisite}', [PrerequisiteController::class, 'destroyPrerequisite']);
         Route::patch('/prerequisites/destroys', [PrerequisiteController::class, 'destroysPrerequisites']);
     });
-    Route::put('curricular-design', [CourseController::class, 'updateCurricularDesignCourse']);
+    Route::put('/curricular-design', [CourseController::class, 'updateCurricularDesignCourse']);
     Route::patch('general-information', [CourseController::class, 'updateGeneralInformationCourse']);
     Route::patch('assign-code', [CourseController::class, 'assignCodeToCourse']);
     Route::patch('not-approve-reason', [CourseController::class, 'notApproveCourseReason']);
