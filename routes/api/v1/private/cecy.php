@@ -110,14 +110,8 @@ Route::prefix('courses')->group(function () {
     Route::get('', [CourseController::class, 'getCourses']);
     Route::post('', [CourseController::class, 'storeNewCourse']);
     Route::get('private-courses-participant', [CourseController::class, 'getPrivateCoursesByParticipantType']);
-<<<<<<< HEAD
-    Route::get('private-courses-category/{category}', [CourseController::class, 'getPrivateCoursesByCategory']);
-    Route::get('private-courses-name', [CourseController::class, 'getPrivateCoursesByName']);
-    Route::get('/by-responsible', [CourseController::class, 'getCoursesByResponsibleCourse']);
-=======
     Route::get('private-courses-category/{category}', [CourseController::class, 'getPrivateCoursesByParticipantTypeAndCategory']);
     Route::get('by-responsible', [CourseController::class, 'getCoursesByResponsibleCourse']);
->>>>>>> afa4f8cc8bf0d031e92ae2f9f85c8fd15615e927
     Route::get('by-instructor/{instructor}', [CourseController::class, 'getCoursesByInstructor']);
     Route::get('by-coodinator/{coodinator}', [CourseController::class, 'getCoursesByCoordinator']);
     Route::get('kpi', [CourseController::class, 'getCoursesKPI']);
@@ -153,23 +147,14 @@ Route::prefix('courses/{course}')->group(function () {
         Route::delete('/prerequisites/{prerequisite}', [PrerequisiteController::class, 'destroyPrerequisite']);
         Route::patch('/prerequisites/destroys', [PrerequisiteController::class, 'destroysPrerequisites']);
     });
-<<<<<<< HEAD
-    Route::put('/curricular-design', [CourseController::class, 'updateCurricularDesignCourse']);
-    Route::patch('general-information', [CourseController::class, 'updateGeneralInformationCourse']);
-    Route::patch('assign-code', [CourseController::class, 'assignCodeToCourse']);
-    Route::patch('not-approve-reason', [CourseController::class, 'notApproveCourseReason']);
-    Route::get('inform-course-needs', [CourseController::class, 'showInformCourseNeeds']);
-    Route::get('curricular-design', [CourseController::class, 'showCurricularDesign']);
-    Route::get('final-report', [CourseController::class, 'showCourseFinalReport']);
-=======
     Route::prefix('')->group(function () {
-        Route::put('curricular-design', [CourseController::class, 'updateCurricularDesignCourse']);
-        Route::patch('general-information', [CourseController::class, 'updateGeneralInformationCourse']);
-        Route::patch('assign-code', [CourseController::class, 'assignCodeToCourse']);
-        Route::patch('not-approve-reason', [CourseController::class, 'notApproveCourseReason']);
-        Route::get('inform-course-needs', [CourseController::class, 'informCourseNeeds']);
-        Route::get('curricular-design', [CourseController::class, 'showCurricularDesign']);
-        Route::get('final-report', [CourseController::class, 'showCourseFinalReport']);
+        Route::put('/curricular-design', [CourseController::class, 'updateCurricularDesignCourse']);
+        Route::patch('/general-information', [CourseController::class, 'updateGeneralInformationCourse']);
+        Route::patch('/assign-code', [CourseController::class, 'assignCodeToCourse']);
+        Route::patch('/not-approve-reason', [CourseController::class, 'notApproveCourseReason']);
+        Route::get('/inform-course-needs', [CourseController::class, 'informCourseNeeds']);
+        Route::get('/curricular-design', [CourseController::class, 'showCurricularDesign']);
+        Route::get('/final-report', [CourseController::class, 'showCourseFinalReport']);
         // Route::get('inform-course-needs/{course}', 'App\Http\Controllers\V1\Cecy\CourseController@informCourseNeeds');
     });
     Route::prefix('image')->group(function () {
@@ -187,7 +172,6 @@ Route::get('/inform', function () {
     ]);
 
     return $pdf->inline('Informe.pdf');
->>>>>>> afa4f8cc8bf0d031e92ae2f9f85c8fd15615e927
 });
 
 /***********************************************************************************************************************
