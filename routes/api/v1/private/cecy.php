@@ -109,12 +109,8 @@ Route::prefix('detailPlanification/{detailPlanification}')->group(function () {
 Route::prefix('courses')->group(function () {
     Route::get('', [CourseController::class, 'getCourses']);
     Route::post('', [CourseController::class, 'storeNewCourse']);
-    Route::get('public-courses', [CourseController::class, 'getPublicCourses']);
-    Route::get('public-courses-category/{category}', [CourseController::class, 'getPublicCoursesByCategory']);
-    Route::get('public-courses-name', [CourseController::class, 'getPublicCoursesByName']);
     Route::get('private-courses-participant', [CourseController::class, 'getPrivateCoursesByParticipantType']);
-    Route::get('private-courses-category/{category}', [CourseController::class, 'getPrivateCoursesByCategory']);
-    Route::get('private-courses-name', [CourseController::class, 'getPrivateCoursesByName']);
+    Route::get('private-courses-category/{category}', [CourseController::class, 'getPrivateCoursesByParticipantTypeAndCategory']);
     Route::get('by-responsible', [CourseController::class, 'getCoursesByResponsibleCourse']);
     Route::get('by-instructor/{instructor}', [CourseController::class, 'getCoursesByInstructor']);
     Route::get('by-coodinator/{coodinator}', [CourseController::class, 'getCoursesByCoordinator']);
@@ -192,21 +188,25 @@ Route::prefix('detailAttendance')->group(function () {
  **********************************************************************************************************************/
 Route::prefix('certificate')->group(function () {
     Route::get('students', [CourseController::class, 'getResponsibleCecyByCourses']);
+    Route::get('pdf-students', [CertificateController::class, 'generatePdf']);
+    Route::get('pdf-instructor', [CertificateController::class, 'generatePdfInstructor']);
     Route::post('registration/{registration}/catalogue/{catalogue}/file/{file}', [CertificateController::class, 'downloadCertificateByParticipant']);
     Route::get('catalogue/{catalogue}/file/{file}', [CertificateController::class, 'downloadFileCertificates']);
     Route::post('catalogue/{catalogue}', [CertificateController::class, 'uploadFileCertificate']);
     Route::post('firm/catalogue/{catalogue}', [CertificateController::class, 'uploadFileCertificateFirm']);
+    
 });
 
-Route::get('/certificate-student', function () {
-    $pdf = PDF::loadView('reports/certificate-student');
-    $pdf->setOptions([
-        'orientation' => 'landscape',
-        'page-size' => 'a4'
-    ]);
+// Route::get('/certificate-student', function () {
+    // $pdf = PDF::loadView('reports/certificate-student');
+    // $pdf->setOptions([
+    //     'orientation' => 'landscape',
+    //     'page-size' => 'a4'
+    // ]);
 
-    return $pdf->inline('Certificado.pdf');
-});
+    // return $pdf->inline('Certificado.pdf');
+// });
+
 /***********************************************************************************************************************
  * SCHOOL PERIODS
  **********************************************************************************************************************/
