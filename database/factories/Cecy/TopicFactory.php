@@ -12,14 +12,7 @@ class TopicFactory extends Factory
 
     public function definition()
     {
-        $courses = Course::get();
-        $topics = Topic::get();
 
-        return [
-            'course_id' => $this->faker->randomElement($courses),
-            'parent_id' => null,
-            'level' => 1,
-            'description' => $this->faker->word(),
-        ];
+        return [];
     }
 }

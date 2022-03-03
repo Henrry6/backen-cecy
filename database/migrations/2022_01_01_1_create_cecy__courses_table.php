@@ -188,7 +188,7 @@ class CreateCecyCoursesTable extends Migration
                 ->nullable();
 
             $table->json('target_groups')
-                ->comment('Tarjeta de grupo')
+                ->comment('Grupo al que va dirigido el curso: niños, jóvenes, adultos')
                 ->nullable();
 
             $table->json('teaching_strategies')

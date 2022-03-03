@@ -2,8 +2,10 @@
 
 namespace Database\Seeders\Develop\Cecy;
 
+use App\Models\Cecy\Course;
 use Illuminate\Database\Seeder;
 use App\Models\Cecy\Prerequisite;
+use Faker\Factory;
 use Illuminate\Support\Facades\DB;
 
 class PrerequisitesSeeder extends Seeder
@@ -11,31 +13,17 @@ class PrerequisitesSeeder extends Seeder
     public function run()
     {
         Prerequisite::factory(10)->create();
-        // DB::table('prerequisites')->insert(
-        //     [
-        //         'course_id' => 1,
-        //         'prerequisite_id' => 2,
-        //     ],
-        //     [
-        //         'course_id' => 1,
-        //         'prerequisite_id' => 3,
-        //     ],
-        //     [
-        //         'course_id' => 1,
-        //         'prerequisite_id' => 4,
-        //     ],
-        //     [
-        //         'course_id' => 2,
-        //         'prerequisite_id' => 1,
-        //     ],
-        //     [
-        //         'course_id' => 2,
-        //         'prerequisite_id' => 3,
-        //     ],
-        //     [
-        //         'course_id' => 2,
-        //         'prerequisite_id' => 5,
-        //     ],
-        // );
+
+        $faker = Factory::create();
+        $courses = Course::get();
+
+        foreach ($courses as $course) {
+            for ($i = 0; $i <= 4; $i++) {
+                Prerequisite::factory(1)->create([
+                    'course_id' => $course,
+                    'prerequisite_id' => $faker->randomElement($courses),
+                ]);
+            }
+        }
     }
 }

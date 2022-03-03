@@ -13,8 +13,8 @@ class UpdateDatesinPlanificationRequest extends FormRequest
   public function rules()
   {
     return [
-      'startedAt' => ['required', 'date'],
-      'endedAt' => ['required', 'date'],
+      'startedAt' => ['required', ],
+      'endedAt' => ['required', ],
       'needs' => ['required'],
       
     ];

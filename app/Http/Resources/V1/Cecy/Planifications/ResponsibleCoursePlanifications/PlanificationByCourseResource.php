@@ -20,14 +20,11 @@ class PlanificationByCourseResource extends JsonResource
 {
     public function toArray($request)
     {
-        $responsibleCourse = $this->responsibleCourse;
-        $responsibleCourseFullname = $responsibleCourse->user->name . '' . $responsibleCourse->user->lastname;
-
         return [
             'id' => $this->id,
             'detailPlanifications' => InstructorsOfPlanificationResource::collection($this->detailPlanifications),
-            // 'participantTypes' => CourseResourceBasic::make($this->course),
-            'responsibleCourse' => $responsibleCourseFullname,
+            'course' => CourseResourceBasic::make($this->course),
+            'responsibleCourse' => InstructorFullnameResource::make($this->responsibleCourse),
             'detailSchoolPeriod' => DetailSchoolPeriodShortResource::make($this->detailSchoolPeriod),
             'state' => CatalogueResource::make($this->state),
             'code' => $this->code,

@@ -29,7 +29,7 @@ class DetailPlanification extends Model implements Auditable
     ];
 
     // Relationships
-    public function attendaces()
+    public function attendances()
     {
         return $this->hasMany(Attendance::class);
     }
@@ -66,7 +66,7 @@ class DetailPlanification extends Model implements Auditable
 
     public function photographicRecords()
     {
-        return $this->hasMany(PhotograficRecord::class);
+        return $this->hasMany(PhotographicRecord::class);
     }
 
     public function registrations()
