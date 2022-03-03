@@ -331,7 +331,7 @@ class Course extends Model implements Auditable
     public function scopePublic($query, $public)
     {
         if ($public) {
-            return $query->Where('public', $public);
+            return $query->orWhere('public', $public);
         }
     }
 

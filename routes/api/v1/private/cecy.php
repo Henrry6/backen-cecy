@@ -109,12 +109,8 @@ Route::prefix('detailPlanification/{detailPlanification}')->group(function () {
 Route::prefix('courses')->group(function () {
     Route::get('', [CourseController::class, 'getCourses']);
     Route::post('', [CourseController::class, 'storeNewCourse']);
-    Route::get('public-courses', [CourseController::class, 'getPublicCourses']);
-    Route::get('public-courses-category/{category}', [CourseController::class, 'getPublicCoursesByCategory']);
-    Route::get('public-courses-name', [CourseController::class, 'getPublicCoursesByName']);
     Route::get('private-courses-participant', [CourseController::class, 'getPrivateCoursesByParticipantType']);
-    Route::get('private-courses-category/{category}', [CourseController::class, 'getPrivateCoursesByCategory']);
-    Route::get('private-courses-name', [CourseController::class, 'getPrivateCoursesByName']);
+    Route::get('private-courses-category/{category}', [CourseController::class, 'getPrivateCoursesByParticipantTypeAndCategory']);
     Route::get('by-responsible', [CourseController::class, 'getCoursesByResponsibleCourse']);
     Route::get('by-instructor/{instructor}', [CourseController::class, 'getCoursesByInstructor']);
     Route::get('by-coodinator/{coodinator}', [CourseController::class, 'getCoursesByCoordinator']);
