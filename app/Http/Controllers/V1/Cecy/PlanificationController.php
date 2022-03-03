@@ -23,6 +23,7 @@ use App\Models\Cecy\Instructor;
 use App\Models\Cecy\Planification;
 use App\Models\Core\State;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 
 class PlanificationController extends Controller
 {
@@ -134,6 +135,23 @@ class PlanificationController extends Controller
                 ]
             ])
             ->response()->setStatusCode(200);
+    }
+
+    public function getPlanitification(Request $request, Planification $planification )
+    {
+        // GetPlanitificationRequest
+        // return "hola";
+        
+        return (new PlanificationByCourseResource($planification))
+        ->additional([
+            'msg' => [
+                'summary' => 'Consulta correcta',
+                'detail' => '',
+                'code' => '200'
+            ]
+        ])
+        ->response()->setStatusCode(200);
+        
     }
 
     /*DDRC-C: Busca planificaciones vigentes por periodo asignadas al usuario logueado(responsable del CECY)*/
