@@ -44,9 +44,6 @@ class CourseController extends Controller
 {
     public function __construct()
     {
-        // $this->middleware('permission:store-catalogues')->only(['store']);
-        // $this->middleware('permission:update-catalogues')->only(['update']);
-        // $this->middleware('permission:delete-catalogues')->only(['destroy', 'destroys']);
     }
 
     // Función privada que permite obtener cursos aprobados
@@ -58,13 +55,6 @@ class CourseController extends Controller
         return $planificationApproved;
     }
 
-    private function getApprovedCourses()
-    {
-        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
-        $courseApproved = Catalogue::where('type',  $catalogue['course_state']['type'])
-            ->where('code', $catalogue['course_state']['approved'])->first();
-        return $courseApproved;
-    }
     // Obtiene los cursos públicos aprobados (Done)
     public function getPublicCourses(IndexCourseRequest $request)
     {
@@ -130,10 +120,11 @@ class CourseController extends Controller
             ->whereHas('course', function ($course) use ($request, $coursesId) {
                 $course
                     ->name($request->input('search'))
-                    ->orWhere('public', true)
-                    ->whereIn('id', $coursesId);
+                    ->where('public', true)
+                    ->orwhereIn('id', $coursesId);
             })
             ->paginate($request->input('per_page'));
+
 
 
         return (new PlanificationCollection($planifications))
@@ -165,15 +156,13 @@ class CourseController extends Controller
 
         $planificationApproved = $this->getApprovedPlanifications();
         $planifications = $planificationApproved->planifications()
-            ->whereHas('course', function ($course) use ($request, $coursesId, $category) {
+            ->whereHas('course', function ($course) use ($coursesId, $category) {
                 $course
-                    ->name($request->input('search'))
+                    ->orwhereIn('id', $coursesId)
                     ->category($category)
-                    ->orWhere('public', true)
-                    ->whereIn('id', $coursesId);
+                    ->where('public', true);
             })
             ->paginate($request->input('per_page'));
-
 
         return (new PlanificationCollection($planifications))
             ->additional([
@@ -188,15 +177,15 @@ class CourseController extends Controller
     // Actualiza la informacion del diseño curricular (Done)
     public function updateCurricularDesignCourse(UpdateCurricularDesign $request, Course $course)
     {
-        return "updateCurricularDesignCourse";
+        // return "updateCurricularDesignCourse";
         $course->area()->associate(Catalogue::find($request->input('area.id')));
         $course->speciality()->associate(Catalogue::find($request->input('speciality.id')));
         $course->alignment = $request->input('alignment');
         $course->objective = $request->input('objective');
         $course->techniques_requisites = $request->input('techniquesRequisites');
         $course->teaching_strategies = $request->input('teachingStrategies');
-        $course->evaluation_mechanism = $request->input('evaluationMechanisms');
-        $course->learning_environment = $request->input('learningEnvironments');
+        $course->evaluation_mechanisms = $request->input('evaluationMechanisms');
+        $course->learning_environments = $request->input('learningEnvironments');
         $course->practice_hours = $request->input('practiceHours');
         $course->theory_hours = $request->input('theoryHours');
         $course->bibliographies = $request->input('bibliographies');
@@ -234,7 +223,7 @@ class CourseController extends Controller
         $courses = Course::where('responsible_id', $instructor->id)->get();
 
 
-        return (new CoursesByResponsibleCollection($courses))
+        return (new CoursesByResponsibleCollection(Instructor::paginate(100)))
             ->additional([
                 'msg' => [
                     'summary' => 'Consulta exitosa',
