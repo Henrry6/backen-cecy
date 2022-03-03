@@ -84,6 +84,19 @@ class RegistrationController extends Controller
             ])
             ->response()->setStatusCode(200);
     }
+    //participantes de un curso por detalle de la planificacion 
+    public function getParticipant(DetailPlanification $detailPlanification){
+        $registration = $detailPlanification->registrations()->get();
+        return(new RegistrationCollection($registration))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'records' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
 
     //Descargar matriz
     // RegistrationController

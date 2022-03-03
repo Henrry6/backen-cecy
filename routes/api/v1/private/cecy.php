@@ -244,6 +244,8 @@ Route::prefix('instructor')->group(function () {
  **********************************************************************************************************************/
 Route::prefix('registration')->group(function () {
     Route::post('register-student', [RegistrationController::class, 'registerStudent']);
+    Route::get('participant/{detailPlanification}', [RegistrationController::class, 'getParticipant']);
+
 });
 /***********************************************************************************************************************
  * DETAIL SCHOOL PERIOD
