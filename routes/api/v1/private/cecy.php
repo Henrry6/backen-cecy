@@ -180,7 +180,7 @@ Route::get('/inform', function () {
  **********************************************************************************************************************/
 
 Route::prefix('detailAttendance')->group(function () {
-    Route::get('course/{course}', [DetailAttendanceController::class, 'showAttedanceParticipant']);
+    Route::get('participant/{registration}', [DetailAttendanceController::class, 'showAttedanceParticipant']);
     Route::patch('/{detailAttendance}', [DetailAttendanceController::class, 'updatDetailAttendanceTeacher']);
 });
 
