@@ -217,13 +217,20 @@ class CourseController extends Controller
     //obtener los cursos asignados a un docente responsable logueado (Done)
     public function getCoursesByResponsibleCourse(getCoursesByResponsibleRequest $request)
     {
-        // return 'xd';
 
         $instructor = Instructor::FirstWhere('user_id', $request->user()->id);
+        if (!isset($instructor)) {
+            return response()->json([
+                'msg' => [
+                    'summary' => 'El usuario no es un instructor',
+                    'detail' => '',
+                    'code' => '404'
+                ],
+                'data' => null
+            ], 404);
+        }
         $courses = Course::where('responsible_id', $instructor->id)->get();
-
-
-        return (new CoursesByResponsibleCollection(Instructor::paginate(100)))
+        return (new CoursesByResponsibleCollection($courses))
             ->additional([
                 'msg' => [
                     'summary' => 'Consulta exitosa',
@@ -249,17 +256,28 @@ class CourseController extends Controller
     //actualiza datos generales de un curso seleccionado  (Done)
     public function updateGeneralInformationCourse(UpdateCourseGeneralDataRequest $request, Course $course)
     {
-        return "updateGeneralInformationCourse";
-        $course->category()->associate(Catalogue::find($request->input('category.id')));
-        $course->certifiedType()->associate(Catalogue::find($request->input('certifiedType.id')));
-        $course->courseType()->associate(Catalogue::find($request->input('courseType.id')));
-        $course->modality()->associate(Catalogue::find($request->input('modality.id')));
-        $course->speciality()->associate(Catalogue::find($request->input('speciality.id')));
+        // return "updateGeneralInformationCourse";
+        $course->career()->associate(Career::find($request->input("career.id")));
+        $course->category()->associate(Catalogue::find($request->input('category.id'))); //categoria de curso, arte, tecnico, patrimocio,etc.
+        $course->certifiedType()->associate(Catalogue::find($request->input('certifiedType.id'))); //tipo de certificado asistencia, aprobacion
+        $course->courseType()->associate(Catalogue::find($request->input('courseType.id'))); //tipo de curso tecnico, administrativo
+        $course->entityCertification()->associate(Catalogue::find($request->input("entityCertification.id"))); //entidad que valida SENESCYT SETEC< CECY
+        $course->formationType()->associate(Catalogue::find($request->input('formationType.id'))); //tecinoc administrativo, ponencia ????
+        $course->modality()->associate(Catalogue::find($request->input('modality.id'))); //modalidad presencial, virtual
+        $course->catalogues()->sync($request->input('participantTypes.ids'));
+
+        // foreach($request->input('participantTypes') as $participantType) {
+        //     $participantType = Catalogue::find($participantType['id']);   
+        //     $course->catalogues()->attach($participantType);
+        // } 
+
+        //campos propios
         $course->abbreviation = $request->input('abbreviation');
         $course->duration = $request->input('duration');
         $course->needs = $request->input('needs');
+        $course->target_groups = $request->input("targetGroups"); //poblacion a la que va dirigda
         $course->project = $request->input('project');
-        $course->sumary = $request->input('sumary');
+        $course->summary = $request->input('summary');
         $course->save();
 
         return (new CourseResource($course))
