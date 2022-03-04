@@ -3,7 +3,6 @@
 use App\Http\Controllers\V1\Cecy\AuthorityController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\V1\Cecy\CatalogueController;
-use App\Http\Controllers\V1\Cecy\CertificateController;
 use App\Http\Controllers\V1\Cecy\ClassroomController;
 use App\Http\Controllers\V1\Cecy\DetailPlanificationController;
 use App\Http\Controllers\V1\Cecy\CourseController;
@@ -15,11 +14,15 @@ use App\Http\Controllers\V1\Cecy\PlanificationController;
 use App\Http\Controllers\V1\Cecy\RequirementController;
 use App\Http\Controllers\V1\Cecy\SchoolPeriodController;
 use App\Http\Controllers\V1\Cecy\InstructorController;
-use \App\Http\Controllers\V1\Cecy\RegistrationController;
 use \App\Http\Controllers\V1\Cecy\DetailSchoolPeriodController;
-use App\Http\Controllers\V1\Cecy\AttendanceController;
 use App\Http\Controllers\V1\Cecy\PhotographicRecordController;
 use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
+use App\Http\Controllers\V1\Cecy\RegistrationController;
+use App\Http\Controllers\V1\Cecy\CertificateController;
+use App\Http\Controllers\V1\Cecy\AttendanceController;
+
+
+
 
 /***********************************************************************************************************************
  * CATALOGUES
@@ -195,17 +198,16 @@ Route::prefix('certificate')->group(function () {
     Route::get('catalogue/{catalogue}/file/{file}', [CertificateController::class, 'downloadFileCertificates']);
     Route::post('catalogue/{catalogue}', [CertificateController::class, 'uploadFileCertificate']);
     Route::post('firm/catalogue/{catalogue}', [CertificateController::class, 'uploadFileCertificateFirm']);
-    
 });
 
 // Route::get('/certificate-student', function () {
-    // $pdf = PDF::loadView('reports/certificate-student');
-    // $pdf->setOptions([
-    //     'orientation' => 'landscape',
-    //     'page-size' => 'a4'
-    // ]);
+// $pdf = PDF::loadView('reports/certificate-student');
+// $pdf->setOptions([
+//     'orientation' => 'landscape',
+//     'page-size' => 'a4'
+// ]);
 
-    // return $pdf->inline('Certificado.pdf');
+// return $pdf->inline('Certificado.pdf');
 // });
 
 /***********************************************************************************************************************
@@ -247,7 +249,6 @@ Route::prefix('instructor')->group(function () {
 Route::prefix('registration')->group(function () {
     Route::post('register-student', [RegistrationController::class, 'registerStudent']);
     Route::get('participant/{detailPlanification}', [RegistrationController::class, 'getParticipant']);
-
 });
 /***********************************************************************************************************************
  * DETAIL SCHOOL PERIOD
@@ -299,4 +300,29 @@ Route::apiResource('records', PhotographicRecordController::class);
 Route::prefix('record')->group(function () {
     Route::get('{photographicRecord}', [PhotographicRecordController::class, 'show']);
     Route::get('detail/{detailPlanification}', [PhotographicRecordController::class, 'getDetails']);
+});
+
+/*****************************************
+ * Registration ROUTES
+ ****************************************/
+
+Route::prefix('registration')->group(function () {
+    Route::get('courses-by-participant', [RegistrationController::class, 'getCoursesByParticipant']);
+    Route::get('courses-by-participant/{registration}', [RegistrationController::class, 'getCoursesByParticipant']);
+    //ruta para consulta las notas de registration
+    //Route::get('courses-by-participant', [RegistrationController::class, 'getCoursesByParticipant']);
+    Route::get('records-returned-by-registration', [RegistrationController::class, 'recordsReturnedByRegistration']);
+    Route::get('show-participants', [RegistrationController::class, 'showParticipants']);
+    Route::get('download-file', [RegistrationController::class, 'downloadFile']);
+    Route::post('nullify-registrations', [RegistrationController::class, 'nullifyRegistrations']);
+    Route::patch('nullify-registration', [RegistrationController::class, 'nullifyRegistration']);
+    Route::get('show-record-competitor', [RegistrationController::class, 'showRecordCompetitor']);
+    Route::patch('show-participant-grades', [RegistrationController::class, 'ShowParticipantGrades']);
+    Route::put('upload-file', [RegistrationController::class, 'uploadFile']);
+    Route::get('download-file-grades', [RegistrationController::class, 'downloadFileGrades']);
+    Route::get('show-file', [RegistrationController::class, 'showFile']);
+    Route::patch('destroy-file', [RegistrationController::class, 'destroyFile']);
+});
+Route::prefix('attendances')->group(function () {
+    Route::get('detail-attendances/{detail_planification}', [AttendanceController::class, 'getAttendancesByParticipant']);
 });
