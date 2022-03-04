@@ -107,7 +107,7 @@ Route::prefix('detailPlanification/{detailPlanification}')->group(function () {
 
 
 /***********************************************************************************************************************
- * COURSE
+ * COURSES
  **********************************************************************************************************************/
 
 Route::prefix('courses')->group(function () {
@@ -231,7 +231,7 @@ Route::prefix('classroom')->group(function () {
 });
 
 /***********************************************************************************************************************
- * INSTRUCTOR
+ * INSTRUCTORS
  **********************************************************************************************************************/
 
 Route::prefix('instructor')->group(function () {
@@ -244,7 +244,7 @@ Route::prefix('instructor')->group(function () {
 });
 
 /***********************************************************************************************************************
- * REGISTRATION
+ * REGISTRATIONS
  **********************************************************************************************************************/
 Route::prefix('registration')->group(function () {
     Route::post('register-student', [RegistrationController::class, 'registerStudent']);
@@ -274,8 +274,9 @@ Route::prefix('requirement')->group(function () {
     Route::get('file', [RequirementController::class, 'showFile']);
     Route::get('image', [RequirementController::class, 'showImage']);
 });
+
 /***********************************************************************************************************************
- * AUTHORITY
+ * AUTHORITIES
  **********************************************************************************************************************/
 
 Route::apiResource('authorities', AuthorityController::class);
@@ -286,7 +287,7 @@ Route::prefix('authority')->group(function () {
 });
 
 /***********************************************************************************************************************
- * AUTHORITY
+ * ATTENDANCES
  **********************************************************************************************************************/
 
 Route::apiResource('attendances', AttendanceController::class);
@@ -294,6 +295,10 @@ Route::apiResource('attendances', AttendanceController::class);
 Route::prefix('attendance')->group(function () {
     Route::get('detail/{detailPlanification}', [AttendanceController::class, 'getAttendancesByDetailPlanification']);
 });
+
+/***********************************************************************************************************************
+ * RECORDS
+ **********************************************************************************************************************/
 
 Route::apiResource('records', PhotographicRecordController::class);
 
@@ -303,7 +308,7 @@ Route::prefix('record')->group(function () {
 });
 
 /*****************************************
- * Registration ROUTES
+ * REGISTRATIONS 
  ****************************************/
 
 Route::prefix('registration')->group(function () {
