@@ -288,6 +288,16 @@ Route::apiResource('attendances', AttendanceController::class);
 
 Route::prefix('attendance')->group(function () {
     Route::get('detail/{detailPlanification}', [AttendanceController::class, 'getAttendancesByDetailPlanification']);
+  
+
+});
+
+Route::prefix('pdf')->group(function () {
+    Route::get('photographic-record/{course}', [AttendanceController::class, 'showPhotographicRecord']);
+    // Route::get('inform-course-needs/{course}', 'App\Http\Controllers\V1\Cecy\CourseController@informCourseNeeds');
+
+    // Route::get('inform-course-needs/{course}', [CourseController::class, 'informCourseNeeds']);
+
 });
 
 Route::apiResource('records', PhotographicRecordController::class);

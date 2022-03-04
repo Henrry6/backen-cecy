@@ -81,12 +81,12 @@ class AttendanceController extends Controller
           //trae el registro fotografico de un curso en especifico por el docente que se loguea
 
  
-          $planification = $course->planifications()->get();
+    /*       $planification = $course->planifications()->get();
           $detailPlanification = $planification->detailPlanifications()->get();
-          $photograpicRecord = $detailPlanification->photograpicRecord()->get();
+          $photograpicRecord = $detailPlanification->photograpicRecord()->get(); */
 
 
-          $data = new PhotographicRecordResource($photograpicRecord);
+          $data = new PhotographicRecordResource($course);
           $pdf = PDF::loadView('reports/photographic-record', ['photograpicRecords'=>$data]);
     
           return $pdf->stream('Registro fotográfico.pdf');

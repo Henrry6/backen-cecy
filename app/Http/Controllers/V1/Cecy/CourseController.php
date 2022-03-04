@@ -31,6 +31,7 @@ use App\Http\Resources\V1\Cecy\Planifications\InformCourseNeedsResource;
 use App\Http\Resources\V1\Cecy\Courses\CoursesByResponsibleCollection;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationCollection;
 use App\Http\Resources\V1\Cecy\Certificates\CertificateResource;
+use App\Http\Resources\V1\Cecy\Planifications\InformCourseNeedsCollection;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationsResponsibleCecyCollection;
 use App\Models\Cecy\Authority;
 use App\Models\Cecy\Instructor;
@@ -379,10 +380,10 @@ class CourseController extends Controller
     {
         //trae un informe de nececidades de una planificacion, un curso en especifico por el docente que se logea
 
-/*         $planification = $course->planifications()->get();
- */
+        /*  $planification = $course->planifications()->get(); */
+ 
         $data = new InformCourseNeedsResource($course);
-     $pdf = PDF::loadView('reports/report-needs', ['planification' => $data]);
+        $pdf = PDF::loadView('reports/report-needs', ['planification' => $data]);
 
         return $pdf->stream('informNeeds.pdf'); 
     }
