@@ -21,6 +21,7 @@ use App\Http\Resources\V1\Cecy\Planifications\PlanificationCollection;
 use App\Models\Cecy\Authority;
 use App\Models\Cecy\Catalogue;
 use App\Models\Cecy\Course;
+use App\Models\Cecy\DetailPlanification;
 use App\Models\Cecy\DetailSchoolPeriod;
 use App\Models\Cecy\Instructor;
 use App\Models\Cecy\Planification;
@@ -153,7 +154,7 @@ class PlanificationController extends Controller
     {
 
         $sorts = explode(',', $request->input('sort'));
-        
+
         $authority = Authority::firstWhere('user_id', $request->user()->id);
         //verificar que el usuario logeado es una autoridad de Authority
         if (!$authority) {
@@ -174,7 +175,9 @@ class PlanificationController extends Controller
         $planifications = $authority->planifications()->whereHas('detailSchoolPeriod', function ($detailSchoolPeriod) use ($schoolPeriod) {
             $detailSchoolPeriod->where('school_period_id', $schoolPeriod->id);
         })->customOrderBy($sorts)
-            ->get();
+        ->get();
+        
+        // paginate($request->input('per_page'))
 
         return (new PlanificationCollection($planifications))
             ->additional([
@@ -189,7 +192,8 @@ class PlanificationController extends Controller
     // PlanificationController ya esta, no vale el metodo.
     public function getCoursesParallelsWorkdays(getCoursesByResponsibleRequest $request)
     {
-
+        $detailPlanifications = DetailPlanification::get();
+        return $detailPlanifications;
         $sorts = explode(',', $request->sort);
         $courseParallelWorkday = Planification::customOrderBy($sorts)
             //            ->detailplanifications()

@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources\V1\Cecy\Planifications\PlanificationParticipants;
 
-
+use App\Http\Resources\V1\Cecy\Catalogues\CatalogueResource;
 use App\Http\Resources\V1\Cecy\Participants\ParticipantResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 // use Illuminate\Http\Re
@@ -14,7 +14,12 @@ class PlanificationParticipantResource extends JsonResource
         return [
             'id' => $this->id,
             'participant' => ParticipantResource::make($this->participant),
-            
+            'state' => CatalogueResource::make($this->state),
+            'stateCourse' => CatalogueResource::make($this->stateCourse),
+            'type' => CatalogueResource::make($this->type),
+            'typeParticipant' => CatalogueResource::make($this->typeParticipant),
+            'number' => $this->number,
+            'observations' => $this->observations,       
         ];
     }
 }

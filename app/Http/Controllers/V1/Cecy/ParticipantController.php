@@ -134,12 +134,12 @@ class ParticipantController extends Controller
     }
     /*DDRC-C: Busca los participantes inscritos a una planificación especifica*/
     // ParticipantController
-    public function getParticipantsByPlanification(IndexPlanificationRequest $request, Planification $planification)
+    public function getParticipantsByPlanification(IndexPlanificationRequest $request, DetailPlanification $detailPlanification)
     {
 
-        $detailPlanifications = DetailPlanification::firstwhere('planification_id', $planification->id);
+        $detailPlanifications = DetailPlanification::firstwhere('planification_id', $detailPlanification->id);
 
-        $participants = Registration::where('detail_planification_id', $detailPlanifications->id)
+        $participants = Registration::where('detail_planification_id', $detailPlanification->id)
             ->paginate($request->input('per_page'));
         // return $participants;
         return (new PlanificationParticipantCollection($participants))
@@ -171,6 +171,11 @@ class ParticipantController extends Controller
     // ParticipantController
     public function updateParticipantRegistration(UpdateRegistrationRequest $request, Registration $registration)
     {
+        if ($registration->observation==null || $registration->observation==''){
+            return 'observaciones esta vacio';
+        }else{
+            return 'observaciones tiene datos';
+        }
         $registration->observation = $request->input('observation');
         $registration->state()->associate(Catalogue::find($request->input('state.id')));
         $registration->save();
@@ -184,7 +189,7 @@ class ParticipantController extends Controller
                 ]
             ])->response()->setStatusCode(201);
     }
-
+    
     /*DDRC-C: Matricula un participante */
     // ParticipantController
     public function registerParticipant(Request $request, Participant $participant)

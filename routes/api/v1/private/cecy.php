@@ -69,6 +69,7 @@ Route::prefix('institution')->group(function () {
 
 Route::prefix('planification')->group(function () {
     Route::get('planifications-period-state', [PlanificationController::class, 'getPlanificationsByPeriodState']);
+    Route::get('by-detail-planification', [PlanificationController::class, 'getPlanificationsByDetailPlanification']);
     Route::get('course_parallels-works', [PlanificationController::class, 'getCoursesParallelsWorkdays']);
     Route::get('{course}', [PlanificationController::class, 'getPlanificationsByCourse']);
     Route::get('planfications-course/{course}', [PlanificationController::class, 'getPlanificationsByCourse']);
@@ -247,10 +248,10 @@ Route::prefix('registration')->group(function () {
  **********************************************************************************************************************/
 
 Route::prefix('participant')->group(function () {
-    Route::get('planification/{planification}', [ParticipantController::class, 'getParticipantsByPlanification']);
+    Route::get('detail-planification/{detailPlanification}', [ParticipantController::class, 'getParticipantsByPlanification']);
     Route::get('information/{registration}', [ParticipantController::class, 'getParticipantInformation']);
-    Route::patch('update-participant-registration', [ParticipantController::class, 'updateParticipantRegistration']);
-    Route::patch('participant-registration', [ParticipantController::class, 'registerParticipant']);
+    Route::put('update-registration/{registration}', [ParticipantController::class, 'updateParticipantRegistration']);
+    Route::patch('participant-registration/{registration}', [ParticipantController::class, 'registerParticipant']);
 });
 /***********************************************************************************************************************
  * DETAIL SCHOOL PERIOD
