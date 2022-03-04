@@ -34,7 +34,7 @@ class CoursesByResponsibleResource extends JsonResource
             'needs' => $this->needs,
             'project' => $this->project,
             'summary' => $this->summary,
-            'targetGroups' => $this->targetGroups,
+            'targetGroups' => $this->target_groups,
         ];
     }
 }

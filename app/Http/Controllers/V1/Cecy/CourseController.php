@@ -300,7 +300,7 @@ class CourseController extends Controller
         $course->abbreviation = $request->input('abbreviation');
         $course->duration = $request->input('duration');
         $course->needs = $request->input('needs');
-        // $course->target_groups->associate($request->input("targetGroups.ids")); //poblacion a la que va dirigda
+        $course->target_groups=$request->input("targetGroups"); //poblacion a la que va dirigda
         $course->project = $request->input('project');
         $course->summary = $request->input('summary');
         $course->save();

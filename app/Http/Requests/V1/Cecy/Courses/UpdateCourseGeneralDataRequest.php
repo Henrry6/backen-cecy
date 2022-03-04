@@ -23,8 +23,9 @@ class UpdateCourseGeneralDataRequest extends FormRequest
       'modality.id' => ['required', 'integer'],
       'abbreviation' => ['required', 'string', 'max:100'],
       'duration' => ['required', 'integer'],
-      'needs' => ['required', 'json'],
+      // 'needs' => ['required', 'json'],
       'project' => ['required', 'string', 'max:1000'],
+      // 'participantTypes.id' => ['required', 'json'],
       // 'targetGroups' => ['required'],
       'summary' => ['required',  'string', 'max:1000'],
     ];
@@ -45,6 +46,7 @@ class UpdateCourseGeneralDataRequest extends FormRequest
       'duration' => 'Duración',
       'needs' => 'Necesidades',
       'project' => 'Proyecto',
+      'participantTypes.id' =>'Tipo de participantes de curso',
       // 'targetGroups' => 'Ids de grupos al que va dirigido el curso',
       'summary' => 'Sumario',
     ];
