@@ -23,9 +23,13 @@ class Attendance extends Model implements Auditable
 
     // Relationships
 
-    public function detailAttendance()
+    public function detailAttendances()
     {
         return $this->hasMany(DetailAttendance::class);
+    }
+    public function detailAttendance()
+    {
+        return $this->hasOne(DetailAttendance::class);
     }
 
     public function detailPlanification()
