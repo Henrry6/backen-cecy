@@ -13,6 +13,7 @@ use App\Http\Resources\V1\Cecy\Registrations\RegisterStudentResource;
 use App\Models\Cecy\AdditionalInformation;
 use App\Models\Cecy\Course;
 use App\Http\Requests\V1\Cecy\Registrations\IndexRegistrationRequest;
+use App\Http\Requests\V1\Cecy\Registrations\NullifyRegistrationRequest;
 use App\Http\Resources\V1\Cecy\Certificates\CertificateResource;
 use App\Http\Resources\V1\Cecy\Participants\CoursesByParticipantCollection;
 use App\Http\Resources\V1\Cecy\Registrations\RegistrationCollection;
@@ -95,7 +96,7 @@ class RegistrationController extends Controller
     }
     /*DDRC-C: Anular varias Matriculas */
     // RegistrationController
-    public function nullifyRegistrations(Request $request)
+    public function nullifyRegistrations(NullifyRegistrationRequest $request)
     {
         $registrations = Registration::whereIn('id', $request->input('ids'))->get();
         $registrations->state()->associate(Catalogue::find($request->input('state.id')));
@@ -114,7 +115,7 @@ class RegistrationController extends Controller
 
     /*DDRC-C: elimina una matricula de un participante en un curso especifico */
     // RegistrationController
-    public function nullifyRegistration(Request $request ,Registration $registration )
+    public function nullifyRegistration(NullifyRegistrationRequest $request ,Registration $registration )
     {
         $registrations = Registration::whereIn('id', $request->input('id'))->get();
         $registrations->state()->associate(Catalogue::find($request->input('state.id')));

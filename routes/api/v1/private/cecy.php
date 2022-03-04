@@ -248,9 +248,9 @@ Route::prefix('registration')->group(function () {
  **********************************************************************************************************************/
 
 Route::prefix('participant')->group(function () {
+    Route::put('update-registration/{registration}', [ParticipantController::class, 'updateParticipantRegistration']);
     Route::get('detail-planification/{detailPlanification}', [ParticipantController::class, 'getParticipantsByPlanification']);
     Route::get('information/{registration}', [ParticipantController::class, 'getParticipantInformation']);
-    Route::put('update-registration/{registration}', [ParticipantController::class, 'updateParticipantRegistration']);
     Route::patch('participant-registration/{registration}', [ParticipantController::class, 'registerParticipant']);
 });
 /***********************************************************************************************************************
