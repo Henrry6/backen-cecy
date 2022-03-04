@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\V1\Cecy\Attendance;
+namespace App\Http\Requests\V1\Cecy\Attendances;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -13,8 +13,8 @@ class GetAttendancesByParticipantRequest extends FormRequest
     public function rules()
     {
         return [
-            'registration.id'=> ['required','integer'],
-            'attendance.id'=> ['required','integer']
+            //'registration.id'=> ['required','integer'],
+            //'attendance.id'=> ['required','integer']
         ];
     }
 

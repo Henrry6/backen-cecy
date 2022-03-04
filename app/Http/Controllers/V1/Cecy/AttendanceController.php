@@ -4,7 +4,7 @@ namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Cecy\Attendance\DestroysAttendanceRequest;
-use App\Http\Requests\V1\Cecy\Attendance\GetAttendancesByParticipantRequest;
+use App\Http\Requests\V1\Cecy\Attendances\GetAttendancesByParticipantRequest;
 use App\Http\Requests\V1\Cecy\Attendance\GetAttendanceTeacherRequest;
 use App\Http\Requests\V1\Cecy\Attendance\SaveDetailAttendanceRequest;
 use App\Http\Requests\V1\Cecy\Attendance\ShowAttendanceTeacherRequest;
@@ -31,26 +31,27 @@ use App\Http\Resources\V1\Cecy\PhotographicRecords\PhotographicRecordResource;
 use App\Http\Resources\V1\Cecy\Registrations\RegistrationRecordCompetitorResource;
 use App\Models\Cecy\Attendance;
 use App\Models\Cecy\Registration;
+use App\Models\Cecy\Participant;
+
 
 class AttendanceController extends Controller
 {
  //Ver todas las asistencias del estudiante
     // AttendanceController
-    public function getAttendancesByParticipant(GetAttendancesByParticipantRequest $request, Registration $registration)
+    public function getAttendancesByParticipant(GetAttendancesByParticipantRequest $request , DetailPlanification $detailPlanification)
     {
-        $detailPlanification = $registration->detailPlanification()->first();
-        $attendances = $detailPlanification
-            ->attendances()
-            ->paginate($request->input('per_page'));
-
+        //dd($registration->detailPlanification->attendances);
+        $attendances = $detailPlanification->attendances()->get();
+            //->paginate($request->input('per_page'));
+            
         return (new GetAttendanceByParticipantCollection($attendances))
             ->additional([
                 'msg' => [
-                    'sumary' => 'consulta exitosa',
+                    'sumary' => 'consulta exitosa 1',
                     'detail' => '',
                     'code' => '200'
                 ]
-            ])
+            ])  
             ->response()->setStatusCode(200);
     }
     // Guardar asistencia

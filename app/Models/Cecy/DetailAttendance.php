@@ -21,15 +21,11 @@ class DetailAttendance extends Model implements Auditable
     // Relationships
     public function attendance()
     {
-        return $this->hasMany(Attendance::class);
+        return $this->belongsTo(Attendance::class);
     }
-    public function registrations()
+    public function type()
     {
-        return $this->hasMany(Registration::class);
-    }
-    public function catalogue()
-    {
-        return $this->hasMany(Catalogue::class);
+        return $this->belongsTo(Catalogue::class,'type_id');
     }
 
 

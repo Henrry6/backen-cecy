@@ -2,15 +2,18 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\V1\Cecy\CatalogueController;
-use App\Http\Controllers\V1\Cecy\GuachagmiraController;
-use App\Http\Controllers\V1\Cecy\GuanunaController;
-use App\Http\Controllers\V1\Cecy\PerezController;
 use App\Http\Controllers\V1\Cecy\CourseController;
 use App\Http\Controllers\V1\Cecy\DetailAttendanceController;
 use App\Http\Controllers\V1\Cecy\InstitutionController;
 use App\Http\Controllers\V1\Cecy\TopicController;
 use App\Http\Controllers\V1\Cecy\PrerequisiteController;
 use App\Http\Controllers\V1\Cecy\PlanificationController;
+use App\Http\Controllers\V1\Cecy\RegistrationController;
+use App\Http\Controllers\V1\Cecy\CertificateController;
+use App\Http\Controllers\V1\Cecy\AttendanceController;
+
+
+
 
 /***********************************************************************************************************************
  * CATALOGUES
@@ -69,17 +72,7 @@ Route::prefix('planification/{planification}')->group(function () {
 /***********************************************************************************************************************
  * DETAIL PLANIFICATIONS
  **********************************************************************************************************************/
-Route::prefix('detailPlanification')->group(function () {
-    Route::get('', [PerezController::class, 'getDetailPlanificationsByPlanification']);
-    Route::post('', [PerezController::class, 'registerDetailPlanification']);
-    Route::patch('', [PerezController::class, 'destroysDetailPlanifications']);
-});
 
-Route::prefix('detailPlanification/{detailPlanification}')->group(function () {
-    Route::get('', [PerezController::class, 'showDetailPlanification']);
-    Route::put('', [PerezController::class, 'updateDetailPlanification']);
-    Route::delete('', [PerezController::class, 'deleteDetailPlanification']);
-});
 
 /***********************************************************************************************************************
  * TOPICS
@@ -164,4 +157,30 @@ Route::apiResource('institutions', InstitutionController::class);
 
 Route::prefix('institution')->group(function () {
     Route::patch('{institution}', [InstitutionController::class, 'destroys']);
+});
+
+/*****************************************
+ * Registration ROUTES
+ ****************************************/
+
+Route::prefix('registration')->group(function () {
+    Route::get('courses-by-participant', [RegistrationController::class, 'getCoursesByParticipant']);
+    Route::get('courses-by-participant/{registration}', [RegistrationController::class, 'getCoursesByParticipant']);
+    //ruta para consulta las notas de registration
+    //Route::get('courses-by-participant', [RegistrationController::class, 'getCoursesByParticipant']);
+    Route::get('records-returned-by-registration', [RegistrationController::class, 'recordsReturnedByRegistration']);
+    Route::get('show-participants', [RegistrationController::class, 'showParticipants']);
+    Route::get('download-file', [RegistrationController::class, 'downloadFile']);
+    Route::post('nullify-registrations', [RegistrationController::class, 'nullifyRegistrations']);
+    Route::patch('nullify-registration', [RegistrationController::class, 'nullifyRegistration']);
+    Route::get('show-record-competitor', [RegistrationController::class, 'showRecordCompetitor']);
+    Route::patch('show-participant-grades', [RegistrationController::class, 'ShowParticipantGrades']);
+    Route::put('upload-file', [RegistrationController::class, 'uploadFile']);
+    Route::get('download-file-grades', [RegistrationController::class, 'downloadFileGrades']);
+    Route::get('show-file', [RegistrationController::class, 'showFile']);
+    Route::patch('destroy-file', [RegistrationController::class, 'destroyFile']);
+
+});
+Route::prefix('attendances')->group(function () {
+    Route::get('detail-attendances/{detail_planification}', [AttendanceController::class, 'getAttendancesByParticipant']);
 });

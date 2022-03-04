@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\V1\Cecy\Authorities;
+namespace App\Http\Resources\V1\Cecy\DetailAttendances;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 

@@ -110,14 +110,15 @@ class RegistrationsSeeder extends Seeder
 
         foreach ($detailPlanifications as $detailPlanification) {
             for ($i = 0; $i <= 4; $i++) {
-                Registration::factory()->create(
+                $participant = $faker->randomElement($participants);
+                Registration::factory(1)->create(
                     [
                         'detail_planification_id' => $detailPlanification,
-                        'participant_id' => $iterador,
+                        'participant_id' => $participant,
                         'state_id' =>  $faker->randomElement($states),
                         'state_course_id' => $faker->randomElement($states_course),
                         'type_id' => $faker->randomElement($types),
-                        'type_participant_id' => $participants[$iterador - 1]->type()->first(),
+                        'type_participant_id' => $participant->type()->first(),
                         'final_grade' => $faker->numberBetween(50, 100),
                         'grade1' => $faker->numberBetween(50, 100),
                         'grade2' => $faker->numberBetween(50, 100),

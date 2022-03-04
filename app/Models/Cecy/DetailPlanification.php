@@ -29,7 +29,7 @@ class DetailPlanification extends Model implements Auditable
     ];
 
     // Relationships
-    public function attendaces()
+    public function attendances()
     {
         return $this->hasMany(Attendance::class);
     }
