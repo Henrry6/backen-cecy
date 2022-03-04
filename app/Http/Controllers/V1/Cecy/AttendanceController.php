@@ -3,55 +3,39 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\V1\Cecy\Attendances\DestroysAttendanceRequest;
 use App\Http\Requests\V1\Cecy\Attendances\GetAttendancesByParticipantRequest;
-use App\Http\Requests\V1\Cecy\Attendances\GetAttendanceTeacherRequest;
-use App\Http\Requests\V1\Cecy\Attendances\SaveDetailAttendanceRequest;
-use App\Http\Requests\V1\Cecy\Attendances\ShowAttendanceTeacherRequest;
-use App\Http\Requests\V1\Cecy\Attendances\StoreAttendanceRequest;
+use App\Http\Requests\V1\Cecy\Attendance\SaveDetailAttendanceRequest;
+use App\Http\Requests\V1\Cecy\Attendance\ShowAttendanceTeacherRequest;
+use App\Http\Requests\V1\Cecy\Attendance\StoreAttendanceRequest;
 use App\Http\Requests\V1\Cecy\Courses\GetCoursesByNameRequest;
 use App\Http\Requests\V1\Core\Images\UploadImageRequest;
 use App\Http\Resources\V1\Cecy\Attendances\AttendanceCollection;
 use App\Http\Resources\V1\Cecy\Attendances\AttendanceResource;
-use App\Http\Resources\V1\Cecy\Authorities\DetailAttendanceCollection;
-use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationCollection;
-use App\Http\Resources\V1\Cecy\PhotographicRecords\PhotographicRecordCollection;
 use App\Models\Cecy\DetailPlanification;
-use App\Models\Cecy\PhotographicRecord;
-use Illuminate\Http\Request;
 use App\Models\Cecy\Course;
-use App\Models\Cecy\Catalogue;
-use App\Models\Cecy\Prerequisite;
-use App\Http\Resources\V1\Cecy\Prerequisites\PrerequisiteCollection;
-use App\Http\Resources\V1\Cecy\Prerequisites\PrerequisiteResource;
-use App\Http\Requests\V1\Cecy\Prerequisites\DestroyPrerequisiteRequest;
-use App\Http\Requests\V1\Cecy\Prerequisites\StorePrerequisiteRequest;
-use App\Http\Requests\V1\Cecy\Prerequisites\UpdatePrerequisiteRequest;
 use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\GetDetailPlanificationsByResponsibleCourseRequest;
 use App\Http\Resources\V1\Cecy\Attendances\GetAttendanceByParticipantCollection;
 use App\Http\Resources\V1\Cecy\Attendances\SaveDetailAttendanceResource;
 use App\Http\Resources\V1\Cecy\PhotographicRecords\PhotographicRecordResource;
 use App\Http\Resources\V1\Cecy\Registrations\RegistrationRecordCompetitorResource;
 use App\Models\Cecy\Attendance;
-use App\Models\Cecy\Registration;
 use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 
 
 class AttendanceController extends Controller
 {
- //Ver todas las asistencias del estudiante
+    //Ver todas las asistencias del estudiante
     // AttendanceController
-    public function getAttendancesByParticipant(GetAttendanceDetailPlanificationRequest $request, Registration $registration)
+    public function getAttendancesByParticipant(GetAttendancesByParticipantRequest $request, DetailPlanification $detailPlanification)
     {
-        $detailPlanification = $registration->detailPlanification()->first();
-        $attendances = $detailPlanification
-            ->attendances()
-            ->paginate($request->input('per_page'));
+        //dd($registration->detailPlanification->attendances);
+        $attendances = $detailPlanification->attendances()->get();
+        //->paginate($request->input('per_page'));
 
         return (new GetAttendanceByParticipantCollection($attendances))
             ->additional([
                 'msg' => [
-                    'sumary' => 'consulta exitosa',
+                    'sumary' => 'consulta exitosa 1',
                     'detail' => '',
                     'code' => '200'
                 ]
@@ -75,6 +59,7 @@ class AttendanceController extends Controller
             ])
             ->response()->setStatusCode(200);
     }
+<<<<<<< HEAD
       // AttendanceController
       public function showPhotographicRecord(GetDetailPlanificationsByResponsibleCourseRequest $request, Course $course)
       {
@@ -115,6 +100,46 @@ class AttendanceController extends Controller
                 'code' => '200'
             ]
         ]);
+=======
+    // AttendanceController
+    public function showPhotographicRecord(GetDetailPlanificationsByResponsibleCourseRequest $request, Course $course)
+    {
+        //trae el registro fotografico de un curso en especifico por el docente que se loguea
+
+
+        $planification = $course->planifications()->get();
+        $detailPlanification = $planification->detailPlanifications()->get();
+        $photograpicRecord = $detailPlanification->photograpicRecord()->get();
+
+
+        $data = new PhotographicRecordResource($photograpicRecord);
+        $pdf = PDF::loadView('reports/photographic-record', ['photograpicRecords' => $data]);
+
+        return $pdf->stream('Registro fotográfico.pdf');
+    }
+
+    public function showAttendenceEvaluationRecord(GetCoursesByNameRequest $request, Course $course)
+    {
+        // trae la informacion de registro asistencia-evaluacion
+        $course = Course::where('course_id', $request->course()->id)->get();
+
+        $detailPlanifications = $course
+            ->detailPlanifications()
+            ->planifications()
+            ->course()
+            ->registration()
+            ->attendence()
+            ->paginate($request->input('per_page'));
+
+        return (new RegistrationRecordCompetitorResource($detailPlanifications))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ]);
+>>>>>>> 3fdb918926582f594724dfb1c01e65910e78a40f
     }
     //ver todas las asistencias de un detalle planification
     // AttendanceController
@@ -155,7 +180,6 @@ class AttendanceController extends Controller
                 ]
             ])
             ->response()->setStatusCode(200);
-
     }
     //ver asistencia una por una
     // AttendanceController
@@ -172,10 +196,9 @@ class AttendanceController extends Controller
                 ]
             ])
             ->response()->setStatusCode(200);
-
     }
     //eliminar una asistencia
-// AttendanceController
+    // AttendanceController
     public function destroysAttendanceTeacher(DestroysAttendanceRequest $request)
     {
         $attendance = Attendance::whereIn('id', $request->input('ids'))->get();
@@ -190,10 +213,10 @@ class AttendanceController extends Controller
                 ]
             ])
             ->response()->setStatusCode(200);
-
     }
-    public function index(){
-        return(new AttendanceCollection(Attendance::paginate()))
+    public function index()
+    {
+        return (new AttendanceCollection(Attendance::paginate()))
             ->additional([
                 'msg' => [
                     'summary' => 'success',
@@ -203,9 +226,10 @@ class AttendanceController extends Controller
             ])
             ->response()->setStatusCode(200);
     }
-    public function show(Attendance $attendance){
+    public function show(Attendance $attendance)
+    {
 
-        return(new AttendanceResource($attendance))
+        return (new AttendanceResource($attendance))
             ->additional([
                 'msg' => [
                     'summary' => 'success',
@@ -228,8 +252,5 @@ class AttendanceController extends Controller
         $image->save($path, 75);
 
         return $photograficRecord->uploadImage($request);
-
     }
 }
-
-

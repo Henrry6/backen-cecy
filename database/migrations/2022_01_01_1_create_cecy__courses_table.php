@@ -18,6 +18,11 @@ class CreateCecyCoursesTable extends Migration
                 ->nullable()
                 ->constrained('cecy.catalogues');
 
+            $table->foreignId('area_id')
+                ->comment('')
+                ->nullable()
+                ->constrained('cecy.catalogues');
+
             $table->foreignId('entity_certification_id')
                 ->comment('Institución que lo avala, Senecyt, Setec, Setec')
                 ->nullable()
