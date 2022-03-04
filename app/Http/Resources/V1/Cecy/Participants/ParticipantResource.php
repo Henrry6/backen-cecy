@@ -13,7 +13,7 @@ class ParticipantResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'type' => CatalogueResource::make($this->personType),
+            'type' => CatalogueResource::make($this->type),//antes es taba $this->personType
             'user' => UserResource::make($this->user),
             'state' => CatalogueResource::make($this->state),
         ];

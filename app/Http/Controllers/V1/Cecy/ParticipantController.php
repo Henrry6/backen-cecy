@@ -3,17 +3,19 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\V1\Cecy\DetailPlanifications\DetailPlanificationRequest;
 use App\Http\Requests\V1\Cecy\Participants\StoreParticipantUserRequest;
+use App\Http\Requests\V1\Cecy\Planifications\IndexPlanificationRequest;
 use App\Http\Requests\V1\Cecy\Registrations\IndexRegistrationRequest;
 use App\Http\Requests\V1\Cecy\Registrations\UpdateRegistrationRequest;
 use App\Http\Resources\V1\Cecy\Participants\ParticipantInformationResource;
-use App\Http\Resources\V1\Cecy\Planifications\PlanificationParticipantCollection;
+use App\Http\Resources\V1\Cecy\Planifications\PlanificationParticipants\PlanificationParticipantCollection;
 use Illuminate\Http\Request;
 use App\Models\Cecy\Catalogue;
 use App\Http\Resources\V1\Cecy\Registrations\RegistrationResource;
 use App\Http\Resources\V1\Core\Users\UserResource;
 use App\Models\Authentication\User;
+use App\Models\Cecy\AdditionalInformation;
+use App\Models\Cecy\DetailPlanification;
 use App\Models\Cecy\Participant;
 use App\Models\Cecy\Planification;
 use App\Models\Cecy\Registration;
@@ -132,13 +134,14 @@ class ParticipantController extends Controller
     }
     /*DDRC-C: Busca los participantes inscritos a una planificación especifica*/
     // ParticipantController
-    public function getParticipantsByPlanification(DetailPlanificationRequest $request, Planification $planification)
+    public function getParticipantsByPlanification(IndexPlanificationRequest $request, DetailPlanification $detailPlanification)
     {
-        $detailPlanifications = $planification->detailPlanifications()->get();
 
-        $participants = Registration::whereIn('detail_planification_id', $detailPlanifications)
+        $detailPlanifications = DetailPlanification::firstwhere('planification_id', $detailPlanification->id);
+
+        $participants = Registration::where('detail_planification_id', $detailPlanification->id)
             ->paginate($request->input('per_page'));
-
+        // return $participants;
         return (new PlanificationParticipantCollection($participants))
             ->additional([
                 'msg' => [
@@ -152,7 +155,8 @@ class ParticipantController extends Controller
     // ParticipantController
     public function getParticipantInformation(IndexRegistrationRequest $request, Registration $registration)
     {
-
+        // $participantRegistration = Registration::firstWhere('id', $registration->id);
+        // $additionalInformation = AdditionalInformation::firstwhere('registration_id', $registration->id);
         return (new ParticipantInformationResource($registration))
             ->additional([
                 'msg' => [
@@ -167,6 +171,11 @@ class ParticipantController extends Controller
     // ParticipantController
     public function updateParticipantRegistration(UpdateRegistrationRequest $request, Registration $registration)
     {
+        if ($registration->observation==null || $registration->observation==''){
+            return 'observaciones esta vacio';
+        }else{
+            return 'observaciones tiene datos';
+        }
         $registration->observation = $request->input('observation');
         $registration->state()->associate(Catalogue::find($request->input('state.id')));
         $registration->save();
@@ -180,7 +189,7 @@ class ParticipantController extends Controller
                 ]
             ])->response()->setStatusCode(201);
     }
-
+    
     /*DDRC-C: Matricula un participante */
     // ParticipantController
     public function registerParticipant(Request $request, Participant $participant)
