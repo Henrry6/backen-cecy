@@ -63,7 +63,7 @@ Route::prefix('institution')->group(function () {
 //Route::apiResource('planifications',[PlanificationController::class]);
 
 Route::prefix('planification')->group(function () {
-    Route::get('{course}', [PlanificationController::class, 'getPlanificationsByCourse']);
+    // Route::get('{course}', [PlanificationController::class, 'getPlanificationsByCourse']);
     Route::get('planfications-course/{course}', [PlanificationController::class, 'getPlanificationsByCourse']);
     Route::get('kpis/{state}', [PlanificationController::class, 'getKpi']);
     Route::get('planifications-period-state', [PlanificationController::class, 'getPlanificationsByPeriodState']);
@@ -71,6 +71,7 @@ Route::prefix('planification')->group(function () {
 });
 
 Route::prefix('planification/{planification}')->group(function () {
+    Route::get('', [PlanificationController::class, 'getPlanitification']);
     Route::put('dates-and-needs-planifications', [PlanificationController::class, 'updateDatesAndNeedsInPlanification']);
     Route::post('create-planifications-course', [PlanificationController::class, 'storePlanificationByCourse']);
     Route::put('planifications-cecy', [PlanificationController::class, 'updatePlanificationByCecy']);
@@ -148,13 +149,13 @@ Route::prefix('courses/{course}')->group(function () {
         Route::patch('/prerequisites/destroys', [PrerequisiteController::class, 'destroysPrerequisites']);
     });
     Route::prefix('')->group(function () {
-        Route::put('curricular-design', [CourseController::class, 'updateCurricularDesignCourse']);
-        Route::patch('general-information', [CourseController::class, 'updateGeneralInformationCourse']);
-        Route::patch('assign-code', [CourseController::class, 'assignCodeToCourse']);
-        Route::patch('not-approve-reason', [CourseController::class, 'notApproveCourseReason']);
-        Route::get('inform-course-needs', [CourseController::class, 'informCourseNeeds']);
-        Route::get('curricular-design', [CourseController::class, 'showCurricularDesign']);
-        Route::get('final-report', [CourseController::class, 'showCourseFinalReport']);
+        Route::put('/curricular-design', [CourseController::class, 'updateCurricularDesignCourse']);
+        Route::patch('/general-information', [CourseController::class, 'updateGeneralInformationCourse']);
+        Route::patch('/assign-code', [CourseController::class, 'assignCodeToCourse']);
+        Route::patch('/not-approve-reason', [CourseController::class, 'notApproveCourseReason']);
+        Route::get('/inform-course-needs', [CourseController::class, 'informCourseNeeds']);
+        Route::get('/curricular-design', [CourseController::class, 'showCurricularDesign']);
+        Route::get('/final-report', [CourseController::class, 'showCourseFinalReport']);
         // Route::get('inform-course-needs/{course}', 'App\Http\Controllers\V1\Cecy\CourseController@informCourseNeeds');
     });
     Route::prefix('image')->group(function () {
