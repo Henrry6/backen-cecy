@@ -13,8 +13,8 @@ class GetAttendancesByParticipantRequest extends FormRequest
     public function rules()
     {
         return [
-            'registration.id'=> ['required','integer'],
-            'attendance.id'=> ['required','integer']
+            //'registration.id'=> ['required','integer'],
+            //'attendance.id'=> ['required','integer']
         ];
     }
 

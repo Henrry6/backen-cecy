@@ -18,6 +18,7 @@ use App\Http\Resources\V1\Cecy\Courses\CourseResource;
 use App\Http\Resources\V1\Cecy\Courses\CourseCollection;
 use App\Http\Resources\V1\Cecy\Instructors\InstructorResource;
 use App\Http\Resources\V1\Core\Users\UserCollection;
+use App\Models\Authentication\User;
 use App\Models\Cecy\Catalogue;
 use App\Models\Cecy\Course;
 use Illuminate\Support\Facades\DB;
@@ -116,4 +117,26 @@ class InstructorController extends Controller
                 ]
             ]);
     }
+    public function storeInstructor(Instructor $instructor, Request $request){
+
+        $instructor = new Instructor();
+        $instructor->state()
+        ->associate(Catalogue::find($request->input('state')));
+        $instructor->type()
+        ->associate(Catalogue::find($request->input('type')));
+        $instructor->user()
+        ->associate(User::find($request->input('user')));
+        $instructor->save();
+
+        return (new InstructorResource($instructor))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Institution Creado',
+                    'Institution' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
 }
+

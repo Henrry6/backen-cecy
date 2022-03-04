@@ -23,21 +23,22 @@ use App\Models\Cecy\Catalogue;
 use App\Models\Cecy\DetailPlanification;
 use App\Models\Cecy\Participant;
 use App\Models\Cecy\Registration;
+use App\Models\Core\Catalogue as CoreCatalogue;
 use App\Models\Core\File;
 use http\Env\Request;
 use Illuminate\Support\Facades\DB;
 
 class RegistrationController extends Controller
 {
- //Ver todos los cursos del estudiante en el cual esta matriculado
+    //Ver todos los cursos del estudiante en el cual esta matriculado
     // RegistrationController
     public function getCoursesByParticipant(GetCoursesByParticipantRequest $request)
     {
-        $participant = Participant::firstWhere('user_id', $request->user()->id);
-        $registrations = $participant->registrations()->where(['state' => function ($state) {
-            $state->where('code', 'MATRICULADO');
-        }])
-            ->paginate($request->input('per_page'));
+        $catalogues = Catalogue::where(["code" => "APPROVED", "type" => "PARTICIPANT_STATE"])->get();
+        $participant = Participant::where(["user_id" => $request->user()->id])->whereIn("state_id", $catalogues->ModelKeys())->first();
+        $registrations = $participant->registrations()->paginate($request->input('per_page'));
+
+        //logger($participant);
 
         return (new CoursesByParticipantCollection($registrations))
             ->additional([
@@ -49,12 +50,17 @@ class RegistrationController extends Controller
             ])
             ->response()->setStatusCode(200);
     }
+
+    //recuperar las matriculas
+
     public function recordsReturnedByRegistration(IndexRegistrationRequest $request)
     {
-        $participant = Participant::firstWhere('user_id', $request->user()->id);
-        $registrations = $participant->registrations()->get();
+        //dd($request->user()->id);
 
-        return (new RegistrationResource($registrations))
+        $participant = Participant::firstWhere('user_id', $request->user()->id);
+        $registrations = $participant->registrations()->get("number", "id");
+
+        return (new RegistrationCollection($registrations))
             ->additional([
                 'msg' => [
                     'sumary' => 'consulta exitosa',
@@ -85,9 +91,10 @@ class RegistrationController extends Controller
             ->response()->setStatusCode(200);
     }
     //participantes de un curso por detalle de la planificacion 
-    public function getParticipant(DetailPlanification $detailPlanification){
+    public function getParticipant(DetailPlanification $detailPlanification)
+    {
         $registration = $detailPlanification->registrations()->get();
-        return(new RegistrationCollection($registration))
+        return (new RegistrationCollection($registration))
             ->additional([
                 'msg' => [
                     'summary' => 'success',
@@ -110,6 +117,7 @@ class RegistrationController extends Controller
     // RegistrationController
     public function nullifyRegistrations(Request $request)
     {
+        return 'hola';
         $registrations = Registration::whereIn('id', $request->input('ids'))->get();
         $registrations->state()->associate(Catalogue::find($request->input('state.id')));
 
@@ -127,7 +135,7 @@ class RegistrationController extends Controller
 
     /*DDRC-C: elimina una matricula de un participante en un curso especifico */
     // RegistrationController
-    public function nullifyRegistration(Request $request ,Registration $registration )
+    public function nullifyRegistration(Request $request, Registration $registration)
     {
         $registrations = Registration::whereIn('id', $request->input('id'))->get();
         $registrations->state()->associate(Catalogue::find($request->input('state.id')));
@@ -143,21 +151,21 @@ class RegistrationController extends Controller
             ->response()->setStatusCode(201);
     }
 
-       // RegistrationController
-       public function showRecordCompetitor(GetCoursesByNameRequest $request, Course $course)
-       {
-           //trae todos los participantes registrados de un curso en especifico
-           $planification = $course->planifications()->get();
-           $detailPlanification = $planification->detailPlanifications()->get();
-           $registrations = $detailPlanification->registrations()->get();
-           /*        $aditionalInformation= $registrations->aditionalInformations()->get();
+    // RegistrationController
+    public function showRecordCompetitor(GetCoursesByNameRequest $request, Course $course)
+    {
+        //trae todos los participantes registrados de un curso en especifico
+        $planification = $course->planifications()->get();
+        $detailPlanification = $planification->detailPlanifications()->get();
+        $registrations = $detailPlanification->registrations()->get();
+        /*        $aditionalInformation= $registrations->aditionalInformations()->get();
                   $participant = $aditionalInformation->registrations()->get()
                   ->participants()
                   ->users();
            */
-           /*  $Course = Planification::where('course_id', $request->course()->id)->get(); */
+        /*  $Course = Planification::where('course_id', $request->course()->id)->get(); */
 
-           /*         $registration = $registrations
+        /*         $registration = $registrations
                        ->planifications()
                        ->detailPlanifications()
                        ->additionalInformations()
@@ -167,16 +175,16 @@ class RegistrationController extends Controller
                         ->course()
                        ->paginate($request->input('per_page')); */
 
-           return (new RegistrationRecordCompetitorResource($registrations))
-               ->additional([
-                   'msg' => [
-                       'summary' => 'success',
-                       'detail' => '',
-                       'code' => '200'
-                   ]
-               ])
-               ->response()->setStatusCode(200);
-       }
+        return (new RegistrationRecordCompetitorResource($registrations))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
     //estudiantes de un curso y sus notas
     // RegistrationController
     public function ShowParticipantGrades(ShowParticipantsRequest $request, DetailPlanification $detailPlanification)
@@ -268,5 +276,4 @@ class RegistrationController extends Controller
 
         return $additionalInformation;
     }
-
 }
