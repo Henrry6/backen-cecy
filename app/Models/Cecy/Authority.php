@@ -48,7 +48,7 @@ class Authority extends Model implements Auditable
 
     public function planifications()
     {
-        return $this->hasMany(Planification::class);
+        return $this->hasMany(Planification::class, 'responsible_cecy_id');
     }
 
     // Mutators

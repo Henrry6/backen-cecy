@@ -28,6 +28,7 @@ class PrerequisiteController extends Controller
     public function getPrerequisites(Course $course)
     {
         $prerequisites = $course->prerequisites()->get();
+        
         return (new PrerequisiteCollection($prerequisites))
             ->additional([
                 'msg' => [

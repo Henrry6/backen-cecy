@@ -37,7 +37,7 @@ class CreateCecyRegistrationsTable extends Migration
                 ->nullable()
                 ->comment('Tipo de matrícula: Ordinaria, extraordinaria, o especial')
                 ->constrained('cecy.catalogues');
-
+// DDRC-C: campo extra ya que en la parte de participante ya esta definido el tipo
             $table->foreignId('type_participant_id')
                 ->nullable()
                 ->comment('Tipo de participante: Externo, docente, GAD, senecyt')

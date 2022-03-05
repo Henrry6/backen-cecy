@@ -18,8 +18,8 @@ class DetailAttendancesSeeder extends Seeder
      */
     public function run()
     {
-        $this->createDetailAttendances();
         $this->createDetailAttendancesCatalogue();
+        $this->createDetailAttendances();
     }
 
     public function createDetailAttendancesCatalogue()
