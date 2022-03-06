@@ -18,7 +18,7 @@ class RegisterDetailPlanificationRequest extends FormRequest
             'planification.id' => ['required', 'integer'],
             'workday.id' => ['required', 'integer'],
             'parallel.id' => ['required', 'integer'],
-            'endedTime' => ['required', ],
+            'endedTime' => ['required', 'after:startedTime'],
             'startedTime' => ['required', ],
         ];
     }
