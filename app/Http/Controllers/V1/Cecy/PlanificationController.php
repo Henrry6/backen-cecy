@@ -52,15 +52,15 @@ class PlanificationController extends Controller
         $planifications = $course->planifications()->customOrderBy($sorts)
             ->paginate($request->input('per_page'));
 
-        // return (new PlanificationByCourseCollection($planifications))
-        //     ->additional([
-        //         'msg' => [
-        //             'summary' => 'success',
-        //             'detail' => '',
-        //             'code' => '200'
-        //         ]
-        //     ])
-        //     ->response()->setStatusCode(200);
+        return (new PlanificationByCourseCollection($planifications))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
     }
     /*
     * Asignar docente responsable de cecy de la planificación
