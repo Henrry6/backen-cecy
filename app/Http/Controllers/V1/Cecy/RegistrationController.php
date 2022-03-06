@@ -36,9 +36,16 @@ class RegistrationController extends Controller
     {
         $catalogues = Catalogue::where(["code" => "APPROVED", "type" => "PARTICIPANT_STATE"])->get();
         $participant = Participant::where(["user_id" => $request->user()->id])->whereIn("state_id", $catalogues->ModelKeys())->first();
+        /*if (!isset($participant))
+            return response()->json([
+                'msg' => [
+                    'sumary' => 'Este usuario no es participante',
+                    'detail' => '',
+                    'code' => '404'
+                ],
+                'data'=>null
+            ],404);*/
         $registrations = $participant->registrations()->paginate($request->input('per_page'));
-
-        //logger($participant);
 
         return (new CoursesByParticipantCollection($registrations))
             ->additional([
@@ -50,7 +57,6 @@ class RegistrationController extends Controller
             ])
             ->response()->setStatusCode(200);
     }
-
     //recuperar las matriculas
 
     public function recordsReturnedByRegistration(IndexRegistrationRequest $request)
@@ -275,5 +281,31 @@ class RegistrationController extends Controller
         $additionalInformation->course_follows = $request->input('courseFollows');
 
         return $additionalInformation;
+    }
+    // trae el
+    public function getGradeByParticipant(GetCoursesByParticipantRequest $request)
+    {
+        $catalogues = Catalogue::where(["code" => "APPROVED", "type" => "PARTICIPANT_STATE"])->get();
+        $participant = Participant::where(["user_id" => $request->user()->id])->whereIn("state_id", $catalogues->ModelKeys())->first();
+        /*if (!isset($participant))
+            return response()->json([
+                'msg' => [
+                    'sumary' => 'Este usuario no es participante',
+                    'detail' => '',
+                    'code' => '404'
+                ],
+                'data'=>null
+            ],404);*/
+        $registration = $participant->registrations()->paginate($request->input('per_page'));
+
+        return (new CoursesByParticipantCollection($registration))
+            ->additional([
+                'msg' => [
+                    'sumary' => 'consulta exitosa',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
     }
 }
