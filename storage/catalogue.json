@@ -16,7 +16,7 @@
     },
     "entity_certification": {
         "type": "ENTITY_CERTIFICATION",
-        "senecyt": "SENECYT",
+        "senecyt": "SENESCYT",
         "setec": "SETECT",
         "cecy": "CECY"
     },
@@ -255,5 +255,10 @@
         "type": "PERIOD_STATE",
         "current": "CURRENT",
         "past": "PAST"
+    },
+    "target_groups": {
+        "type":"TARGET_GROUPS",
+        "childrens":"CHILDRENS",
+        "young":"YOUNG"
     }
 }

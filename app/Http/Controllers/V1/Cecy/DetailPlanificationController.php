@@ -31,13 +31,14 @@ class DetailPlanificationController extends Controller
     /*
         Obtener los horarios de cada paralelo dado un curso
     */
-    // DetailController
-    public function getDetailPlanificationsByCourse(Course $course)
+    // DetailController (done) =>conflicto en controlador
+
+    public function getDetailPlanificationsByCourse(Course $course) //hecho
     {
+
         $planification = $course->planifications()->get();
         $detailPlanification = $planification
             ->detailPlanifications();
-
         return (new DetailPlanificationResource($detailPlanification))
             ->additional([
                 'msg' => [
@@ -154,7 +155,7 @@ class DetailPlanificationController extends Controller
      * Return a detailPlanification record
      */
     // DetailPlanificationController
-    public function showDetailPlanification(ShowDetailPlanificationRequest $request, DetailPlanification $detailPlanification)
+    public function showDetailPlanification(ShowDetailPlanificationRequest $request, DetailPlanification $detailPlanification) //hecho
     {
         return (new ResponsibleCourseDetailPlanificationResource($detailPlanification))
             ->additional([
@@ -304,7 +305,7 @@ class DetailPlanificationController extends Controller
     }
 
     //actualizar informacion del detalle planificación
-    public function updatedetailPlanificationByCecy(UpdateDetailPlanificationRequest $request)
+    public function updatedetailPlanificationByCecy(UpdateDetailPlanificationRequest $request) //hecho
     {
         $loggedAuthority = Authority::where('user_id', $request->user()->id)->get();
         $classroom = Classroom::find($request->input('classroom.id'));

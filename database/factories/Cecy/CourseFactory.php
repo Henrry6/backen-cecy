@@ -78,8 +78,8 @@ class CourseFactory extends Factory
             'record_number' => $this->faker->regexify('[A-Z]{5}[0-4]{3}'),
             'learning_environments' => [[
                 'installation' => $this->faker->word(),
-                'theoreticalPhase'=> $this->faker->randomElement([false, true]),
-                'practicalPhase'=> $this->faker->randomElement([false, true])
+                'theoreticalPhase' => $this->faker->randomElement([false, true]),
+                'practicalPhase' => $this->faker->randomElement([false, true])
             ]],
             'local_proposal' => $this->faker->sentence(8),
             'objective' => $this->faker->sentence(10),
@@ -93,8 +93,8 @@ class CourseFactory extends Factory
             'target_groups' => $this->faker->words(3),
             'teaching_strategies' => $this->faker->sentences(),
             'techniques_requisites' => [
-                'technical'=> [],
-                'general' => []
+                'technical' => $this->faker->words(4),
+                'general' => $this->faker->words(4),
             ],
             'theory_hours' => $this->faker->numberBetween(40, 200),
         ];

@@ -23,15 +23,11 @@ class IndexRegistrationRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-
-        ];
+        return [];
     }
 
     public function attributes()
     {
-        return [
-         
-        ];
+        return [];
     }
 }

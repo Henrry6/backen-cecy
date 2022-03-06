@@ -61,7 +61,8 @@ class CourseResource extends JsonResource
             'targetGroups' => $this->target_groups,
             'teachingStrategies' => $this->teaching_strategies,
             'techniquesRequisites' => $this->techniques_requisites,
-            'theoryHours' => $this->theory_hours,
+            'theoryHours' => $this->techniques_requisites,
+            'participantTypes' => CatalogueResource::collection($this->catalogues),
         ];
     }
 }

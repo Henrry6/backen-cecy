@@ -31,7 +31,7 @@ class Registration extends Model implements Auditable
 
     public function additionalInformation()
     {
-        $this->hasOne(AdditionalInformation::class);
+       return $this->hasOne(AdditionalInformation::class);
     }
 
     public function certificates()
