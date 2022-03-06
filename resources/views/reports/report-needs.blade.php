@@ -16,10 +16,10 @@
 		<div class="stl_view">
 			<div class="stl_05 stl_06">
 				<div class="posiciones_01"">
-					<span class=" stl_07 stl_08" style="word-spacing:0.05em;top: 0em; left:44.7em; position: absolute;white-space: nowrap;">CÓDIGO DEL CURSO: {{ $planification->code}} </span>
+					<span class=" stl_07 stl_08" style="word-spacing:0.05em;top: 0em; left:44.7em; position: absolute;white-space: nowrap;">CÓDIGO DEL CURSO: {{ $planification->course->code}} </span>
 				</div>
 				<div class="posiciones_01" style="top: 0.7265em; left:42.7em; position: absolute;white-space: nowrap;">
-					<span class="stl_11 stl_08" style="word-spacing:0.09em;">FORMULARIO: f {{ $planification->id }} </span>
+					<span class="stl_11 stl_08" style="word-spacing:0.09em;">FORMULARIO: f {{ $planification->course->id }} </span>
 				</div>
 				<center>
 					<br><br><br><br>
@@ -37,11 +37,11 @@
 				</center>
 				<br><br> <br><br>
 				<div class="posiciones_01" style="top: 18.6243em; left:6.0125em;">
-					<span class="stl_15 stl_08" style="word-spacing:0.07em;">Nombre del Docente:LUIS PATRICIO VICENTE </span>
+					<span class="stl_15 stl_08" style="word-spacing:0.07em;">Nombre del Docente: {{$planification->user->name}}</span>
 				</div>
 				<br>
 				<div class="posiciones_01" style="top: 21.1243em; left:6.0125em;">
-					<span class="stl_15 stl_08" style="word-spacing:0.06em;">Nombre del Curso: {{ $planification->name }}</span>
+					<span class="stl_15 stl_08" style="word-spacing:0.06em;">Nombre del Curso: </span>
 				</div>
 				<br>
 				@if($planification->course_type_id == 33)
@@ -74,7 +74,7 @@
 				<br>
 				<div class="posiciones_01" style="top: 32.2688em; left:7.8626em;">
 					<span class="stl_16 stl_08" style="word-spacing:0.05em;">
-						@foreach( $planification->needs as $need)
+						@foreach( $planification->course->needs as $need)
 						<table>
 							<tr>
 
@@ -87,7 +87,7 @@
 				<br>
 
 				<div class="posiciones_01" style="top: 40.3743em; left:6.0125em;">
-					<span class="stl_15 stl_08" style="word-spacing:0.07em;">Duración del curso: {{$planification->duration}} horas</span>
+					<span class="stl_15 stl_08" style="word-spacing:0.07em;">Duración del curso: {{$planification->course->duration}} horas</span>
 				</div>
 				<br>
 
@@ -97,7 +97,7 @@
 				</div>
 				<div class="posiciones_01" style="top: 46.7768em; left:6.0125em;">
 					<span class="stl_15 stl_08" style="word-spacing:0.06em;">
-
+					
 						<table border="1px">
 							<tr>
 

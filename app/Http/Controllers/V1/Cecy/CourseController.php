@@ -30,12 +30,7 @@ use App\Http\Resources\V1\Cecy\Planifications\InformCourseNeedsResource;
 use App\Http\Resources\V1\Cecy\Courses\CoursesByResponsibleCollection;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationCollection;
 use App\Http\Resources\V1\Cecy\Certificates\CertificateResource;
-<<<<<<< HEAD
 use App\Http\Resources\V1\Cecy\Planifications\InformCourseNeedsCollection;
-use App\Http\Resources\V1\Cecy\Planifications\PlanificationsResponsibleCecyCollection;
-use App\Models\Cecy\Authority;
-=======
->>>>>>> 3fdb918926582f594724dfb1c01e65910e78a40f
 use App\Models\Cecy\Instructor;
 use App\Models\Cecy\Participant;
 use App\Models\Cecy\Planification;
@@ -361,19 +356,12 @@ class CourseController extends Controller
     {
         //trae un informe de nececidades de una planificacion, un curso en especifico por el docente que se logea
 
-<<<<<<< HEAD
-        /*  $planification = $course->planifications()->get(); */
- 
-        $data = new InformCourseNeedsResource($course);
+        $planification = $course->planifications()->first();
+
+     $data= new InformCourseNeedsResource($planification);
         $pdf = PDF::loadView('reports/report-needs', ['planification' => $data]);
-=======
-        $planification = $course->planifications()->get();
 
-        $data =  new InformCourseNeedsResource($planification);
-        $pdf = PDF::loadView('reports/report-needs', ['planifications' => $data]);
->>>>>>> 3fdb918926582f594724dfb1c01e65910e78a40f
-
-        return $pdf->stream('informNeeds.pdf');
+        return $pdf->stream('informNeeds.pdf'); 
     }
 
     //Traer todos los cursos planificados de un año en especifico (Done)
