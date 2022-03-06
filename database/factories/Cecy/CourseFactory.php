@@ -57,18 +57,18 @@ class CourseFactory extends Factory
             'cost' => $this->faker->numberBetween(0, 100),
             'duration' => $this->faker->numberBetween(40, 200),
             'evaluation_mechanisms' => [
-                'a' => [
-                    'diagnostica' => $this->faker->word(2),
-                    'formativa' => $this->faker->word(2)
-                ],
-                'b' => [
-                    'diagnostica' => $this->faker->word(2),
-                    'formativa' => $this->faker->word(2)
-                ],
-                'c' => [
-                    'diagnostica' => $this->faker->word(2),
-                    'formativa' => $this->faker->word(2)
-                ]
+                'diagnostic' => [[
+                    'tecnique' => $this->faker->word(2),
+                    'instrument' => $this->faker->word(2)
+                ]],
+                'formative' => [[
+                    'technique' => $this->faker->word(2),
+                    'instrument' => $this->faker->word(2)
+                ]],
+                'final' => [[
+                    'tecnique' => $this->faker->word(2),
+                    'instrument' => $this->faker->word(2)
+                ]]
             ],
             'expired_at' => $this->faker->date('Y_m_d'),
             'free' => $this->faker->boolean(),
@@ -76,7 +76,11 @@ class CourseFactory extends Factory
             'needs' => $this->faker->words(6),
             'needed_at' => $this->faker->date('Y_m_d'),
             'record_number' => $this->faker->regexify('[A-Z]{5}[0-4]{3}'),
-            'learning_environments' => $this->faker->words(3),
+            'learning_environments' => [[
+                'installation' => $this->faker->word(),
+                'theoreticalPhase' => $this->faker->randomElement([false, true]),
+                'practicalPhase' => $this->faker->randomElement([false, true])
+            ]],
             'local_proposal' => $this->faker->sentence(8),
             'objective' => $this->faker->sentence(10),
             'observations' => $this->faker->sentence(8),
@@ -87,8 +91,11 @@ class CourseFactory extends Factory
             'setec_name' => $this->faker->word(),
             'summary' => $this->faker->sentence(),
             'target_groups' => $this->faker->words(3),
-            'teaching_strategies' => $this->faker->words(3),
-            'techniques_requisites' => $this->faker->words(3),
+            'teaching_strategies' => $this->faker->sentences(),
+            'techniques_requisites' => [
+                'technical' => $this->faker->words(4),
+                'general' => $this->faker->words(4),
+            ],
             'theory_hours' => $this->faker->numberBetween(40, 200),
         ];
     }

@@ -26,22 +26,22 @@ class DetailAttendancesSeeder extends Seeder
     {
         //Campos que son de catalogo
         //type_id
-        $catalogues = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
-        Catalogue::factory()->sequence(
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+        Catalogue::factory(3)->sequence(
             [
-                'code' => $catalogues['attendance']['present'],
+                'code' => $catalogue['attendance']['present'],
                 'name' => 'PRESENT',
-                'type' => $catalogues['attendance']['type'],
+                'type' => $catalogue['attendance']['type'],
             ],
             [
-                'code' => $catalogues['attendance']['backwardness'],
+                'code' => $catalogue['attendance']['backwardness'],
                 'name' => 'BACKWARDNESS',
-                'type' => $catalogues['attendance']['type'],
+                'type' => $catalogue['attendance']['type'],
             ],
             [
-                'code' => $catalogues['attendance']['absent'],
+                'code' => $catalogue['attendance']['absent'],
                 'name' => 'ABSENT',
-                'type' => $catalogues['attendance']['type'],
+                'type' => $catalogue['attendance']['type'],
             ],
         )->create();
     }
