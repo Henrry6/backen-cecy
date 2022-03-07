@@ -4,9 +4,9 @@ namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Cecy\Attendances\GetAttendancesByParticipantRequest;
+use App\Http\Requests\V1\Cecy\Attendance\SaveDetailAttendanceRequest;
 use App\Http\Requests\V1\Cecy\Attendance\ShowAttendanceTeacherRequest;
 use App\Http\Requests\V1\Cecy\Attendance\StoreAttendanceRequest;
-use App\Http\Requests\V1\Cecy\Attendances\SaveDetailAttendanceRequest;
 use App\Http\Requests\V1\Cecy\Courses\GetCoursesByNameRequest;
 use App\Http\Requests\V1\Core\Images\UploadImageRequest;
 use App\Http\Resources\V1\Cecy\Attendances\AttendanceCollection;
@@ -59,57 +59,13 @@ class AttendanceController extends Controller
             ])
             ->response()->setStatusCode(200);
     }
-<<<<<<< HEAD
-      // AttendanceController
-      public function showPhotographicRecord(GetDetailPlanificationsByResponsibleCourseRequest $request, Course $course)
-      {
-          //trae el registro fotografico de un curso en especifico por el docente que se loguea
-
- 
-    /*       $planification = $course->planifications()->get();
-          $detailPlanification = $planification->detailPlanifications()->get();
-          $photograpicRecord = $detailPlanification->photograpicRecord()->get(); */
-
-
-          $data = new PhotographicRecordResource($course);
-          $pdf = PDF::loadView('reports/photographic-record', ['photograpicRecords'=>$data]);
-    
-          return $pdf->stream('Registro fotográfico.pdf');
-     
-       
-      }
-
-      public function showAttendenceEvaluationRecord(GetCoursesByNameRequest $request ,Course $course)
-      {
-         // trae la informacion de registro asistencia-evaluacion
-         $course = Course::where('course_id', $request->course()->id)->get();
-
-    $detailPlanifications = $course
-        ->detailPlanifications()
-        ->planifications()
-        ->course()
-        ->registration()
-        ->attendence()
-        ->paginate($request->input('per_page'));
-
-    return (new RegistrationRecordCompetitorResource($detailPlanifications))
-        ->additional([
-            'msg' => [
-                'summary' => 'success',
-                'detail' => '',
-                'code' => '200'
-            ]
-        ]);
-=======
     // AttendanceController
     public function showPhotographicRecord(GetDetailPlanificationsByResponsibleCourseRequest $request, Course $course)
     {
         //trae el registro fotografico de un curso en especifico por el docente que se loguea
 
 
-        $planification = $course->planifications()->get();
-        $detailPlanification = $planification->detailPlanifications()->get();
-        $photograpicRecord = $detailPlanification->photograpicRecord()->get();
+        $photograpicRecord = $course->planifications()->first();
 
 
         $data = new PhotographicRecordResource($photograpicRecord);
@@ -139,7 +95,6 @@ class AttendanceController extends Controller
                     'code' => '200'
                 ]
             ]);
->>>>>>> 3fdb918926582f594724dfb1c01e65910e78a40f
     }
     //ver todas las asistencias de un detalle planification
     // AttendanceController

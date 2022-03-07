@@ -37,11 +37,11 @@
 				</center>
 				<br><br> <br><br>
 				<div class="posiciones_01" style="top: 18.6243em; left:6.0125em;">
-					<span class="stl_15 stl_08" style="word-spacing:0.07em;">Nombre del Docente: {{$planification->user->name}}</span>
+					<span class="stl_15 stl_08" style="word-spacing:0.07em;">Nombre del Docente: {{$planification->responsibleCourse->fullname}}</span>
 				</div>
 				<br>
 				<div class="posiciones_01" style="top: 21.1243em; left:6.0125em;">
-					<span class="stl_15 stl_08" style="word-spacing:0.06em;">Nombre del Curso: </span>
+					<span class="stl_15 stl_08" style="word-spacing:0.06em;">Nombre del Curso: {{$planification->course->name}}</span>
 				</div>
 				<br>
 				@if($planification->course_type_id == 33)
@@ -97,16 +97,16 @@
 				</div>
 				<div class="posiciones_01" style="top: 46.7768em; left:6.0125em;">
 					<span class="stl_15 stl_08" style="word-spacing:0.06em;">
-					
-						<table border="1px">
+
+						<table class="table">
 							<tr>
 
-								<th width="350px" class="column-right">Horario Curso:</th>
-								<td width="350px" class="column-right"></td>
-								<th width="350px" class="column-right">a</th>
-								<td width="350px" class="column-right"></td>
-								<th width="350px" class="column-right">Días</th>
-								<td width="350px" class="column-right"></td>
+								<th width="350px" class="th">Horario Curso:</th>
+								<td width="350px" class="td"></td>
+								<th width="350px" class="td">a</th>
+								<td width="350px" class="td"></td>
+								<th width="350px" class="td">Días</th>
+								<td width="350px" class="td"></td>
 							</tr>
 						</table>
 					</span>
@@ -115,27 +115,29 @@
 				<div class="posiciones_01" style="top: 57.4368em; left:6.0125em;">
 					<span class="stl_15 stl_08" style="word-spacing:0.07em;">Participantes a ser inscritos: </span>
 				</div>
-
+				<div>
+					<span>
+						<table class="table">
+							<tr>
+								<th width="350px" class="th">77</th>
+							</tr>
+						</table>
+					</span>
+				</div>
 				<div class="posiciones_01" style="top: 60.0618em; left:6.0125em;">
 					<span class="stl_22 stl_08" style="word-spacing:0.05em;">Resumen del Curso y Posible Proyecto: </span>
 				</div>
-				<div class="posiciones_01" style="top: 60.147em; left:29.2em;">
-					<span class="stl_16 stl_08" style="word-spacing:0.06em;">El curso busca desarrollar las competencias necesarias en los </span>
-				</div>
-				<div class="posiciones_01" style="top: 61.4595em; left:6.0125em;">
-					<span class="stl_16 stl_08" style="word-spacing:0.08em;">profesionales interesados en ser Formador de Formadores, facilitando las perspectivas, herramientas y técnicas requeridas </span>
-				</div>
-				<div class="posiciones_01" style="top: 62.772em; left:6.0125em;">
-					<span class="stl_16 stl_08" style="word-spacing:0.05em;">Un instructor puede ser de la setec o docente de la senescyt'</span>
-				</div>
-				<div class="posiciones_01" style="top: 64.0845em; left:6.0125em;">
-					<span class="stl_16 stl_08" style="word-spacing:0.05em;">1. El aprendizaje y la formación en adultos </span>
-				</div>
-				<div class="posiciones_01" style="top: 65.397em; left:6.0125em;">
-					<span class="stl_16 stl_08" style="word-spacing:0.06em;">2. El contexto de la formación profesional </span>
-				</div>
-				<div class="posiciones_01" style="top: 66.7095em; left:6.0125em;">
-					<span class="stl_16 stl_08" style="word-spacing:0.06em;">3. El proceso de formación profesional </span>
+				<div class="posiciones_01" style="top: 46.7768em; left:6.0125em;">
+					<span class="stl_15 stl_08" style="word-spacing:0.06em;">
+
+
+						<table class="table">
+							<tr>
+								<th width="350px" class="th">sdfsdfsdf</th>
+							</tr>
+						</table>
+
+					</span>
 				</div>
 				<div class="posiciones_01" style="top: 73.1868em; left:6.0125em;">
 					<span class="stl_22 stl_08" style="word-spacing:0.05em;">Indicar a que población se encuentra dirigido el curso: </span>
@@ -146,87 +148,53 @@
 				<div class="posiciones_01" style="top: 74.5845em; left:6.0125em;">
 					<span class="stl_16 stl_08" style="word-spacing:0.07em;">expertos en diferentes áreas técnicas, tecnológicas y de especialización </span>
 				</div>
-				<div class="posiciones_01" style="top: 79.8345em; left:45.2em;">
-					<span class="stl_16 stl_10">26-feb-21</span>
+				<br><br>
+				<div style="float: left;">
+					<h4>.........................................................................<br>
+						REPRESENTANTE DEL OCS</h4>
+					<br><br>
+					<h4>.........................................................................<br>
+						VICERRECTOR </h4>
 				</div>
-				<div class="posiciones_01" style="top: 81.0618em; left:9.7em;">
-					<span class="stl_22 stl_08" style="word-spacing:0.02em;">REPRESENTANTE DEL OCS </span>
+				<div style="float: right;">
+					<h4>.........................................................................<br>
+						FECHA</h4>
+					<br><br>
+					<h4>.........................................................................<br>
+						FECHA </h4>
 				</div>
-				<div class="posiciones_01" style="top: 81.0618em; left:45.3875em;">
-					<span class="stl_22 stl_10">FECHA</span>
-				</div>
-				<div class="posiciones_01" style="top: 86.397em; left:45.2em;">
-					<span class="stl_16 stl_10">26-feb-21</span>
-				</div>
-				<div class="posiciones_01" style="top: 87.6243em; left:12.3875em;">
-					<span class="stl_22 stl_08">VICERRECTOR</span>
-				</div>
-				<div class="posiciones_01" style="top: 87.6243em; left:45.3875em;">
-					<span class="stl_22 stl_10">FECHA</span>
-				</div>
-				<div class="posiciones_01" style="top: 93.7688em; left:6.2em;">
-					<span class="stl_17" style="word-spacing:0em;">Nota</span>
-					<span class="stl_09 stl_08" style="word-spacing:0.05em;">: Documento que deberá ser aprobado por parte del Organo Colegiado Superior (OCS) y del Vicerrector del Instituto, tal como lo </span>
-				</div>
-				<div class="posiciones_01" style="top: 94.7031em; left:6.2em;">
-					<span class="stl_09 stl_08" style="word-spacing:0.05em;">indica la normativa y el Acuerdo 118 (Instructivo de Capacitación</span>
-				</div>
-				<div class="posiciones_01" style="top: 95.6374em; left:9.0125em;">
-					<span class="stl_09 stl_08" style="word-spacing:0.06em;">que sea un registro digital, se adjuntan las firmas de responsabilidad como fotografìas en las celdas correspondientes </span>
+				<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+				<div style="border: 1px solid black;">
+					<p>Nota:</p>
+					<p>Documento que deberá ser aprobado por parte del Organo Colegiado Superior (OCS) y del Vicerrector del Instituto, tal como lo indica la normativa y el Acuerdo 118 (Instructivo de Capacitación - Certificación por Competencias Laborales SENESCYT), en el caso que sea un registro digital, se adjuntan las firmas de responsabilidad como fotografìas en las celdas correspondientes.</p>
 				</div>
 			</div>
+			<br><br><br>
+
+
 		</div>
 	</div>
 	<STYLE>
-		/* 		sup {
-			top: -0.4em;
-			vertical-align: baseline;
-			position: relative;
+		.table,
+		.th,
+		.td {
+			border: 1px solid black;
+			border-collapse: collapse;
+			width: 80%;
+			height: 30px;
+
 		}
 
-		sub {
-			top: 0.4em;
-			vertical-align: baseline;
-			position: relative;
+		div2 {
+			float: left;
+			height: 100%;
+			margin-left: 70px;
 		}
 
-		.posiciones_01 {
-			position: absolute;
-			white-space: nowrap;
+		div1 {
+			float: left;
+			height: 100%
 		}
-
-		.pociciones_recuadros {
-			height: 108.5833em;
-			font-size: 1em;
-			margin: 0em;
-			line-height: 0.0em;
-			display: block;
-			border-style: none;
-			width: 61.41667em;
-		}
-
-		.stl_03 {
-			position: relative;
-		}
-
-		.stl_04 {
-			width: 100%;
-			position: absolute;
-			pointer-events: none;
-		}
-
-		.stl_05 {
-			position: relative;
-			width: 61.41667em;
-		}
-
-		.stl_06 {
-			height: 10.85833em;
-		}
-
-		.ie .stl_06 {
-			height: 108.5833em;
-		} */
 
 		.stl_07 {
 			font-size: 0.81em;

@@ -28,11 +28,8 @@ use App\Http\Resources\V1\Cecy\Planifications\InformCourseNeedsResource;
 use App\Http\Resources\V1\Cecy\Courses\CoursesByResponsibleCollection;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationCollection;
 use App\Http\Resources\V1\Cecy\Certificates\CertificateResource;
-<<<<<<< HEAD
 use App\Http\Resources\V1\Cecy\Planifications\InformCourseNeedsCollection;
-=======
-use App\Http\Resources\V1\Cecy\Courses\CoordinatorCecy\CourseByCoordinatorCecyCollection;
->>>>>>> 2e979b9a22cf81689c083221f8ea731927cf8b46
+use App\Http\Resources\V1\Cecy\Planifications\ResponsibleCoursePlanifications\PlanificationByCourseResource;
 use App\Models\Cecy\Instructor;
 use App\Models\Cecy\Participant;
 use App\Models\Cecy\Planification;
@@ -375,7 +372,7 @@ class CourseController extends Controller
 
         $planification = $course->planifications()->first();
 
-     $data= new InformCourseNeedsResource($planification);
+     $data= new PlanificationByCourseResource($planification);
         $pdf = PDF::loadView('reports/report-needs', ['planification' => $data]);
 
         return $pdf->stream('informNeeds.pdf'); 
@@ -384,28 +381,21 @@ class CourseController extends Controller
     //Traer todos los cursos planificados de un año en especifico (Done)
     // el que hizo esto debe enviar el año en especifico bien por el url 
     // o por params
-    public function showYearSchedule(GetDateByshowYearScheduleRequest $request)
+    public function showYearSchedule(Planification $planificacion)
     {
-        return "showYearSchedule";
-        $year = Planification::whereYear('started_at', $request->input('startedAt'))->get();
+/*         $year = $planificacion->whereYear('started_at')->first();
 
-        $planificacion = $year
-            ->instructors()
-            ->detailPlanifications()
-            ->classrooms()
-            ->planifications()
-            ->courses()
-            ->paginate($request->input('per_page'));
+        $planificacion = $year;
 
-        return (new DetailPlanificationInformNeedResource($planificacion))
-            ->additional([
-                'msg' => [
-                    'summary' => 'success',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ])
-            ->response()->setStatusCode(200);
+
+        return new DetailPlanificationInformNeedResource($planificacion); */
+        $pdf = PDF::loadView('reports/report-year-schedule');
+        $pdf->setOptions([
+            'orientation' => 'landscape',
+            'page-size' => 'a4'
+        ]);
+        return $pdf->stream('informNeeds.pdf'); 
+  
     }
 
     //Traer la informacion de diseño curricular (Done)
