@@ -31,15 +31,16 @@ class AttendancesSeeder extends Seeder
         $detailPlanifications = DetailPlanification::get();
 
         foreach ($detailPlanifications as $detailPlanification) {
-            for ($i = 1; $i < 30; $i++) {
+            for ($i = 1; $i <= 30; $i++) {
                 Attendance::factory()->create(
                     [
                         'detail_planification_id' => $detailPlanification,
                         'duration' =>  $faker->numberBetween(60, 120),
-                        'registered_at' => $faker->dateTimeBetween('now', '+30 days')
+                        'registered_at' => "2022-03-{$i}"
                     ]
                 );
             }
+            // $faker->dateTimeBetween('now', '+30 days')
         }
     }
 }

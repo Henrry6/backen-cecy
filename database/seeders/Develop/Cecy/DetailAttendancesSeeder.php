@@ -52,7 +52,9 @@ class DetailAttendancesSeeder extends Seeder
         $faker = Factory::create();
         $attendances  = Attendance::get();
         foreach ($attendances as $attendance) {
-            if ($attendance->registered_at >= date('y-m-d')) {
+            $attendanceDate = strtotime($attendance->registered_at);
+            $dateNow = strtotime(date('y-m-d'));
+            if ($attendanceDate >= $dateNow) {
                 DetailAttendance::factory()->create(
                     [
                         'attendance_id' => $attendance,
