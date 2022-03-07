@@ -54,24 +54,26 @@ class DetailAttendancesSeeder extends Seeder
         foreach ($attendances as $attendance) {
             $attendanceDate = strtotime($attendance->registered_at);
             $dateNow = strtotime(date('y-m-d'));
-            // $registrationsByDetailPlanification = Registration::where('detail_planification_id', $attendance->detail_planification_id)->get();
-            // foreach ($registrationsByDetailPlanification as $registrationByDetPlan) {
-            if ($attendanceDate >= $dateNow) {
-                DetailAttendance::factory()->create(
-                    [
-                        'attendance_id' => $attendance,
-                        'type_id' => null
-                    ]
-                );
-            } else {
-                DetailAttendance::factory()->create(
-                    [
-                        'attendance_id' => $attendance,
-                        'type_id' => $faker->randomElement($types)
-                    ]
-                );
+            $registrationsByDetailPlanification = Registration::where('detail_planification_id', $attendance->detail_planification_id)->get();
+            foreach ($registrationsByDetailPlanification as $registrationByDetPlan) {
+                if ($attendanceDate >= $dateNow) {
+                    DetailAttendance::factory()->create(
+                        [
+                            'attendance_id' => $attendance,
+                            'registration_id' => $registrationByDetPlan,
+                            'type_id' => null
+                        ]
+                    );
+                } else {
+                    DetailAttendance::factory()->create(
+                        [
+                            'attendance_id' => $attendance,
+                            'registration_id' => $registrationByDetPlan,
+                            'type_id' => $faker->randomElement($types)
+                        ]
+                    );
+                }
             }
-            // }
         }
     }
 }

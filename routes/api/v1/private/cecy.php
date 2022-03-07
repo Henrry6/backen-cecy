@@ -184,6 +184,8 @@ Route::get('/inform', function () {
 Route::prefix('detailAttendance')->group(function () {
     Route::get('participant/{registration}', [DetailAttendanceController::class, 'showAttedanceParticipant']);
     Route::patch('/{detailAttendance}', [DetailAttendanceController::class, 'updatDetailAttendanceTeacher']);
+    Route::get('/{detail_planification}', [DetailAttendanceController::class, 'getDetailAttendancesByParticipant']);
+    Route::get('/current-date/{detail_planification}', [DetailAttendanceController::class, 'getCurrentDateDetailAttendance']);
 });
 
 Route::prefix('detailAttendance/{detailAttendance}')->group(function () {
@@ -191,6 +193,8 @@ Route::prefix('detailAttendance/{detailAttendance}')->group(function () {
         Route::patch('save-detail-attendance', [DetailAttendanceController::class, 'saveDetailAttendance']);
     });
 });
+
+
 /***********************************************************************************************************************
  * CERTIFICATES
  **********************************************************************************************************************/
@@ -310,8 +314,6 @@ Route::apiResource('attendances', AttendanceController::class);
 
 Route::prefix('attendance')->group(function () {
     Route::get('detail/{detailPlanification}', [AttendanceController::class, 'getAttendancesByDetailPlanification']);
-  
-
 });
 
 Route::prefix('pdf')->group(function () {
@@ -355,7 +357,4 @@ Route::prefix('registration')->group(function () {
     Route::get('download-file-grades', [RegistrationController::class, 'downloadFileGrades']);
     Route::get('show-file', [RegistrationController::class, 'showFile']);
     Route::patch('destroy-file', [RegistrationController::class, 'destroyFile']);
-});
-Route::prefix('attendances')->group(function () {
-    Route::get('detail-attendances/{detail_planification}', [AttendanceController::class, 'getAttendancesByParticipant']);
 });
