@@ -54,6 +54,8 @@ class DetailAttendancesSeeder extends Seeder
         foreach ($attendances as $attendance) {
             $attendanceDate = strtotime($attendance->registered_at);
             $dateNow = strtotime(date('y-m-d'));
+            // $registrationsByDetailPlanification = Registration::where('detail_planification_id', $attendance->detail_planification_id)->get();
+            // foreach ($registrationsByDetailPlanification as $registrationByDetPlan) {
             if ($attendanceDate >= $dateNow) {
                 DetailAttendance::factory()->create(
                     [
@@ -69,6 +71,7 @@ class DetailAttendancesSeeder extends Seeder
                     ]
                 );
             }
+            // }
         }
     }
 }
