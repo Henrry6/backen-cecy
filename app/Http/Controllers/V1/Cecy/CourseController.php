@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\V1\Cecy\Courses\CoordinatorCecy\GetCoursesByCoordinatorCecyRequest as CoordinatorCecyGetCoursesByCoordinatorCecyRequest;
+use App\Http\Requests\V1\Cecy\Courses\CoordinatorCecy\GetCoursesByCoordinatorCecyRequest;
 use App\Http\Requests\V1\Cecy\Courses\GetCoursesByCategoryRequest;
 use App\Http\Requests\V1\Cecy\Courses\GetCoursesByNameRequest;
 use App\Http\Requests\V1\Cecy\Courses\getCoursesByResponsibleRequest;
@@ -23,13 +23,12 @@ use App\Http\Requests\V1\Cecy\Courses\UploadCertificateOfApprovalRequest;
 use App\Http\Requests\V1\Cecy\Planifications\GetDateByshowYearScheduleRequest;
 use App\Http\Requests\V1\Cecy\Planifications\IndexPlanificationRequest;
 use App\Http\Requests\V1\Core\Images\UploadImageRequest;
-use App\Http\Resources\V1\Cecy\Courses\CourseByCoordinatorCecyCollection;
-use App\Http\Resources\V1\Cecy\Courses\CoursePublicPrivateCollection;
 use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationInformNeedResource;
 use App\Http\Resources\V1\Cecy\Planifications\InformCourseNeedsResource;
 use App\Http\Resources\V1\Cecy\Courses\CoursesByResponsibleCollection;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationCollection;
 use App\Http\Resources\V1\Cecy\Certificates\CertificateResource;
+use App\Http\Resources\V1\Cecy\Courses\CoordinatorCecy\CourseByCoordinatorCecyCollection;
 use App\Models\Cecy\Instructor;
 use App\Models\Cecy\Participant;
 use App\Models\Cecy\Planification;
@@ -292,10 +291,8 @@ class CourseController extends Controller
 
     //Obtener cursos y Filtrarlos por peridos lectivos , carrera o estado (Done)
     //el que hizo esto debe cambiar lo que se envia por json a algo que se envia por params
-    public function getCoursesByCoordinator(CoordinatorCecyGetCoursesByCoordinatorCecyRequest $request)
+    public function getCoursesByCoordinator(GetCoursesByCoordinatorCecyRequest $request)
     {
-
-        return "getCoursesByCoordinator";
         $sorts = explode(',', $request->sort);
 
         $courses = Course::customOrderBy($sorts)
@@ -307,12 +304,11 @@ class CourseController extends Controller
         return (new CourseByCoordinatorCecyCollection($courses))
             ->additional([
                 'msg' => [
-                    'summary' => '',
+                    'summary' => 'Consulta exitosa',
                     'detail' => '',
                     'code' => '200'
                 ]
-            ])
-            ->response()->setStatusCode(200);
+            ])->response()->setStatusCode(200);
     }
 
     //Mostrar los KPI de cursos aprobados, por aprobar y en proceso (Done)

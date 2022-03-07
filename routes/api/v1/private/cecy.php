@@ -69,7 +69,6 @@ Route::prefix('planification')->group(function () {
     Route::get('planifications-period-state', [PlanificationController::class, 'getPlanificationsByPeriodState']);
     Route::get('by-detail-planification', [PlanificationController::class, 'getPlanificationsByDetailPlanification']);
     Route::get('course_parallels-works', [PlanificationController::class, 'getCoursesParallelsWorkdays']);
-    Route::get('{course}', [PlanificationController::class, 'getPlanificationsByCourse']);
     Route::get('planfications-course/{course}', [PlanificationController::class, 'getPlanificationsByCourse']);
     Route::get('kpis/{state}', [PlanificationController::class, 'getKpi']);
 });
@@ -118,7 +117,7 @@ Route::prefix('courses')->group(function () {
     Route::get('private-courses-category/{category}', [CourseController::class, 'getPrivateCoursesByParticipantTypeAndCategory']);
     Route::get('by-responsible', [CourseController::class, 'getCoursesByResponsibleCourse']);
     Route::get('by-instructor/{instructor}', [CourseController::class, 'getCoursesByInstructor']);
-    Route::get('by-coodinator/{coodinator}', [CourseController::class, 'getCoursesByCoordinator']);
+    Route::get('by-coodinator', [CourseController::class, 'getCoursesByCoordinator']);
     Route::get('kpi', [CourseController::class, 'getCoursesKPI']);
     Route::get('year-schedule', [CourseController::class, 'showYearSchedule']);
     Route::get('career/{career}', [CourseController::class, 'getCoursesByCareer']);
