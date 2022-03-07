@@ -199,24 +199,13 @@ Route::prefix('detailAttendance/{detailAttendance}')->group(function () {
  * CERTIFICATES
  **********************************************************************************************************************/
 Route::prefix('certificate')->group(function () {
-    Route::get('students', [CourseController::class, 'getResponsibleCecyByCourses']);
     Route::get('pdf-students', [CertificateController::class, 'generatePdf']);
-    Route::get('pdf-instructor', [CertificateController::class, 'generatePdfInstructor']);
+    Route::get('pdf-instructors', [CertificateController::class, 'generatePdfInstructor']);
     Route::post('registration/{registration}/catalogue/{catalogue}/file/{file}', [CertificateController::class, 'downloadCertificateByParticipant']);
     Route::get('catalogue/{catalogue}/file/{file}', [CertificateController::class, 'downloadFileCertificates']);
     Route::post('catalogue/{catalogue}', [CertificateController::class, 'uploadFileCertificate']);
     Route::post('firm/catalogue/{catalogue}', [CertificateController::class, 'uploadFileCertificateFirm']);
 });
-
-// Route::get('/certificate-student', function () {
-// $pdf = PDF::loadView('reports/certificate-student');
-// $pdf->setOptions([
-//     'orientation' => 'landscape',
-//     'page-size' => 'a4'
-// ]);
-
-// return $pdf->inline('Certificado.pdf');
-// });
 
 /***********************************************************************************************************************
  * SCHOOL PERIODS
