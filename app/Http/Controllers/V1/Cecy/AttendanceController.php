@@ -35,7 +35,7 @@ class AttendanceController extends Controller
         return (new GetAttendanceByParticipantCollection($attendances))
             ->additional([
                 'msg' => [
-                    'sumary' => 'consulta exitosa 1',
+                    'sumary' => 'consulta zexitosa 1',
                     'detail' => '',
                     'code' => '200'
                 ]

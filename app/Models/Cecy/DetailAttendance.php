@@ -23,7 +23,7 @@ class DetailAttendance extends Model implements Auditable
     {
         return $this->belongsTo(Attendance::class);
     }
-    public function catalogue()
+    public function type()
     {
         return $this->belongsTo(Catalogue::class);
     }
