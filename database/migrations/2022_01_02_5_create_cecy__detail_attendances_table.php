@@ -17,8 +17,8 @@ class CreateCecyDetailAttendancesTable extends Migration
                 ->nullable()
                 ->constrained('cecy.attendances');
 
-            $table->foreignId('registration_id')
-                ->constrained('cecy.registrations');
+            // $table->foreignId('registration_id')
+            //     ->constrained('cecy.registrations');
 
             $table->foreignId('type_id')
                 ->nullable()
