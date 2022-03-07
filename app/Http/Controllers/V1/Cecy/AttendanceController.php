@@ -4,9 +4,9 @@ namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Cecy\Attendances\GetAttendancesByParticipantRequest;
+use App\Http\Requests\V1\Cecy\Attendance\SaveDetailAttendanceRequest;
 use App\Http\Requests\V1\Cecy\Attendance\ShowAttendanceTeacherRequest;
 use App\Http\Requests\V1\Cecy\Attendance\StoreAttendanceRequest;
-use App\Http\Requests\V1\Cecy\Attendances\SaveDetailAttendanceRequest;
 use App\Http\Requests\V1\Cecy\Courses\GetCoursesByNameRequest;
 use App\Http\Requests\V1\Core\Images\UploadImageRequest;
 use App\Http\Resources\V1\Cecy\Attendances\AttendanceCollection;
@@ -65,9 +65,7 @@ class AttendanceController extends Controller
         //trae el registro fotografico de un curso en especifico por el docente que se loguea
 
 
-        $planification = $course->planifications()->get();
-        $detailPlanification = $planification->detailPlanifications()->get();
-        $photograpicRecord = $detailPlanification->photograpicRecord()->get();
+        $photograpicRecord = $course->planifications()->first();
 
 
         $data = new PhotographicRecordResource($photograpicRecord);

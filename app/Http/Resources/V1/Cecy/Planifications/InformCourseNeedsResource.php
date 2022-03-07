@@ -12,10 +12,12 @@ use App\Models\Cecy\Course;
 use App\Models\Cecy\Planification;
 use Illuminate\Http\Resources\Json\JsonResource;
 // use Illuminate\Http\Re
-
 class InformCourseNeedsResource extends JsonResource
 {
+    public static $wrap = null;
+
     public function toArray($request)
+    
     {
 /*         $course = Course::find($this->id);
         $planification = $course->planifications()
