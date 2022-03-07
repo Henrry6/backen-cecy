@@ -6,6 +6,7 @@ use App\Models\Cecy\Attendance;
 use App\Models\Cecy\Catalogue;
 use App\Models\Cecy\DetailAttendance;
 use App\Models\Cecy\Registration;
+use Faker\Factory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -47,6 +48,30 @@ class DetailAttendancesSeeder extends Seeder
     }
     public function createDetailAttendances()
     {
-        DetailAttendance::factory(100)->create();
+        $types = Catalogue::where('type', 'ATTENDANCE')->get();
+        $faker = Factory::create();
+        $attendances  = Attendance::get();
+        foreach ($attendances as $attendance) {
+            $attendanceDate = strtotime($attendance->registered_at);
+            $dateNow = strtotime(date('y-m-d'));
+            // $registrationsByDetailPlanification = Registration::where('detail_planification_id', $attendance->detail_planification_id)->get();
+            // foreach ($registrationsByDetailPlanification as $registrationByDetPlan) {
+            if ($attendanceDate >= $dateNow) {
+                DetailAttendance::factory()->create(
+                    [
+                        'attendance_id' => $attendance,
+                        'type_id' => null
+                    ]
+                );
+            } else {
+                DetailAttendance::factory()->create(
+                    [
+                        'attendance_id' => $attendance,
+                        'type_id' => $faker->randomElement($types)
+                    ]
+                );
+            }
+            // }
+        }
     }
 }

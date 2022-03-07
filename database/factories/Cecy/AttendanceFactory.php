@@ -22,12 +22,6 @@ class AttendanceFactory extends Factory
      */
     public function definition()
     {
-        //$detail = DetailPlanification::where('state_id','APPROVED')->value('id');
-        $detail = DetailPlanification::get();
-        return [
-            'detail_planification_id' => $detail[rand(0, sizeof($detail) - 1)],
-            'duration' => $this->faker->randomElement(['120', '60']),
-            'registered_at' => $this->faker->date(),
-        ];
+        return [];
     }
 }

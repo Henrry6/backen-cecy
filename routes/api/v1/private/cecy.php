@@ -186,6 +186,11 @@ Route::prefix('detailAttendance')->group(function () {
     Route::patch('/{detailAttendance}', [DetailAttendanceController::class, 'updatDetailAttendanceTeacher']);
 });
 
+Route::prefix('detailAttendance/{detailAttendance}')->group(function () {
+    Route::prefix('')->group(function () {
+        Route::patch('save-detail-attendance', [DetailAttendanceController::class, 'saveDetailAttendance']);
+    });
+});
 /***********************************************************************************************************************
  * CERTIFICATES
  **********************************************************************************************************************/

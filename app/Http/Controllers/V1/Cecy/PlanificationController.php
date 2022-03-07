@@ -84,7 +84,6 @@ class PlanificationController extends Controller
     /**
      * Update start_at and ended_at and needs in planification
      */
-    // PlanificationController ya esta
     public function updateDatesAndNeedsInPlanification(UpdateDatesinPlanificationRequest $request, Planification $planification)
     {
         $planification->started_at = $request->input('startedAt');
@@ -101,35 +100,6 @@ class PlanificationController extends Controller
                 ]
             ])
             ->response()->setStatusCode(200);
-    }
-
-
-
-    /**
-     * KPI of planifications
-     */
-    // PlanificationController ya esta, no trae la informacion .
-    public function getKpi(ShowKpiRequest $request, Catalogue $state)
-    {
-
-        // $planifications = Planification::withCount([
-        //     'id' => function (Builder $query) {
-        //         $query->where(
-        //             'state_id',
-        //             $state->id
-        //         );
-        //     },
-        // ])->get();
-
-        //     return (new KpiPlanificationResourse($planifications[0]))
-        //         ->additional([
-        //             'msg' => [
-        //                 'summary' => 'success',
-        //                 'detail' => '',
-        //                 'code' => '200'
-        //             ]
-        //         ])
-        //         ->response()->setStatusCode(200);
     }
 
     //Trae todos los cursos

@@ -29,13 +29,13 @@ class AttendanceController extends Controller
     public function getAttendancesByParticipant(GetAttendancesByParticipantRequest $request, DetailPlanification $detailPlanification)
     {
         //dd($registration->detailPlanification->attendances);
-        $attendances = $detailPlanification->attendances()->get();
-        //->paginate($request->input('per_page'));
+        $attendances = $detailPlanification->attendances()
+            ->paginate($request->input('per_page'));
 
         return (new GetAttendanceByParticipantCollection($attendances))
             ->additional([
                 'msg' => [
-                    'sumary' => 'consulta exitosa 1',
+                    'sumary' => 'consulta zexitosa 1',
                     'detail' => '',
                     'code' => '200'
                 ]
