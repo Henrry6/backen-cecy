@@ -389,7 +389,7 @@ class CourseController extends Controller
         $classrooms = $planification->detailPlanifications()->with('classroom')->get();
         
         $pdf = PDF::loadView('reports/report-needs', [
-            'responsibleCourse' => $planification,
+            'planification' => $planification,
             'course' => $course,
             'days' => $days,
             'classrooms' => $classrooms,

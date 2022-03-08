@@ -207,10 +207,12 @@
 		.td {
 			border: 1px solid black;
 			border-collapse: collapse;
-
+			width: 50%;
 			height: 30px;
 
 		}
+	
+ 
 
 		div2 {
 			float: left;
