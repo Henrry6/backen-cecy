@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\V1\Cecy\Attendances;
 
+use App\Http\Resources\V1\Cecy\DetailAttendances\DetailAttendanceDateResource;
 use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 

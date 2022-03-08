@@ -4,9 +4,14 @@ namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Cecy\Attendances\SaveDetailAttendanceRequest;
+use App\Http\Requests\V1\Cecy\DetailAttendance\GetDetailAttendancesByParticipantRequest;
 use App\Http\Resources\V1\Cecy\Attendances\AttendanceResource;
 use App\Http\Resources\V1\Cecy\Attendances\SaveDetailAttendanceResource;
+use App\Http\Resources\V1\Cecy\DetailAttendances\DetailAttendanceCollection;
+use App\Models\Cecy\Attendance;
 use App\Models\Cecy\DetailAttendance;
+use App\Models\Cecy\DetailPlanification;
+use App\Models\Cecy\Participant;
 use App\Models\Cecy\Registration;
 
 class DetailAttendanceController extends Controller
@@ -37,6 +42,65 @@ class DetailAttendanceController extends Controller
             ->additional([
                 'msg' => [
                     'sumary' => $detailAttendance,
+                    'detail' => 'Asistencia guardada correctamente',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
+
+    public function getDetailAttendancesByParticipantWithOutPaginate(GetDetailAttendancesByParticipantRequest $request, DetailPlanification $detailPlanification)
+    {
+
+        $sorts = explode(',', $request->input('sort'));
+
+        $participant = Participant::where('user_id', $request->user()->id)->first();
+
+        $registration = Registration::where(
+            [
+                'detail_planification_id' => $detailPlanification->id,
+                'participant_id' => $participant->id
+            ]
+        )->first();
+
+        $detailAttendances = DetailAttendance::customOrderBy($sorts)
+            ->registration($registration)
+            ->get();
+
+
+        return (new DetailAttendanceCollection($detailAttendances))
+            ->additional([
+                'msg' => [
+                    'sumary' => 'consulta exitosa',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
+    public function getDetailAttendancesByParticipant(GetDetailAttendancesByParticipantRequest $request, DetailPlanification $detailPlanification)
+    {
+
+        $sorts = explode(',', $request->input('sort'));
+
+        $participant = Participant::where('user_id', $request->user()->id)->first();
+
+        $registration = Registration::where(
+            [
+                'detail_planification_id' => $detailPlanification->id,
+                'participant_id' => $participant->id
+            ]
+        )->first();
+
+        $detailAttendances = DetailAttendance::customOrderBy($sorts)
+            ->registration($registration)
+            ->paginate($request->input('per_page'));
+
+
+        return (new DetailAttendanceCollection($detailAttendances))
+            ->additional([
+                'msg' => [
+                    'sumary' => 'consulta exitosa',
                     'detail' => '',
                     'code' => '200'
                 ]
@@ -44,23 +108,26 @@ class DetailAttendanceController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    //editar o actualizar una asistencia
-    // DetailAttendanceController
-    // public function updatDetailAttendanceTeacher(UpdateDetailAttendanceRequest $request)
-    // {
-    //     $detailAttendance->type_id = $request->input('type.id');
+    public function getCurrentDateDetailAttendance(GetDetailAttendancesByParticipantRequest $request, DetailPlanification $detailPlanification)
+    {
 
-    //     $detailAttendance->save();
+        $dateToday = Date('Y-m-d');
 
-    //     return (new DetailAttendanceResource($detailAttendance))
-    //         ->additional([
-    //             'msg' => [
-    //                 'summary' => 'Registro actualizado',
-    //                 'detail' => '',
-    //                 'code' => '200'
-    //             ]
-    //         ])
-    //         ->response()->setStatusCode(200);
+        $attendance = Attendance::where(
+            [
+                'detail_planification_id' => $detailPlanification->id,
+                'registered_at' => $dateToday
+            ]
+        )->first();
 
-    // }
+        return (new AttendanceResource($attendance))
+            ->additional([
+                'msg' => [
+                    'sumary' => 'consulta exitosa',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
 }
