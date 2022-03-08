@@ -80,6 +80,8 @@ Route::prefix('planification/{planification}')->group(function () {
     Route::put('planifications-cecy', [PlanificationController::class, 'updatePlanificationByCecy']);
     Route::put('assign-code-planification', [PlanificationController::class, 'assignCodeToPlanification']);
     Route::put('approve-planification', [PlanificationController::class, 'approvePlanification']);
+    Route::get('/curricular-design', [PlanificationController::class, 'curricularDesign']);
+
 });
 
 
@@ -156,7 +158,6 @@ Route::prefix('courses/{course}')->group(function () {
         Route::patch('/assign-code', [CourseController::class, 'assignCodeToCourse']);
         Route::patch('/not-approve-reason', [CourseController::class, 'notApproveCourseReason']);
         Route::get('/inform-course-needs', [CourseController::class, 'informCourseNeeds']);
-        Route::get('/curricular-design', [CourseController::class, 'showCurricularDesign']);
         Route::get('/final-report', [CourseController::class, 'showCourseFinalReport']);
         // Route::get('inform-course-needs/{course}', 'App\Http\Controllers\V1\Cecy\CourseController@informCourseNeeds');
     });
