@@ -231,6 +231,7 @@ Route::prefix('classroom')->group(function () {
 /***********************************************************************************************************************
  * INSTRUCTORS
  **********************************************************************************************************************/
+Route::apiResource('instructors', InstructorController::class);
 
 Route::prefix('instructor')->group(function () {
     Route::post('create', [InstructorController::class, 'storeInstructor']);
