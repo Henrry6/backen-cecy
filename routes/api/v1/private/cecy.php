@@ -259,6 +259,7 @@ Route::prefix('registration')->group(function () {
     Route::get('participant/{detailPlanification}', [RegistrationController::class, 'getParticipant']);
     Route::patch('nullify-registration', [RegistrationController::class, 'nullifyRegistration']);
     Route::patch('nullify-registrations', [RegistrationController::class, 'nullifyRegistrations']);
+    Route::patch('participant-grades/{registration}', [RegistrationController::class, 'updateGradesParticipant']);
 });
 /***********************************************************************************************************************
  * PARTICIPANTS

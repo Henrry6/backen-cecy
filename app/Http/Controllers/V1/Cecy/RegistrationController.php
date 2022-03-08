@@ -27,6 +27,7 @@ use App\Models\Cecy\Registration;
 use App\Models\Core\Catalogue as CoreCatalogue;
 use App\Models\Core\File;
 use http\Env\Request;
+use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\DB;
 
 class RegistrationController extends Controller
@@ -282,5 +283,21 @@ class RegistrationController extends Controller
         $additionalInformation->course_follows = $request->input('courseFollows');
 
         return $additionalInformation;
+    }
+
+    public function updateGradesParticipant(HttpRequest $request, Registration $registration)
+    {
+        $registration->grade1 = $request->input('grade1');
+        $registration->grade2 = $request->input('grade2');
+        $registration->final_grade = $request->input('final_grade');
+        $registration->save();
+        return (new RegistrationResource($registration))
+            ->additional([
+                'msg' => [
+                    'summary' => 'registro Actualizado',
+                    'Institution' => '',
+                    'code' => '200'
+                ]
+            ]);
     }
 }
