@@ -20,9 +20,7 @@ use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 use App\Http\Controllers\V1\Cecy\RegistrationController;
 use App\Http\Controllers\V1\Cecy\CertificateController;
 use App\Http\Controllers\V1\Cecy\AttendanceController;
-
-
-
+use App\Http\Controllers\V1\Cecy\ParticipantController;
 
 /***********************************************************************************************************************
  * CATALOGUES
@@ -80,6 +78,8 @@ Route::prefix('planification/{planification}')->group(function () {
     Route::put('planifications-cecy', [PlanificationController::class, 'updatePlanificationByCecy']);
     Route::put('assign-code-planification', [PlanificationController::class, 'assignCodeToPlanification']);
     Route::put('approve-planification', [PlanificationController::class, 'approvePlanification']);
+    Route::get('/curricular-design', [PlanificationController::class, 'curricularDesign']);
+
 });
 
 
@@ -156,7 +156,6 @@ Route::prefix('courses/{course}')->group(function () {
         Route::patch('/assign-code', [CourseController::class, 'assignCodeToCourse']);
         Route::patch('/not-approve-reason', [CourseController::class, 'notApproveCourseReason']);
         Route::get('/inform-course-needs', [CourseController::class, 'informCourseNeeds']);
-        Route::get('/curricular-design', [CourseController::class, 'showCurricularDesign']);
         Route::get('/final-report', [CourseController::class, 'showCourseFinalReport']);
         // Route::get('inform-course-needs/{course}', 'App\Http\Controllers\V1\Cecy\CourseController@informCourseNeeds');
     });
@@ -257,7 +256,7 @@ Route::prefix('registration')->group(function () {
  **********************************************************************************************************************/
 
 Route::prefix('participant')->group(function () {
-    Route::put('update-registration/{registration}', [ParticipantController::class, 'updateParticipantRegistration']);
+    Route::put('update-registration/{registration}', [ParticipantController::class, 'participantRegistrationStateModification']);
     Route::get('detail-planification/{detailPlanification}', [ParticipantController::class, 'getParticipantsByPlanification']);
     Route::get('information/{registration}', [ParticipantController::class, 'getParticipantInformation']);
     Route::patch('participant-registration/{registration}', [ParticipantController::class, 'registerParticipant']);
@@ -342,7 +341,7 @@ Route::prefix('registration')->group(function () {
     Route::get('show-participants', [RegistrationController::class, 'showParticipants']);
     Route::get('download-file', [RegistrationController::class, 'downloadFile']);
     Route::post('nullify-registrations', [RegistrationController::class, 'nullifyRegistrations']);
-    Route::patch('nullify-registration', [RegistrationController::class, 'nullifyRegistration']);
+    Route::patch('nullify-registration/{registration}', [RegistrationController::class, 'nullifyRegistration']);
     Route::get('show-record-competitor', [RegistrationController::class, 'showRecordCompetitor']);
     Route::patch('show-participant-grades', [RegistrationController::class, 'ShowParticipantGrades']);
     Route::put('upload-file', [RegistrationController::class, 'uploadFile']);
