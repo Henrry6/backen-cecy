@@ -29,6 +29,8 @@ use App\Models\Core\File;
 use http\Env\Request;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
+
 
 class RegistrationController extends Controller
 {
@@ -163,35 +165,24 @@ class RegistrationController extends Controller
     public function showRecordCompetitor(GetCoursesByNameRequest $request, Course $course)
     {
         //trae todos los participantes registrados de un curso en especifico
-        $planification = $course->planifications()->get();
+/*         $planification = $course->planifications()->get();
         $detailPlanification = $planification->detailPlanifications()->get();
         $registrations = $detailPlanification->registrations()->get();
-        /*        $aditionalInformation= $registrations->aditionalInformations()->get();
-                  $participant = $aditionalInformation->registrations()->get()
-                  ->participants()
-                  ->users();
-           */
-        /*  $Course = Planification::where('course_id', $request->course()->id)->get(); */
+        $planification = $course->planifications()->with('responsibleCourse.user')->first();
 
-        /*         $registration = $registrations
-                       ->planifications()
-                       ->detailPlanifications()
-                       ->additionalInformations()
-                       ->users()
-                       ->participants()
-                       ->registrations()
-                        ->course()
-                       ->paginate($request->input('per_page')); */
+        $days = $planification->detailPlanifications()->with('day')->first();
 
-        return (new RegistrationRecordCompetitorResource($registrations))
-            ->additional([
-                'msg' => [
-                    'summary' => 'success',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ])
-            ->response()->setStatusCode(200);
+        $classrooms = $planification->detailPlanifications()->with('classroom')->get(); */
+        
+        $pdf = PDF::loadView('reports/report-record-competitors', [
+ 
+        ]);
+        $pdf->setOptions([
+            'orientation' => 'landscape',
+        ]);
+        return $pdf->stream('reporte registro participantes.pdf');
+
+       
     }
     //estudiantes de un curso y sus notas
     // RegistrationController

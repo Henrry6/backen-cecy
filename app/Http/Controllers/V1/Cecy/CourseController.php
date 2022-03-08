@@ -28,6 +28,7 @@ use App\Http\Resources\V1\Cecy\Planifications\InformCourseNeedsResource;
 use App\Http\Resources\V1\Cecy\Courses\CoursesByResponsibleCollection;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationCollection;
 use App\Http\Resources\V1\Cecy\Certificates\CertificateResource;
+use App\Http\Resources\V1\Cecy\Courses\CoordinatorCecy\CourseByCoordinatorCecyCollection;
 use App\Http\Resources\V1\Cecy\Planifications\InformCourseNeedsCollection;
 use App\Models\Cecy\Instructor;
 use App\Models\Cecy\Participant;
@@ -403,12 +404,13 @@ class CourseController extends Controller
     // o por params
     public function showYearSchedule(Planification $planificacion)
     {
-        /*         $year = $planificacion->whereYear('started_at')->first();
+                // $year = $planificacion->whereYear('started_at')->first();
+        $planifications = Planification::whereYear('started_at','=',2020)->get();
+        $course = $planifications->course()->get();
+        
 
-        $planificacion = $year;
+       return new PlanificationCollection($planifications) ;
 
-
-        return new DetailPlanificationInformNeedResource($planificacion); */
         $pdf = PDF::loadView('reports/report-year-schedule');
         $pdf->setOptions([
             'orientation' => 'landscape',

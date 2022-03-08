@@ -11,7 +11,7 @@
 <body>
 	<div class="pociciones_recuadros">
 		<div>
-			<img src="https://ignug.yavirac.edu.ec/assets/images/web/logo_login.png" alt="" />
+			<img src="" alt="" />
 		</div>
 		<div class="stl_view">
 			<div class="stl_05 stl_06">
