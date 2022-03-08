@@ -13,6 +13,7 @@ use App\Http\Resources\V1\Cecy\Registrations\RegisterStudentResource;
 use App\Models\Cecy\AdditionalInformation;
 use App\Models\Cecy\Course;
 use App\Http\Requests\V1\Cecy\Registrations\IndexRegistrationRequest;
+use App\Http\Requests\V1\Cecy\Registrations\NullifyParticipantRegistrationRequest;
 use App\Http\Requests\V1\Cecy\Registrations\NullifyRegistrationRequest;
 use App\Http\Resources\V1\Cecy\Certificates\CertificateResource;
 use App\Http\Resources\V1\Cecy\Participants\CoursesByParticipantCollection;
@@ -127,10 +128,29 @@ class RegistrationController extends Controller
     // RegistrationController
     public function nullifyRegistrations(NullifyRegistrationRequest $request)
     {
-        return 'hola';
-        $registrations = Registration::whereIn('id', $request->input('ids'))->get();
-        $registrations->state()->associate(Catalogue::find($request->input('state.id')));
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+        $currentState = Catalogue::firstWhere('code', $catalogue['registration_state']['cancelled']);
+        
+        // DDRC-C:recorre las ids enviadas para anularlas
+        foreach ($request->ids as $registration => $value) {
+            $registration=Registration::firstWhere('id',$value);
+        $detailPlanification = $registration->detailPlanification;
+        
+        $registration->observations = $request->input('observations');
+        $registration->state()->associate(Catalogue::find($currentState->id));
 
+        $remainingRegistrations = $registration->detailPlanification->registrations_left;
+        $detailPlanification->registrations_left = $remainingRegistrations + 1;
+        
+        DB::transaction(function () use ($registration, $detailPlanification) {
+
+            $detailPlanification->save();
+            $registration->save();
+            
+        });
+        }
+        // DDRC-C:recupera los ids modificadas para enviarlas de nuevo
+        $registrations = Registration::whereIn('id', $request->input('ids'))->get();
         return (new RegistrationCollection($registrations))
             ->additional([
                 'msg' => [
@@ -143,14 +163,29 @@ class RegistrationController extends Controller
     }
 
 
-    /*DDRC-C: elimina una matricula de un participante en un curso especifico */
+    /*DDRC-C: anula una matricula de un participante en un curso especifico */
     // RegistrationController
-    public function nullifyRegistration(NullifyRegistrationRequest $request, Registration $registration)
+    public function nullifyRegistration(NullifyParticipantRegistrationRequest $request, Registration $registration)
     {
-        $registrations = Registration::whereIn('id', $request->input('id'))->get();
-        $registrations->state()->associate(Catalogue::find($request->input('state.id')));
 
-        return (new UserResource($registration))
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+        $currentState = Catalogue::firstWhere('code', $catalogue['registration_state']['cancelled']);
+        $detailPlanification = $registration->detailPlanification;
+        
+        $registration->observations = $request->input('observations');
+        $registration->state()->associate(Catalogue::find($currentState->id));
+
+        $remainingRegistrations = $registration->detailPlanification->registrations_left;
+        $detailPlanification->registrations_left = $remainingRegistrations + 1;
+        
+        DB::transaction(function () use ($registration, $detailPlanification) {
+
+            $detailPlanification->save();
+            $registration->save();
+            
+        });
+
+        return (new RegistrationResource($registration))
             ->additional([
                 'msg' => [
                     'summary' => 'Matrícula Anulada',

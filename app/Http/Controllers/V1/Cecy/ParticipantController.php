@@ -6,9 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Cecy\Participants\StoreParticipantUserRequest;
 use App\Http\Requests\V1\Cecy\Planifications\IndexPlanificationRequest;
 use App\Http\Requests\V1\Cecy\Registrations\IndexRegistrationRequest;
+use App\Http\Requests\V1\Cecy\Registrations\RegisterParticipantRequest;
+use App\Http\Requests\V1\Cecy\Registrations\RegisterStudentRequest;
+use App\Http\Requests\V1\Cecy\Registrations\RegistrationStateModificationRequest;
 use App\Http\Requests\V1\Cecy\Registrations\UpdateRegistrationRequest;
 use App\Http\Resources\V1\Cecy\Participants\ParticipantInformationResource;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationParticipants\PlanificationParticipantCollection;
+use App\Http\Resources\V1\Cecy\Registrations\RegisterParticipantResource;
 use Illuminate\Http\Request;
 use App\Models\Cecy\Catalogue;
 use App\Http\Resources\V1\Cecy\Registrations\RegistrationResource;
@@ -169,30 +173,54 @@ class ParticipantController extends Controller
 
     /*DDRC-C: actualiza una inscripcion, cambiando la observacion,y estado de una inscripción de un participante en un curso especifico  */
     // ParticipantController
-    public function updateParticipantRegistration(UpdateRegistrationRequest $request, Registration $registration)
+    public function participantRegistrationStateModification(RegistrationStateModificationRequest $request, Registration $registration)
     {
-        if ($registration->observation==null || $registration->observation==''){
-            return 'observaciones esta vacio';
-        }else{
-            return 'observaciones tiene datos';
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+
+        if (($request->observations === null || $request->observations === '' ) &&
+        ($registration->state->code !== 'REGISTERED' || $registration->state->code !== 'CANCELLED')) {
+            $currentState = Catalogue::firstWhere('code', $catalogue['registration_state']['registered']);
+            $registration->observations = $request->input('observations');
+            $registration->state()->associate(Catalogue::find($currentState->id));
+            $registration->save();
+        } elseif ($registration->state->code === 'RECTIFIED' || $registration->state->code === 'SIGNED_IN' || $registration->state->code === 'IN_REVIEW') {
+            $currentState = Catalogue::firstWhere('code', $catalogue['registration_state']['in_review']);
+            $registration->observations = $request->input('observations');
+            $registration->state()->associate(Catalogue::find($currentState->id));
+            $registration->save();
+        } elseif($registration->state->code === 'REGISTERED'){
+            return response()->json([
+                'data' => '',
+                'msg' => [
+                    'summary' => 'failed',
+                    'detail' => 'El usuario ya esta matriculado.',
+                    'code' => '400'
+                ]
+            ], 400);
+        } elseif($registration->state->code === 'CANCELLED'){
+            return response()->json([
+                'data' => '',
+                'msg' => [
+                    'summary' => 'failed',
+                    'detail' => 'La matricula se encuentra anulada.',
+                    'code' => '400'
+                ]
+            ], 400);
         }
-        $registration->observation = $request->input('observation');
-        $registration->state()->associate(Catalogue::find($request->input('state.id')));
-        $registration->save();
 
         return (new RegistrationResource($registration))
             ->additional([
                 'msg' => [
                     'summary' => 'success',
-                    'detail' => '',
+                    'detail' => 'Proceso exitoso',
                     'code' => '201'
                 ]
             ])->response()->setStatusCode(201);
     }
-    
+
     /*DDRC-C: Matricula un participante */
     // ParticipantController
-    public function registerParticipant(Request $request, Participant $participant)
+    public function registerParticipant(RegistrationStateModificationRequest $request, Participant $participant)
     {
         $registration = $participant->registration()->first();
         $registration->state()->associate(Catalogue::find($request->input('state.id')));
