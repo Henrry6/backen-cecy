@@ -27,9 +27,7 @@
  }
  a:link {text-decoration:none;}
  a:visited {text-decoration:none;}
- @media screen and (min-device-pixel-ratio:0), (-webkit-min-device-pixel-ratio:0), (min--moz-device-pixel-ratio: 0) {.stl_view{ font-size:10em; transform:scale(0.1); -moz-transform:scale(0.1); -webkit-transform:scale(0.1); -moz-transform-origin:top left; -webkit-transform-origin:top left; } }
- .layer { }.ie { font-size: 1pt; }
- .ie body { font-size: 12em; }
+
  .stl_01 {
    position: absolute;
    white-space: nowrap;
