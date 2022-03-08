@@ -43,14 +43,14 @@ class File extends Model implements Auditable
     public function scopeDescription($query, $description)
     {
         if ($description && $description != 'null') {
-            return $query->orWhere('descriptions', 'ILIKE', "%$description%");
+            return $query->where('description', 'ILIKE', "%$description%");
         }
     }
 
     public function scopeName($query, $name)
     {
         if ($name && $name != 'null') {
-            return $query->orWhere('names', 'ILIKE', "%$name%");
+            return $query->orWhere('name', 'ILIKE', "%$name%");
         }
     }
 

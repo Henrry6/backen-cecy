@@ -14,13 +14,11 @@ class FileController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('role:admin')->only(['destroyTrashed']);
-
-        $this->middleware('permission:download-files')->only(['download']);
-        $this->middleware('permission:upload-files')->only(['upload']);
-        $this->middleware('permission:view-files')->only(['index', 'show']);
-        $this->middleware('permission:update-files')->only(['update']);
-        $this->middleware('permission:delete-files')->only(['destroy', 'destroys']);
+//        $this->middleware('permission:download-files')->only(['download']);
+//        $this->middleware('permission:upload-files')->only(['upload']);
+//        $this->middleware('permission:view-files')->only(['index', 'show']);
+//        $this->middleware('permission:update-files')->only(['update']);
+//        $this->middleware('permission:delete-files')->only(['destroy', 'destroys']);
     }
 
     public function download(File $file)

@@ -13,6 +13,7 @@ use App\Http\Resources\V1\Cecy\Registrations\RegisterStudentResource;
 use App\Models\Cecy\AdditionalInformation;
 use App\Models\Cecy\Course;
 use App\Http\Requests\V1\Cecy\Registrations\IndexRegistrationRequest;
+use App\Http\Requests\V1\Cecy\Registrations\NullifyParticipantRegistrationRequest;
 use App\Http\Requests\V1\Cecy\Registrations\NullifyRegistrationRequest;
 use App\Http\Resources\V1\Cecy\Certificates\CertificateResource;
 use App\Http\Resources\V1\Cecy\Participants\CoursesByParticipantCollection;
@@ -29,6 +30,8 @@ use App\Models\Core\File;
 use http\Env\Request;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
+
 
 class RegistrationController extends Controller
 {
@@ -125,10 +128,29 @@ class RegistrationController extends Controller
     // RegistrationController
     public function nullifyRegistrations(NullifyRegistrationRequest $request)
     {
-        return 'hola';
-        $registrations = Registration::whereIn('id', $request->input('ids'))->get();
-        $registrations->state()->associate(Catalogue::find($request->input('state.id')));
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+        $currentState = Catalogue::firstWhere('code', $catalogue['registration_state']['cancelled']);
+        
+        // DDRC-C:recorre las ids enviadas para anularlas
+        foreach ($request->ids as $registration => $value) {
+            $registration=Registration::firstWhere('id',$value);
+        $detailPlanification = $registration->detailPlanification;
+        
+        $registration->observations = $request->input('observations');
+        $registration->state()->associate(Catalogue::find($currentState->id));
 
+        $remainingRegistrations = $registration->detailPlanification->registrations_left;
+        $detailPlanification->registrations_left = $remainingRegistrations + 1;
+        
+        DB::transaction(function () use ($registration, $detailPlanification) {
+
+            $detailPlanification->save();
+            $registration->save();
+            
+        });
+        }
+        // DDRC-C:recupera los ids modificadas para enviarlas de nuevo
+        $registrations = Registration::whereIn('id', $request->input('ids'))->get();
         return (new RegistrationCollection($registrations))
             ->additional([
                 'msg' => [
@@ -141,14 +163,29 @@ class RegistrationController extends Controller
     }
 
 
-    /*DDRC-C: elimina una matricula de un participante en un curso especifico */
+    /*DDRC-C: anula una matricula de un participante en un curso especifico */
     // RegistrationController
-    public function nullifyRegistration(NullifyRegistrationRequest $request, Registration $registration)
+    public function nullifyRegistration(NullifyParticipantRegistrationRequest $request, Registration $registration)
     {
-        $registrations = Registration::whereIn('id', $request->input('id'))->get();
-        $registrations->state()->associate(Catalogue::find($request->input('state.id')));
 
-        return (new UserResource($registration))
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+        $currentState = Catalogue::firstWhere('code', $catalogue['registration_state']['cancelled']);
+        $detailPlanification = $registration->detailPlanification;
+        
+        $registration->observations = $request->input('observations');
+        $registration->state()->associate(Catalogue::find($currentState->id));
+
+        $remainingRegistrations = $registration->detailPlanification->registrations_left;
+        $detailPlanification->registrations_left = $remainingRegistrations + 1;
+        
+        DB::transaction(function () use ($registration, $detailPlanification) {
+
+            $detailPlanification->save();
+            $registration->save();
+            
+        });
+
+        return (new RegistrationResource($registration))
             ->additional([
                 'msg' => [
                     'summary' => 'Matrícula Anulada',
@@ -163,35 +200,24 @@ class RegistrationController extends Controller
     public function showRecordCompetitor(GetCoursesByNameRequest $request, Course $course)
     {
         //trae todos los participantes registrados de un curso en especifico
-        $planification = $course->planifications()->get();
+/*         $planification = $course->planifications()->get();
         $detailPlanification = $planification->detailPlanifications()->get();
         $registrations = $detailPlanification->registrations()->get();
-        /*        $aditionalInformation= $registrations->aditionalInformations()->get();
-                  $participant = $aditionalInformation->registrations()->get()
-                  ->participants()
-                  ->users();
-           */
-        /*  $Course = Planification::where('course_id', $request->course()->id)->get(); */
+        $planification = $course->planifications()->with('responsibleCourse.user')->first();
 
-        /*         $registration = $registrations
-                       ->planifications()
-                       ->detailPlanifications()
-                       ->additionalInformations()
-                       ->users()
-                       ->participants()
-                       ->registrations()
-                        ->course()
-                       ->paginate($request->input('per_page')); */
+        $days = $planification->detailPlanifications()->with('day')->first();
 
-        return (new RegistrationRecordCompetitorResource($registrations))
-            ->additional([
-                'msg' => [
-                    'summary' => 'success',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ])
-            ->response()->setStatusCode(200);
+        $classrooms = $planification->detailPlanifications()->with('classroom')->get(); */
+        
+        $pdf = PDF::loadView('reports/report-record-competitors', [
+ 
+        ]);
+        $pdf->setOptions([
+            'orientation' => 'landscape',
+        ]);
+        return $pdf->stream('reporte registro participantes.pdf');
+
+       
     }
     //estudiantes de un curso y sus notas
     // RegistrationController

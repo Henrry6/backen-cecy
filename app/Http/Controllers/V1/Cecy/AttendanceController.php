@@ -45,32 +45,22 @@ class AttendanceController extends Controller
             ->response()->setStatusCode(200);
     }
     // AttendanceController
-    public function showPhotographicRecord(GetDetailPlanificationsByResponsibleCourseRequest $request, Course $course)
+    public function showPhotographicRecord(Course $course)
     {
         //trae el registro fotografico de un curso en especifico por el docente que se loguea
 
 
-/*         $photograpicRecord = $course->planifications()->first();
- */        $planification = $course->planifications()->with('responsibleCourse.user')->first();
-        $_course = $course->planifications()->with('course')->first();
+        $planification = $course->planifications()->first();
+        $detailPlanification = $planification->detailPlanifications()->with('day')->first();
+        $photograpicRecords = $detailPlanification->photographicRecords()->first();
 
-/*         $instructor = $planification->detailPlanifications()->with('instructors.user')->first();
- */        $days = $planification->detailPlanifications()->with('day')->get();
-
-        $classroom = $planification->detailPlanifications()->with('classroom')->get();
-        $inform = [
+        //return $photograpicRecords;
+        $pdf = PDF::loadView('reports/photographic-record', [
+            'course' => $course,
             'planification' => $planification,
-            'course' => $_course,
-            'days' => $days,
-            'classroom' => $classroom,
-        ];
-
-        $pdf = PDF::loadView('reports/photographic-record', [          
-              'planification' => $planification,
-            'course' => $_course,
-            'days' => $days,
-            'classroom' => $classroom,]);
-
+            'detailPlanification' => $detailPlanification,
+            'photograpicRecords' => $photograpicRecords
+        ]);
         return $pdf->stream('Registro fotográfico.pdf');
     }
 

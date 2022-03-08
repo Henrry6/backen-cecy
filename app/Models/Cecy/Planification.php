@@ -98,6 +98,13 @@ class Planification extends Model implements Auditable
         }
     }
 
+    public function scopeStartedAt($query, $started_at)
+    {
+        if ($started_at) {
+            return $query->Where('started_at', 'ilike', "%$started_at%");
+        }
+    }
+
     public function scopeKpi($query, $planifications, $state)
     {
         return $query->orWhere('state_id', $planifications->$state);

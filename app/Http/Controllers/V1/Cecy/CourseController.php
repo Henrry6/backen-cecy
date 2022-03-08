@@ -28,7 +28,11 @@ use App\Http\Resources\V1\Cecy\Planifications\InformCourseNeedsResource;
 use App\Http\Resources\V1\Cecy\Courses\CoursesByResponsibleCollection;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationCollection;
 use App\Http\Resources\V1\Cecy\Certificates\CertificateResource;
+<<<<<<< HEAD
+use App\Http\Resources\V1\Cecy\Courses\CoordinatorCecy\CourseByCoordinatorCecyCollection;
+=======
 use App\Http\Resources\V1\Cecy\Planifications\CoordinatorCecy\PlanificationResource;
+>>>>>>> 8a71d6f62a8b6daefa771b479b0d9e15ae29bd43
 use App\Http\Resources\V1\Cecy\Planifications\InformCourseNeedsCollection;
 use App\Models\Cecy\Instructor;
 use App\Models\Cecy\Participant;
@@ -404,12 +408,13 @@ class CourseController extends Controller
     // o por params
     public function showYearSchedule(Planification $planificacion)
     {
-        /*         $year = $planificacion->whereYear('started_at')->first();
+                // $year = $planificacion->whereYear('started_at')->first();
+        $planifications = Planification::whereYear('started_at','=',2020)->get();
+        $course = $planifications->course()->get();
+        
 
-        $planificacion = $year;
+       return new PlanificationCollection($planifications) ;
 
-
-        return new DetailPlanificationInformNeedResource($planificacion); */
         $pdf = PDF::loadView('reports/report-year-schedule');
         $pdf->setOptions([
             'orientation' => 'landscape',
