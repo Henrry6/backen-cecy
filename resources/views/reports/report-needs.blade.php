@@ -16,7 +16,7 @@
 		<div class="stl_view">
 			<div class="stl_05 stl_06">
 				<div class="posiciones_01"">
-					<span class=" stl_07 stl_08" style="word-spacing:0.05em;top: 0em; left:44.7em; position: absolute;white-space: nowrap;">CÓDIGO DEL CURSO: {{ $course->course->code}} </span>
+					<span class=" stl_07 stl_08" style="word-spacing:0.05em;top: 0em; left:44.7em; position: absolute;white-space: nowrap;">CÓDIGO DEL CURSO: {{ $course->code}} </span>
 				</div>
 				<div class="posiciones_01" style="top: 0.7265em; left:42.7em; position: absolute;white-space: nowrap;">
 					<span class="stl_11 stl_08" style="word-spacing:0.09em;">FORMULARIO: f {{ $course->id }} </span>
@@ -41,10 +41,10 @@
 				</div>
 				<br>
 				<div class="posiciones_01" style="top: 21.1243em; left:6.0125em;">
-					<span class="stl_15 stl_08" style="word-spacing:0.06em;">Nombre del Curso: {{$course->course->name}}</span>
+					<span class="stl_15 stl_08" style="word-spacing:0.06em;">Nombre del Curso: {{$course->name}}</span>
 				</div>
 				<br>
-				@if($course->course->course_type_id == 33)
+				@if($course->course_type_id == 33)
 				<div class="posiciones_01" style="top: 23.7095em; left:17.95em;">
 					<span class="stl_17 stl_10"> Tipo de curso: ADMINISTRATIVO </span>
 				</div>
@@ -56,7 +56,7 @@
 				<br>
 
 
-				@if($course->course->course_type_id == 34)
+				@if($course->course_type_id == 34)
 
 				<div class="posiciones_01" style="top: 26.2095em; left:17.95em;">
 					<span class="stl_17 stl_10"> Modalidad del curso: PRESENCIAL</span>
@@ -97,7 +97,7 @@
 				<br>
 
 				<div class="posiciones_01" style="top: 40.3743em; left:6.0125em;">
-					<span class="stl_15 stl_08" style="word-spacing:0.07em;">Duración del curso: {{$course->course->duration}} horas</span>
+					<span class="stl_15 stl_08" style="word-spacing:0.07em;">Duración del curso: {{$course->duration}} horas</span>
 				</div>
 				<br>
 
@@ -116,7 +116,7 @@
 								<th class="td">a</th>
 								<td class="td">{{$day->ended_time}}</td>
 								<th class="td">Días</th>
-								<td class="td">{{$day->code}}</td>
+								<td class="td">{{$day->day->name}}</td>
 							</tr>
 						</table>
 						@endforeach
@@ -143,12 +143,13 @@
 				</div>
 				<div>
 					<span>
-						
+						@foreach($classrooms as $classroom)
 						<table class="table">
 							<tr>
-								<th width="350px" class="th">{{$classroom->capacity}}</th>
+								<th width="350px" class="th">{{$classroom->classroom->capacity}}</th>
 							</tr>
 						</table>
+						@endforeach
 					</span>
 				</div>
 				<div class="posiciones_01" style="top: 60.0618em; left:6.0125em;">
@@ -160,7 +161,7 @@
 
 						<table class="table">
 							<tr>
-								<td width="350px" class="th">{{$course->course->summary}}</td>
+								<td width="350px" class="th">{{$course->summary}}</td>
 							</tr>
 						</table>
 					</span>
