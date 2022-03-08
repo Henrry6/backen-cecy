@@ -31,17 +31,17 @@ class DetailAttendancesSeeder extends Seeder
         Catalogue::factory(3)->sequence(
             [
                 'code' => $catalogue['attendance']['present'],
-                'name' => 'PRESENT',
+                'name' => 'PRESENTE',
                 'type' => $catalogue['attendance']['type'],
             ],
             [
                 'code' => $catalogue['attendance']['backwardness'],
-                'name' => 'BACKWARDNESS',
+                'name' => 'ATRASADO',
                 'type' => $catalogue['attendance']['type'],
             ],
             [
                 'code' => $catalogue['attendance']['absent'],
-                'name' => 'ABSENT',
+                'name' => 'AUSENTE',
                 'type' => $catalogue['attendance']['type'],
             ],
         )->create();
