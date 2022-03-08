@@ -18,10 +18,10 @@
 		<br>
 
 		<h4>Nombre del docente:&nbsp;&nbsp; </h4>
-		<div1> LUIS </div1>
+		<div1> {{$planification->responsible_course}} </div1>
 
 		<h4>Nombre del curso:</h4>
-		<div2> FORMADOR DE FORMADORES </div2>
+		<div2>{{$course->name}} </div2>
 
 
 		<h4>Tipo de curso:</h4>
@@ -42,7 +42,7 @@
 		<div14>6 ....................................................</div14>
 
 		<div15>Duracion del curso: </div15>
-		<div16>40</div16>
+		<div16>{{$course->duration}}</div16>
 		<div17>horas</div17>
 		<div18>Lugar donde se dicta:</div18>
 		<div19>CAMPUS YAVIRAC</div19>
@@ -564,7 +564,6 @@
 			position: relative;
 			margin-left: 40px;
 			margin-right: 40px;
-			background-color: violet;
 			
 
 		}

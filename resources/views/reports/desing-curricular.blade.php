@@ -35,7 +35,7 @@
 
         </tr>
         <tr>
-          <td>FORMADOR DE FORMADORES</td>
+          <td>{{$course->name}}</td>
           <td>A</td>
           <td>ADMINISTRACION Y LEGISLACION </td>
           <td>A.4</td>
@@ -67,7 +67,7 @@
           <td></td>
           <td>Virtual</td>
           <td></td>
-          <td>40 horas </td>
+          <td>{{$course->duration}}   horas </td>
 
         </tr>
       </table>
@@ -76,13 +76,16 @@
 
     <div class="col-11">
       <h4>Requisitos minimos de entrada al curso</h4>
-      <p style="text-align:center ">Técnicos: Computadora, tablet o smartphone con acceso a internet / Navegadores instalados Mozilla Firefox, Google Chrome, Brave, Opera u otro en última versión / Zoom instalado / Microsoft
-        Office (Word, Excel, Power Point) / Adobe Acrobat Reader u otro lector PDF instalado y actualizado
-        Office (Word, Excel, Power Point) / Adobe Acrobat Reader u otro lector PDF instalado y actualizado </p>
+      <h4>Tecnicos:</h4> 
+      <p style="text-align:center "></p>
+      <h4>Generales:</h4> 
+      <p style="text-align:center "></p>
+
+
       <br>
-      <h4>Obejtivo del curso</h4>
+      <h4>Objetivo del curso</h4>
       <br>
-      <p style="text-align:center ">Desarrollar las competencias necesarias como Formador de Formadores, facilitando enfoques teóricos, metodologías y técnicas de enseñanza–aprendizaje requeridas para procesos exitosos en los ámbitos educativo y empresarial</p>
+      <p style="text-align:center ">{{$course->objective}}</p>
       <br>
       <h4>Contenido del curso</h4>
       <div>Temas principales</div>
@@ -142,13 +145,15 @@
     <div class="col-11 ">
       <h4>Estrategias de enseñanza - aprendizaje</h4>
       <br>
+      @foreach($course->teaching_strategies as $strategies) 
       <table align="">
 
         <tr>
-          <td>Aprendizaje basado en Problemas, Aprendizaje orientado a Proyectos, Aprendizaje Coooperativo </td>
+          <td>{{$strategies}}</td>
 
         </tr>
       </table>
+      @endforeach
     </div>
     <br>
     <div class="table_3 ">
@@ -175,7 +180,7 @@
 
         </tr>
         <tr>
-          <td>Encuesta</td>
+          <td>{{$course->tecnique}}</td>
           <td>Cuestionario escrito</td>
           <td>Talleres</td>
           <td>Entregable</td>
@@ -242,17 +247,17 @@
         <tr>
           <td rowspan="2">Carga horaria</td>
           <td>Horas practicas</td>
-          <td>20 horas</td>
+          <td>{{$course->practice_hours}}   horas </td>
         </tr>
 
 
         <tr>
           <td>Horas teóricas</td>
-          <td>20 horas</td>
+          <td>{{$course->theory_hours}} horas</td>
         </tr>
 
         <tr>
-          <td>Bibliografia</td>
+          <td>Bibliografia  </td>
           <td colspan="2">AQUI VA UNA BIBLIOGRAFIA</td>
         </tr>
       </table>

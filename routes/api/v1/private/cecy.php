@@ -81,6 +81,8 @@ Route::prefix('planification/{planification}')->group(function () {
     Route::put('assign-code-planification', [PlanificationController::class, 'assignCodeToPlanification']);
     Route::put('approve-planification', [PlanificationController::class, 'approvePlanification']);
     Route::get('/curricular-design', [PlanificationController::class, 'curricularDesign']);
+    Route::get('/informe-final', [PlanificationController::class, 'informeFinal']);
+
 
 });
 

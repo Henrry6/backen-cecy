@@ -34,3 +34,14 @@ Route::get('/case-report ', function () {
 
 
 });
+
+Route::get('/case-report ', function () {
+
+    $pdf = PDF::loadView('reports/desing-curricular');
+
+    return $pdf->inline('Diseno-Cuccicular.pdf');
+
+
+
+});
+
