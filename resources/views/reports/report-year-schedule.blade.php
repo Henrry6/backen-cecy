@@ -26,7 +26,7 @@
         <center>
 
           <div class="posiciones_01" style="top: 14.1458em; left:16.0125em;">
-            <span class="stl_14 stl_08" style="word-spacing:0.06em;">INFORME DE NECESIDAD DEL CURSO </span>
+            <span class="stl_14 stl_08" style="word-spacing:0.06em;">PROGRAMACIÓN MENSUAL </span>
           </div>
         </center>
         <br><br> <br><br>

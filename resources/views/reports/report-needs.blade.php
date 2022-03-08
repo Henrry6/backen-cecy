@@ -16,10 +16,10 @@
 		<div class="stl_view">
 			<div class="stl_05 stl_06">
 				<div class="posiciones_01"">
-					<span class=" stl_07 stl_08" style="word-spacing:0.05em;top: 0em; left:44.7em; position: absolute;white-space: nowrap;">CÓDIGO DEL CURSO: {{ $planification->course->code}} </span>
+					<span class=" stl_07 stl_08" style="word-spacing:0.05em;top: 0em; left:44.7em; position: absolute;white-space: nowrap;">CÓDIGO DEL CURSO: {{ $course->code}} </span>
 				</div>
 				<div class="posiciones_01" style="top: 0.7265em; left:42.7em; position: absolute;white-space: nowrap;">
-					<span class="stl_11 stl_08" style="word-spacing:0.09em;">FORMULARIO: f {{ $planification->course->id }} </span>
+					<span class="stl_11 stl_08" style="word-spacing:0.09em;">FORMULARIO: f {{ $course->id }} </span>
 				</div>
 				<center>
 					<br><br><br><br>
@@ -37,14 +37,14 @@
 				</center>
 				<br><br> <br><br>
 				<div class="posiciones_01" style="top: 18.6243em; left:6.0125em;">
-					<span class="stl_15 stl_08" style="word-spacing:0.07em;">Nombre del Docente: {{$planification->responsibleCourse->fullname}}</span>
+					<span class="stl_15 stl_08" style="word-spacing:0.07em;">Nombre del Docente:{{$planification->responsible_course}} </span>
 				</div>
 				<br>
 				<div class="posiciones_01" style="top: 21.1243em; left:6.0125em;">
-					<span class="stl_15 stl_08" style="word-spacing:0.06em;">Nombre del Curso: {{$planification->course->name}}</span>
+					<span class="stl_15 stl_08" style="word-spacing:0.06em;">Nombre del Curso: {{$course->name}}</span>
 				</div>
 				<br>
-				@if($planification->course_type_id == 33)
+				@if($course->course_type_id == 33)
 				<div class="posiciones_01" style="top: 23.7095em; left:17.95em;">
 					<span class="stl_17 stl_10"> Tipo de curso: ADMINISTRATIVO </span>
 				</div>
@@ -56,7 +56,7 @@
 				<br>
 
 
-				@if($planification->course_type_id == 34)
+				@if($course->course_type_id == 34)
 
 				<div class="posiciones_01" style="top: 26.2095em; left:17.95em;">
 					<span class="stl_17 stl_10"> Modalidad del curso: PRESENCIAL</span>
@@ -74,20 +74,30 @@
 				<br>
 				<div class="posiciones_01" style="top: 32.2688em; left:7.8626em;">
 					<span class="stl_16 stl_08" style="word-spacing:0.05em;">
-						@foreach( $planification->course->needs as $need)
+						@foreach($course->needs as $need)
+
 						<table>
 							<tr>
 
 								<td width="350px" class="column-right">{{$need}}</td>
 							</tr>
-							@endforeach
 						</table>
+						@endforeach
+						@foreach($planification->needs as $need)
+
+						<table>
+							<tr>
+
+								<td width="350px" class="column-right">{{$need}}</td>
+							</tr>
+						</table>
+						@endforeach
 					</span>
 				</div>
 				<br>
 
 				<div class="posiciones_01" style="top: 40.3743em; left:6.0125em;">
-					<span class="stl_15 stl_08" style="word-spacing:0.07em;">Duración del curso: {{$planification->course->duration}} horas</span>
+					<span class="stl_15 stl_08" style="word-spacing:0.07em;">Duración del curso: {{$course->duration}} horas</span>
 				</div>
 				<br>
 
@@ -97,18 +107,34 @@
 				</div>
 				<div class="posiciones_01" style="top: 46.7768em; left:6.0125em;">
 					<span class="stl_15 stl_08" style="word-spacing:0.06em;">
-
+						@foreach($days as $day)
 						<table class="table">
 							<tr>
 
-								<th width="350px" class="th">Horario Curso:</th>
-								<td width="350px" class="td"></td>
-								<th width="350px" class="td">a</th>
-								<td width="350px" class="td"></td>
-								<th width="350px" class="td">Días</th>
-								<td width="350px" class="td"></td>
+								<th class="th">Horario Curso:</th>
+								<td class="td">{{$day->started_time}}</td>
+								<th class="td">a</th>
+								<td class="td">{{$day->ended_time}}</td>
+								<th class="td">Días</th>
+								<td class="td">{{$day->day->name}}</td>
 							</tr>
 						</table>
+						@endforeach
+					</span>
+				</div>
+				<br>
+				<div class="posiciones_01" style="top: 46.7768em; left:6.0125em;">
+					<span class="stl_15 stl_08" style="word-spacing:0.06em;">
+						<table class="table">
+							<tr>
+
+								<th class="th">Fecha iniciación:</th>
+								<td class="td">{{$planification->started_at}}</td>
+								<th class="td">Fecha real de finalización</th>
+								<td class="td">{{$planification->ended_at}}</td>
+							</tr>
+						</table>
+
 					</span>
 				</div>
 				<br>
@@ -117,11 +143,13 @@
 				</div>
 				<div>
 					<span>
+						@foreach($classrooms as $classroom)
 						<table class="table">
 							<tr>
-								<th width="350px" class="th">77</th>
+								<th width="350px" class="th">{{$classroom->classroom->capacity}}</th>
 							</tr>
 						</table>
+						@endforeach
 					</span>
 				</div>
 				<div class="posiciones_01" style="top: 60.0618em; left:6.0125em;">
@@ -133,10 +161,9 @@
 
 						<table class="table">
 							<tr>
-								<th width="350px" class="th">sdfsdfsdf</th>
+								<td width="350px" class="th">{{$course->summary}}</td>
 							</tr>
 						</table>
-
 					</span>
 				</div>
 				<div class="posiciones_01" style="top: 73.1868em; left:6.0125em;">
@@ -180,7 +207,7 @@
 		.td {
 			border: 1px solid black;
 			border-collapse: collapse;
-			width: 80%;
+
 			height: 30px;
 
 		}

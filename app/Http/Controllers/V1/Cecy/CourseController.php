@@ -29,7 +29,6 @@ use App\Http\Resources\V1\Cecy\Courses\CoursesByResponsibleCollection;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationCollection;
 use App\Http\Resources\V1\Cecy\Certificates\CertificateResource;
 use App\Http\Resources\V1\Cecy\Planifications\InformCourseNeedsCollection;
-use App\Http\Resources\V1\Cecy\Planifications\ResponsibleCoursePlanifications\PlanificationByCourseResource;
 use App\Models\Cecy\Instructor;
 use App\Models\Cecy\Participant;
 use App\Models\Cecy\Planification;
@@ -366,16 +365,37 @@ class CourseController extends Controller
     }
 
     // Mostrar las necesidades de un curso (Done)
-    public function informCourseNeeds(Course $course)
+    /*     public function informCourseNeeds(Course $course)
     {
         //trae un informe de nececidades de una planificacion, un curso en especifico por el docente que se logea
 
         $planification = $course->planifications()->first();
 
-     $data= new PlanificationByCourseResource($planification);
+     $data= new InformCourseNeedsResource($planification);
         $pdf = PDF::loadView('reports/report-needs', ['planification' => $data]);
 
         return $pdf->stream('informNeeds.pdf'); 
+    } */
+
+    // Mostrar las necesidades de un curso (Done)
+    public function informCourseNeeds(Course $course)
+    {
+        //trae un informe de nececidades de una planificacion, un curso en especifico por el docente que se logea
+
+        $planification = $course->planifications()->with('responsibleCourse.user')->first();
+
+        $days = $planification->detailPlanifications()->with('day')->get();
+
+        $classrooms = $planification->detailPlanifications()->with('classroom')->get();
+        
+        $pdf = PDF::loadView('reports/report-needs', [
+            'responsibleCourse' => $planification,
+            'course' => $course,
+            'days' => $days,
+            'classrooms' => $classrooms,
+        ]);
+
+        return $pdf->stream('informNeeds.pdf');
     }
 
     //Traer todos los cursos planificados de un año en especifico (Done)
@@ -383,7 +403,7 @@ class CourseController extends Controller
     // o por params
     public function showYearSchedule(Planification $planificacion)
     {
-/*         $year = $planificacion->whereYear('started_at')->first();
+        /*         $year = $planificacion->whereYear('started_at')->first();
 
         $planificacion = $year;
 
@@ -394,8 +414,7 @@ class CourseController extends Controller
             'orientation' => 'landscape',
             'page-size' => 'a4'
         ]);
-        return $pdf->stream('informNeeds.pdf'); 
-  
+        return $pdf->stream('informNeeds.pdf');
     }
 
     //Traer la informacion de diseño curricular (Done)
