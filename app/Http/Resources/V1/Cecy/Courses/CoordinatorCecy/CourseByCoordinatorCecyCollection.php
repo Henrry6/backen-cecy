@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\V1\Cecy\Courses;
+namespace App\Http\Resources\V1\Cecy\Courses\CoordinatorCecy;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 

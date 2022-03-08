@@ -81,7 +81,7 @@ class DetailPlanificationController extends Controller
             return response()->json([
                 'data' => '',
                 'msg' => [
-                    'summary' => 'failed',
+                    'summary' => 'Error',
                     'detail' => 'No es instructor o no se encuentra registrado',
                     'code' => '400'
                 ]
@@ -95,7 +95,7 @@ class DetailPlanificationController extends Controller
             return response()->json([
                 'data' => '',
                 'msg' => [
-                    'summary' => 'failed',
+                    'summary' => 'Error',
                     'detail' => 'No le pertece esta planificación',
                     'code' => '400'
                 ]
@@ -109,7 +109,7 @@ class DetailPlanificationController extends Controller
         ) {
             return response()->json([
                 'msg' => [
-                    'summary' => 'failed',
+                    'summary' => 'Error',
                     'detail' => 'La planificación ha culminado o no fue aprobada.',
                     'code' => '400'
                 ]
@@ -180,7 +180,7 @@ class DetailPlanificationController extends Controller
             return response()->json([
                 'data' => '',
                 'msg' => [
-                    'summary' => 'failed',
+                    'summary' => 'Error',
                     'detail' => 'No es instructor o no se encuentra registrado',
                     'code' => '400'
                 ]
@@ -194,7 +194,7 @@ class DetailPlanificationController extends Controller
             return response()->json([
                 'data' => '',
                 'msg' => [
-                    'summary' => 'failed',
+                    'summary' => 'Error',
                     'detail' => 'No le pertece esta planificación',
                     'code' => '400'
                 ]
@@ -208,8 +208,8 @@ class DetailPlanificationController extends Controller
         ) {
             return response()->json([
                 'msg' => [
-                    'summary' => 'failed',
-                    'detail' => 'La planificación ha culminado o no fue aprovada.',
+                    'summary' => 'Error',
+                    'detail' => 'La planificación ha culminado o no fue aprobada.',
                     'code' => '400'
                 ]
             ], 400);
@@ -259,7 +259,7 @@ class DetailPlanificationController extends Controller
             return response()->json([
                 'data' => '',
                 'msg' => [
-                    'summary' => 'failed',
+                    'summary' => 'Error',
                     'detail' => 'No es instructor o no se encuentra registrado',
                     'code' => '400'
                 ]
@@ -270,7 +270,7 @@ class DetailPlanificationController extends Controller
             return response()->json([
                 'data' => '',
                 'msg' => [
-                    'summary' => 'failed',
+                    'summary' => 'Error',
                     'detail' => 'No le pertece esta planificación',
                     'code' => '400'
                 ]
@@ -284,7 +284,7 @@ class DetailPlanificationController extends Controller
         ) {
             return response()->json([
                 'msg' => [
-                    'summary' => 'failed',
+                    'summary' => 'Error',
                     'detail' => 'La planificación ha culminado o no fue aprobada.',
                     'code' => '400'
                 ]
