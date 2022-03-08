@@ -185,6 +185,7 @@ Route::prefix('detailAttendance')->group(function () {
     Route::get('participant/{registration}', [DetailAttendanceController::class, 'showAttedanceParticipant']);
     Route::patch('/{detailAttendance}', [DetailAttendanceController::class, 'updatDetailAttendanceTeacher']);
     Route::get('/{detail_planification}', [DetailAttendanceController::class, 'getDetailAttendancesByParticipant']);
+    Route::get('no-paginate/{detail_planification}', [DetailAttendanceController::class, 'getDetailAttendancesByParticipantWithOutPaginate']);
     Route::get('/current-date/{detail_planification}', [DetailAttendanceController::class, 'getCurrentDateDetailAttendance']);
 });
 

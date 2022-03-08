@@ -49,6 +49,35 @@ class DetailAttendanceController extends Controller
             ->response()->setStatusCode(200);
     }
 
+    public function getDetailAttendancesByParticipantWithOutPaginate(GetDetailAttendancesByParticipantRequest $request, DetailPlanification $detailPlanification)
+    {
+
+        $sorts = explode(',', $request->input('sort'));
+
+        $participant = Participant::where('user_id', $request->user()->id)->first();
+
+        $registration = Registration::where(
+            [
+                'detail_planification_id' => $detailPlanification->id,
+                'participant_id' => $participant->id
+            ]
+        )->first();
+
+        $detailAttendances = DetailAttendance::customOrderBy($sorts)
+            ->registration($registration)
+            ->get();
+
+
+        return (new DetailAttendanceCollection($detailAttendances))
+            ->additional([
+                'msg' => [
+                    'sumary' => 'consulta exitosa',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
     public function getDetailAttendancesByParticipant(GetDetailAttendancesByParticipantRequest $request, DetailPlanification $detailPlanification)
     {
 
