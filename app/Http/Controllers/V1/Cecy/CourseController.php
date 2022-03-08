@@ -29,7 +29,6 @@ use App\Http\Resources\V1\Cecy\Courses\CoursesByResponsibleCollection;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationCollection;
 use App\Http\Resources\V1\Cecy\Certificates\CertificateResource;
 use App\Http\Resources\V1\Cecy\Planifications\InformCourseNeedsCollection;
-use App\Http\Resources\V1\Cecy\Planifications\ResponsibleCoursePlanifications\PlanificationByCourseResource;
 use App\Models\Cecy\Instructor;
 use App\Models\Cecy\Participant;
 use App\Models\Cecy\Planification;
@@ -366,16 +365,45 @@ class CourseController extends Controller
     }
 
     // Mostrar las necesidades de un curso (Done)
-    public function informCourseNeeds(Course $course)
+/*     public function informCourseNeeds(Course $course)
     {
         //trae un informe de nececidades de una planificacion, un curso en especifico por el docente que se logea
 
         $planification = $course->planifications()->first();
 
-     $data= new PlanificationByCourseResource($planification);
+     $data= new InformCourseNeedsResource($planification);
         $pdf = PDF::loadView('reports/report-needs', ['planification' => $data]);
 
         return $pdf->stream('informNeeds.pdf'); 
+    } */
+
+    // Mostrar las necesidades de un curso (Done)
+    public function informCourseNeeds(Course $course)
+    {
+        //trae un informe de nececidades de una planificacion, un curso en especifico por el docente que se logea
+
+        // $planification = $course->planifications()->first();
+        $planification = $course->planifications()->with('responsibleCourse.user')->first();
+        $_course = $course->planifications()->with('course')->first();
+
+/*         $instructor = $planification->detailPlanifications()->with('instructors.user')->first();
+ */        $days = $planification->detailPlanifications()->with('day')->get();
+
+        $classroom = $planification->detailPlanifications()->with('classroom')->first();
+        $inform = [
+            'planification' => $planification,
+            'course' => $_course,
+            'days' => $days,
+            'classroom' => $classroom,
+        ];
+        return $planification ;
+        $pdf = PDF::loadView('reports/report-needs', [            
+        'planification' => $planification,
+        'course' => $_course,
+        'days' => $days,
+        'classroom' => $classroom,]);
+
+        return $pdf->stream('informNeeds.pdf');
     }
 
     //Traer todos los cursos planificados de un año en especifico (Done)
