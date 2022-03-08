@@ -4,7 +4,7 @@ namespace App\Http\Requests\V1\Cecy\Registrations;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class NullifyRegistrationRequest extends FormRequest
+class NullifyParticipantRegistrationRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,19 +23,15 @@ class NullifyRegistrationRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'ids' => ['required', 'array'],
-            'observations' => ['required',],
-            
+        return [   
+            'observations' => ['required'],
         ];
     }
 
     public function attributes()
     {
         return [
-            'id' => 'Id´s de planificación',
-            'observations' => 'observaciones del registro',
-            
+            'observations' => 'Observaciones',
         ];
     }
 }

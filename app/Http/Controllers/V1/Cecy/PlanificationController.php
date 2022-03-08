@@ -314,4 +314,18 @@ class PlanificationController extends Controller
                 ]
             ]);
     }
+
+    //Traer la informacion de diseño curricular (Done)
+    public function curricularDesign( Planification $planification)
+    {
+        $planification = Planification::firstWhere('id',$planification->id);
+        return (new PlanificationResource($planification))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ]);
+    }
 }
