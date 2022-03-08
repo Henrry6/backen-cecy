@@ -238,7 +238,7 @@ Route::prefix('instructor')->group(function () {
     Route::get('courses', [InstructorController::class, 'getCourses']);
     Route::get('instructor-courses', [InstructorController::class, 'getInstructorByCourses']);
     Route::get('instructor-information', [InstructorController::class, 'getInstructorsInformationByCourse']);
-    Route::get('type-instructor', [InstructorController::class, 'updateTypeInstructors']);
+    Route::put('type-instructor/{instructor}', [InstructorController::class, 'updateTypeInstructors']);
     Route::get('destroy/{instructor}', [InstructorController::class, 'destroyInstructors']);
 });
 
