@@ -278,4 +278,3 @@ class UserController extends Controller
         return $user->destroyFiles($request);
     }
 }
-

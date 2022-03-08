@@ -184,6 +184,9 @@ Route::get('/inform', function () {
 Route::prefix('detailAttendance')->group(function () {
     Route::get('participant/{registration}', [DetailAttendanceController::class, 'showAttedanceParticipant']);
     Route::patch('/{detailAttendance}', [DetailAttendanceController::class, 'updatDetailAttendanceTeacher']);
+    Route::get('/{detail_planification}', [DetailAttendanceController::class, 'getDetailAttendancesByParticipant']);
+    Route::get('no-paginate/{detail_planification}', [DetailAttendanceController::class, 'getDetailAttendancesByParticipantWithOutPaginate']);
+    Route::get('/current-date/{detail_planification}', [DetailAttendanceController::class, 'getCurrentDateDetailAttendance']);
 });
 
 Route::prefix('detailAttendance/{detailAttendance}')->group(function () {
@@ -191,28 +194,19 @@ Route::prefix('detailAttendance/{detailAttendance}')->group(function () {
         Route::patch('save-detail-attendance', [DetailAttendanceController::class, 'saveDetailAttendance']);
     });
 });
+
+
 /***********************************************************************************************************************
  * CERTIFICATES
  **********************************************************************************************************************/
 Route::prefix('certificate')->group(function () {
-    Route::get('students', [CourseController::class, 'getResponsibleCecyByCourses']);
     Route::get('pdf-students', [CertificateController::class, 'generatePdf']);
-    Route::get('pdf-instructor', [CertificateController::class, 'generatePdfInstructor']);
+    Route::get('pdf-instructors', [CertificateController::class, 'generatePdfInstructor']);
     Route::post('registration/{registration}/catalogue/{catalogue}/file/{file}', [CertificateController::class, 'downloadCertificateByParticipant']);
     Route::get('catalogue/{catalogue}/file/{file}', [CertificateController::class, 'downloadFileCertificates']);
     Route::post('catalogue/{catalogue}', [CertificateController::class, 'uploadFileCertificate']);
     Route::post('firm/catalogue/{catalogue}', [CertificateController::class, 'uploadFileCertificateFirm']);
 });
-
-// Route::get('/certificate-student', function () {
-// $pdf = PDF::loadView('reports/certificate-student');
-// $pdf->setOptions([
-//     'orientation' => 'landscape',
-//     'page-size' => 'a4'
-// ]);
-
-// return $pdf->inline('Certificado.pdf');
-// });
 
 /***********************************************************************************************************************
  * SCHOOL PERIODS
@@ -255,6 +249,7 @@ Route::prefix('registration')->group(function () {
     Route::get('participant/{detailPlanification}', [RegistrationController::class, 'getParticipant']);
     Route::patch('nullify-registration', [RegistrationController::class, 'nullifyRegistration']);
     Route::patch('nullify-registrations', [RegistrationController::class, 'nullifyRegistrations']);
+    Route::patch('participant-grades/{registration}', [RegistrationController::class, 'updateGradesParticipant']);
 });
 /***********************************************************************************************************************
  * PARTICIPANTS
@@ -310,8 +305,6 @@ Route::apiResource('attendances', AttendanceController::class);
 
 Route::prefix('attendance')->group(function () {
     Route::get('detail/{detailPlanification}', [AttendanceController::class, 'getAttendancesByDetailPlanification']);
-  
-
 });
 
 Route::prefix('pdf')->group(function () {
@@ -355,7 +348,4 @@ Route::prefix('registration')->group(function () {
     Route::get('download-file-grades', [RegistrationController::class, 'downloadFileGrades']);
     Route::get('show-file', [RegistrationController::class, 'showFile']);
     Route::patch('destroy-file', [RegistrationController::class, 'destroyFile']);
-});
-Route::prefix('attendances')->group(function () {
-    Route::get('detail-attendances/{detail_planification}', [AttendanceController::class, 'getAttendancesByParticipant']);
 });
