@@ -20,9 +20,7 @@ use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 use App\Http\Controllers\V1\Cecy\RegistrationController;
 use App\Http\Controllers\V1\Cecy\CertificateController;
 use App\Http\Controllers\V1\Cecy\AttendanceController;
-
-
-
+use App\Http\Controllers\V1\Cecy\ParticipantController;
 
 /***********************************************************************************************************************
  * CATALOGUES
@@ -258,7 +256,7 @@ Route::prefix('registration')->group(function () {
  **********************************************************************************************************************/
 
 Route::prefix('participant')->group(function () {
-    Route::put('update-registration/{registration}', [ParticipantController::class, 'updateParticipantRegistration']);
+    Route::put('update-registration/{registration}', [ParticipantController::class, 'participantRegistrationStateModification']);
     Route::get('detail-planification/{detailPlanification}', [ParticipantController::class, 'getParticipantsByPlanification']);
     Route::get('information/{registration}', [ParticipantController::class, 'getParticipantInformation']);
     Route::patch('participant-registration/{registration}', [ParticipantController::class, 'registerParticipant']);
@@ -333,7 +331,7 @@ Route::prefix('registration')->group(function () {
     Route::get('show-participants', [RegistrationController::class, 'showParticipants']);
     Route::get('download-file', [RegistrationController::class, 'downloadFile']);
     Route::post('nullify-registrations', [RegistrationController::class, 'nullifyRegistrations']);
-    Route::patch('nullify-registration', [RegistrationController::class, 'nullifyRegistration']);
+    Route::patch('nullify-registration/{registration}', [RegistrationController::class, 'nullifyRegistration']);
     Route::get('show-record-competitor', [RegistrationController::class, 'showRecordCompetitor']);
     Route::patch('show-participant-grades', [RegistrationController::class, 'ShowParticipantGrades']);
     Route::put('upload-file', [RegistrationController::class, 'uploadFile']);
