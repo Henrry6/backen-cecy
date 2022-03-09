@@ -19,6 +19,7 @@ use App\Models\Cecy\Catalogue;
 use App\Http\Resources\V1\Cecy\Courses\CourseResource;
 use App\Http\Resources\V1\Cecy\Courses\CourseCollection;
 use App\Http\Requests\V1\Cecy\Courses\UpdateCurricularDesign;
+use App\Http\Requests\V1\Cecy\Courses\UpdateStateCourseRequest;
 use App\Http\Requests\V1\Cecy\Courses\UploadCertificateOfApprovalRequest;
 use App\Http\Requests\V1\Cecy\Planifications\GetDateByshowYearScheduleRequest;
 use App\Http\Requests\V1\Cecy\Planifications\IndexPlanificationRequest;
@@ -30,6 +31,7 @@ use App\Http\Resources\V1\Cecy\Planifications\PlanificationCollection;
 use App\Http\Resources\V1\Cecy\Certificates\CertificateResource;
 use App\Http\Resources\V1\Cecy\Courses\CoordinatorCecy\CourseByCoordinatorCecyCollection;
 use App\Http\Resources\V1\Cecy\Planifications\CoordinatorCecy\PlanificationResource;
+
 use App\Http\Resources\V1\Cecy\Planifications\InformCourseNeedsCollection;
 use App\Models\Cecy\Instructor;
 use App\Models\Cecy\Participant;
@@ -389,7 +391,7 @@ class CourseController extends Controller
         $days = $planification->detailPlanifications()->with('day')->get();
 
         $classrooms = $planification->detailPlanifications()->with('classroom')->get();
-        
+
         $pdf = PDF::loadView('reports/report-needs', [
             'planification' => $planification,
             'course' => $course,
@@ -403,22 +405,26 @@ class CourseController extends Controller
     //Traer todos los cursos planificados de un año en especifico (Done)
     // el que hizo esto debe enviar el año en especifico bien por el url 
     // o por params
-    public function showYearSchedule(Planification $planificacion)
+    public function showYearSchedule(Planification $planification)
     {
-        /*         $year = $planificacion->whereYear('started_at')->first();
+                // $year = $planificacion->whereYear('started_at')->first();
+        $planifications = $planification->whereYear('started_at','=',2022)->get();
+        $course = $planifications->course()->get();
+        $detailPlanifications=$planifications->detailPlanifications()->get();
+        
 
-        $planificacion = $year;
+      return $detailPlanifications ;
 
-
-        return new DetailPlanificationInformNeedResource($planificacion); */
-        $pdf = PDF::loadView('reports/report-year-schedule');
+        $pdf = PDF::loadView('reports/report-year-schedule',[
+            'planifications'=>$planifications
+        ]);
         $pdf->setOptions([
             'orientation' => 'landscape',
             'page-size' => 'a4'
         ]);
         return $pdf->stream('informNeeds.pdf');
     }
-    
+
     // Traer la informacion del informe final del curso (Done)
     public function showCourseFinalReport(getCoursesByNameRequest $request, Course $course)
     {
@@ -523,6 +529,22 @@ class CourseController extends Controller
             'page-size' => 'a4'
         ]);
         return $pdf->stream('certificate.pdf');
+    }
+
+    public function updateStateCourse(UpdateStateCourseRequest $request, Course $course)
+    {
+        $course->state_id = $request -> id;
+        $course ->save();
+
+        return (new CourseResource($course))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Estado actualizado',
+                    'detail' => 'El estado del curso pudo haber cambiado de posición',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
     }
 
     // Adjuntar el acta de aprobación

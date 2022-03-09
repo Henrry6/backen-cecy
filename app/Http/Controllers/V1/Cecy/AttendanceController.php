@@ -21,6 +21,7 @@ use App\Http\Resources\V1\Cecy\Registrations\RegistrationRecordCompetitorResourc
 use App\Models\Cecy\Attendance;
 use App\Models\Cecy\DetailAttendance;
 use App\Models\Cecy\Participant;
+use App\Models\Cecy\PhotographicRecord;
 use App\Models\Cecy\Registration;
 use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 
@@ -45,32 +46,20 @@ class AttendanceController extends Controller
             ->response()->setStatusCode(200);
     }
     // AttendanceController
-    public function showPhotographicRecord(GetDetailPlanificationsByResponsibleCourseRequest $request, Course $course)
+    public function showPhotographicRecord(Course $course, DetailPlanification $detailPlanification)
     {
         //trae el registro fotografico de un curso en especifico por el docente que se loguea
 
-
-/*         $photograpicRecord = $course->planifications()->first();
- */        $planification = $course->planifications()->with('responsibleCourse.user')->first();
-        $_course = $course->planifications()->with('course')->first();
-
-/*         $instructor = $planification->detailPlanifications()->with('instructors.user')->first();
- */        $days = $planification->detailPlanifications()->with('day')->get();
-
-        $classroom = $planification->detailPlanifications()->with('classroom')->get();
-        $inform = [
+        $planification = $course->planifications()->first();
+        $detailPlanification = $planification->detailPlanifications()->with(['day','workday'])->first();
+        $photographicRecords = $detailPlanification->photographicRecords()->first();
+            //return $detailPlanification;
+        $pdf = PDF::loadView('reports/photographic-record', [
+            'course' => $course,
             'planification' => $planification,
-            'course' => $_course,
-            'days' => $days,
-            'classroom' => $classroom,
-        ];
-
-        $pdf = PDF::loadView('reports/photographic-record', [          
-              'planification' => $planification,
-            'course' => $_course,
-            'days' => $days,
-            'classroom' => $classroom,]);
-
+            'detailPlanification' => $detailPlanification,
+            'photographicRecords' => $photographicRecords
+        ]);
         return $pdf->stream('Registro fotográfico.pdf');
     }
 

@@ -42,6 +42,7 @@ class AdditionalInformation extends Model implements Auditable
     {
         return $this->belongsTo(Catalogue::class);
     }
+    
     // Mutators
     public function setCompanyActivityAttribute($value)
     {

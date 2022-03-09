@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\V1\Cecy\SchoolPeriods;
+namespace App\Http\Requests\V1\Cecy\DetailSchoolPeriods;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Http\Requests\V1\JobBoard\JobBoardFormRequest;
 
-class IndexSchoolPeriodsRequest extends FormRequest
+class IndexDetailSchoolPeriodRequest extends FormRequest
 {
     public function authorize()
   {
