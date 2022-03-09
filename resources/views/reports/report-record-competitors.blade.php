@@ -42,7 +42,7 @@
 				<table>
 					<tr>
 						<th>PROVINCIA</th>
-						<td></td>
+						<td>PICHINCHA</td>
 						<th>TIPO DE CURSO</th>
 						@if($course->course_type_id == 33)
 
@@ -55,7 +55,7 @@
 					</tr>
 					<tr>
 						<th>CANTON</th>
-						<td></td>
+						<td>QUITO</td>
 
 						<th>MODALIDAD DEL CURSO:</th>
 						@if($course->course_type_id == 34)
@@ -69,7 +69,7 @@
 					</tr>
 					<tr>
 						<th>PARROQUIA</th>
-						<td></td>
+						<td>CENTRO HISTORICO</td>
 						<th>DURACIÓN DEL CURSO:</th>
 						<td>{{$course->duration}} HORAS</td>
 
@@ -85,7 +85,7 @@
 					</tr>
 					<tr>
 						<th>CONVENIO</th>
-						<td></td>
+						<td style="background-color: red;"></td>
 						<th>FECHA PREVISTA DE FINALIZACION</th>
 						<td>{{$planification->ended_at}}</td>
 						<th>HORARIO DEL CURSO:</th>
@@ -111,11 +111,11 @@
 					<tr>
 						<th>APELLIDOS Y NOMBRES.</th>
 						<th>DOCUMENTO DE IDENTIDAD</th>
-						<th >SEXO</th>
+						<th>SEXO</th>
 						<th>EDAD / AÑOS</th>
 						<th colspan="3">NIVEL DE INSTRUCCIÓN</th>
-						<th colspan="3">DATOS DE LA EMPRESA</th>
-						<th colspan="3">DATOS DEL PARTICIPANTE</th>
+						<th colspan="4">DATOS DE LA EMPRESA</th>
+						<th colspan="2">DATOS DEL PARTICIPANTE</th>
 						<th>RESULTADOS</th>
 
 
@@ -132,69 +132,53 @@
 						<td>NOMBRE DE LA EMPRESA</td>
 						<td>ACTIVIDAD DE LA EMPRESA</td>
 						<td>DIRECCION DE LA EMPRESA</td>
-						<td colspan="2">TELEFONO</td>
+						<td>TELEFONO</td>
 						<td>DIRECCION DOMICILIARIA</td>
+						<td>TELEFONOS</td>
 						<td></td>
 
 
 					</tr>
-					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td>Celular</td>
-						<td>Conven</td>
-						<td></td>
-						<td></td>
-						<td></td>
 
-					</tr>
 					@foreach($registrations as $information)
+
+
 					<tr>
 						<td>{{$information->participant->user->name}} {{$information->participant->user->lastname}}</td>
 						<td>{{$information->participant->user->username}}</td>
 						<td>{{$information->participant->user->sex->name}}</td>
-						<td></td>
-						<td>{{$information->participant->user->address}}</td>
-						<td>}</td>
+						<td>{{$information->participant->user->birthdate}}</td>
 						<td></td>
 						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
+						<td>{{$information}}</td>
 						<td></td>
 						<td></td>
 						<td></td>
 
+						<td></td>
+						<td>{{$information->participant->user->address}}</td>
+						<td>{{$information->participant->user->phone}}</td>
+						<td>{{$information->state->name}}</td>
 
 					</tr>
 					@endforeach
+		
+
 
 				</table>
 			</div>
 			<br><br><br>
 			<br><br>
 			<div style="float: left;">
-				<h4>Elaborado por:<br>.........................................................................<br>
-					Firma: Coordinador de Vinculación con la Comunidad </h4>
+				<h4>FECHA DE ELABORACION:<br>......................................................................... </h4>
 				<br><br>
-				<h4>Revisado por: <br>.........................................................................<br>
-					Firma: Vicerrector ITS </h4>
+				
 			</div>
+
 			<div style="float: right;">
-				<h4>Aprobado por: <br>.........................................................................<br>
-					Firma: Representante del OCS.</h4>
-				<br><br>
+			<h4>RESPONSABLE DE ELABORACION: <br>......................................................................... </h4>
 			</div>
-			<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+			<br><br><br><br><br>
 			<div style="border: 1px solid black;">
 				<p>Nota:</p>
 				<p>Nota: Este formulario es para uso directo del Docente Responsable del Curso de Capacitación, como archvo digital, puede hacer uso del mismo colocando las firmas de responsabilidad como imagen dento del documento Excell.</p>

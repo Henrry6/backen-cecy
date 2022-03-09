@@ -196,15 +196,15 @@ class RegistrationController extends Controller
     }
 
     // RegistrationController
-    public function showRecordCompetitor(GetCoursesByNameRequest $request, Course $course)
+    public function showRecordCompetitor(GetCoursesByNameRequest $request, Course $course, AdditionalInformation $additionalInformation)
     {
         //trae todos los participantes registrados de un curso en especifico
 
         $planification = $course->planifications()->first();
         $detailPlanification = $planification->detailPlanifications()->first();
         $classroom = $planification->detailPlanifications()->with('classroom')->first();
-        $registrations = $detailPlanification->registrations()->with(['participant.user.sex', 'additionalInformation'])->get();
-        //$additionalInformations = $registrations->additionalInformation()->first();
+        $registrations = $detailPlanification->registrations()->with(['participant.user.sex','additionalInformation','state'])->get();
+        //$additionalInformations = $additionalInformation->registration()->get();
         //$participants = $registrations->participant()->with('user')->get();
 
         $data = [
@@ -212,9 +212,10 @@ class RegistrationController extends Controller
             'detailPlanification' => $detailPlanification,
             'registrations' => $registrations,
             'clasrroom'=>$classroom,
-          //  'additionalInformations' => $additionalInformations,
+             // 'additionalInformations' => $additionalInformations,
             //'participants' => $participants,
         ];
+ 
         
         //return $data;
         $pdf = PDF::loadView('reports/report-record-competitors', [
@@ -222,7 +223,7 @@ class RegistrationController extends Controller
             'detailPlanification' => $detailPlanification,
             'registrations' => $registrations,
             'course'=>$course,
-            'clasrroom'=>$classroom
+            'clasrroom'=>$classroom,
 
            // 'aditionalInformations' => $adicionalInformation,
             //'participants' => $participants,
@@ -232,6 +233,9 @@ class RegistrationController extends Controller
             'orientation' => 'landscape',
         ]);
         return $pdf->stream('reporte registro participantes.pdf', []);
+    }
+    public function additionalInformation(Registration $registration){
+        $additionalInformation=$registration->additionalInformation()->get();
     }
     //estudiantes de un curso y sus notas
     // RegistrationController

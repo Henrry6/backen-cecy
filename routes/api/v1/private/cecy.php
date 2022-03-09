@@ -309,7 +309,7 @@ Route::prefix('attendance')->group(function () {
 
 Route::prefix('pdf')->group(function () {
     Route::get('photographic-record/{course}', [AttendanceController::class, 'showPhotographicRecord']);
-    Route::get('year-schedule/{year}', [CourseController::class, 'showYearSchedule']);
+    Route::get('year-schedule', [CourseController::class, 'showYearSchedule']);
 
     // Route::get('inform-course-needs/{course}', 'App\Http\Controllers\V1\Cecy\CourseController@informCourseNeeds');
 
