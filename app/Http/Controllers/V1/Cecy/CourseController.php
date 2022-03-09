@@ -390,6 +390,8 @@ class CourseController extends Controller
 
         $classrooms = $planification->detailPlanifications()->with('classroom')->get();
 
+        //return $planification;
+
         $pdf = PDF::loadView('reports/report-needs', [
             'planification' => $planification,
             'course' => $course,
@@ -407,11 +409,11 @@ class CourseController extends Controller
     {
                 // $year = $planificacion->whereYear('started_at')->first();
         $planifications = $planification->whereYear('started_at','=',2022)->get();
-        $course = $planifications->course()->get();
-        $detailPlanifications=$planifications->detailPlanifications()->get();
+  /*       $course = $planifications->course()->get();
+        $detailPlanifications=$planifications->detailPlanifications()->get(); */
         
 
-      return $detailPlanifications ;
+    //   return $detailPlanifications ;
 
         $pdf = PDF::loadView('reports/report-year-schedule',[
             'planifications'=>$planifications
