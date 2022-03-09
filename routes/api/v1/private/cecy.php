@@ -69,6 +69,7 @@ Route::prefix('planification')->group(function () {
     Route::get('course_parallels-works', [PlanificationController::class, 'getCoursesParallelsWorkdays']);
     Route::get('planfications-course/{course}', [PlanificationController::class, 'getPlanificationsByCourse']);
     Route::get('kpis/{state}', [PlanificationController::class, 'getKpi']);
+    Route::put('{planification}', [PlanificationController::class, 'updateStatePlanification']);
 });
 
 Route::prefix('planification/{planification}')->group(function () {
@@ -124,6 +125,7 @@ Route::prefix('courses')->group(function () {
     Route::get('kpi', [CourseController::class, 'getCoursesKPI']);
     Route::get('year-schedule', [CourseController::class, 'showYearSchedule']);
     Route::get('career/{career}', [CourseController::class, 'getCoursesByCareer']);
+    Route::put('{course}', [CourseController::class, 'updateStateCourse']);
 });
 
 Route::prefix('courses')->group(function () {
@@ -248,6 +250,7 @@ Route::prefix('instructor')->group(function () {
  * REGISTRATIONS
  **********************************************************************************************************************/
 Route::prefix('registration')->group(function () {
+    Route::post('register-student/{detailPlanification}', [RegistrationController::class, 'registerStudent']);
     Route::post('register-student', [RegistrationController::class, 'registerStudent']);
     Route::get('participant/{detailPlanification}', [RegistrationController::class, 'getParticipant']);
     Route::patch('nullify-registration', [RegistrationController::class, 'nullifyRegistration']);
@@ -268,7 +271,9 @@ Route::prefix('participant')->group(function () {
  * DETAIL SCHOOL PERIOD
  **********************************************************************************************************************/
 Route::apiResource('detail-school-periods', DetailSchoolPeriodController::class);
-
+Route::prefix('detail-school-period')->group(function () {
+    Route::patch('/{detail-school-period}', [DetailSchoolPeriodController::class, 'destroys']);
+});
 
 /*
 ******************************************************************************************************************
@@ -314,6 +319,7 @@ Route::prefix('pdf')->group(function () {
     Route::get('photographic-record/{course}', [AttendanceController::class, 'showPhotographicRecord']);
     Route::get('year-schedule/{year}', [CourseController::class, 'showYearSchedule']);
     Route::get('attendance-evaluation/{course}', [AttendanceController::class, 'attendanceEvaluation']);
+    Route::get('year-schedule', [CourseController::class, 'showYearSchedule']);
 
     // Route::get('inform-course-needs/{course}', 'App\Http\Controllers\V1\Cecy\CourseController@informCourseNeeds');
 
@@ -347,7 +353,7 @@ Route::prefix('registration')->group(function () {
     Route::get('download-file', [RegistrationController::class, 'downloadFile']);
     Route::post('nullify-registrations', [RegistrationController::class, 'nullifyRegistrations']);
     Route::patch('nullify-registration/{registration}', [RegistrationController::class, 'nullifyRegistration']);
-    Route::get('show-record-competitor/{course}', [RegistrationController::class, 'showRecordCompetitor']);
+    Route::get('show-record-competitor/{detailPlanification}', [RegistrationController::class, 'showRecordCompetitor']);
     Route::patch('show-participant-grades', [RegistrationController::class, 'ShowParticipantGrades']);
     Route::put('upload-file', [RegistrationController::class, 'uploadFile']);
     Route::get('download-file-grades', [RegistrationController::class, 'downloadFileGrades']);

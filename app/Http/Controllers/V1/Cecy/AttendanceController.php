@@ -54,13 +54,15 @@ class AttendanceController extends Controller
         $planification = $course->planifications()->first();
         $detailPlanification = $planification->detailPlanifications()->with(['day','workday'])->first();
         $photographicRecords = $detailPlanification->photographicRecords()->first();
-            //return $detailPlanification;
+            //return $photographicRecords;
         $pdf = PDF::loadView('reports/photographic-record', [
             'course' => $course,
             'planification' => $planification,
             'detailPlanification' => $detailPlanification,
             'photographicRecords' => $photographicRecords
         ]);
+
+
         return $pdf->stream('Registro fotográfico.pdf');
     }
 
