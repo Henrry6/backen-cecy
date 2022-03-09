@@ -24,10 +24,19 @@
 					</div>
 				</center>
 				<center>
+					<br><br><br><br>
+					<div class="posiciones_01" style="top: 11.3006em; left:16.45em;">
+						<span class="stl_12 stl_08" style="word-spacing:0.01em;">
+							<span class="stl_13" style="color: red;">FORMULARIO: e{{$course->id}} </span>
+						</span>
+					</div><br><br>
+				</center>
+				<center>
 
 					<div class="posiciones_01" style="top: 14.1458em; left:16.0125em;">
 						<span class="stl_14 stl_08" style="word-spacing:0.06em;"> REGISTRO DE PARTICIPANTES INSCRITOS Y MATRICULADOS </span>
 					</div>
+					<br><br>
 				</center>
 
 				<table>
@@ -35,42 +44,79 @@
 						<th>PROVINCIA</th>
 						<td></td>
 						<th>TIPO DE CURSO</th>
-						<td></td>
+						@if($course->course_type_id == 33)
+
+						<td>ADMINISTRATIVO</td>
+						@else
+						<td>TECNICO </td>
+						@endif
+
 
 					</tr>
 					<tr>
 						<th>CANTON</th>
 						<td></td>
-						<th></th>
+
+						<th>MODALIDAD DEL CURSO:</th>
+						@if($course->course_type_id == 34)
+
+						<td>Presencial</td>
+						@else
+
+						<td>Virtual</td>
+						@endif
+
+					</tr>
+					<tr>
+						<th>PARROQUIA</th>
 						<td></td>
-						<th></th>
+						<th>DURACIÓN DEL CURSO:</th>
+						<td>{{$course->duration}} HORAS</td>
+
+
+					</tr>
+					<tr>
+						<th>LOCAL DONDE SE DICTA</th>
+						<td>{{$clasrroom->classroom->name}}</td>
+						<th>FECHA DE INICIACION</th>
+						<td>{{$planification->started_at}}</td>
+
+
+					</tr>
+					<tr>
+						<th>CONVENIO</th>
 						<td></td>
+						<th>FECHA PREVISTA DE FINALIZACION</th>
+						<td>{{$planification->ended_at}}</td>
+						<th>HORARIO DEL CURSO:</th>
+						<td>{{$detailPlanification->started_time}} / {{$detailPlanification->ended_time}}</td>
+
+					</tr>
+					<tr>
+						<th>NOMBRE DEL CURSO</th>
+						<td>{{$course->name}}</td>
+						<th>FECHA REAL DE FINALIZACION </th>
+						<td>{{$planification->ended_at}}</td>
+						<th>CODIGO DEL CURSO:</th>
+						<td>{{$course->code}}</td>
 
 					</tr>
 
 				</table>
-				<br><br> <br><br>
-
-				<div style="float: right;">
-					<p>Año:4654</p>
-				</div>
-				<br><br>
+				<br><br> <br>
 				<table>
 
 
 
 					<tr>
-						<th>Nro.</th>
-						<th>Sector</th>
-						<th>Area</th>
-						<th>Nombre Del Curso</th>
-						<th>¿Curso OCC ?</th>
-						<th>Fechas</th>
-						<th>Horario</th>
-						<th>Lugar Del Curso Dictado</th>
-						<th>Nro. De Participantes</th>
-						<th>Docente</th>
-						<th>Responsable</th>
+						<th>APELLIDOS Y NOMBRES.</th>
+						<th>DOCUMENTO DE IDENTIDAD</th>
+						<th >SEXO</th>
+						<th>EDAD / AÑOS</th>
+						<th colspan="3">NIVEL DE INSTRUCCIÓN</th>
+						<th colspan="3">DATOS DE LA EMPRESA</th>
+						<th colspan="3">DATOS DEL PARTICIPANTE</th>
+						<th>RESULTADOS</th>
 
 
 
@@ -80,12 +126,14 @@
 						<td></td>
 						<td></td>
 						<td></td>
-						<td></td>
-						<td>INICIA</td>
-						<td>FINALIZA</td>
-						<td>DESDE</td>
-						<td>HASTA</td>
-						<td></td>
+						<td>PRI</td>
+						<td>SEC</td>
+						<td>SUP</td>
+						<td>NOMBRE DE LA EMPRESA</td>
+						<td>ACTIVIDAD DE LA EMPRESA</td>
+						<td>DIRECCION DE LA EMPRESA</td>
+						<td colspan="2">TELEFONO</td>
+						<td>DIRECCION DOMICILIARIA</td>
 						<td></td>
 
 
@@ -101,10 +149,34 @@
 						<td></td>
 						<td></td>
 						<td></td>
+						<td>Celular</td>
+						<td>Conven</td>
+						<td></td>
+						<td></td>
 						<td></td>
 
 					</tr>
+					@foreach($registrations as $information)
+					<tr>
+						<td>{{$information->participant->user->name}} {{$information->participant->user->lastname}}</td>
+						<td>{{$information->participant->user->username}}</td>
+						<td>{{$information->participant->user->sex->name}}</td>
+						<td></td>
+						<td>{{$information->participant->user->address}}</td>
+						<td>}</td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
 
+
+					</tr>
+					@endforeach
 
 				</table>
 			</div>
@@ -125,7 +197,7 @@
 			<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 			<div style="border: 1px solid black;">
 				<p>Nota:</p>
-				<p>Nota: Este documento deberá generarse de manera mensual sobre la planificación de cursos de capacitación tanto SENESCYT como OCC, respaldado en el Instructivo Capacitación - Certificación por Competencias Laborales de SENESCYT</p>
+				<p>Nota: Este formulario es para uso directo del Docente Responsable del Curso de Capacitación, como archvo digital, puede hacer uso del mismo colocando las firmas de responsabilidad como imagen dento del documento Excell.</p>
 			</div>
 		</div>
 	</div>

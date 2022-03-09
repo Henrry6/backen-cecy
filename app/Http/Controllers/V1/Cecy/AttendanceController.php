@@ -21,6 +21,7 @@ use App\Http\Resources\V1\Cecy\Registrations\RegistrationRecordCompetitorResourc
 use App\Models\Cecy\Attendance;
 use App\Models\Cecy\DetailAttendance;
 use App\Models\Cecy\Participant;
+use App\Models\Cecy\PhotographicRecord;
 use App\Models\Cecy\Registration;
 use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 
@@ -45,21 +46,19 @@ class AttendanceController extends Controller
             ->response()->setStatusCode(200);
     }
     // AttendanceController
-    public function showPhotographicRecord(Course $course)
+    public function showPhotographicRecord(Course $course, DetailPlanification $detailPlanification)
     {
         //trae el registro fotografico de un curso en especifico por el docente que se loguea
 
-
         $planification = $course->planifications()->first();
-        $detailPlanification = $planification->detailPlanifications()->with('day')->first();
-        $photograpicRecords = $detailPlanification->photographicRecords()->first();
-
-        //return $photograpicRecords;
+        $detailPlanification = $planification->detailPlanifications()->with(['day','workday'])->first();
+        $photographicRecords = $detailPlanification->photographicRecords()->first();
+            //return $detailPlanification;
         $pdf = PDF::loadView('reports/photographic-record', [
             'course' => $course,
             'planification' => $planification,
             'detailPlanification' => $detailPlanification,
-            'photograpicRecords' => $photograpicRecords
+            'photographicRecords' => $photographicRecords
         ]);
         return $pdf->stream('Registro fotográfico.pdf');
     }

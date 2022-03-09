@@ -33,6 +33,11 @@ class Registration extends Model implements Auditable
     {
         return $this->hasOne(AdditionalInformation::class);
     }
+    
+    public function additionalInformations()
+    {
+        return $this->hasMany(AdditionalInformation::class);
+    }
 
     public function certificates()
     {

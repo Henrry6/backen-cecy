@@ -12,68 +12,80 @@
 
 	<br>
 
+	<center>
+		<table>
 
-	<table>
+			<tr>
 
-		<tr>
-
-			<th colspan="5">{{$detailPlanification->day->name}}</th>
-
-
-		</tr>
-
-		<tr>
-
-			<th>Foto N.</th>
-
-     
-			<td></td>
-
-			<td rowspan="5">}</td>
-
-		</tr>
-
-		<tr>
-
-			<th>Descripcion</th>
-
-			<td></td>
-
-		</tr>
-
-		<tr>
-
-			<th>Fecha</th>
-
-			<td></td>
+				<th colspan="5">Registro Fotografico</th>
 
 
-		</tr>
+			</tr>
 
-		<tr>
+			<tr>
 
-			<th></th>
-
-			<td></td>
+				<th>Foto N.</th>
 
 
-		</tr>
+				<td>{{$photographicRecords->number_week}}</td>
 
-		<tr>
+				<td rowspan="6" style="width: 100%; height: 100%">{{$photographicRecords->url_image}}</td>
 
-			<th></th>
+			</tr>
 
-			<td></td>
+			<tr>
+
+				<th>Descripcion</th>
+
+				<td>{{$photographicRecords->description}}</td>
+
+			</tr>
+
+			<tr>
+
+				<th>Fecha</th>
+
+				<td>{{$photographicRecords->week_at}}</td>
 
 
-		</tr>
+			</tr>
+			<tr>
 
-	</table>
+				<th></th>
 
+				<td>{{$detailPlanification->day->name}}</td>
+
+
+			</tr>
+			<tr>
+
+				<th></th>
+
+				<td>{{$detailPlanification->workday->name}}</td>
+
+
+			</tr>
+
+			<tr>
+
+				<th></th>
+
+				<td>{{$detailPlanification->started_time}}-{{$detailPlanification->ended_time}}</td>
+
+
+			</tr>
+
+		</table>
+
+
+	</center>
 
 	</div> <br><br>
 
-	
+	<div style="border: 1px solid black;">
+		<p>Nota:</p>
+		<p>Arhivo para uso digital, en el caso de requerir incluir más medios de verificación se pueden usar las celdas inferiores.</p>
+	</div>
 
 
 
@@ -83,7 +95,7 @@
 		td {
 			border: 1px solid black;
 			border-collapse: collapse;
-			width: 40%;
+
 
 		}
 
@@ -98,7 +110,6 @@
 
 		th {
 			background-color: #008080;
-			width: 100%;
 		}
 
 		.col-20 {
