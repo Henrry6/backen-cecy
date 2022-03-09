@@ -196,32 +196,40 @@ class RegistrationController extends Controller
     }
 
     // RegistrationController
-    public function showRecordCompetitor(GetCoursesByNameRequest $request, Course $course, AdditionalInformation $additionalInformation)
+    public function showRecordCompetitor(GetCoursesByNameRequest $request, DetailPlanification $detailPlanification, AdditionalInformation $additionalInformation)
     {
         //trae todos los participantes registrados de un curso en especifico
 
-        $planification = $course->planifications()->first();
-        $detailPlanification = $planification->detailPlanifications()->first();
+        $planification=$detailPlanification->planification()->first();
+        $course=$planification->course()->first();
+        $regitrations=$detailPlanification->registrations()->with(['participant.user.sex','state','additionalInformation'])->get();
+        $classroom = $detailPlanification->classroom()->first();
+
+       /*  $planification = $course->planifications()->get();
+        $detailPlanification = $planification->detailPlanifications()->get();
         $classroom = $planification->detailPlanifications()->with('classroom')->first();
-        $registrations = $detailPlanification->registrations()->with(['participant.user.sex','additionalInformation','state'])->get();
+        $registrations = $detailPlanification->registrations()->with(['participant.user.sex','state','additionalInformation'])->get(); */
+        //$value = array_get($registrations, 'additionalInformation');
+       // $course_tec=$registrations->additionalInformation[''];
         //$additionalInformations = $additionalInformation->registration()->get();
         //$participants = $registrations->participant()->with('user')->get();
 
         $data = [
-            'planification' => $planification,
+     /*        'planification' => $planification,
             'detailPlanification' => $detailPlanification,
             'registrations' => $registrations,
-            'clasrroom'=>$classroom,
-             // 'additionalInformations' => $additionalInformations,
+            'clasrroom'=>$classroom, */
+             //'additionalInformations' => $additionalInformations,
             //'participants' => $participants,
         ];
  
         
-        //return $data;
+        //return $regitrations;
+
         $pdf = PDF::loadView('reports/report-record-competitors', [
             'planification' => $planification,
             'detailPlanification' => $detailPlanification,
-            'registrations' => $registrations,
+            'registrations' => $regitrations,
             'course'=>$course,
             'clasrroom'=>$classroom,
 
