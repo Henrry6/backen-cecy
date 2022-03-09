@@ -405,12 +405,13 @@ class CourseController extends Controller
     // o por params
     public function showYearSchedule(Planification $planificacion)
     {
-        /*         $year = $planificacion->whereYear('started_at')->first();
+                // $year = $planificacion->whereYear('started_at')->first();
+        $planifications = Planification::whereYear('started_at','=',2020)->get();
+        $course = $planifications->course()->get();
+        
 
-        $planificacion = $year;
+       return new PlanificationCollection($planifications) ;
 
-
-        return new DetailPlanificationInformNeedResource($planificacion); */
         $pdf = PDF::loadView('reports/report-year-schedule');
         $pdf->setOptions([
             'orientation' => 'landscape',
