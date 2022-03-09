@@ -388,7 +388,7 @@ class CourseController extends Controller
         $days = $planification->detailPlanifications()->with('day')->get();
 
         $classrooms = $planification->detailPlanifications()->with('classroom')->get();
-        
+
         $pdf = PDF::loadView('reports/report-needs', [
             'planification' => $planification,
             'course' => $course,
@@ -418,7 +418,7 @@ class CourseController extends Controller
         ]);
         return $pdf->stream('informNeeds.pdf');
     }
-    
+
     // Traer la informacion del informe final del curso (Done)
     public function showCourseFinalReport(getCoursesByNameRequest $request, Course $course)
     {
