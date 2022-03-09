@@ -249,9 +249,7 @@ Route::prefix('instructor')->group(function () {
  * REGISTRATIONS
  **********************************************************************************************************************/
 Route::prefix('registration')->group(function () {
-<<<<<<< HEAD
     Route::post('register-student/{detailPlanification}', [RegistrationController::class, 'registerStudent']);
-=======
     Route::post('register-student', [RegistrationController::class, 'registerStudent']);
     Route::get('participant/{detailPlanification}', [RegistrationController::class, 'getParticipant']);
     Route::patch('nullify-registration', [RegistrationController::class, 'nullifyRegistration']);
@@ -267,7 +265,6 @@ Route::prefix('participant')->group(function () {
     Route::get('detail-planification/{detailPlanification}', [ParticipantController::class, 'getParticipantsByPlanification']);
     Route::get('information/{registration}', [ParticipantController::class, 'getParticipantInformation']);
     Route::patch('participant-registration/{registration}', [ParticipantController::class, 'registerParticipant']);
->>>>>>> 1add5a361016745ea20ccce4f51e42d558f2d930
 });
 /***********************************************************************************************************************
  * DETAIL SCHOOL PERIOD
