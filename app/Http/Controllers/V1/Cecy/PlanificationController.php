@@ -13,6 +13,7 @@ use App\Http\Requests\V1\Cecy\Planifications\UpdateDatesinPlanificationRequest;
 use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\GetPlanificationsByCourseRequest;
 use App\Http\Requests\V1\Cecy\Planifications\StorePlanificationByCourseRequest;
 use App\Http\Requests\V1\Cecy\Planifications\UpdatePlanificationRequest;
+use App\Http\Requests\V1\Cecy\Planifications\UpdateStatePlanificationRequest;
 use App\Http\Resources\V1\Cecy\Courses\CourseCollection;
 use App\Http\Resources\V1\Cecy\Planifications\Kpi\KpiPlanificationResourse;
 use App\Http\Resources\V1\Cecy\Planifications\ResponsibleCoursePlanifications\PlanificationByCourseCollection;
@@ -304,5 +305,21 @@ class PlanificationController extends Controller
                     'code' => '200'
                 ]
             ]);
+    }
+
+    public function updateStatePlanification(UpdateStatePlanificationRequest $request, Planification $planification)
+    {
+        $planification->state_id = $request -> id;
+        $planification ->save();
+
+        return (new PlanificationResource($planification))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Estado de la planificación actualizado',
+                    'detail' => 'El estado de la planificación pudo haber cambiado de posición',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
     }
 }

@@ -71,6 +71,7 @@ Route::prefix('planification')->group(function () {
     Route::get('course_parallels-works', [PlanificationController::class, 'getCoursesParallelsWorkdays']);
     Route::get('planfications-course/{course}', [PlanificationController::class, 'getPlanificationsByCourse']);
     Route::get('kpis/{state}', [PlanificationController::class, 'getKpi']);
+    Route::put('{planification}', [PlanificationController::class, 'updateStatePlanification']);
 });
 
 Route::prefix('planification/{planification}')->group(function () {
@@ -121,6 +122,7 @@ Route::prefix('courses')->group(function () {
     Route::get('kpi', [CourseController::class, 'getCoursesKPI']);
     Route::get('year-schedule', [CourseController::class, 'showYearSchedule']);
     Route::get('career/{career}', [CourseController::class, 'getCoursesByCareer']);
+    Route::put('{course}', [CourseController::class, 'updateStateCourse']);
 });
 
 Route::prefix('courses')->group(function () {
