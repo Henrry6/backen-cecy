@@ -4,18 +4,11 @@ namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Cecy\Certificates\IndexCertificateRequest;
-use Illuminate\Http\Request;
-use App\Models\Cecy\Course;
 use App\Models\Cecy\Catalogue;
-use App\Models\Cecy\Prerequisite;
-use App\Http\Resources\V1\Cecy\Prerequisites\PrerequisiteCollection;
-use App\Http\Resources\V1\Cecy\Prerequisites\PrerequisiteResource;
-use App\Http\Requests\V1\Cecy\Prerequisites\DestroyPrerequisiteRequest;
-use App\Http\Requests\V1\Cecy\Prerequisites\StorePrerequisiteRequest;
-use App\Http\Requests\V1\Cecy\Prerequisites\UpdatePrerequisiteRequest;
 use App\Http\Requests\V1\Core\Files\UploadFileRequest;
 use App\Models\Cecy\Registration;
 use App\Models\Core\File;
+use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 
 class CertificateController extends Controller
 {
@@ -51,4 +44,30 @@ class CertificateController extends Controller
     {
         return $catalogue->downloadFileCertificates($file);
     }
+
+    //Genera los Pdfs del estudiante 
+    //CertificateController
+    public function generatePdf(){
+    $pdf = PDF::loadView('reports/certificate-student');
+    $pdf->setOptions([
+        'orientation' => 'landscape',
+        'page-size' => 'a4'
+    ]);
+
+    return $pdf->inline('Certificado.pdf');
+
+    }
+
+     //Genera los Pdfs del instructor
+    //CertificateController
+    public function generatePdfInstructor(){
+        $pdf = PDF::loadView('reports/certificate-instructor');
+        $pdf->setOptions([
+            'orientation' => 'landscape',
+            'page-size' => 'a4'
+        ]);
+    
+        return $pdf->inline('Certificado.pdf');
+    
+        }
 }

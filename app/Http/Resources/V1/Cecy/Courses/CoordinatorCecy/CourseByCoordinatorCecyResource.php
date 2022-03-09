@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Resources\V1\Cecy\Courses;
+namespace App\Http\Resources\V1\Cecy\Courses\CoordinatorCecy;
 
 use App\Http\Resources\V1\Cecy\Catalogues\CatalogueResource;
 use App\Http\Resources\V1\Cecy\Instructors\InstructorResource;
+use App\Http\Resources\V1\Cecy\Planifications\CoordinatorCecy\PlanificationResource;
 use App\Http\Resources\V1\Core\CareerResource;
 use App\Models\Cecy\Planification;
 use App\Models\Cecy\SchoolPeriod;
@@ -15,15 +16,14 @@ class CourseByCoordinatorCecyResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'academicPeriod' => SchoolPeriod::make($this->academicPeriod),
-            'career' => CareerResource::make($this->career),
-            'planifications'=>Planification::collection($this->course),
+            'academicPeriod' => CatalogueResource::make($this->academicPeriod),
+            'planifications' => PlanificationResource::collection($this->planifications),
             'state' => CatalogueResource::make($this->state),
+            'approvedAt' => $this->approved_at,
+            'bibliographies' => $this->bibliographies,
+            'career' => CareerResource::make($this->career),
             'code' => $this->code,
             'name' => $this->name,
-            'approved_at' => $this->approved_at,
-            'expired_at' => $this->expired_at,
-            'observations'=> $this->observations,
         ];
     }
 }

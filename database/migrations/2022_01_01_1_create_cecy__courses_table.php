@@ -18,6 +18,11 @@ class CreateCecyCoursesTable extends Migration
                 ->nullable()
                 ->constrained('cecy.catalogues');
 
+            $table->foreignId('area_id')
+                ->comment('')
+                ->nullable()
+                ->constrained('cecy.catalogues');
+
             $table->foreignId('entity_certification_id')
                 ->comment('Institución que lo avala, Senecyt, Setec, Setec')
                 ->nullable()
@@ -183,7 +188,7 @@ class CreateCecyCoursesTable extends Migration
                 ->nullable();
 
             $table->json('target_groups')
-                ->comment('Tarjeta de grupo')
+                ->comment('Grupo al que va dirigido el curso: niños, jóvenes, adultos')
                 ->nullable();
 
             $table->json('teaching_strategies')

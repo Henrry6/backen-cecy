@@ -13,10 +13,9 @@ class UpdateDatesinPlanificationRequest extends FormRequest
   public function rules()
   {
     return [
-      'startedAt' => ['required', 'date'],
-      'endedAt' => ['required', 'date'],
+      'startedAt' => ['required',],
+      'endedAt' => ['required', 'after:startedAt'],
       'needs' => ['required'],
-      
     ];
   }
 
@@ -26,7 +25,7 @@ class UpdateDatesinPlanificationRequest extends FormRequest
       'startedAt' => 'Fecha de inicio de planificación',
       'endedAt' => 'Fecha de finalización de planificación',
       'needs' => 'Necesidades de planificación',
-      
+
     ];
   }
 }

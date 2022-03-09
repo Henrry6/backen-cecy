@@ -13,18 +13,18 @@ class GetCoursesByCoordinatorCecyRequest extends FormRequest
   public function rules()
   {
     return [
-      'career.id' => ['required'],
-      'academicPeriod.id' => ['required'],
-      'state.id' => ['required'],
+      // 'career.id' => ['required'],
+      // 'academicPeriod.id' => ['required'],
+      // 'state.id' => ['required'],
     ];
   }
 
   public function attributes()
   {
     return [
-      'career.id' => 'Id de la carrera ',
-      'academicPeriod.id' => 'Id de periodo academico ',
-      'state.id' => 'Id del estado ',
+      // 'career' => 'Id de la carrera ',
+      // 'academicPeriod' => 'Id de periodo academico ',
+      // 'state' => 'Id del estado ',
     ];
   }
 }

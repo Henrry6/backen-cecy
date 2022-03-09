@@ -23,9 +23,13 @@ class Attendance extends Model implements Auditable
 
     // Relationships
 
-    public function detailAttendance()
+    public function detailAttendances()
     {
         return $this->hasMany(DetailAttendance::class);
+    }
+    public function detailAttendance()
+    {
+        return $this->hasOne(DetailAttendance::class);
     }
 
     public function detailPlanification()
@@ -33,7 +37,10 @@ class Attendance extends Model implements Auditable
         return $this->belongsTo(DetailPlanification::class);
     }
 
-
+    public function photographicRecords()
+    {
+        return $this->hasMany(PhotographicRecord::class);
+    }
     // Mutators
 
 

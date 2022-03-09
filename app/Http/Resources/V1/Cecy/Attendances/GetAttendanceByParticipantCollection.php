@@ -2,18 +2,15 @@
 
 namespace App\Http\Resources\V1\Cecy\Attendances;
 
-use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationResource;
-use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class GetAttendanceByParticipantCollection extends JsonResource
+class GetAttendanceByParticipantCollection extends ResourceCollection
 {
     public function toArray($request)
+    
     {
         return [
-            'id' => $this->id,
-            'detailPlanification' => DetailPlanificationResource::make($this->detailPlanification),
-            'duration' => $this->duration,
-            'registeredAt' => $this->registered_at,
+            'data' => $this->collection
         ];
     }
 }

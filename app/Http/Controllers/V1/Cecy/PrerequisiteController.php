@@ -28,7 +28,20 @@ class PrerequisiteController extends Controller
     public function getPrerequisites(Course $course)
     {
         $prerequisites = $course->prerequisites()->get();
+        
         return (new PrerequisiteCollection($prerequisites))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ]);
+    }
+
+    public function getPrerequisitesAll(Course $course)
+    {
+        return (new PrerequisiteCollection(Prerequisite::paginate(100)))
             ->additional([
                 'msg' => [
                     'summary' => 'success',
@@ -40,13 +53,19 @@ class PrerequisiteController extends Controller
 
     // Agrega prerequsitos para un curso
     // PrerequisteController
-    public function storePrerequisite(StorePrerequisiteRequest $request, Course $course)
+    public function storePrerequisite(Request $request, Course $course)
     {
-        $prerequisite = new Prerequisite();
-        $prerequisite->course()->associate($course);
-        $prerequisite->prerequisite()->associate($request->input('prerequisite.id'));
-        $prerequisite->save();
-        return (new PrerequisiteResource($prerequisite))
+        
+        Prerequisite::where('course_id', $course->id)->delete();
+        $prerequisites = $request->input('prerequisites');
+        foreach ($prerequisites as $prerequisite) {
+                $coursePrerequisite = Course::find($prerequisite);
+                $newPrerequisite = new Prerequisite();
+                $newPrerequisite->course()->associate($course);
+                $newPrerequisite->prerequisite()->associate($coursePrerequisite);
+                $newPrerequisite->save();
+        }
+        return (new PrerequisiteCollection([]))
             ->additional([
                 'msg' => [
                     'summary' => 'success',

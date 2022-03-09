@@ -13,7 +13,7 @@ class UpdateRegistrationRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -34,7 +34,7 @@ class UpdateRegistrationRequest extends FormRequest
             'grade1' => ['required', 'number'],
             'grade2' => ['required', 'number'],
             'number' => ['required', 'number'],
-            'observations' => ['required',],
+            'observations' => ['required'],
             'registeredAt' => ['required', 'date'],
         ];
     }

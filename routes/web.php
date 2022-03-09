@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\V1\Authentication\AuthController;
+use App\Models\Authentication\User;
+use App\Models\Cecy\Course;
 use Illuminate\Support\Facades\Route;
-
+use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -22,3 +24,16 @@ Route::prefix('login')->group(function () {
 Route::get('generate-password/{password}',function ($password){
     return \Illuminate\Support\Facades\Hash::make($password);
 });
+
+Route::get('/case-report ', function () {
+
+    $pdf = PDF::loadView('reports/report-needs');
+
+    return $pdf->inline('Certificado-Estudiante.pdf');
+
+
+
+});
+
+
+

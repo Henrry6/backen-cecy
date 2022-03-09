@@ -4,7 +4,7 @@ namespace App\Http\Requests\V1\Cecy\Participants;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreUserAndParticipantRequest extends FormRequest
+class StoreParticipantUserRequest extends FormRequest
 {
     public function authorize()
     {
@@ -13,13 +13,14 @@ class StoreUserAndParticipantRequest extends FormRequest
     public function rules()
     {
         return [
-            'identificationType' => ['required'],
             'username' => ['required', 'max:20'],
             'name' => ['required', 'max:100'],
             'lastname' => ['required', 'max:100'],
             'email' => ['required', 'max:100', 'email'],
-            'password' => ['required', 'min:8', 'max:16'],
-            'type.id' => ['required', 'integer']
+            'participantType.id' => ['required', 'integer'],
+            'address.mainStreet' => ['required'],
+            'address.secondaryStreet' => ['required'],
+            'address.cantonLocation.id' => ['required',  'integer']
         ];
     }
 

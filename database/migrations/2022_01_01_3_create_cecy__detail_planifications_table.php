@@ -43,7 +43,6 @@ class CreateCecyDetailPlanificationsTable extends Migration
                 ->comment('Si el paralelo esta: Proceso, culminado, Aprobado, Por aprobar')
                 ->constrained('cecy.catalogues');
 
-            // nombre del campo debe ir en pasado -2
             $table->time('ended_time')
                 ->nullable()
                 ->comment('Hora de finalización de clases');
@@ -53,12 +52,13 @@ class CreateCecyDetailPlanificationsTable extends Migration
                 ->comment('Observaciones necesaria si las horas de duración de curso no son alcanzadas por las horas de clase');
 
             $table->date('plan_ended_at')
+                ->nullable()
                 ->comment('Fecha final real de la planificación (que puede variar a la planificación)');
 
             $table->integer('registrations_left')
+                ->nullable()
                 ->comment('Capacidad restante del paralelo');
 
-            // nombre del campo debe ir en pasado -2
             $table->time('started_time')
                 ->nullable()
                 ->comment('Hora de inicio de clases');

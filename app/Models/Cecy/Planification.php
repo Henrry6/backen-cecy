@@ -35,6 +35,10 @@ class Planification extends Model implements Auditable
     {
         return $this->belongsTo(Course::class);
     }
+    public function courses()
+    {
+        return $this->hasMany(Course::class);
+    }
 
     public function detailSchoolPeriod()
     {
@@ -98,6 +102,13 @@ class Planification extends Model implements Auditable
         }
     }
 
+    public function scopeStartedAt($query, $started_at)
+    {
+        if ($started_at) {
+            return $query->Where('started_at', 'ilike', "%$started_at%");
+        }
+    }
+
     public function scopeKpi($query, $planifications, $state)
     {
         return $query->orWhere('state_id', $planifications->$state);
@@ -107,6 +118,18 @@ class Planification extends Model implements Auditable
     {
         if ($responsibleCourse) {
             return $query->orWhere('responsible_course_id', $responsibleCourse->id);
+        }
+    }
+    public function scopeResponsibleCecy($query, $responsibleCecy)
+    {
+        if ($responsibleCecy) {
+            return $query->orWhere('responsible_cecy_id', $responsibleCecy->id);
+        }
+    }
+    public function scopeDetailSchoolPeriod($query, $detailSchoolPeriod)
+    {
+        if ($detailSchoolPeriod) {
+            return $query->orWhere('detail_school_period_id', $detailSchoolPeriod->id);
         }
     }
 

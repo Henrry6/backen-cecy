@@ -3,6 +3,9 @@
 namespace App\Models\Cecy;
 
 use App\Models\Core\Career;
+use App\Models\Core\Image;
+use App\Traits\FileTrait;
+use App\Traits\ImageTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -14,6 +17,8 @@ class Course extends Model implements Auditable
     use HasFactory;
     use Auditing;
     use SoftDeletes;
+    use ImageTrait;
+    use FileTrait;
 
     protected $table = 'cecy.courses';
 
@@ -136,7 +141,10 @@ class Course extends Model implements Auditable
     {
         return $this->hasMany(Planification::class);
     }
-
+    public function planification()
+    {
+        return $this->belongsTo(Planification::class);
+    }
     public function prerequisites()
     {
         return $this->hasMany(Prerequisite::class);
@@ -326,7 +334,7 @@ class Course extends Model implements Auditable
     public function scopePublic($query, $public)
     {
         if ($public) {
-            return $query->Where('public', $public);
+            return $query->orWhere('public', $public);
         }
     }
 

@@ -15,9 +15,14 @@ use Illuminate\Support\Facades\Request;
 class SchoolPeriodController extends Controller
 {
     //Obtiene todas los periodos escolares que hay
-    public function index()
+    public function index(Request $request)
     {
+<<<<<<< HEAD
         return (new SchoolPeriodCollection(SchoolPeriod::paginate()))
+=======
+        $schoolPeriods =  SchoolPeriod::get();
+        return (new SchoolPeriodCollection($schoolPeriods))
+>>>>>>> 1add5a361016745ea20ccce4f51e42d558f2d930
             ->additional([
                 'msg' => [
                     'summary' => 'success',
@@ -63,6 +68,7 @@ class SchoolPeriodController extends Controller
             ->response()->setStatusCode(201);
     }
     //Actualiza un periodo escolar
+<<<<<<< HEAD
     public function update (UpdateSchoolPeriodRequest $request, SchoolPeriod $schoolPeriod){
 
         $schoolPeriod->state()->associate(Catalogue::find($request->input('state.id')));
@@ -88,6 +94,33 @@ class SchoolPeriodController extends Controller
     {
 
         $schoolPeriod->delete();
+=======
+    public function update(UpdateSchoolPeriodsRequest $request, SchoolPeriod $schooolperiod)
+    {
+        $schooolperiod->type()->associate(Catalogue::find($request->input('state.id')));
+        $schooolperiod->code = $request->input('code');
+        $schooolperiod->ended_at = $request->input('nded_at');
+        $schooolperiod->minium_note = $request->input('minium_note');
+        $schooolperiod->name = $request->input('name');
+        $schooolperiod->started_at = $request->input('started_ad');
+        $schooolperiod->save();
+
+        return (new SchoolPeriodResource($schooolperiod))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Periodo actualizado',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(201);
+    }
+    //Elimina un periodo escolar
+    public function destroy(Request $request, SchoolPeriod $schooolperiod)
+    {
+        return 'hola';
+        $schooolperiod->delete();
+>>>>>>> 1add5a361016745ea20ccce4f51e42d558f2d930
 
         return (new SchoolPeriodResource($schoolPeriod))
             ->additional([
@@ -100,7 +133,11 @@ class SchoolPeriodController extends Controller
             ->response()->setStatusCode(201);
     }
     //Elimina varias periodos escolares
+<<<<<<< HEAD
     public function destroys (DestroysSchoolPeriodRequest $request)
+=======
+    public function destroys(DestroysSchoolPeriodsRequest $request)
+>>>>>>> 1add5a361016745ea20ccce4f51e42d558f2d930
     {
         $schoolPeriod = SchoolPeriod::whereIn('id', $request->input('ids'))->get();
 

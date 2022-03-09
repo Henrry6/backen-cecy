@@ -13,14 +13,12 @@ class GetDetailPlanificationsByPlanificationRequest extends FormRequest
     public function rules()
     {
         return [
-            'planification.id' => ['required', 'integer'],
         ];
     }
     
     public function attributes()
     {
         return [
-            'planification.id' => 'Planificación',
         ];
     }
 }

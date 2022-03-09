@@ -16,7 +16,7 @@
     },
     "entity_certification": {
         "type": "ENTITY_CERTIFICATION",
-        "senecyt": "SENECYT",
+        "senecyt": "SENESCYT",
         "setec": "SETECT",
         "cecy": "CECY"
     },
@@ -250,5 +250,18 @@
         "type": "REQUIREMENT_STATE",
         "enabled": "ENABLED",
         "disabled": "DISABLED"
+<<<<<<< HEAD
+=======
+    },
+    "period_state": {
+        "type": "PERIOD_STATE",
+        "current": "CURRENT",
+        "past": "PAST"
+    },
+    "target_groups": {
+        "type":"TARGET_GROUPS",
+        "childrens":"CHILDRENS",
+        "young":"YOUNG"
+>>>>>>> 1add5a361016745ea20ccce4f51e42d558f2d930
     }
 }
