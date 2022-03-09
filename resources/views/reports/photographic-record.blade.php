@@ -25,11 +25,12 @@
 		<tr>
 
 			<th>Foto N.</th>
+			
 
      
 			<td></td>
 
-			<td rowspan="5">}</td>
+			<td rowspan="5">{{$detailPlanification->day->name}}</td>
 
 		</tr>
 
@@ -83,7 +84,7 @@
 		td {
 			border: 1px solid black;
 			border-collapse: collapse;
-			width: 40%;
+			width: 100%;
 
 		}
 

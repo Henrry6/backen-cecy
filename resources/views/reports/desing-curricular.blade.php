@@ -36,7 +36,7 @@
         </tr>
         <tr>
           <td>{{$course->name}}</td>
-          <td>A</td>
+          <td>{{$course->area_id}}</td>
           <td>ADMINISTRACION Y LEGISLACION </td>
           <td>A.4</td>
           <td>Evaluacion de proyectos <br> (Economia financiera)</td>
@@ -76,8 +76,12 @@
 
     <div class="col-11">
       <h4>Requisitos minimos de entrada al curso</h4>
+
+       
       <h4>Tecnicos:</h4> 
       <p style="text-align:center "></p>
+      
+
       <h4>Generales:</h4> 
       <p style="text-align:center "></p>
 
@@ -98,15 +102,15 @@
       <table align="">
 
         <tr>
-          <td>1. El aprendizaje y la formación en adultos </td>
+          <td>1. {{$topics->description}} </td>
 
         </tr>
         <tr>
-          <td>2. El contexto de la formación profesional</td>
+          <td>2.{{$topics->description}}</td>
 
         </tr>
         <tr>
-          <td> 3. El proceso de formación profesional </td>
+          <td> 3. {{$topics->description}} </td>
 
         </tr>
       </table>
@@ -116,11 +120,11 @@
     <div class="col-11 ">
       <p>Temas secundarios o sub temas </p>
       <br>
-      <p>1.1. Educación, formación y pedagogía 1.2. Didáctica y aprendizaje integral 1.3. Andragogía 1.4. Estilos de aprendizaje 1.5. Diagnóstico motivacional 1.6. Género e inclusión </p>
+      <p>1.1. {{$topics->description}}</p>
 
-      <p>2.1. Contexto de la formación profesional 2.2. Marco legal del sistema de formaciòn profesional 2.3. Necesidades de formación profesional en la empresa </p>
+      <p>2.1. {{$topics->description}}</p>
 
-      <p>3.1. Planificación de la formación 3.2. Organización de la formación 3.3. Desarrollo de la formación 3.4. Evaluación de la formación 3.5. Cierre y retroalimenatción de la formación </p>
+      <p>3.1. {{$topics->description}}</p>
     </div>
     <br><br>
 
@@ -131,11 +135,11 @@
       <table align="">
 
         <tr>
-          <td>Modalidades de Formación Técnica y Tecnológica. Industria 4.0: El futuro del trabajo. Competencias digitales </td>
+          <td>{{$topics->description}}</td>
 
         </tr>
         <tr>
-          <td>Estrategias personales de estudio. Técnicas. Hábitos </td>
+          <td> {{$topics->description}}</td>
 
         </tr>
 
@@ -256,11 +260,14 @@
           <td>{{$course->theory_hours}} horas</td>
         </tr>
 
+
+        @foreach($course->bibliographies as $bibliographies) 
         <tr>
           <td>Bibliografia  </td>
-          <td colspan="2">AQUI VA UNA BIBLIOGRAFIA</td>
+          <td colspan="2">{{$bibliographies}}</td>
         </tr>
       </table>
+      @endforeach
 
     </div>
 

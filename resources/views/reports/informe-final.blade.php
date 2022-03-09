@@ -11,7 +11,7 @@
 <body>
 	<div class="col-20">
 
-		<h4 style="text-align: right;">CODIGO DEL CURSO: SENESCYT-FF-V001-2021</h4>
+		<h4 style="text-align: right;">CODIGO DEL CURSO: {{$course->code}}</h4>
 		<h4 style="text-align: right;">FORMULARIO: b2 </h4>
 		<h3 style="text-align:center ">INSTITUTO SUPERIOR TECNOLÓGICO YAVIRAC</h3>
 		<h3 style="text-align:center ">INFORME FINAL DEL CURSO</h3>
@@ -24,22 +24,22 @@
 		<div2>{{$course->name}} </div2>
 
 
-		<h4>Tipo de curso:</h4>
+		<h4>Tipo de curso: {{$course->course_type_id}}</h4>
 		<div3>Administrativo</div3>
 		<div4>Tecnico</div4>
 
-		<h4>Modalidad del curso:</h4>
+		<h4>Modalidad del curso:{{$course->modality_id}}</h4>
 		<div6>Presencial</div6>
 		<div7>Virtual</div7>
 		<br>
 
 		<h4>Contenido del curso (Temas generales)</h4>
-		<div9>1 ....................................................</div9>
-		<div10>2 ....................................................</div10>
-		<div11>3 ....................................................</div11>
-		<div12>4 ....................................................</div12>
-		<div13>5 ....................................................</div13>
-		<div14>6 ....................................................</div14>
+		<div9>1 {{$topics->description}}</div9>
+		<div10>2 {{$topics->description}}...........................</div10>
+		<div11>3 {{$topics->description}}............................</div11>
+		<div12>4 {{$topics->description}}........................</div12>
+		<div13>5 {{$topics->description}}.......................</div13>
+		<div14>6 {{$topics->description}}...........................</div14>
 
 		<div15>Duracion del curso: </div15>
 		<div16>{{$course->duration}}</div16>
@@ -86,7 +86,7 @@
 		<div43>Participantes reprobados:</div43>
 		<div44>Participantes aprobados:</div44>
 		<br>
-		<div45>Observaciones:..................................</div45>
+		<div45>Observaciones: {{$course->observations}}</div45>
 
 		<br>
 		<br>
@@ -168,6 +168,11 @@
 		<br><br>
 		<br><br>
 		<br>
+		<div class="col-12">
+			<div50> DOCENTE</div50>
+			<div51> FECHA</div51>
+
+		</div>
 		<div class="table-2">
 			<table align="center">
 
@@ -190,6 +195,8 @@
 			margin-left: 200px;
 			font-weight: bold;
 			margin-top: -40px;
+			color: blue;
+
 
 		}
 
@@ -199,6 +206,8 @@
 			margin-left: 200px;
 			font-weight: bold;
 			margin-top: -40px;
+			color: blue;
+
 
 		}
 
@@ -243,48 +252,59 @@
 		div9 {
 			float: left;
 			height: 100%;
-			margin-left: 0px;
+			margin-left: 20px;
 			margin-top: 5px;
+			color: blue;
 
 		}
 
 		div10 {
 			float: left;
 			height: 100%;
-			margin-left: -221px;
+			margin-left: -70px;
 			margin-top: 30px;
+			color: blue;
+
 
 		}
 
 		div11 {
 			float: left;
 			height: 100%;
-			margin-left: -222px;
+			margin-left: -180px;
 			margin-top: 55px;
+			color: blue;
+
 
 		}
 
 		div12 {
 			float: left;
 			height: 100%;
-			margin-left: -222px;
+			margin-left: -180px;
 			margin-top: 80px;
+			color: blue;
+
 
 		}
 
 		div13 {
 			float: left;
 			height: 100%;
-			margin-left: -222px;
+			margin-left: -180px;
 			margin-top: 105px;
+			color: blue;
+
 
 		}
 
 		div14 {
 			float: left;
 			height: 100%;
-			margin-left: -222px;
+			margin-left: -180px;
 			margin-top: 130px;
+			color: blue;
+
 
 
 		}
@@ -551,6 +571,7 @@
 			margin-left: -550px;
 			margin-top: 50px;
 			font-weight: bold;
+			color: blue;
 
 
 		}
@@ -567,8 +588,23 @@
 			
 
 		}
-		
 
+		div50 {
+			float: left;
+			height: 100%;
+			margin-left: 200px;
+			margin-top: -70px;
+			font-weight: bold;
+		
+		}
+		div51 {
+			float: left;
+			height: 100%;
+			margin-left: 600px;
+			margin-top: -70px;
+			font-weight: bold;
+		
+		}
 		table,
 		th,
 		td {

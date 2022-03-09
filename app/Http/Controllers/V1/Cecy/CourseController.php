@@ -28,11 +28,8 @@ use App\Http\Resources\V1\Cecy\Planifications\InformCourseNeedsResource;
 use App\Http\Resources\V1\Cecy\Courses\CoursesByResponsibleCollection;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationCollection;
 use App\Http\Resources\V1\Cecy\Certificates\CertificateResource;
-<<<<<<< HEAD
 use App\Http\Resources\V1\Cecy\Courses\CoordinatorCecy\CourseByCoordinatorCecyCollection;
-=======
 use App\Http\Resources\V1\Cecy\Planifications\CoordinatorCecy\PlanificationResource;
->>>>>>> 8a71d6f62a8b6daefa771b479b0d9e15ae29bd43
 use App\Http\Resources\V1\Cecy\Planifications\InformCourseNeedsCollection;
 use App\Models\Cecy\Instructor;
 use App\Models\Cecy\Participant;
