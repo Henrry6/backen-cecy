@@ -42,7 +42,7 @@ class DetailPlanificationController extends Controller
         return (new DetailPlanificationResource($detailPlanification))
             ->additional([
                 'msg' => [
-                    'summary' => 'success',
+                    'summary' => 'Éxito',
                     'detail' => '',
                     'code' => '200'
                 ]
@@ -63,7 +63,7 @@ class DetailPlanificationController extends Controller
         return (new ResponsibleCourseDetailPlanificationCollection($detailPlanifications))
             ->additional([
                 'msg' => [
-                    'summary' => 'success',
+                    'summary' => 'Éxito',
                     'detail' => '',
                     'code' => '200'
                 ]
@@ -143,7 +143,7 @@ class DetailPlanificationController extends Controller
         return (new ResponsibleCourseDetailPlanificationResource($detailPlanification))
             ->additional([
                 'msg' => [
-                    'summary' => 'success',
+                    'summary' => 'Éxito',
                     'detail' => 'Registro Creado',
                     'code' => '200'
                 ]
@@ -160,7 +160,7 @@ class DetailPlanificationController extends Controller
         return (new ResponsibleCourseDetailPlanificationResource($detailPlanification))
             ->additional([
                 'msg' => [
-                    'summary' => 'success',
+                    'summary' => 'Éxito',
                     'detail' => '',
                     'code' => '200'
                 ]
@@ -239,7 +239,7 @@ class DetailPlanificationController extends Controller
         return (new ResponsibleCourseDetailPlanificationResource($detailPlanification))
             ->additional([
                 'msg' => [
-                    'summary' => 'success',
+                    'summary' => 'Éxito',
                     'detail' => 'Registro actualizado',
                     'code' => '200'
                 ]
@@ -296,7 +296,7 @@ class DetailPlanificationController extends Controller
         return (new ResponsibleCourseDetailPlanificationResource($detailPlanification))
             ->additional([
                 'msg' => [
-                    'summary' => 'success',
+                    'summary' => 'Éxito',
                     'detail' => 'Registro eliminado',
                     'code' => '200'
                 ]
@@ -351,7 +351,7 @@ class DetailPlanificationController extends Controller
         return (new ResponsibleCourseDetailPlanificationCollection($detailPlanifications))
             ->additional([
                 'msg' => [
-                    'summary' => 'success',
+                    'summary' => 'Éxito',
                     'detail' => 'Registros eliminados',
                     'code' => '200'
                 ]
