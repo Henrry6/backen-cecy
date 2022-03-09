@@ -29,6 +29,11 @@ use App\Http\Resources\V1\Cecy\Courses\CoursesByResponsibleCollection;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationCollection;
 use App\Http\Resources\V1\Cecy\Certificates\CertificateResource;
 use App\Http\Resources\V1\Cecy\Courses\CoordinatorCecy\CourseByCoordinatorCecyCollection;
+<<<<<<< HEAD
+=======
+use App\Http\Resources\V1\Cecy\Planifications\CoordinatorCecy\PlanificationResource;
+
+>>>>>>> 9eae475ac09868839901f3635a1fe1cc0fe039fa
 use App\Http\Resources\V1\Cecy\Planifications\InformCourseNeedsCollection;
 use App\Models\Cecy\Instructor;
 use App\Models\Cecy\Participant;
@@ -402,16 +407,19 @@ class CourseController extends Controller
     //Traer todos los cursos planificados de un año en especifico (Done)
     // el que hizo esto debe enviar el año en especifico bien por el url 
     // o por params
-    public function showYearSchedule(Planification $planificacion)
+    public function showYearSchedule(Planification $planification)
     {
                 // $year = $planificacion->whereYear('started_at')->first();
-        $planifications = Planification::whereYear('started_at','=',2020)->get();
+        $planifications = $planification->whereYear('started_at','=',2022)->get();
         $course = $planifications->course()->get();
+        $detailPlanifications=$planifications->detailPlanifications()->get();
         
 
-       return new PlanificationCollection($planifications) ;
+      return $detailPlanifications ;
 
-        $pdf = PDF::loadView('reports/report-year-schedule');
+        $pdf = PDF::loadView('reports/report-year-schedule',[
+            'planifications'=>$planifications
+        ]);
         $pdf->setOptions([
             'orientation' => 'landscape',
             'page-size' => 'a4'
