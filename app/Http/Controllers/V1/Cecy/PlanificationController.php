@@ -30,6 +30,8 @@ use App\Models\Cecy\SchoolPeriod;
 use App\Models\Core\State;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
+
 
 class PlanificationController extends Controller
 {
@@ -319,13 +321,54 @@ class PlanificationController extends Controller
     public function curricularDesign( Planification $planification)
     {
         $planification = Planification::firstWhere('id',$planification->id);
-        return (new PlanificationResource($planification))
-            ->additional([
-                'msg' => [
-                    'summary' => 'success',
-                    'detail' => '',
-                    'code' => '200'
-                ]
+        $course = $planification->course()->first();
+        $topics = $course->topics()->first();
+
+        //return $course;
+        //return $topics;
+       
+
+            $pdf = PDF::loadView('reports/desing-curricular', [
+                'planification' => $planification,
+                'course' => $course,
+                'topics' => $topics,
+                
+                
             ]);
-    }
+    
+            return $pdf->stream('Diseño Curricular.pdf');
+        }
+
+
+
+        //Traer la informacion de informe final del curso (Done)
+    public function informeFinal( Planification $planification)
+    {
+        $planification = Planification::firstWhere('id',$planification->id);
+        $course = $planification->course()->first();
+        $topics = $course->topics()->first();
+
+
+
+        return $course;
+        //return $planification;
+       
+
+            $pdf = PDF::loadView('reports/informe-final', [
+                'planification' => $planification,
+                'course' => $course,
+                'topics' => $topics,
+
+
+
+                
+                
+            ]);
+    
+            return $pdf->stream('Informe final del curso.pdf');
+        }
+
+         
 }
+
+

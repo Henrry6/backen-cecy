@@ -26,10 +26,19 @@
 
 				<th>Foto N.</th>
 
+<<<<<<< HEAD
+			<th>Foto N.</th>
+			
+=======
+>>>>>>> c70b4e2a4a2d04690ad9c701133a7eafe13f0919
 
 				<td>{{$photographicRecords->number_week}}</td>
 
+<<<<<<< HEAD
+			<td rowspan="5">{{$detailPlanification->day->name}}</td>
+=======
 				<td rowspan="6" style="width: 100%; height: 100%">{{$photographicRecords->url_image}}</td>
+>>>>>>> c70b4e2a4a2d04690ad9c701133a7eafe13f0919
 
 			</tr>
 
@@ -95,7 +104,11 @@
 		td {
 			border: 1px solid black;
 			border-collapse: collapse;
+<<<<<<< HEAD
+			width: 100%;
+=======
 
+>>>>>>> c70b4e2a4a2d04690ad9c701133a7eafe13f0919
 
 		}
 
