@@ -27,14 +27,13 @@ Route::get('generate-password/{password}',function ($password){
 
 Route::get('/case-report ', function () {
 
-    $pdf = PDF::loadView('case-report');
-
-    $pdf->setOptions([
-        'page-size' => 'a4'
-    ]);
+    $pdf = PDF::loadView('reports/report-needs');
 
     return $pdf->inline('Certificado-Estudiante.pdf');
 
 
 
 });
+
+
+

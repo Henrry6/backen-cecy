@@ -141,7 +141,10 @@ class Course extends Model implements Auditable
     {
         return $this->hasMany(Planification::class);
     }
-
+    public function planification()
+    {
+        return $this->belongsTo(Planification::class);
+    }
     public function prerequisites()
     {
         return $this->hasMany(Prerequisite::class);

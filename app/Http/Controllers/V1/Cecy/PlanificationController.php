@@ -31,6 +31,8 @@ use App\Models\Cecy\SchoolPeriod;
 use App\Models\Core\State;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
+
 
 class PlanificationController extends Controller
 {
@@ -85,9 +87,47 @@ class PlanificationController extends Controller
     /**
      * Update start_at and ended_at and needs in planification
      */
-    // PlanificationController ya esta
     public function updateDatesAndNeedsInPlanification(UpdateDatesinPlanificationRequest $request, Planification $planification)
     {
+        $loggedInInstructor = Instructor::where('user_id', $request->user()->id)->first();
+        if (!$loggedInInstructor) {
+            return response()->json([
+                'data' => '',
+                'msg' => [
+                    'summary' => 'Error',
+                    'detail' => 'No es instructor o no se encuentra registrado',
+                    'code' => '400'
+                ]
+            ], 400);
+        }
+
+        $responsibleCourse = $planification->responsibleCourse()->first();
+
+        if ($loggedInInstructor->id !== $responsibleCourse->id) {
+            return response()->json([
+                'data' => '',
+                'msg' => [
+                    'summary' => 'Error',
+                    'detail' => 'No le pertece esta planificación',
+                    'code' => '400'
+                ]
+            ], 400);
+        }
+
+        //validar que la planification ha culminado
+        if (
+            $planification->state()->first()->code === State::CULMINATED ||
+            $planification->state()->first()->code === State::NOT_APPROVED
+        ) {
+            return response()->json([
+                'msg' => [
+                    'summary' => 'Error',
+                    'detail' => 'La planificación ha culminado o no fue aprobada.',
+                    'code' => '400'
+                ]
+            ], 400);
+        }
+
         $planification->started_at = $request->input('startedAt');
         $planification->ended_at = $request->input('endedAt');
         $planification->needs = $request->input('needs');
@@ -102,35 +142,6 @@ class PlanificationController extends Controller
                 ]
             ])
             ->response()->setStatusCode(200);
-    }
-
-
-
-    /**
-     * KPI of planifications
-     */
-    // PlanificationController ya esta, no trae la informacion .
-    public function getKpi(ShowKpiRequest $request, Catalogue $state)
-    {
-
-        // $planifications = Planification::withCount([
-        //     'id' => function (Builder $query) {
-        //         $query->where(
-        //             'state_id',
-        //             $state->id
-        //         );
-        //     },
-        // ])->get();
-
-        //     return (new KpiPlanificationResourse($planifications[0]))
-        //         ->additional([
-        //             'msg' => [
-        //                 'summary' => 'success',
-        //                 'detail' => '',
-        //                 'code' => '200'
-        //             ]
-        //         ])
-        //         ->response()->setStatusCode(200);
     }
 
     //Trae todos los cursos
@@ -182,7 +193,7 @@ class PlanificationController extends Controller
             return response()->json([
                 'data' => '',
                 'msg' => [
-                    'summary' => 'failed',
+                    'summary' => 'Error',
                     'detail' => 'No se encontró al usuario: no es una autoridad o no está registrado.',
                     'code' => '400'
                 ]
@@ -322,4 +333,58 @@ class PlanificationController extends Controller
             ])
             ->response()->setStatusCode(201);
     }
+    //Traer la informacion de diseño curricular (Done)
+    public function curricularDesign( Planification $planification)
+    {
+        $planification = Planification::firstWhere('id',$planification->id);
+        $course = $planification->course()->first();
+        $topics = $course->topics()->first();
+
+        //return $course;
+        //return $topics;
+       
+
+            $pdf = PDF::loadView('reports/desing-curricular', [
+                'planification' => $planification,
+                'course' => $course,
+                'topics' => $topics,
+                
+                
+            ]);
+    
+            return $pdf->stream('Diseño Curricular.pdf');
+        }
+
+
+
+        //Traer la informacion de informe final del curso (Done)
+    public function informeFinal( Planification $planification)
+    {
+        $planification = Planification::firstWhere('id',$planification->id);
+        $course = $planification->course()->first();
+        $topics = $course->topics()->first();
+
+
+
+        return $course;
+        //return $planification;
+       
+
+            $pdf = PDF::loadView('reports/informe-final', [
+                'planification' => $planification,
+                'course' => $course,
+                'topics' => $topics,
+
+
+
+                
+                
+            ]);
+    
+            return $pdf->stream('Informe final del curso.pdf');
+        }
+
+         
 }
+
+
