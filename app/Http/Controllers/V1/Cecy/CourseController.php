@@ -23,6 +23,7 @@ use App\Http\Requests\V1\Cecy\Courses\UpdateStateCourseRequest;
 use App\Http\Requests\V1\Cecy\Courses\UploadCertificateOfApprovalRequest;
 use App\Http\Requests\V1\Cecy\Planifications\GetDateByshowYearScheduleRequest;
 use App\Http\Requests\V1\Cecy\Planifications\IndexPlanificationRequest;
+use App\Http\Requests\V1\Core\Images\IndexImageRequest;
 use App\Http\Requests\V1\Core\Images\UploadImageRequest;
 use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationInformNeedResource;
 use App\Http\Resources\V1\Cecy\Planifications\InformCourseNeedsResource;
@@ -269,10 +270,7 @@ class CourseController extends Controller
         $course->modality()->associate(Catalogue::find($request->input('modality.id'))); //modalidad presencial, virtual
         $course->catalogues()->sync($request->input('participantTypes.ids'));
 
-        // foreach($request->input('participantTypes') as $participantType) {
-        //     $participantType = Catalogue::find($participantType['id']);   
-        //     $course->catalogues()->attach($participantType);
-        // } 
+   
 
         //campos propios
         $course->abbreviation = $request->input('abbreviation');
@@ -560,15 +558,19 @@ class CourseController extends Controller
     {
         return $course->showFile($file);
     }
+
+
     //Images
 
-    public function showImageCourse(Course $course, Image $image)
+  
+    public function uploadPublicImage(UploadImageRequest $request, Course $course)
     {
-        return $course->showImage($image);
+        return $course->uploadPublicImage($request);
     }
 
-    public function uploadImageCourse(UploadImageRequest $request, Course $course)
+    public function indexPublicImages(IndexImageRequest $request,Course $course)
     {
-        return $course->uploadImage($request);
+        return $course->indexPublicImages($request);
     }
+
 }

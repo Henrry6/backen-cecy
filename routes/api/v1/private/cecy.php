@@ -165,8 +165,8 @@ Route::prefix('courses/{course}')->group(function () {
         // Route::get('inform-course-needs/{course}', 'App\Http\Controllers\V1\Cecy\CourseController@informCourseNeeds');
     });
     Route::prefix('image')->group(function () {
-        Route::get('{image}', [CourseController::class, 'showImageCourse']);
-        Route::post('', [CourseController::class, 'uploadImageCourse']);
+        Route::get('{image}', [CourseController::class, 'indexPublicImages']);
+        Route::post('', [CourseController::class, 'uploadPublicImage']);
     });
 });
 

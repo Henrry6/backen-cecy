@@ -17,12 +17,9 @@ class SchoolPeriodController extends Controller
     //Obtiene todas los periodos escolares que hay
     public function index(Request $request)
     {
-<<<<<<< HEAD
-        return (new SchoolPeriodCollection(SchoolPeriod::paginate()))
-=======
         $schoolPeriods =  SchoolPeriod::get();
         return (new SchoolPeriodCollection($schoolPeriods))
->>>>>>> 1add5a361016745ea20ccce4f51e42d558f2d930
+
             ->additional([
                 'msg' => [
                     'summary' => 'success',
@@ -68,7 +65,6 @@ class SchoolPeriodController extends Controller
             ->response()->setStatusCode(201);
     }
     //Actualiza un periodo escolar
-<<<<<<< HEAD
     public function update (UpdateSchoolPeriodRequest $request, SchoolPeriod $schoolPeriod){
 
         $schoolPeriod->state()->associate(Catalogue::find($request->input('state.id')));
@@ -90,11 +86,6 @@ class SchoolPeriodController extends Controller
         ->response()->setStatusCode(201);
     }
     //Elimina un periodo escolar
-    public function destroy (Request $request, SchoolPeriod $schoolPeriod)
-    {
-
-        $schoolPeriod->delete();
-=======
     public function update(UpdateSchoolPeriodsRequest $request, SchoolPeriod $schooolperiod)
     {
         $schooolperiod->type()->associate(Catalogue::find($request->input('state.id')));
@@ -116,11 +107,9 @@ class SchoolPeriodController extends Controller
             ->response()->setStatusCode(201);
     }
     //Elimina un periodo escolar
-    public function destroy(Request $request, SchoolPeriod $schooolperiod)
+    public function destroy(Request $request, SchoolPeriod $schoolPeriod)
     {
-        return 'hola';
-        $schooolperiod->delete();
->>>>>>> 1add5a361016745ea20ccce4f51e42d558f2d930
+        $schoolPeriod->delete();
 
         return (new SchoolPeriodResource($schoolPeriod))
             ->additional([
@@ -133,11 +122,7 @@ class SchoolPeriodController extends Controller
             ->response()->setStatusCode(201);
     }
     //Elimina varias periodos escolares
-<<<<<<< HEAD
-    public function destroys (DestroysSchoolPeriodRequest $request)
-=======
     public function destroys(DestroysSchoolPeriodsRequest $request)
->>>>>>> 1add5a361016745ea20ccce4f51e42d558f2d930
     {
         $schoolPeriod = SchoolPeriod::whereIn('id', $request->input('ids'))->get();
 
