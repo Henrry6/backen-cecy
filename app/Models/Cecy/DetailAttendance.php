@@ -23,9 +23,22 @@ class DetailAttendance extends Model implements Auditable
     {
         return $this->belongsTo(Attendance::class);
     }
-    public function catalogue()
+
+    public function type()
     {
         return $this->belongsTo(Catalogue::class);
+    }
+
+    public function registration()
+    {
+        return $this->belongsTo(Registration::class);
+    }
+
+    public function scopeRegistration($query, $registration)
+    {
+        if ($registration) {
+            return $query->orWhere('registration_id', $registration->id);
+        }
     }
 
 

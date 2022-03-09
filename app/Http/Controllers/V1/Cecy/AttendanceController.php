@@ -19,29 +19,15 @@ use App\Http\Resources\V1\Cecy\Attendances\SaveDetailAttendanceResource;
 use App\Http\Resources\V1\Cecy\PhotographicRecords\PhotographicRecordResource;
 use App\Http\Resources\V1\Cecy\Registrations\RegistrationRecordCompetitorResource;
 use App\Models\Cecy\Attendance;
+use App\Models\Cecy\DetailAttendance;
+use App\Models\Cecy\Participant;
+use App\Models\Cecy\PhotographicRecord;
+use App\Models\Cecy\Registration;
 use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 
 
 class AttendanceController extends Controller
 {
-    //Ver todas las asistencias del estudiante
-    // AttendanceController
-    public function getAttendancesByParticipant(GetAttendancesByParticipantRequest $request, DetailPlanification $detailPlanification)
-    {
-        //dd($registration->detailPlanification->attendances);
-        $attendances = $detailPlanification->attendances()->get();
-        //->paginate($request->input('per_page'));
-
-        return (new GetAttendanceByParticipantCollection($attendances))
-            ->additional([
-                'msg' => [
-                    'sumary' => 'consulta exitosa 1',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ])
-            ->response()->setStatusCode(200);
-    }
     // Guardar asistencia
     // AttendanceController
     public function saveDetailAttendances(SaveDetailAttendanceRequest $request, Attendance $attendance)
@@ -60,19 +46,20 @@ class AttendanceController extends Controller
             ->response()->setStatusCode(200);
     }
     // AttendanceController
-    public function showPhotographicRecord(GetDetailPlanificationsByResponsibleCourseRequest $request, Course $course)
+    public function showPhotographicRecord(Course $course, DetailPlanification $detailPlanification)
     {
         //trae el registro fotografico de un curso en especifico por el docente que se loguea
 
-
-        $planification = $course->planifications()->get();
-        $detailPlanification = $planification->detailPlanifications()->get();
-        $photograpicRecord = $detailPlanification->photograpicRecord()->get();
-
-
-        $data = new PhotographicRecordResource($photograpicRecord);
-        $pdf = PDF::loadView('reports/photographic-record', ['photograpicRecords' => $data]);
-
+        $planification = $course->planifications()->first();
+        $detailPlanification = $planification->detailPlanifications()->with(['day','workday'])->first();
+        $photographicRecords = $detailPlanification->photographicRecords()->first();
+            //return $detailPlanification;
+        $pdf = PDF::loadView('reports/photographic-record', [
+            'course' => $course,
+            'planification' => $planification,
+            'detailPlanification' => $detailPlanification,
+            'photographicRecords' => $photographicRecords
+        ]);
         return $pdf->stream('Registro fotográfico.pdf');
     }
 

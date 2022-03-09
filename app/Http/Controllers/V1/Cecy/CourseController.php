@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\V1\Cecy\Courses\CoordinatorCecy\GetCoursesByCoordinatorCecyRequest as CoordinatorCecyGetCoursesByCoordinatorCecyRequest;
+use App\Http\Requests\V1\Cecy\Courses\CoordinatorCecy\GetCoursesByCoordinatorCecyRequest;
 use App\Http\Requests\V1\Cecy\Courses\GetCoursesByCategoryRequest;
 use App\Http\Requests\V1\Cecy\Courses\GetCoursesByNameRequest;
 use App\Http\Requests\V1\Cecy\Courses\getCoursesByResponsibleRequest;
@@ -23,13 +23,17 @@ use App\Http\Requests\V1\Cecy\Courses\UploadCertificateOfApprovalRequest;
 use App\Http\Requests\V1\Cecy\Planifications\GetDateByshowYearScheduleRequest;
 use App\Http\Requests\V1\Cecy\Planifications\IndexPlanificationRequest;
 use App\Http\Requests\V1\Core\Images\UploadImageRequest;
-use App\Http\Resources\V1\Cecy\Courses\CourseByCoordinatorCecyCollection;
-use App\Http\Resources\V1\Cecy\Courses\CoursePublicPrivateCollection;
 use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationInformNeedResource;
 use App\Http\Resources\V1\Cecy\Planifications\InformCourseNeedsResource;
 use App\Http\Resources\V1\Cecy\Courses\CoursesByResponsibleCollection;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationCollection;
 use App\Http\Resources\V1\Cecy\Certificates\CertificateResource;
+use App\Http\Resources\V1\Cecy\Courses\CoordinatorCecy\CourseByCoordinatorCecyCollection;
+<<<<<<< HEAD
+use App\Http\Resources\V1\Cecy\Planifications\CoordinatorCecy\PlanificationResource;
+=======
+>>>>>>> c70b4e2a4a2d04690ad9c701133a7eafe13f0919
+use App\Http\Resources\V1\Cecy\Planifications\InformCourseNeedsCollection;
 use App\Models\Cecy\Instructor;
 use App\Models\Cecy\Participant;
 use App\Models\Cecy\Planification;
@@ -292,10 +296,8 @@ class CourseController extends Controller
 
     //Obtener cursos y Filtrarlos por peridos lectivos , carrera o estado (Done)
     //el que hizo esto debe cambiar lo que se envia por json a algo que se envia por params
-    public function getCoursesByCoordinator(CoordinatorCecyGetCoursesByCoordinatorCecyRequest $request)
+    public function getCoursesByCoordinator(GetCoursesByCoordinatorCecyRequest $request)
     {
-
-        return "getCoursesByCoordinator";
         $sorts = explode(',', $request->sort);
 
         $courses = Course::customOrderBy($sorts)
@@ -307,12 +309,11 @@ class CourseController extends Controller
         return (new CourseByCoordinatorCecyCollection($courses))
             ->additional([
                 'msg' => [
-                    'summary' => '',
+                    'summary' => 'Consulta exitosa',
                     'detail' => '',
                     'code' => '200'
                 ]
-            ])
-            ->response()->setStatusCode(200);
+            ])->response()->setStatusCode(200);
     }
 
     //Mostrar los KPI de cursos aprobados, por aprobar y en proceso (Done)
@@ -369,14 +370,35 @@ class CourseController extends Controller
     }
 
     // Mostrar las necesidades de un curso (Done)
+    /*     public function informCourseNeeds(Course $course)
+    {
+        //trae un informe de nececidades de una planificacion, un curso en especifico por el docente que se logea
+
+        $planification = $course->planifications()->first();
+
+     $data= new InformCourseNeedsResource($planification);
+        $pdf = PDF::loadView('reports/report-needs', ['planification' => $data]);
+
+        return $pdf->stream('informNeeds.pdf'); 
+    } */
+
+    // Mostrar las necesidades de un curso (Done)
     public function informCourseNeeds(Course $course)
     {
         //trae un informe de nececidades de una planificacion, un curso en especifico por el docente que se logea
 
-        $planification = $course->planifications()->get();
+        $planification = $course->planifications()->with('responsibleCourse.user')->first();
 
-        $data =  new InformCourseNeedsResource($planification);
-        $pdf = PDF::loadView('reports/report-needs', ['planifications' => $data]);
+        $days = $planification->detailPlanifications()->with('day')->get();
+
+        $classrooms = $planification->detailPlanifications()->with('classroom')->get();
+
+        $pdf = PDF::loadView('reports/report-needs', [
+            'planification' => $planification,
+            'course' => $course,
+            'days' => $days,
+            'classrooms' => $classrooms,
+        ]);
 
         return $pdf->stream('informNeeds.pdf');
     }
@@ -384,48 +406,21 @@ class CourseController extends Controller
     //Traer todos los cursos planificados de un año en especifico (Done)
     // el que hizo esto debe enviar el año en especifico bien por el url 
     // o por params
-    public function showYearSchedule(GetDateByshowYearScheduleRequest $request)
+    public function showYearSchedule(Planification $planificacion)
     {
-        return "showYearSchedule";
-        $year = Planification::whereYear('started_at', $request->input('startedAt'))->get();
+                // $year = $planificacion->whereYear('started_at')->first();
+        $planifications = Planification::whereYear('started_at','=',2020)->get();
+        $course = $planifications->course()->get();
+        
 
-        $planificacion = $year
-            ->instructors()
-            ->detailPlanifications()
-            ->classrooms()
-            ->planifications()
-            ->courses()
-            ->paginate($request->input('per_page'));
+       return new PlanificationCollection($planifications) ;
 
-        return (new DetailPlanificationInformNeedResource($planificacion))
-            ->additional([
-                'msg' => [
-                    'summary' => 'success',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ])
-            ->response()->setStatusCode(200);
-    }
-
-    //Traer la informacion de diseño curricular (Done)
-    public function showCurricularDesign(getCoursesByNameRequest $request, Course $course)
-    {
-        return "showCurricularDesign";
-        $planification = $course->planifications()->get()
-            ->detailPlanifications()
-            ->planifications()
-            ->course()
-            ->paginate($request->input('per_page'));
-
-        return (new InformCourseNeedsResource($planification))
-            ->additional([
-                'msg' => [
-                    'summary' => 'success',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ]);
+        $pdf = PDF::loadView('reports/report-year-schedule');
+        $pdf->setOptions([
+            'orientation' => 'landscape',
+            'page-size' => 'a4'
+        ]);
+        return $pdf->stream('informNeeds.pdf');
     }
 
     // Traer la informacion del informe final del curso (Done)

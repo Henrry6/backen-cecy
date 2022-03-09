@@ -13,16 +13,16 @@ class SaveDetailAttendanceRequest extends FormRequest
     public function rules()
     {
         return [
-            'attendance.id'=> ['required','integer'],
-            'registration.id'=> ['required','integer']
+            'type.id' => ['required', 'integer'],
+            // 'registration.id'=> ['required','integer']
         ];
     }
 
     public function attributes()
     {
         return [
-            'attendance.id'=> 'id de la asistencia',
-            'registration.id'=> 'id del registro'
+            'type.id' => 'tipo de  asistencia',
+            // 'registration.id'=> 'id del registro'
         ];
     }
 }

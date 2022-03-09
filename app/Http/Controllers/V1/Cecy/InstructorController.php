@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use App\Models\Cecy\Instructor;
 use App\Http\Resources\V1\Cecy\Courses\CourseResource;
 use App\Http\Resources\V1\Cecy\Courses\CourseCollection;
+use App\Http\Resources\V1\Cecy\Instructors\InstructorCollection;
 use App\Http\Resources\V1\Cecy\Instructors\InstructorResource;
 use App\Http\Resources\V1\Core\Users\UserCollection;
 use App\Models\Authentication\User;
@@ -32,6 +33,19 @@ class InstructorController extends Controller
     //     $this->middleware('permission:delete-catalogues')->only(['destroy', 'destroys']);
     // }
 
+    public function index()
+    {
+        //return Institution::paginate();
+        return (new InstructorCollection(Instructor::paginate()))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'Institution' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
     // Devuelve los cursos que le fueron asignados al docente responsable
     // InstructorCotroller
     public function getCourses(Instructor $instructor)
@@ -85,7 +99,21 @@ class InstructorController extends Controller
     }
 
     // para eliminar un instructor
+    public function destroy(Instructor $instructor)
+    {
 
+        $instructor->delete();
+
+        return (new InstructorResource($instructor))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Institucion Eliminada',
+                    'detail' => '',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
+    }
     public function destroyInstructors(DestroysInstructorRequest $request)
     {
         $instructor = Instructor::whereIn('id', $request->input('ids'))->get();

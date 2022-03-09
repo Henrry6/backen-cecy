@@ -23,16 +23,6 @@ class DetailAttendanceFactory extends Factory
      */
     public function definition()
     {
-        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
-        $registration = Registration::get();
-        $attendance = Attendance::get();
-        $types = Catalogue::where('type', $catalogue['attendance']['type'])->get();
-
-
-        return [
-            'attendance_id' => $this->faker->randomElement($attendance),
-            'registration_id' => $this->faker->randomElement($registration),
-            'type_id' => $this->faker->randomElement($types),
-        ];
+        return [];
     }
 }
