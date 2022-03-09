@@ -344,7 +344,7 @@ Route::prefix('registration')->group(function () {
     Route::get('download-file', [RegistrationController::class, 'downloadFile']);
     Route::post('nullify-registrations', [RegistrationController::class, 'nullifyRegistrations']);
     Route::patch('nullify-registration/{registration}', [RegistrationController::class, 'nullifyRegistration']);
-    Route::get('show-record-competitor', [RegistrationController::class, 'showRecordCompetitor']);
+    Route::get('show-record-competitor/{course}', [RegistrationController::class, 'showRecordCompetitor']);
     Route::patch('show-participant-grades', [RegistrationController::class, 'ShowParticipantGrades']);
     Route::put('upload-file', [RegistrationController::class, 'uploadFile']);
     Route::get('download-file-grades', [RegistrationController::class, 'downloadFileGrades']);
