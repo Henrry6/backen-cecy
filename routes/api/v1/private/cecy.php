@@ -202,13 +202,15 @@ Route::prefix('instructor')->group(function () {
  * REGISTRATION
  **********************************************************************************************************************/
 Route::prefix('registration')->group(function () {
-    Route::post('register-student', [RegistrationController::class, 'registerStudent']);
+    Route::post('register-student/{detailPlanification}', [RegistrationController::class, 'registerStudent']);
 });
 /***********************************************************************************************************************
  * DETAIL SCHOOL PERIOD
  **********************************************************************************************************************/
 Route::apiResource('detail-school-periods', DetailSchoolPeriodController::class);
-
+Route::prefix('detail-school-period')->group(function () {
+    Route::patch('/{detail-school-period}', [DetailSchoolPeriodController::class, 'destroys']);
+});
 
 /*
 ******************************************************************************************************************

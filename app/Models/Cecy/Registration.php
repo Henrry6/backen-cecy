@@ -71,7 +71,7 @@ class Registration extends Model implements Auditable
 
     public function typeParticipant()
     {
-        return $this->belongsTo(Catalogue::class);
+        return $this->belongsTo(Catalogue::class, 'type_participant_id');
     }
 
     // Mutators
