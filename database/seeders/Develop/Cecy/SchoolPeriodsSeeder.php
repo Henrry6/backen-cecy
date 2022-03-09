@@ -23,7 +23,7 @@ class SchoolPeriodsSeeder extends Seeder
 
     public function createSchoolPeriodsCatalogue()
     {
-        //Campos que son de catalogo
+
         //state_id (hecho)
         $catalogues = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
         Catalogue::factory()->sequence(

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\V1\Cecy\DetailSchoolPeriods;
+namespace App\Http\Requests\V1\Cecy\SchoolPeriods;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class DestroysDetailSchoolPeriodsRequest extends FormRequest
+class DestroysSchoolPeriodRequest extends FormRequest
 {
     public function authorize()
     {

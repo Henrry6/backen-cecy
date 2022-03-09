@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\V1\Cecy\DetailSchoolPeriods\IndexDetailSchoolPeriodsRequest;
-use App\Http\Requests\V1\Cecy\DetailSchoolPeriods\StoreDetailSchoolPeriodsRequest;
-use App\Http\Requests\V1\Cecy\DetailSchoolPeriods\UpdateDetailSchoolPeriodsRequest;
+use App\Http\Requests\V1\Cecy\DetailSchoolPeriods\DestroysDetailSchoolPeriodRequest;
+use App\Http\Requests\V1\Cecy\DetailSchoolPeriods\IndexDetailSchoolPeriodRequest;
+use App\Http\Requests\V1\Cecy\DetailSchoolPeriods\StoreDetailSchoolPeriodRequest;
+use App\Http\Requests\V1\Cecy\DetailSchoolPeriods\UpdateDetailSchoolPeriodRequest;
 use App\Http\Resources\V1\Cecy\DetailSchoolPeriods\DetailSchoolPeriodCollection;
 use App\Http\Resources\V1\Cecy\DetailSchoolPeriods\DetailSchoolPeriodResource;
 use App\Models\Cecy\DetailSchoolPeriod;
@@ -18,19 +19,10 @@ class DetailSchoolPeriodController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(IndexDetailSchoolPeriodsRequest $request)
+    public function index(IndexDetailSchoolPeriodRequest $request)
     {
-        return "detail school periods";
         $sorts = explode(',', $request->sort);
         $detailSchoolPeriods = DetailSchoolPeriod::customOrderBy($sorts)
-            ->especialEndedAt($request->input('especial_ended_at'))
-            ->especialStartedAt($request->input('especial_started_at'))
-            ->extraordinaryEndedAt($request->input('extraordinary_ended_at'))
-            ->extraordinaryStartedAt($request->input('extraordinary_started_at'))
-            ->nullificationStartedAt($request->input('nullification_started_at'))
-            ->nullificationEndedAt($request->input('nullification_ended_at'))
-            ->ordinaryEndedAt($request->input('ordinary_ended_at'))
-            ->ordinaryStartedAt($request->input('ordinary_started_at'))
             ->paginate($request->per_page);
         return (new DetailSchoolPeriodCollection($detailSchoolPeriods))
             ->additional([
@@ -49,12 +41,12 @@ class DetailSchoolPeriodController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreDetailSchoolPeriodsRequest $request)
+    public function store(StoreDetailSchoolPeriodRequest $request)
     {
         $detailSchoolPeriod = new DetailSchoolPeriod();
 
         $detailSchoolPeriod->schoolPeriod()
-            ->associate(DetailSchoolPeriod::find($request->input('detail_school_period.id')));
+            ->associate(DetailSchoolPeriod::find($request->input('schoolPeriod.id')));
 
         $detailSchoolPeriod->especial_ended_at = $request->input('especialEndedAt');
         $detailSchoolPeriod->especial_started_at = $request->input('especialStartedAt');
@@ -104,10 +96,10 @@ class DetailSchoolPeriodController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateDetailSchoolPeriodsRequest $request, DetailSchoolPeriod $detailSchoolPeriod)
+    public function update(UpdateDetailSchoolPeriodRequest $request, DetailSchoolPeriod $detailSchoolPeriod)
     {
         $detailSchoolPeriod->schoolPeriod()
-            ->associate(DetailSchoolPeriod::find($request->input('detail_school_period.id')));
+            ->associate(DetailSchoolPeriod::find($request->input('schoolPeriod.id')));
 
         $detailSchoolPeriod->especial_ended_at = $request->input('especialEndedAt');
         $detailSchoolPeriod->especial_started_at = $request->input('especialStartedAt');
@@ -119,6 +111,16 @@ class DetailSchoolPeriodController extends Controller
         $detailSchoolPeriod->ordinary_started_at = $request->input('ordinaryStartedAt');
 
         $detailSchoolPeriod->save();
+
+        return (new DetailSchoolPeriodResource($detailSchoolPeriod))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Registro Actualizado',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(201);
     }
 
     /**
@@ -134,6 +136,22 @@ class DetailSchoolPeriodController extends Controller
             ->additional([
                 'msg' => [
                     'summary' => 'Registro Eliminado',
+                    'detail' => '',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
+    }
+    public function destroys (DestroysDetailSchoolPeriodRequest $request)
+    {
+        $schoolPeriod = DetailSchoolPeriod::whereIn('id', $request->input('ids'))->get();
+
+        DetailSchoolPeriod::destroy($request->input('ids'));
+
+        return (new DetailSchoolPeriodCollection($schoolPeriod))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Periodos Eliminados',
                     'detail' => '',
                     'code' => '201'
                 ]

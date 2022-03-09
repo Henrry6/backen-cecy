@@ -4,7 +4,7 @@ namespace App\Http\Requests\V1\Cecy\SchoolPeriods;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreSchoolPeriodsRequest extends FormRequest
+class UpdateSchoolPeriodRequest extends FormRequest
 {
     public function authorize()
     {

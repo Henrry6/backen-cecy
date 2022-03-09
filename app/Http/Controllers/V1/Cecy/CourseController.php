@@ -19,6 +19,7 @@ use App\Models\Cecy\Catalogue;
 use App\Http\Resources\V1\Cecy\Courses\CourseResource;
 use App\Http\Resources\V1\Cecy\Courses\CourseCollection;
 use App\Http\Requests\V1\Cecy\Courses\UpdateCurricularDesign;
+use App\Http\Requests\V1\Cecy\Courses\UpdateStateCourseRequest;
 use App\Http\Requests\V1\Cecy\Courses\UploadCertificateOfApprovalRequest;
 use App\Http\Requests\V1\Cecy\Planifications\GetDateByshowYearScheduleRequest;
 use App\Http\Requests\V1\Cecy\Planifications\IndexPlanificationRequest;
@@ -530,6 +531,22 @@ class CourseController extends Controller
             'page-size' => 'a4'
         ]);
         return $pdf->stream('certificate.pdf');
+    }
+
+    public function updateStateCourse(UpdateStateCourseRequest $request, Course $course)
+    {
+        $course->state_id = $request -> id;
+        $course ->save();
+
+        return (new CourseResource($course))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Estado actualizado',
+                    'detail' => 'El estado del curso pudo haber cambiado de posición',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
     }
 
     // Adjuntar el acta de aprobación
