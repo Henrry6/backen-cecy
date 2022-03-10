@@ -20,11 +20,13 @@ use App\Http\Resources\V1\Cecy\Planifications\ResponsibleCoursePlanifications\Pl
 use App\Http\Resources\V1\Cecy\Planifications\ResponsibleCoursePlanifications\PlanificationByCourseResource;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationResource;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationCollection;
+use App\Models\Authentication\User;
 use App\Models\Cecy\Authority;
 use App\Models\Cecy\Catalogue;
 use App\Models\Cecy\Course;
 use App\Models\Cecy\DetailPlanification;
 use App\Models\Cecy\DetailSchoolPeriod;
+use App\Models\Cecy\Institution;
 use App\Models\Cecy\Instructor;
 use App\Models\Cecy\Planification;
 use App\Models\Cecy\SchoolPeriod;
@@ -319,15 +321,30 @@ class PlanificationController extends Controller
         $planification = Planification::firstWhere('id',$planification->id);
         $course = $planification->course()->first();
         $topics = $course->topics()->first();
+        $course_tec=$course->techniques_requisites['technical'];
+        $course_gen=$course->techniques_requisites['general'];
+        $instructor = Instructor::where('id', $planification->responsible_course_id)->first();
+        //$user =  $instructor->user();
+        $user = User::firstWhere('id', $instructor->user_id);
 
-        //return $course;
+
+
+
+        //return $course->evaluation_mechanisms->diagnostic['tecnique'];
         //return $topics;
+        //return $course;
        
 
             $pdf = PDF::loadView('reports/desing-curricular', [
                 'planification' => $planification,
                 'course' => $course,
+                'course_tec' => $course_tec,
                 'topics' => $topics,
+                'course_gen' => $course_gen,
+                'user'=> $user,
+                'instructor'=>$instructor,
+
+                
                 
                 
             ]);
@@ -343,10 +360,18 @@ class PlanificationController extends Controller
         $planification = Planification::firstWhere('id',$planification->id);
         $course = $planification->course()->first();
         $topics = $course->topics()->first();
+        $responsiblececy =$planification->responsibleCecy()->first();
+        $institution =Institution::firstWhere('id',$responsiblececy->intitution_id);
+
+        $instructor = Instructor::where('id', $planification->responsible_course_id)->first();
+        //$user =  $instructor->user();
+        $user = User::firstWhere('id', $instructor->user_id);
 
 
+        //return $institution;
 
-        return $course;
+
+        //return $course;
         //return $planification;
        
 
@@ -354,6 +379,9 @@ class PlanificationController extends Controller
                 'planification' => $planification,
                 'course' => $course,
                 'topics' => $topics,
+                'institution'=> $institution,
+                'user'=> $user,
+                'instructor'=>$instructor,
 
 
 

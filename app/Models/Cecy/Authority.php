@@ -28,7 +28,7 @@ class Authority extends Model implements Auditable
     // Relationships
     public function institution()
     {
-        return $this->belongsTo(Institution::class);
+        return $this->belongsTo(Institution::class, 'id','institution_id');
     }
 
     public function position()
