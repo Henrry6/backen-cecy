@@ -163,7 +163,7 @@ Route::prefix('courses/{course}')->group(function () {
         Route::get('/final-report', [CourseController::class, 'showCourseFinalReport']);
         // Route::get('inform-course-needs/{course}', 'App\Http\Controllers\V1\Cecy\CourseController@informCourseNeeds');
     });
-    Route::prefix('image')->group(function () {
+    Route::prefix('images')->group(function () {
         Route::get('{image}', [CourseController::class, 'indexPublicImages']);
         Route::post('', [CourseController::class, 'uploadPublicImage']);
     });
