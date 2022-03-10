@@ -37,7 +37,10 @@ class Attendance extends Model implements Auditable
         return $this->belongsTo(DetailPlanification::class);
     }
 
-
+    public function photographicRecords()
+    {
+        return $this->hasMany(PhotographicRecord::class);
+    }
     // Mutators
 
 

@@ -4,7 +4,7 @@ namespace App\Http\Requests\V1\Cecy\SchoolPeriods;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateSchoolPeriodsRequest extends FormRequest
+class StoreSchoolPeriodRequest extends FormRequest
 {
     public function authorize()
     {
@@ -16,10 +16,10 @@ class UpdateSchoolPeriodsRequest extends FormRequest
         return [
             'state.id' =>  ['integer', 'required'],
             'code' =>  ['required'],
-            'ended_at' =>  ['required'],
-            'minimum_note' =>  ['required'],
+            'endedAt' =>  ['required'],
+            'minimumNote' =>  ['required'],
             'name' =>  ['required'],
-            'started_at' =>  ['required'],
+            'startedAt' =>  ['required'],
         ];
     }
 
@@ -28,10 +28,10 @@ class UpdateSchoolPeriodsRequest extends FormRequest
         return [
             'state.id' =>  'Id del estado del periodo lectivo',
             'code' =>  'codigo unico del periodo lectivo',
-            'ended_at' =>  'Fecha de finalización del perido lectivo',
-            'minimum_note' =>  'minimo de nota para aprovar los cursos',
+            'endedAt' =>  'Fecha de finalización del perido lectivo',
+            'minimumNote' =>  'minimo de nota para aprovar los cursos',
             'name' =>  'Nombre del periodo lectivo',
-            'started_at' =>  'Fecha de inicio del perido lectivo',
+            'startedAt' =>  'Fecha de inicio del perido lectivo',
         ];
     }
 }

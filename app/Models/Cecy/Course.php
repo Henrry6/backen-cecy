@@ -141,7 +141,10 @@ class Course extends Model implements Auditable
     {
         return $this->hasMany(Planification::class);
     }
-
+    public function planification()
+    {
+        return $this->belongsTo(Planification::class);
+    }
     public function prerequisites()
     {
         return $this->hasMany(Prerequisite::class);
@@ -181,6 +184,12 @@ class Course extends Model implements Auditable
     {
         return $this->morphMany(Image::class, 'imageable');
     }
+
+    public function image()
+    {
+        return $this->morphOne(Image::class, 'imageable');
+    }
+
 
     // Mutators
     public function setAbbreviationAttribute($value)

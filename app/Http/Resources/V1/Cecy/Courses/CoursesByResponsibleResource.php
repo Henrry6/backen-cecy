@@ -8,6 +8,7 @@ use App\Http\Resources\V1\Cecy\Courses\CourseResource;
 use App\Http\Resources\V1\Cecy\Instructors\InstructorResource;
 use App\Http\Resources\V1\Cecy\Participants\ParticipantResource;
 use App\Http\Resources\V1\Core\CareerResource;
+use App\Http\Resources\V1\Core\ImageResource;
 use App\Models\Cecy\Authority;
 use App\Models\Cecy\SchoolPeriod;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -23,6 +24,7 @@ class CoursesByResponsibleResource extends JsonResource
             'career' => CareerResource::make($this->career),
             'category' => CatalogueResource::make($this->category),
             'formationType' => CatalogueResource::make($this->formationType),
+            'image' => ImageResource::make($this->image),
             'certifiedType' => CatalogueResource::make($this->certifiedType),
             'courseType' => CatalogueResource::make($this->courseType),
             'modality' => CatalogueResource::make($this->modality),

@@ -171,11 +171,29 @@ class TopicController extends Controller
                 ]
             ]);
     }
+    public function show(Course $course, Topic $topic)
+    {
+        return (new TopicResource($topic))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Tema o subtema Actualizado',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ]);
+    }
 
     // Elimina un tema o subtema de un curso
     // TopicCotroller
     public function destroyTopic(Course $course, Topic $topic)
     {
+        $topicFilter = Topic::find($topic->id);
+        if ($topicFilter->children) {
+            $idsChildren = $topicFilter->children->map(function ($item, $key) {
+                return $item->id;
+            });
+            Topic::destroy($idsChildren);
+        }
         $topic->delete();
         return (new TopicResource($topic))
             ->additional([

@@ -18,7 +18,7 @@ class CoursesSeeder extends Seeder
     public function createCoursesCatalogue()
     {
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
-        Catalogue::factory(38)->sequence(
+        Catalogue::factory(42)->sequence(
             [
                 'code' => $catalogue['academic_period']['first'],
                 'name' => 'PRIMERO',
@@ -252,7 +252,26 @@ class CoursesSeeder extends Seeder
                 'name' => 'No aprobado',
                 'type' => $catalogue['course_state']['type'],
                 'description' => 'Cuando el estado del curso es no parobado'
-            ]
+            ],
+            [
+                'code' => $catalogue['target_groups']['children'],
+                'name' => 'Niños',
+                'type' => $catalogue['target_groups']['type'],
+                'description' => 'Grupo al que va dirigido'
+            ],
+            [
+                'code' => $catalogue['target_groups']['young'],
+                'name' => 'Adolescente',
+                'type' => $catalogue['target_groups']['type'],
+                'description' => 'Grupo al que va dirigido'
+            ],
+            [
+                'code' => $catalogue['target_groups']['adult'],
+                'name' => 'Adultos',
+                'type' => $catalogue['target_groups']['type'],
+                'description' => 'Grupo al que va dirigido'
+            ],
+            
         )->create();
 
         $faker = Factory::create();

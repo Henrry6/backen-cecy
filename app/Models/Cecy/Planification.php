@@ -35,6 +35,10 @@ class Planification extends Model implements Auditable
     {
         return $this->belongsTo(Course::class);
     }
+    public function courses()
+    {
+        return $this->hasMany(Course::class);
+    }
 
     public function detailSchoolPeriod()
     {
@@ -54,7 +58,7 @@ class Planification extends Model implements Auditable
     {
         return $this->belongsTo(Authority::class);
     }
-
+    
     public function state()
     {
         return $this->belongsTo(Catalogue::class);
@@ -95,6 +99,13 @@ class Planification extends Model implements Auditable
     {
         if ($course) {
             return $query->orWhere('course_id', $course->id);
+        }
+    }
+
+    public function scopeStartedAt($query, $started_at)
+    {
+        if ($started_at) {
+            return $query->Where('started_at', 'ilike', "%$started_at%");
         }
     }
 
