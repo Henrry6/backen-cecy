@@ -63,7 +63,9 @@ class AttendanceController extends Controller
             'detailPlanification' => $detailPlanification,
             'photographicRecords' => $photographicRecords
         ]);
-
+        $pdf->setOptions([
+            'orientation' => 'landscape',
+        ]);
 
         return $pdf->stream('Registro fotográfico.pdf');
     }
