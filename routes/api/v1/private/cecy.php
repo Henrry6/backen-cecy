@@ -47,6 +47,7 @@ Route::prefix('catalogue/{catalogue}')->group(function () {
     });
 });
 
+
 /***********************************************************************************************************************
  * INSTITUTIONS
  **********************************************************************************************************************/
@@ -360,4 +361,16 @@ Route::prefix('registration')->group(function () {
     Route::get('download-file-grades', [RegistrationController::class, 'downloadFileGrades']);
     Route::get('show-file', [RegistrationController::class, 'showFile']);
     Route::patch('destroy-file', [RegistrationController::class, 'destroyFile']);
+});
+Route::prefix('topic/{topic}')->group(function () {
+    Route::prefix('file')->group(function () {
+        Route::get('{file}/download', [TopicController::class, 'downloadFile']);
+        Route::get('download', [TopicController::class, 'downloadFiles']);
+        Route::get('', [TopicController::class, 'indexFiles']);
+        Route::get('{file}', [TopicController::class, 'showFile']);
+        Route::post('', [TopicController::class, 'uploadFile']);
+        Route::post('{file}', [TopicController::class, 'updateFile']);
+        Route::delete('{file}', [TopicController::class, 'destroyFile']);
+        Route::patch('', [TopicController::class, 'destroyFiles']);
+    });
 });
