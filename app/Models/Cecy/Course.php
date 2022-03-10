@@ -185,6 +185,12 @@ class Course extends Model implements Auditable
         return $this->morphMany(Image::class, 'imageable');
     }
 
+    public function image()
+    {
+        return $this->morphOne(Image::class, 'imageable');
+    }
+
+
     // Mutators
     public function setAbbreviationAttribute($value)
     {

@@ -98,10 +98,12 @@
 
 
 		}
+
 		table,
 		th,
 		td {
 			border: 1px solid black;
+			border-radius: 5%;
 			border-collapse: collapse;
 
 		}
