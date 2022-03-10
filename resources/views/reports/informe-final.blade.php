@@ -257,7 +257,7 @@
 		div9 {
 			float: left;
 			height: 100%;
-			margin-left: 20px;
+			margin-left: 0px;
 			margin-top: 5px;
 			color: blue;
 
@@ -266,7 +266,7 @@
 		div10 {
 			float: left;
 			height: 100%;
-			margin-left: -70px;
+			margin-left: -95px;
 			margin-top: 30px;
 			color: blue;
 
@@ -276,7 +276,7 @@
 		div11 {
 			float: left;
 			height: 100%;
-			margin-left: -180px;
+			margin-left: -210px;
 			margin-top: 55px;
 			color: blue;
 
@@ -286,7 +286,7 @@
 		div12 {
 			float: left;
 			height: 100%;
-			margin-left: -180px;
+			margin-left: -210px;
 			margin-top: 80px;
 			color: blue;
 
@@ -296,7 +296,7 @@
 		div13 {
 			float: left;
 			height: 100%;
-			margin-left: -180px;
+			margin-left: -210px;
 			margin-top: 105px;
 			color: blue;
 
@@ -306,7 +306,7 @@
 		div14 {
 			float: left;
 			height: 100%;
-			margin-left: -180px;
+			margin-left: -210px;
 			margin-top: 130px;
 			color: blue;
 
