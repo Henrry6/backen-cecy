@@ -202,7 +202,7 @@ class RegistrationController extends Controller
 
         $planification=$detailPlanification->planification()->first();
         $course=$planification->course()->first();
-        $regitrations=$detailPlanification->registrations()->with(['participant.user.sex','state','additionalInformation'])->get();
+        $regitrations=$detailPlanification->registrations()->with(['participant.user.sex','state','additionalInformation.levelInstruction'])->get();
         $classroom = $detailPlanification->classroom()->first();
 
        /*  $planification = $course->planifications()->get();
@@ -214,10 +214,17 @@ class RegistrationController extends Controller
         //$additionalInformations = $additionalInformation->registration()->get();
         //$participants = $registrations->participant()->with('user')->get();
 
-
+        $data = [
+     /*        'planification' => $planification,
+            'detailPlanification' => $detailPlanification,
+            'registrations' => $registrations,
+            'clasrroom'=>$classroom, */
+             //'additionalInformations' => $additionalInformations,
+            //'participants' => $participants,
+        ];
  
         
-        //return $regitrations;
+       // return $regitrations;
 
         $pdf = PDF::loadView('reports/report-record-competitors', [
             'planification' => $planification,
