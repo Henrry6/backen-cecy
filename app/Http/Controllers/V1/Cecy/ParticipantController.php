@@ -141,7 +141,7 @@ class ParticipantController extends Controller
     // ParticipantController
     public function getParticipantsByPlanification(IndexPlanificationRequest $request, DetailPlanification $detailPlanification)
     {
-        //return Requirement::first()->registrations();
+        // return Registration::firstWhere('detail_planification_id', $detailPlanification->id)->requirements('yolo');
         
 
         $participants = Registration::where('detail_planification_id', $detailPlanification->id)
