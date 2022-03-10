@@ -29,7 +29,7 @@
 					<br><br><br><br>
 					<div class="posiciones_01" style="top: 11.3006em; left:16.45em;">
 						<span class="stl_12 stl_08" style="word-spacing:0.01em;">
-							<span class="stl_13" style="color: red;">FORMULARIO: e{{$course->id}} </span>
+							<span class="stl_13" style="color: red;">FORMULARIO: e{{$detailPlanification->id}} </span>
 						</span>
 					</div><br><br>
 				</center>
@@ -48,9 +48,9 @@
 						<th>TIPO DE CURSO</th>
 						@if($course->course_type_id === 33)
 
-						<td>ADMINISTRATIVO</td>
+						<td colspan="3">ADMINISTRATIVO</td>
 						@else
-						<td>TECNICO </td>
+						<td colspan="3">TECNICO </td>
 						@endif
 
 
@@ -62,10 +62,10 @@
 						<th>MODALIDAD DEL CURSO:</th>
 						@if($course->course_type_id == 34)
 
-						<td>PRESENCIAL</td>
+						<td colspan="3">PRESENCIAL</td>
 						@else
 
-						<td>VIRTUAL</td>
+						<td colspan="3">VIRTUAL</td>
 						@endif
 
 					</tr>
@@ -73,7 +73,7 @@
 						<th>PARROQUIA</th>
 						<td>CENTRO HISTORICO</td>
 						<th>DURACIÓN DEL CURSO:</th>
-						<td>{{$course->duration}} HORAS</td>
+						<td colspan="3">{{$course->duration}} HORAS</td>
 
 
 					</tr>
@@ -81,7 +81,7 @@
 						<th>LOCAL DONDE SE DICTA</th>
 						<td>{{$clasrroom->name}}</td>
 						<th>FECHA DE INICIACION</th>
-						<td>{{$planification->started_at}}</td>
+						<td colspan="3">{{$planification->started_at}}</td>
 
 
 					</tr>
@@ -151,7 +151,7 @@
 						<td>{{$information->participant->user->birthdate}}</td>
 
 						@if($information->additional_information !== null)
-						<td>{{$information->additional_information->level_instruction_id}}</td>
+						<td>{{$information->additional_information->level_instruction->name}}</td>
 						<td>{{$information->additional_information->company_name}}</td>
 						<td>{{$information->additional_information->company_activity}}</td>
 						<td>{{$information->additional_information->company_address}}</td>

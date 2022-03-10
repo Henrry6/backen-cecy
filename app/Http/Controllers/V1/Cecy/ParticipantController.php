@@ -23,6 +23,7 @@ use App\Models\Cecy\DetailPlanification;
 use App\Models\Cecy\Participant;
 use App\Models\Cecy\Planification;
 use App\Models\Cecy\Registration;
+use App\Models\Cecy\Requirement;
 use App\Models\Core\Address;
 use App\Models\Core\Catalogue as CoreCatalogue;
 use App\Models\Core\File;
@@ -140,12 +141,12 @@ class ParticipantController extends Controller
     // ParticipantController
     public function getParticipantsByPlanification(IndexPlanificationRequest $request, DetailPlanification $detailPlanification)
     {
-
-        $detailPlanifications = DetailPlanification::firstwhere('planification_id', $detailPlanification->id);
+        //return Requirement::first()->registrations();
+        
 
         $participants = Registration::where('detail_planification_id', $detailPlanification->id)
             ->paginate($request->input('per_page'));
-        // return $participants;
+         
         return (new PlanificationParticipantCollection($participants))
             ->additional([
                 'msg' => [
@@ -155,21 +156,7 @@ class ParticipantController extends Controller
                 ]
             ])->response()->setStatusCode(200);
     }
-    /*DDRC-C: Busca informacion de un participante(datos del usuario) y de registro a un curso especifico(informacion adicional y archivos)*/
-    // ParticipantController
-    public function getParticipantInformation(IndexRegistrationRequest $request, Registration $registration)
-    {
-        // $participantRegistration = Registration::firstWhere('id', $registration->id);
-        // $additionalInformation = AdditionalInformation::firstwhere('registration_id', $registration->id);
-        return (new ParticipantInformationResource($registration))
-            ->additional([
-                'msg' => [
-                    'summary' => 'success',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ])->response()->setStatusCode(200);
-    }
+   
 
     /*DDRC-C: actualiza una inscripcion, cambiando la observacion,y estado de una inscripción de un participante en un curso especifico  */
     // ParticipantController
@@ -218,24 +205,6 @@ class ParticipantController extends Controller
             ])->response()->setStatusCode(201);
     }
 
-    /*DDRC-C: Matricula un participante */
-    // ParticipantController
-    public function registerParticipant(RegistrationStateModificationRequest $request, Participant $participant)
-    {
-        $registration = $participant->registration()->first();
-        $registration->state()->associate(Catalogue::find($request->input('state.id')));
-        $registration->save();
-
-        return (new RegistrationResource($registration))
-            ->additional([
-                'msg' => [
-                    'summary' => 'Participantes matriculados',
-                    'detail' => '',
-                    'code' => '201'
-                ]
-            ])
-            ->response()->setStatusCode(201);
-    }
     /*DDRC-C: notifica a un participante de una observacion en su inscripcion*/
     // ParticipantController
     // Pendiente

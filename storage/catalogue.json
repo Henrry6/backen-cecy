@@ -250,8 +250,6 @@
         "type": "REQUIREMENT_STATE",
         "enabled": "ENABLED",
         "disabled": "DISABLED"
-<<<<<<< HEAD
-=======
     },
     "period_state": {
         "type": "PERIOD_STATE",
@@ -262,6 +260,5 @@
         "type":"TARGET_GROUPS",
         "childrens":"CHILDRENS",
         "young":"YOUNG"
->>>>>>> 1add5a361016745ea20ccce4f51e42d558f2d930
     }
 }
