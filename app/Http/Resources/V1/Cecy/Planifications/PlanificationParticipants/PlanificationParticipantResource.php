@@ -16,14 +16,14 @@ class PlanificationParticipantResource extends JsonResource
         return [
             'id' => $this->id,
             'participant' => ParticipantResource::make($this->participant),
-            'certificates'=> CertificateResource::make($this->certificates),
+            // 'certificates'=> CertificateResource::make($this->certificates),
             'aditionalInformation' => AdditionalInformationResource::make($this->additionalInformation),
             'state' => CatalogueResource::make($this->state),
             'stateCourse' => CatalogueResource::make($this->stateCourse),
             'type' => CatalogueResource::make($this->type),
             'typeParticipant' => CatalogueResource::make($this->typeParticipant),
             'number' => $this->number,
-            'observations' => $this->observations,       
+            'observations' => $this->observations,
         ];
     }
 }

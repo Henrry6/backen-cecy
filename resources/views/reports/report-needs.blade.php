@@ -40,7 +40,7 @@
 				</center>
 				<br><br> <br><br>
 				<div class="posiciones_01" style="top: 18.6243em; left:6.0125em;">
-					<span class="stl_15 stl_08" style="word-spacing:0.07em;">Nombre del Docente:{{$planification->responsible_course}} </span>
+					<span class="stl_15 stl_08" style="word-spacing:0.07em;">Nombre del Docente:{{$user->name}} </span>
 				</div>
 				<br>
 				<div class="posiciones_01" style="top: 21.1243em; left:6.0125em;">
