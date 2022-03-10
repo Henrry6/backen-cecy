@@ -83,6 +83,7 @@ Route::prefix('planification/{planification}')->group(function () {
     Route::get('/informe-final', [PlanificationController::class, 'informeFinal']);
 
 
+
 });
 
 
@@ -144,6 +145,7 @@ Route::prefix('courses/{course}')->group(function () {
         Route::post('/topics', [TopicController::class, 'storesTopics']);
         Route::put('/topics', [TopicController::class, 'updateTopics']);
         Route::delete('/topics/{topic}', [TopicController::class, 'destroyTopic']);
+        Route::get('/topics/{topic}', [TopicController::class, 'show']);
         Route::get('/instructors', [TopicController::class, 'getInstructors']);
     });
     Route::prefix('')->group(function () {
@@ -316,6 +318,8 @@ Route::prefix('attendance')->group(function () {
 
 Route::prefix('pdf')->group(function () {
     Route::get('photographic-record/{course}', [AttendanceController::class, 'showPhotographicRecord']);
+    Route::get('year-schedule/{year}', [CourseController::class, 'showYearSchedule']);
+    Route::get('attendance-evaluation/{course}', [AttendanceController::class, 'attendanceEvaluation']);
     Route::get('year-schedule', [CourseController::class, 'showYearSchedule']);
 
     // Route::get('inform-course-needs/{course}', 'App\Http\Controllers\V1\Cecy\CourseController@informCourseNeeds');
@@ -323,6 +327,7 @@ Route::prefix('pdf')->group(function () {
     // Route::get('inform-course-needs/{course}', [CourseController::class, 'informCourseNeeds']);
 
 });
+
 
 /***********************************************************************************************************************
  * RECORDS

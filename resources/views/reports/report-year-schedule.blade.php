@@ -74,18 +74,19 @@
 
           </tr>
           @foreach($planifications as $planification)
+
           <tr>
           
             <td>{{$planification->id}}</td>
             <td></td>
             <td></td>
-            <td></td>
+            <td>{{$planification->course->name}}</td>
             <td></td>
 
             <td>{{$planification->started_at}}</td>
             <td>{{$planification->ended_at}}</td>
-            <td></td>
-            <td></td>
+            <td>{{$planifications->detailPlanification->started_time}}</td>
+            <td>{{$planifications->detailPlanification->ended_time}</td>
             <td></td>
             <td></td>
             <td></td>
