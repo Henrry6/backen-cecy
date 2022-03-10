@@ -25,6 +25,7 @@ use App\Models\Cecy\Catalogue;
 use App\Models\Cecy\Course;
 use App\Models\Cecy\DetailPlanification;
 use App\Models\Cecy\DetailSchoolPeriod;
+use App\Models\Cecy\Institution;
 use App\Models\Cecy\Instructor;
 use App\Models\Cecy\Planification;
 use App\Models\Cecy\SchoolPeriod;
@@ -220,27 +221,7 @@ class PlanificationController extends Controller
                 ]
             ])->response()->setStatusCode(200);
     }
-    /*DDRC-C: Trae una lista de nombres de cursos, paralelos y jornadas*/
-    // PlanificationController ya esta, no vale el metodo.
-    public function getCoursesParallelsWorkdays(getCoursesByResponsibleRequest $request)
-    {
-        $detailPlanifications = DetailPlanification::get();
-        return $detailPlanifications;
-        $sorts = explode(',', $request->sort);
-        $courseParallelWorkday = Planification::customOrderBy($sorts)
-            //            ->detailplanifications()
-            //            ->course()
-            ->get();
-
-        //         return (new CourseParallelWorkdayResource($courseParallelWorkday))
-        //             ->additional([
-        //                 'msg' => [
-        //                     'summary' => 'success',
-        //                     'detail' => '',
-        //                     'code' => '200'
-        //                 ]
-        //             ])->response()->setStatusCode(201);
-    }
+    
 
     // asignar docente responsable de curso a una planificacion ya esta
     public function storePlanificationByCourse(StorePlanificationByCourseRequest $request, Planification $planification)
@@ -339,15 +320,25 @@ class PlanificationController extends Controller
         $planification = Planification::firstWhere('id',$planification->id);
         $course = $planification->course()->first();
         $topics = $course->topics()->first();
+        $course_tec=$course->techniques_requisites['technical'];
+        $course_gen=$course->techniques_requisites['general'];
 
-        //return $course;
+
+
+
+        //return $course->evaluation_mechanisms->diagnostic['tecnique'];
         //return $topics;
+        //return $course;
        
 
             $pdf = PDF::loadView('reports/desing-curricular', [
                 'planification' => $planification,
                 'course' => $course,
+                'course_tec' => $course_tec,
                 'topics' => $topics,
+                'course_gen' => $course_gen,
+
+                
                 
                 
             ]);
@@ -363,10 +354,14 @@ class PlanificationController extends Controller
         $planification = Planification::firstWhere('id',$planification->id);
         $course = $planification->course()->first();
         $topics = $course->topics()->first();
+        $responsiblececy =$planification->responsibleCecy()->first();
+        $institution =Institution::firstWhere('id',$responsiblececy->intitution_id);
 
 
+        //return $institution;
 
-        return $course;
+
+        //return $course;
         //return $planification;
        
 
@@ -374,6 +369,7 @@ class PlanificationController extends Controller
                 'planification' => $planification,
                 'course' => $course,
                 'topics' => $topics,
+                'institution'=> $institution,
 
 
 

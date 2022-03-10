@@ -83,6 +83,7 @@ Route::prefix('planification/{planification}')->group(function () {
     Route::get('/informe-final', [PlanificationController::class, 'informeFinal']);
 
 
+
 });
 
 
@@ -164,9 +165,9 @@ Route::prefix('courses/{course}')->group(function () {
         Route::get('/final-report', [CourseController::class, 'showCourseFinalReport']);
         // Route::get('inform-course-needs/{course}', 'App\Http\Controllers\V1\Cecy\CourseController@informCourseNeeds');
     });
-    Route::prefix('image')->group(function () {
-        Route::get('{image}', [CourseController::class, 'showImageCourse']);
-        Route::post('', [CourseController::class, 'uploadImageCourse']);
+    Route::prefix('images')->group(function () {
+        Route::get('{image}', [CourseController::class, 'indexPublicImages']);
+        Route::post('', [CourseController::class, 'uploadPublicImage']);
     });
 });
 
@@ -317,6 +318,8 @@ Route::prefix('attendance')->group(function () {
 
 Route::prefix('pdf')->group(function () {
     Route::get('photographic-record/{course}', [AttendanceController::class, 'showPhotographicRecord']);
+    Route::get('year-schedule/{year}', [CourseController::class, 'showYearSchedule']);
+    Route::get('attendance-evaluation/{course}', [AttendanceController::class, 'attendanceEvaluation']);
     Route::get('year-schedule', [CourseController::class, 'showYearSchedule']);
 
     // Route::get('inform-course-needs/{course}', 'App\Http\Controllers\V1\Cecy\CourseController@informCourseNeeds');
@@ -324,6 +327,7 @@ Route::prefix('pdf')->group(function () {
     // Route::get('inform-course-needs/{course}', [CourseController::class, 'informCourseNeeds']);
 
 });
+
 
 /***********************************************************************************************************************
  * RECORDS
@@ -350,7 +354,7 @@ Route::prefix('registration')->group(function () {
     Route::get('download-file', [RegistrationController::class, 'downloadFile']);
     Route::post('nullify-registrations', [RegistrationController::class, 'nullifyRegistrations']);
     Route::patch('nullify-registration/{registration}', [RegistrationController::class, 'nullifyRegistration']);
-    Route::get('show-record-competitor/{course}', [RegistrationController::class, 'showRecordCompetitor']);
+    Route::get('show-record-competitor/{detailPlanification}', [RegistrationController::class, 'showRecordCompetitor']);
     Route::patch('show-participant-grades', [RegistrationController::class, 'ShowParticipantGrades']);
     Route::put('upload-file', [RegistrationController::class, 'uploadFile']);
     Route::get('download-file-grades', [RegistrationController::class, 'downloadFileGrades']);
