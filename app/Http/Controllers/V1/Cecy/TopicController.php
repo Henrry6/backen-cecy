@@ -17,7 +17,11 @@ use App\Http\Requests\V1\Cecy\Topics\StoreTopicRequest;
 use App\Http\Requests\V1\Cecy\Topics\UpdateTopicRequest;
 use App\Http\Resources\V1\Cecy\Courses\TopicsByCourseCollection;
 use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\GetDetailPlanificationsByResponsibleCourseRequest;
-
+use App\Http\Requests\V1\Core\Files\DestroysFileRequest;
+use App\Http\Requests\V1\Core\Files\IndexFileRequest;
+use App\Http\Requests\V1\Core\Files\UpdateFileRequest;
+use App\Http\Requests\V1\Core\Files\UploadFileRequest;
+use App\Models\Core\File;
 
 class TopicController extends Controller
 {
@@ -215,5 +219,47 @@ class TopicController extends Controller
                     'code' => '200'
                 ]
             ]);
+    }
+     /*******************************************************************************************************************
+     * FILES
+     ******************************************************************************************************************/
+    public function indexFiles(IndexFileRequest $request, Topic $topic)
+    {
+        return $topic->indexFiles($request);
+    }
+
+    public function uploadFile(UploadFileRequest $request, Topic $topic)
+    {
+        return $topic->uploadFile($request);
+    }
+
+    public function downloadFile(Topic $topic, File $file)
+    {
+        return $topic->downloadFile($file);
+    }
+
+    public function downloadFiles(Topic $topic)
+    {
+        return $topic->downloadFiles();
+    }
+
+    public function showFile(Topic $topic, File $file)
+    {
+        return $topic->showFile($file);
+    }
+
+    public function updateFile(UpdateFileRequest $request, Topic $topic, File $file)
+    {
+        return $topic->updateFile($request, $file);
+    }
+
+    public function destroyFile(Topic $topic, File $file)
+    {
+        return $topic->destroyFile($file);
+    }
+
+    public function destroyFiles(Topic $topic, DestroysFileRequest $request)
+    {
+        return $topic->destroyFiles($request);
     }
 }
