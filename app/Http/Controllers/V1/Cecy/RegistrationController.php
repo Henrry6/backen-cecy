@@ -204,6 +204,8 @@ class RegistrationController extends Controller
         $course=$planification->course()->first();
         $regitrations=$detailPlanification->registrations()->with(['participant.user.sex','state','additionalInformation.levelInstruction'])->get();
         $classroom = $detailPlanification->classroom()->first();
+/*         $additionalInformations = AdditionalInformation::firstWhere('id', $regitrations->additional_informations_id);
+ */
 
        /*  $planification = $course->planifications()->get();
         $detailPlanification = $planification->detailPlanifications()->get();
@@ -224,8 +226,8 @@ class RegistrationController extends Controller
         ];
  
         
-       // return $regitrations;
-
+/*        return $additionalInformations;
+ */
         $pdf = PDF::loadView('reports/report-record-competitors', [
             'planification' => $planification,
             'detailPlanification' => $detailPlanification,

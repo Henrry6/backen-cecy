@@ -258,7 +258,8 @@
     },
     "target_groups": {
         "type":"TARGET_GROUPS",
-        "childrens":"CHILDRENS",
-        "young":"YOUNG"
+        "children":"CHILDREN",
+        "young":"YOUNG",
+        "adult":"ADULT"
     }
 }
