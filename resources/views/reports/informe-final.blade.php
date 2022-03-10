@@ -25,7 +25,7 @@
 		<br>
 
 		<h4>Nombre del docente:&nbsp;&nbsp; </h4>
-		<div1> {{$planification->responsible_course}} </div1>
+		<div1> {{$user->name}}</div1>
 
 		<h4>Nombre del curso:</h4>
 		<div2>{{$course->name}} </div2>

@@ -20,6 +20,7 @@ use App\Http\Resources\V1\Cecy\Planifications\ResponsibleCoursePlanifications\Pl
 use App\Http\Resources\V1\Cecy\Planifications\ResponsibleCoursePlanifications\PlanificationByCourseResource;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationResource;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationCollection;
+use App\Models\Authentication\User;
 use App\Models\Cecy\Authority;
 use App\Models\Cecy\Catalogue;
 use App\Models\Cecy\Course;
@@ -322,6 +323,9 @@ class PlanificationController extends Controller
         $topics = $course->topics()->first();
         $course_tec=$course->techniques_requisites['technical'];
         $course_gen=$course->techniques_requisites['general'];
+        $instructor = Instructor::where('id', $planification->responsible_course_id)->first();
+        //$user =  $instructor->user();
+        $user = User::firstWhere('id', $instructor->user_id);
 
 
 
@@ -337,6 +341,8 @@ class PlanificationController extends Controller
                 'course_tec' => $course_tec,
                 'topics' => $topics,
                 'course_gen' => $course_gen,
+                'user'=> $user,
+                'instructor'=>$instructor,
 
                 
                 
@@ -357,6 +363,10 @@ class PlanificationController extends Controller
         $responsiblececy =$planification->responsibleCecy()->first();
         $institution =Institution::firstWhere('id',$responsiblececy->intitution_id);
 
+        $instructor = Instructor::where('id', $planification->responsible_course_id)->first();
+        //$user =  $instructor->user();
+        $user = User::firstWhere('id', $instructor->user_id);
+
 
         //return $institution;
 
@@ -370,6 +380,8 @@ class PlanificationController extends Controller
                 'course' => $course,
                 'topics' => $topics,
                 'institution'=> $institution,
+                'user'=> $user,
+                'instructor'=>$instructor,
 
 
 

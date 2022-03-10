@@ -287,7 +287,7 @@
       Firma del responsable del diseño curricular</h4>
     <br>
     <div1>Nombre y <br> apellido: </div1>
-    <div2>LUIS PATRICIO VICENTE <br> GUTIEERRES</div2>
+    <div2>{{$user->name}} <br> GUTIEERRES</div2>
     <br><br>
     <div>Cedula</div>
     <div>17xxxxxxx</div>
