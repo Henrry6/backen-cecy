@@ -38,6 +38,7 @@ class Registration extends Model implements Auditable
     {
         return $this->morphMany(Certificate::class, 'certificateable');
     }
+    
     // Relationships
     public function detailPlanification()
     {

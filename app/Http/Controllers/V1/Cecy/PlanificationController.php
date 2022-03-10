@@ -217,27 +217,7 @@ class PlanificationController extends Controller
                 ]
             ])->response()->setStatusCode(200);
     }
-    /*DDRC-C: Trae una lista de nombres de cursos, paralelos y jornadas*/
-    // PlanificationController ya esta, no vale el metodo.
-    public function getCoursesParallelsWorkdays(getCoursesByResponsibleRequest $request)
-    {
-        $detailPlanifications = DetailPlanification::get();
-        return $detailPlanifications;
-        $sorts = explode(',', $request->sort);
-        $courseParallelWorkday = Planification::customOrderBy($sorts)
-            //            ->detailplanifications()
-            //            ->course()
-            ->get();
-
-        //         return (new CourseParallelWorkdayResource($courseParallelWorkday))
-        //             ->additional([
-        //                 'msg' => [
-        //                     'summary' => 'success',
-        //                     'detail' => '',
-        //                     'code' => '200'
-        //                 ]
-        //             ])->response()->setStatusCode(201);
-    }
+    
 
     // asignar docente responsable de curso a una planificacion ya esta
     public function storePlanificationByCourse(StorePlanificationByCourseRequest $request, Planification $planification)
