@@ -13,6 +13,7 @@ use App\Http\Requests\V1\Cecy\Planifications\UpdateDatesinPlanificationRequest;
 use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\GetPlanificationsByCourseRequest;
 use App\Http\Requests\V1\Cecy\Planifications\StorePlanificationByCourseRequest;
 use App\Http\Requests\V1\Cecy\Planifications\UpdatePlanificationRequest;
+use App\Http\Requests\V1\Cecy\Planifications\UpdateStatePlanificationRequest;
 use App\Http\Resources\V1\Cecy\Courses\CourseCollection;
 use App\Http\Resources\V1\Cecy\Planifications\Kpi\KpiPlanificationResourse;
 use App\Http\Resources\V1\Cecy\Planifications\ResponsibleCoursePlanifications\PlanificationByCourseCollection;
@@ -30,6 +31,8 @@ use App\Models\Cecy\SchoolPeriod;
 use App\Models\Core\State;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
+
 
 class PlanificationController extends Controller
 {
@@ -295,17 +298,73 @@ class PlanificationController extends Controller
             ]);
     }
 
+    public function updateStatePlanification(UpdateStatePlanificationRequest $request, Planification $planification)
+    {
+        $planification->state_id = $request -> id;
+        $planification ->save();
+
+        return (new PlanificationResource($planification))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Estado de la planificación actualizado',
+                    'detail' => 'El estado de la planificación pudo haber cambiado de posición',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
+    }
     //Traer la informacion de diseño curricular (Done)
     public function curricularDesign( Planification $planification)
     {
         $planification = Planification::firstWhere('id',$planification->id);
-        return (new PlanificationResource($planification))
-            ->additional([
-                'msg' => [
-                    'summary' => 'success',
-                    'detail' => '',
-                    'code' => '200'
-                ]
+        $course = $planification->course()->first();
+        $topics = $course->topics()->first();
+
+        //return $course;
+        //return $topics;
+       
+
+            $pdf = PDF::loadView('reports/desing-curricular', [
+                'planification' => $planification,
+                'course' => $course,
+                'topics' => $topics,
+                
+                
             ]);
-    }
+    
+            return $pdf->stream('Diseño Curricular.pdf');
+        }
+
+
+
+        //Traer la informacion de informe final del curso (Done)
+    public function informeFinal( Planification $planification)
+    {
+        $planification = Planification::firstWhere('id',$planification->id);
+        $course = $planification->course()->first();
+        $topics = $course->topics()->first();
+
+
+
+        return $course;
+        //return $planification;
+       
+
+            $pdf = PDF::loadView('reports/informe-final', [
+                'planification' => $planification,
+                'course' => $course,
+                'topics' => $topics,
+
+
+
+                
+                
+            ]);
+    
+            return $pdf->stream('Informe final del curso.pdf');
+        }
+
+         
 }
+
+

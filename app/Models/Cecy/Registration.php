@@ -33,6 +33,11 @@ class Registration extends Model implements Auditable
     {
         return $this->hasOne(AdditionalInformation::class);
     }
+    
+    public function additionalInformations()
+    {
+        return $this->hasMany(AdditionalInformation::class);
+    }
 
     public function certificates()
     {
@@ -72,7 +77,7 @@ class Registration extends Model implements Auditable
 
     public function typeParticipant()
     {
-        return $this->belongsTo(Catalogue::class);
+        return $this->belongsTo(Catalogue::class, 'type_participant_id');
     }
 
     public function detailAttendances()

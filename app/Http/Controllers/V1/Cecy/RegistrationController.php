@@ -21,6 +21,7 @@ use App\Http\Resources\V1\Cecy\Registrations\RegistrationCollection;
 use App\Http\Resources\V1\Cecy\Registrations\RegistrationRecordCompetitorResource;
 use App\Http\Resources\V1\Cecy\Registrations\RegistrationResource;
 use App\Http\Resources\V1\Cecy\Users\UserResource;
+use App\Models\Authentication\User;
 use App\Models\Cecy\Catalogue;
 use App\Models\Cecy\DetailPlanification;
 use App\Models\Cecy\Participant;
@@ -30,6 +31,8 @@ use App\Models\Core\File;
 use http\Env\Request;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
+
 
 class RegistrationController extends Controller
 {
@@ -128,24 +131,23 @@ class RegistrationController extends Controller
     {
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
         $currentState = Catalogue::firstWhere('code', $catalogue['registration_state']['cancelled']);
-        
+
         // DDRC-C:recorre las ids enviadas para anularlas
         foreach ($request->ids as $registration => $value) {
-            $registration=Registration::firstWhere('id',$value);
-        $detailPlanification = $registration->detailPlanification;
-        
-        $registration->observations = $request->input('observations');
-        $registration->state()->associate(Catalogue::find($currentState->id));
+            $registration = Registration::firstWhere('id', $value);
+            $detailPlanification = $registration->detailPlanification;
 
-        $remainingRegistrations = $registration->detailPlanification->registrations_left;
-        $detailPlanification->registrations_left = $remainingRegistrations + 1;
-        
-        DB::transaction(function () use ($registration, $detailPlanification) {
+            $registration->observations = $request->input('observations');
+            $registration->state()->associate(Catalogue::find($currentState->id));
 
-            $detailPlanification->save();
-            $registration->save();
-            
-        });
+            $remainingRegistrations = $registration->detailPlanification->registrations_left;
+            $detailPlanification->registrations_left = $remainingRegistrations + 1;
+
+            DB::transaction(function () use ($registration, $detailPlanification) {
+
+                $detailPlanification->save();
+                $registration->save();
+            });
         }
         // DDRC-C:recupera los ids modificadas para enviarlas de nuevo
         $registrations = Registration::whereIn('id', $request->input('ids'))->get();
@@ -169,18 +171,17 @@ class RegistrationController extends Controller
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
         $currentState = Catalogue::firstWhere('code', $catalogue['registration_state']['cancelled']);
         $detailPlanification = $registration->detailPlanification;
-        
+
         $registration->observations = $request->input('observations');
         $registration->state()->associate(Catalogue::find($currentState->id));
 
         $remainingRegistrations = $registration->detailPlanification->registrations_left;
         $detailPlanification->registrations_left = $remainingRegistrations + 1;
-        
+
         DB::transaction(function () use ($registration, $detailPlanification) {
 
             $detailPlanification->save();
             $registration->save();
-            
         });
 
         return (new RegistrationResource($registration))
@@ -195,38 +196,47 @@ class RegistrationController extends Controller
     }
 
     // RegistrationController
-    public function showRecordCompetitor(GetCoursesByNameRequest $request, Course $course)
+    public function showRecordCompetitor(GetCoursesByNameRequest $request, DetailPlanification $detailPlanification, AdditionalInformation $additionalInformation)
     {
         //trae todos los participantes registrados de un curso en especifico
-        $planification = $course->planifications()->get();
+
+        $planification=$detailPlanification->planification()->first();
+        $course=$planification->course()->first();
+        $regitrations=$detailPlanification->registrations()->with(['participant.user.sex','state','additionalInformation'])->get();
+        $classroom = $detailPlanification->classroom()->first();
+
+       /*  $planification = $course->planifications()->get();
         $detailPlanification = $planification->detailPlanifications()->get();
-        $registrations = $detailPlanification->registrations()->get();
-        /*        $aditionalInformation= $registrations->aditionalInformations()->get();
-                  $participant = $aditionalInformation->registrations()->get()
-                  ->participants()
-                  ->users();
-           */
-        /*  $Course = Planification::where('course_id', $request->course()->id)->get(); */
+        $classroom = $planification->detailPlanifications()->with('classroom')->first();
+        $registrations = $detailPlanification->registrations()->with(['participant.user.sex','state','additionalInformation'])->get(); */
+        //$value = array_get($registrations, 'additionalInformation');
+       // $course_tec=$registrations->additionalInformation[''];
+        //$additionalInformations = $additionalInformation->registration()->get();
+        //$participants = $registrations->participant()->with('user')->get();
 
-        /*         $registration = $registrations
-                       ->planifications()
-                       ->detailPlanifications()
-                       ->additionalInformations()
-                       ->users()
-                       ->participants()
-                       ->registrations()
-                        ->course()
-                       ->paginate($request->input('per_page')); */
 
-        return (new RegistrationRecordCompetitorResource($registrations))
-            ->additional([
-                'msg' => [
-                    'summary' => 'success',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ])
-            ->response()->setStatusCode(200);
+ 
+        
+        //return $regitrations;
+
+        $pdf = PDF::loadView('reports/report-record-competitors', [
+            'planification' => $planification,
+            'detailPlanification' => $detailPlanification,
+            'registrations' => $regitrations,
+            'course'=>$course,
+            'clasrroom'=>$classroom,
+
+           // 'aditionalInformations' => $adicionalInformation,
+            //'participants' => $participants,
+
+        ]);
+        $pdf->setOptions([
+            'orientation' => 'landscape',
+        ]);
+        return $pdf->stream('reporte registro participantes.pdf', []);
+    }
+    public function additionalInformation(Registration $registration){
+        $additionalInformation=$registration->additionalInformation()->get();
     }
     //estudiantes de un curso y sus notas
     // RegistrationController

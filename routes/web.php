@@ -34,3 +34,6 @@ Route::get('/case-report ', function () {
 
 
 });
+
+
+

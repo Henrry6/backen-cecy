@@ -85,6 +85,36 @@ trait ImageTrait
             ]], 201);
     }
 
+    public function uploadPublicImage(UploadImageRequest $request)
+    {
+        foreach ($request->file('images') as $image) {
+            $newImage = new Image();
+            $newImage->name = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+            $newImage->description = $request->input('description');
+            $newImage->extension = 'jpg';
+            $newImage->imageable()->associate($this);
+            $newImage->save();
+
+            Storage::disk('public')->makeDirectory('images/' . $newImage->id);
+
+            $storagePath = storage_path('app/public/images/');
+            $this->uploadOriginal(InterventionImage::make($image), $newImage->id, $storagePath);
+            $this->uploadLargeImage(InterventionImage::make($image), $newImage->id, $storagePath);
+            $this->uploadMediumImage(InterventionImage::make($image), $newImage->id, $storagePath);
+            $this->uploadSmallImage(InterventionImage::make($image), $newImage->id, $storagePath);
+
+            $newImage->directory = 'images/' . $newImage->id;
+            $newImage->save();
+        }
+        return response()->json([
+            'data' => null,
+            'msg' => [
+                'summary' => 'Imagen subida',
+                'detail' => 'Su petición se procesó correctamente',
+                'code' => '201'
+            ]], 201);
+    }
+
     public function updateImage(UpdateImageRequest $request, Image $image)
     {
         if ($request->hasFile('images')) {
@@ -148,6 +178,23 @@ trait ImageTrait
     }
 
     public function indexImages(IndexImageRequest $request)
+    {
+        $images = $this->images()
+            ->description($request->input('description'))
+            ->name($request->input('name'))
+            ->paginate($request->input('per_page'));
+
+        return (new ImageCollection($images))->additional(
+            [
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ]);
+    }
+
+    public function indexPublicImages(IndexImageRequest $request)
     {
         $images = $this->images()
             ->description($request->input('description'))

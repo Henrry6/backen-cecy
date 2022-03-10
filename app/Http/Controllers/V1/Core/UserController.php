@@ -232,6 +232,11 @@ class UserController extends Controller
     }
 
     // Images
+    public function uploadPublicImage(UploadImageRequest $request, User $user)
+    {
+        return $user->uploadPublicImage($request);
+    }
+
     public function uploadImage(UploadImageRequest $request, User $user)
     {
         return $user->uploadImage($request);
@@ -240,6 +245,11 @@ class UserController extends Controller
     public function indexImage(IndexImageRequest $request)
     {
         return (new ImageController())->index($request, User::find($request->input('id')));
+    }
+
+    public function indexPublicImages(IndexImageRequest $request,User $user)
+    {
+        return $user->indexPublicImages($request);
     }
 
     // Files
