@@ -47,7 +47,7 @@
         </td>
 
         <td>DOCENTE: <br><br>
-          OBSERVACION DEL CURSO: <br>
+          OBSERVACION DEL CURSO: {{$user->lastname}}<br>
           </td>
 
         </tr>

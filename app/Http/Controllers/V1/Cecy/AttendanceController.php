@@ -18,9 +18,11 @@ use App\Http\Resources\V1\Cecy\Attendances\GetAttendanceByParticipantCollection;
 use App\Http\Resources\V1\Cecy\Attendances\SaveDetailAttendanceResource;
 use App\Http\Resources\V1\Cecy\PhotographicRecords\PhotographicRecordResource;
 use App\Http\Resources\V1\Cecy\Registrations\RegistrationRecordCompetitorResource;
+use App\Models\Authentication\User;
 use App\Models\Cecy\Attendance;
 use App\Models\Cecy\DetailAttendance;
 use App\Models\Cecy\Institution;
+use App\Models\Cecy\Instructor;
 use App\Models\Cecy\Participant;
 use App\Models\Cecy\PhotographicRecord;
 use App\Models\Cecy\Registration;
@@ -198,6 +200,10 @@ class AttendanceController extends Controller
         $responsiblececy =$planification->responsibleCecy()->first();
         $institution =Institution::firstWhere('id',$responsiblececy->intitution_id);
 
+        $instructor = Instructor::where('id', $planification->responsible_course_id)->first();
+        //$user =  $instructor->user();
+        $user = User::firstWhere('id', $instructor->user_id);
+
         
 
         //return $course;
@@ -209,6 +215,8 @@ class AttendanceController extends Controller
                 'course' => $course,
                 'registrations'=>$registrations,
                 'institution'=> $institution,
+                'instructor'=>$instructor,
+                'user'=>$user,
 
 
                 
