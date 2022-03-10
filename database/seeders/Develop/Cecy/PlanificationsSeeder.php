@@ -32,7 +32,7 @@ class PlanificationsSeeder extends Seeder
         Catalogue::factory(6)->sequence(
             [
                 'code' => State::TO_BE_APPROVED,
-                'name' => 'POR APROBADO',
+                'name' => 'POR APROBAR',
                 'type' => $catalogue['planification_state']['type'],
                 'description' => 'Falta poner una descripción'
             ],
