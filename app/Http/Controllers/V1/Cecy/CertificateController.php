@@ -18,6 +18,7 @@ class CertificateController extends Controller
 {
     //Descargar certificado del curso
     // CertificateController
+    //descargar certificado
     public function downloadCertificateByParticipant(IndexCertificateRequest $request, Registration $registration, Catalogue $catalogue, File $file)
     {
         //$participant = Participant::firstWhere('user_id', $request->user()->id);
