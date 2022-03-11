@@ -3,12 +3,16 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cecy\Certificate;
 use App\Http\Requests\V1\Cecy\Certificates\IndexCertificateRequest;
 use App\Models\Cecy\Catalogue;
 use App\Http\Requests\V1\Core\Files\UploadFileRequest;
 use App\Models\Cecy\Registration;
 use App\Models\Core\File;
+use Illuminate\Http\Request;
 use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
+use App\Imports\CertificatesImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CertificateController extends Controller
 {
@@ -45,29 +49,65 @@ class CertificateController extends Controller
         return $catalogue->downloadFileCertificates($file);
     }
 
-    //Genera los Pdfs del estudiante 
-    //CertificateController
-    public function generatePdf(){
-    $pdf = PDF::loadView('reports/certificate-student');
-    $pdf->setOptions([
-        'orientation' => 'landscape',
-        'page-size' => 'a4'
-    ]);
+   
+    //CertificateController---devuelve datos de la tabla certificados
 
-    return $pdf->inline('Certificado.pdf');
+    public function ExcelData(){
+    
+    $certificate = Certificate::get();
+    return $certificate;
+    // return view('livewire.educacion.guia-para-pacientes-y-familias-component', ['educations' => $certificate]);
 
     }
 
-     //Genera los Pdfs del instructor
-    //CertificateController
-    public function generatePdfInstructor(){
-        $pdf = PDF::loadView('reports/certificate-instructor');
-        $pdf->setOptions([
-            'orientation' => 'landscape',
-            'page-size' => 'a4'
-        ]);
-    
-        return $pdf->inline('Certificado.pdf');
+     
+    //CertificateController----Importa datos de la plantilla Excel 
+
+    public function ExcelImport(){
+      
+        $file = request()->file('excel');
+
+        if (!isset($file)) {
+            echo 'No esta enviando el name del archivo, el nombre es excel';
+            return;
+        }
+        Excel::import(new CertificatesImport, $file);
+        echo 'Se importo correctamente';
     
         }
+
+    //Genera PDF del estudiante 
+    
+    public function generatePdfStudent(){
+    
+     $pdf = PDF::loadView('reports/certificate-student');
+     $pdf->setOptions([
+            'orientation' => 'landscape',
+            'page-size' => 'a4'
+     ]);
+            return $pdf->inline('CertificadoInstructor.pdf');
+    }
+    
+    //Genera PDF del instructor
+
+    public function generatePdfInstructor(){
+    
+     $pdf = PDF::loadView('reports/certificate-instructor');
+     $pdf->setOptions([
+         'orientation' => 'landscape',
+         'page-size' => 'a4'
+     ]);
+            return $pdf->inline('CertificadoInstructor.pdf');
+    }
+
+    public function import (){
+        return view('reports.certificate-student', "data");
+    }
+
+    public function importData(Request $request) {
+        echo 'hola mundo';
+        
+    }
+    
+
 }

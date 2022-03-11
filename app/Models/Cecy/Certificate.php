@@ -2,6 +2,7 @@
 
 namespace App\Models\Cecy;
 
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -15,11 +16,26 @@ class Certificate extends Model implements Auditable
     use SoftDeletes;
 
     protected $table = 'cecy.certificates';
+    protected $table2 = 'authentication.users';
 
     protected $fillable = [
         'code',
         'issued_at',
+        'certificateable_type',
+        'certificateable_id',
+        'state_id',
+        'code',
+        'issued_at',
     ];
+
+    protected $user = [ 
+
+        'username',
+        
+    ];
+
+
+
 
     public function certificateable()
     {
