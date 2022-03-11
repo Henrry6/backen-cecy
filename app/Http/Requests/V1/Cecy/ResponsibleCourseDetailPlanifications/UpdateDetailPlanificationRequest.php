@@ -3,6 +3,7 @@
 namespace App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\Workday;
 
 class UpdateDetailPlanificationRequest extends FormRequest
 {
@@ -17,7 +18,7 @@ class UpdateDetailPlanificationRequest extends FormRequest
             'classroom.id' => ['required', 'integer'],
             'day.id' => ['required', 'integer'],
             'planification.id' => ['required', 'integer'],
-            'workday.id' => ['required', 'integer'],
+            'workday.id' => ['required', 'integer', new Workday($this->endedTime)],
             'parallel.id' => ['required', 'integer'],
             'endedTime' => ['required', 'after:startedTime'],
             'startedTime' => ['required',],

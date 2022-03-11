@@ -7,11 +7,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as Auditing;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\FileTrait;
+use App\Models\Core\File;
 
 class Topic extends Model implements Auditable
 {
     use HasFactory;
     use Auditing;
+    use FileTrait;
     use SoftDeletes;
 
     protected $table = 'cecy.topics';
@@ -36,6 +39,10 @@ class Topic extends Model implements Auditable
     public function parent()
     {
         return $this->belongsTo(Topic::class, 'parent_id');
+    }
+    public function files()
+    {
+        return $this->morphMany(File::class, 'fileable');
     }
 
     // Mutators

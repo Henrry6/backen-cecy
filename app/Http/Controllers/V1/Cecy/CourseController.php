@@ -31,9 +31,13 @@ use App\Http\Resources\V1\Cecy\Courses\CoursesByResponsibleCollection;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationCollection;
 use App\Http\Resources\V1\Cecy\Certificates\CertificateResource;
 use App\Http\Resources\V1\Cecy\Courses\CoordinatorCecy\CourseByCoordinatorCecyCollection;
+use App\Http\Resources\V1\Cecy\Instructors\InstructorResource;
 use App\Http\Resources\V1\Cecy\Planifications\CoordinatorCecy\PlanificationResource;
 
 use App\Http\Resources\V1\Cecy\Planifications\InformCourseNeedsCollection;
+use App\Http\Resources\V1\Core\Users\UserResource;
+use App\Models\Authentication\User;
+use App\Models\Cecy\Authority;
 use App\Models\Cecy\Instructor;
 use App\Models\Cecy\Participant;
 use App\Models\Cecy\Planification;
@@ -270,7 +274,7 @@ class CourseController extends Controller
         $course->modality()->associate(Catalogue::find($request->input('modality.id'))); //modalidad presencial, virtual
         $course->catalogues()->sync($request->input('participantTypes.ids'));
 
-   
+
 
         //campos propios
         $course->abbreviation = $request->input('abbreviation');
@@ -384,19 +388,21 @@ class CourseController extends Controller
     {
         //trae un informe de nececidades de una planificacion, un curso en especifico por el docente que se logea
 
-        $planification = $course->planifications()->with('responsibleCourse.user')->first();
-
+        $planification = $course->planifications()->with('vicerector')->first();
         $days = $planification->detailPlanifications()->with('day')->get();
-
         $classrooms = $planification->detailPlanifications()->with('classroom')->get();
-
-        //return $planification;
-
+        $instructor = Instructor::where('id', $planification->responsible_course_id)->first();
+        //$user =  $instructor->user();
+        $responsibleOcs= Authority::firstWhere('id', $planification->responsible_ocs_id);
+        $user = User::firstWhere('id', $instructor->user_id);
+        //return $responsibleOcs;
         $pdf = PDF::loadView('reports/report-needs', [
             'planification' => $planification,
             'course' => $course,
             'days' => $days,
             'classrooms' => $classrooms,
+            'user' => $user,
+            'responsibleOcs'=>$responsibleOcs
         ]);
 
         return $pdf->stream('informNeeds.pdf');
@@ -407,16 +413,21 @@ class CourseController extends Controller
     // o por params
     public function showYearSchedule(Planification $planification)
     {
-                // $year = $planificacion->whereYear('started_at')->first();
-        $planifications = $planification->whereYear('started_at','=',2022)->get();
-  /*       $course = $planifications->course()->get();
+        // $year = $planificacion->whereYear('started_at')->first();
+        $planifications = Planification::whereYear('started_at', '=', 2022)->with(['course','detailPlanifications'])->get();
+        //$detailPlanifications = $planification->detailPlanifications()->get();
+        $detailPlanifications = Planification::whereYear('started_at', '=', 2022)->with('detailPlanifications')->get();
+        $responsibleCourse = Planification::whereYear('started_at', '=', 2022)->with('responsibleCourse.user')->get();
+        /*       $course = $planifications->course()->get();
         $detailPlanifications=$planifications->detailPlanifications()->get(); */
-        
 
-    //   return $detailPlanifications ;
 
-        $pdf = PDF::loadView('reports/report-year-schedule',[
-            'planifications'=>$planifications
+       // return $planifications ;
+
+        $pdf = PDF::loadView('reports/report-year-schedule', [
+            'planifications' => $planifications,
+            'detailPlanifications' => $detailPlanifications,
+            'responsibleCourse' => $responsibleCourse
         ]);
         $pdf->setOptions([
             'orientation' => 'landscape',
@@ -533,8 +544,8 @@ class CourseController extends Controller
 
     public function updateStateCourse(UpdateStateCourseRequest $request, Course $course)
     {
-        $course->state_id = $request -> id;
-        $course ->save();
+        $course->state_id = $request->id;
+        $course->save();
 
         return (new CourseResource($course))
             ->additional([
@@ -562,15 +573,14 @@ class CourseController extends Controller
 
     //Images
 
-  
+
     public function uploadPublicImage(UploadImageRequest $request, Course $course)
     {
         return $course->uploadPublicImage($request);
     }
 
-    public function indexPublicImages(IndexImageRequest $request,Course $course)
+    public function indexPublicImages(IndexImageRequest $request, Course $course)
     {
         return $course->indexPublicImages($request);
     }
-
 }
