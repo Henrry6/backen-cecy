@@ -85,7 +85,7 @@ class PlanificationsSeeder extends Seeder
         $responsablesCourse = Instructor::get();
         $detailSchoolPeriods = DetailSchoolPeriod::get();
 
-        for ($i = 0; $i <= 29; $i++) {
+        for ($i = 0; $i <= 14; $i++) {
 
             Planification::factory()->create(
                 [
