@@ -19,43 +19,43 @@ class CreateCecyAdditionalInformationsTable extends Migration
             $table->softDeletes();
 
             $table->foreignId('level_instruction_id')
-                ->comment('Informacion acerca del nivel de instrucción para el registro')
+                ->comment('Información acerca del nivel de instrucción para el registro')
                 ->constrained('cecy.catalogues');
 
             $table->foreignId('registration_id')
-                ->comment('Informacion adicional de trabajo para el registro')
+                ->comment('Información adicional de trabajo para el registro')
                 ->constrained('cecy.registrations');   
 
             $table->string('company_activity')
-                ->comment('actividad de la empresa');
+                ->comment('Actividad de la empresa');
 
             $table->string('company_address')
-                ->comment('direccion fisica de empresa');
+                ->comment('Dirección fisica de la empresa');
 
             $table->string('company_email')
-                ->comment('correo de empresa');
+                ->comment('Correo de la empresa');
 
             $table->string('company_name')
-                ->comment('nombre de empresa');
+                ->comment('Nombre de la empresa');
 
             $table->string('company_phone')
-                ->comment('telefono de empresa');
+                ->comment('Telefono de la empresa');
 
             $table->boolean('company_sponsored')
-                ->comment('la empresa patrocina el curso true->la empresa patrocina, false-> no patrocina');
+                ->comment('La empresa patrocina el curso, true->la empresa patrocina, false-> no patrocina');
 
             $table->string('contact_name')
-                ->comment('nombre de contacto que patrocina');
+                ->comment('Nombre de contacto que patrocina');
 
             $table->json('course_follows')
                 ->nullable()
-                ->comment('cursos que te gustaria seguir? Array');
+                ->comment('Cursos que te gustaria seguir? Array');
 
             $table->json('course_knows')
-                ->comment('como se entero del curso? Array');
+                ->comment('¿Cómo se enteró del curso? Array');
 
             $table->boolean('worked')
-                ->comment('el participante trabaja, true -> trabaja, false -> no trabaja');
+                ->comment('El participante trabaja, true -> trabaja, false -> no trabaja');
         });
     }
 
