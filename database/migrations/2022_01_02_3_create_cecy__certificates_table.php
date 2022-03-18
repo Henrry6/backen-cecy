@@ -16,7 +16,7 @@ class CreateCecyCertificatesTable extends Migration
             $table->morphs('certificateable');
 
             $table->foreignId('state_id')
-                ->comment('Estado del certificado [Firmado,Con codigo,Generado,En Proceso,Sin Firma]')
+                ->comment('Estado del certificado [Firmado,Con código,Generado,En Proceso,Sin Firma]')
                 ->constrained('cecy.catalogues');
 
             $table->string('code')

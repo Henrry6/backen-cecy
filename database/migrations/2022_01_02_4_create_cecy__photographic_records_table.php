@@ -18,18 +18,18 @@ class CreateCecyPhotographicRecordsTable extends Migration
                 ->constrained('cecy.detail_planifications');
 
             $table->string('description')
-                ->comment('descripcion del curso');
+                ->comment('Descripción del curso');
 
             $table->integer('number_week')
-                ->comment('numero de la semana que se impartio el curso');
+                ->comment('Número de la semana que se impartio el curso');
 
             // Debe ir solo image o url
             $table->string('url_image')
-                ->comment('direccion de la imagen(evidencia fotografica)');
+                ->comment('Dirección de la imagen(evidencia fotográfica)');
 
             // Deberia ir registered_at
             $table->date('week_at')
-                ->comment('fecha del dia que se guardo la evidencia fotografica');
+                ->comment('Fecha del día que se guardo la evidencia fotográfica');
         });
     }
 
