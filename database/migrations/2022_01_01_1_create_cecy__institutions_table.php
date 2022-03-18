@@ -15,7 +15,7 @@ class CreateCecyInstitutionsTable extends Migration
 
             $table->string('code')
                 ->nullable()
-                ->comment('codigo de institucion');
+                ->comment('Codigo de institucion');
 
             $table->string('name')
                 ->comment('Nombre de la institucion');
