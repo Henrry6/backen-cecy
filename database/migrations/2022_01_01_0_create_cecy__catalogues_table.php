@@ -15,7 +15,7 @@ class CreateCecyCataloguesTable extends Migration
 
             $table->foreignId('parent_id')
                 ->nullable()
-                ->comment('Un catalogo puede tener catalogos hijos')
+                ->comment('Un catálogo puede tener catálogos hijos')
                 ->constrained('cecy.catalogues');
 
             $table->string('code')
@@ -31,7 +31,7 @@ class CreateCecyCataloguesTable extends Migration
             $table->text('name');
 
             $table->string('type')
-                ->comment('Para categorizar los catalogos');
+                ->comment('Para categorizar los catálogos');
         });
     }
 
