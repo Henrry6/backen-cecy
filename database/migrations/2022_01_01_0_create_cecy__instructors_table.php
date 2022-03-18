@@ -25,7 +25,7 @@ class CreateCecyInstructorsTable extends Migration
 
             $table->foreignId('user_id')
                 ->nullable()
-                ->comment('usuario de autenticación')
+                ->comment('Usuario de autenticación')
                 ->constrained('authentication.users');
         });
     }

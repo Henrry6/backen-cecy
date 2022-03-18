@@ -15,20 +15,20 @@ class CreateCecySchoolPeriodsTable extends Migration
 
             $table->foreignId('state_id')
                 ->nullable()
-                ->comment('estado del periodo lectivo ej: actual, antiguo')
+                ->comment('Estado del periodo lectivo ej: actual, antiguo')
                 ->constrained('cecy.catalogues');
 
             $table->string('code')->unique()
-                ->comment('codigo unico de periodos lectivos ej: 2021-2022');
+                ->comment('Codigo unico de periodos lectivos ej: 2021-2022');
 
             $table->date('ended_at')
                 ->comment('Fecha de finalización del perido lectivo');
 
             $table->integer('minimum_note')
-                ->comment('minimo de nota para aprovar los cursos');
+                ->comment('Minimo de nota para aprovar los cursos');
 
             $table->string('name')
-                ->comment('nombre del periodo lectivo');
+                ->comment('Nombre del periodo lectivo');
 
 
             $table->date('started_at')
