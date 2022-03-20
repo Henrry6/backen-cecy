@@ -19,28 +19,28 @@ class CreateCecyDetailSchoolPeriodsTable extends Migration
 
             $table->date('especial_ended_at')
                 ->nullable()
-                ->comment('fecha de finalización periodo especial');
+                ->comment('Fecha de finalización periodo especial');
 
             $table->date('especial_started_at')
                 ->nullable()
-                ->comment('fecha de inicio periodo especial');
+                ->comment('Fecha de inicio periodo especial');
 
             $table->date('extraordinary_ended_at')
-                ->comment('fecha de finalización periodo extraordinario');
+                ->comment('Fecha de finalización periodo extraordinario');
 
             $table->date('extraordinary_started_at')
-                ->comment('fecha de inicio periodo extraordinario');
+                ->comment('Fecha de inicio periodo extraordinario');
 
             $table->date('nullification_ended_at')
                 ->nullable()
-                ->comment('fecha de inicio de anulación de matrícula');
+                ->comment('Fecha de inicio de anulación de matrícula');
 
             $table->date('nullification_started_at')
                 ->nullable()
-                ->comment('fecha de fin de anulación de matrícula');
+                ->comment('Fecha de fin de anulación de matrícula');
 
             $table->date('ordinary_ended_at')
-                ->comment('fin del periodo ordinario');
+                ->comment('Fin del periodo ordinario');
 
             $table->date('ordinary_started_at')
                 ->nullable()
