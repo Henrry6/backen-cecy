@@ -24,7 +24,7 @@ class CoursesByResponsibleResource extends JsonResource
             'career' => CareerResource::make($this->career),
             'category' => CatalogueResource::make($this->category),
             'formationType' => CatalogueResource::make($this->formationType),
-            'images' => ImageResource::collection($this->images),
+            'image' => ImageResource::make($this->image),
             'certifiedType' => CatalogueResource::make($this->certifiedType),
             'courseType' => CatalogueResource::make($this->courseType),
             'modality' => CatalogueResource::make($this->modality),

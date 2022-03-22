@@ -18,13 +18,16 @@ use App\Http\Resources\V1\Cecy\Attendances\GetAttendanceByParticipantCollection;
 use App\Http\Resources\V1\Cecy\Attendances\SaveDetailAttendanceResource;
 use App\Http\Resources\V1\Cecy\PhotographicRecords\PhotographicRecordResource;
 use App\Http\Resources\V1\Cecy\Registrations\RegistrationRecordCompetitorResource;
+use App\Models\Authentication\User;
 use App\Models\Cecy\Attendance;
 use App\Models\Cecy\DetailAttendance;
+use App\Models\Cecy\Institution;
+use App\Models\Cecy\Instructor;
 use App\Models\Cecy\Participant;
 use App\Models\Cecy\PhotographicRecord;
 use App\Models\Cecy\Registration;
 use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
-
+use Illuminate\Pagination\Cursor;
 
 class AttendanceController extends Controller
 {
@@ -60,7 +63,9 @@ class AttendanceController extends Controller
             'detailPlanification' => $detailPlanification,
             'photographicRecords' => $photographicRecords
         ]);
-
+        $pdf->setOptions([
+            'orientation' => 'landscape',
+        ]);
 
         return $pdf->stream('Registro fotográfico.pdf');
     }
@@ -185,6 +190,52 @@ class AttendanceController extends Controller
             ])
             ->response()->setStatusCode(200);
     }
+
+
+
+    //trae informacion del informe de asistencia evaluacion
+    public function attendanceEvaluation( Course $course)
+    {
+        $planification = $course->planifications()->first();
+        $detailPlanification = $planification->detailPlanifications()->first();
+        $registrations = $detailPlanification->registrations()->get();
+        $responsiblececy =$planification->responsibleCecy()->first();
+        $institution =Institution::firstWhere('id',$responsiblececy->intitution_id);
+        $instructor = Instructor::where('id', $planification->responsible_course_id)->first();
+        //$user =  $instructor->user();
+        $user = User::firstWhere('id', $instructor->user_id);
+        $grade1=$registrations[0]['grade1'];
+        $grade2=$registrations[0]['grade2'];
+        $final_grade=$registrations[0]['final_grade'];
+
+
+
+
+        //return $registrations['grade1'];
+        //return $registrations[0]['grade1'];
+        //return $course;
+        //return $planification;
+       
+
+            $pdf = PDF::loadView('reports/atendence-evaluation', [
+                'planification' => $planification,
+                'course' => $course,
+                'registrations'=>$registrations,
+                'institution'=> $institution,
+                'instructor'=>$instructor,
+                'user'=>$user,
+                'grade1'=>$grade1,
+                'grade2'=>$grade2,
+                'final_grade'=>$final_grade,
+
+
+
+
+                
+            ]);
+    
+            return $pdf->stream('Asistencia-evaluacion.pdf');
+        }
     /*******************************************************************************************************************
      * IMAGES
      ******************************************************************************************************************/

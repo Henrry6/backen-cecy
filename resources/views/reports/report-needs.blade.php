@@ -40,7 +40,7 @@
 				</center>
 				<br><br> <br><br>
 				<div class="posiciones_01" style="top: 18.6243em; left:6.0125em;">
-					<span class="stl_15 stl_08" style="word-spacing:0.07em;">Nombre del Docente:{{$planification->responsible_course}} </span>
+					<span class="stl_15 stl_08" style="word-spacing:0.07em;">Nombre del Docente: {{$user->name}} {{$user->lastname}} </span>
 				</div>
 				<br>
 				<div class="posiciones_01" style="top: 21.1243em; left:6.0125em;">
@@ -180,18 +180,13 @@
 				</div>
 				<br><br>
 				<div style="float: left;">
+				<p></p>
 					<h4>.........................................................................<br>
 						REPRESENTANTE DEL OCS</h4>
 					<br><br>
+					<p>{{$responsibleOcs->electronic_signature}}</p>
 					<h4>.........................................................................<br>
 						VICERRECTOR </h4>
-				</div>
-				<div style="float: right;">
-					<h4>.........................................................................<br>
-						FECHA</h4>
-					<br><br>
-					<h4>.........................................................................<br>
-						FECHA </h4>
 				</div>
 				<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 				<div style="border: 1px solid black;">
@@ -219,12 +214,26 @@
 		.td {
 			border: 1px solid black;
 			border-collapse: collapse;
-			width: 50%;
+			width: 60%;
 			height: 30px;
 
 		}
 
+		.td {
+			border: 1px solid black;
+			border-radius: 5%;
+			border-collapse: collapse;
 
+		}
+
+		.th,
+		.td {
+			padding: 5px;
+			text-align: center;
+			height: auto;
+			width: auto;
+
+		}
 
 		div2 {
 			float: left;

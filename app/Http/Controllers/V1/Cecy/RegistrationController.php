@@ -202,8 +202,10 @@ class RegistrationController extends Controller
 
         $planification=$detailPlanification->planification()->first();
         $course=$planification->course()->first();
-        $regitrations=$detailPlanification->registrations()->with(['participant.user.sex','state','additionalInformation'])->get();
+        $regitrations=$detailPlanification->registrations()->with(['participant.user.sex','state','additionalInformation.levelInstruction'])->get();
         $classroom = $detailPlanification->classroom()->first();
+/*         $additionalInformations = AdditionalInformation::firstWhere('id', $regitrations->additional_informations_id);
+ */
 
        /*  $planification = $course->planifications()->get();
         $detailPlanification = $planification->detailPlanifications()->get();
@@ -224,8 +226,8 @@ class RegistrationController extends Controller
         ];
  
         
-        //return $regitrations;
-
+/*        return $additionalInformations;
+ */
         $pdf = PDF::loadView('reports/report-record-competitors', [
             'planification' => $planification,
             'detailPlanification' => $detailPlanification,
@@ -287,26 +289,19 @@ class RegistrationController extends Controller
     }
     // registrar estudiante al curso con la informacion adicional
 
-    public function registerStudent(RegisterStudentRequest $request, DetailPlanification $detailPlanification)
+    public function registerStudent(RegisterStudentRequest $request)
     {
-        $registration = new Registration();
         $participant = Participant::firstWhere('user_id', $request->user()->id);
-        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
-        $state = Catalogue::where('code', $catalogue['registration_state']['in_review'])->get();
-        $type = Catalogue::where('code', $catalogue['registration']['ordinary'])->get();
-        $typeParticipant = Catalogue::where('code', $catalogue['participant']['internal_student'])->get();
 
+        $registration = new Registration();
         $registration->participant()->associate($participant);
-        $registration->state()->associate($state);
-        $registration->type()->associate($type);
-        $registration->typeParticipant()->associate($typeParticipant);
-        $registration->detailPlanification()->associate($detailPlanification);
-
-
+        $registration->type()->associate(Catalogue::find($request->input('type.id')));
+        $registration->state()->associate(Catalogue::find($request->input('state.id')));
+        $registration->typeParticipant()->associate(Catalogue::find($request->input('type_participant.id')));
         $registration->number = $request->input('number');
-        $registration->registered_at = now();
+        $registration->registered_at = $request->input('registeredAt');
 
-        DB::transaction(function ()use ($registration, $request) {
+        DB::transaction(function ($registration, $request) {
             $registration->save();
             $additionalInformation = $this->storeAdditionalInformation($request, $registration);
             $additionalInformation->save();
@@ -321,31 +316,28 @@ class RegistrationController extends Controller
                 ]
             ])->response()->setStatusCode(200);
     }
+
     // llenar informacion adicional de la solicitud de matricula
     private function storeAdditionalInformation(RegisterStudentRequest $request, Registration $registration)
     {
         $additionalInformation = new AdditionalInformation();
 
-        $additionalInformation->worked = $request->input('worked');
-
         $additionalInformation->registration()->associate($registration);
-        $additionalInformation->levelInstruction()->associate(Catalogue::find($request->input('levelInstruction.id')));
+
+        $additionalInformation->levelInstruction()->associate(Catalogue::find($request->input('level_instruction.id')));
+        $additionalInformation->worked = $request->input('worked');
         $additionalInformation->company_activity = $request->input('companyActivity');
         $additionalInformation->company_address = $request->input('companyAddress');
         $additionalInformation->company_email = $request->input('companyEmail');
         $additionalInformation->company_name = $request->input('companyName');
         $additionalInformation->company_phone = $request->input('companyPhone');
-
         $additionalInformation->company_sponsored = $request->input('companySponsored');
-
         $additionalInformation->contact_name = $request->input('contactName');
         $additionalInformation->course_knows = $request->input('courseKnows');
         $additionalInformation->course_follows = $request->input('courseFollows');
 
         return $additionalInformation;
     }
-<<<<<<< HEAD
-=======
 
     public function updateGradesParticipant(HttpRequest $request, Registration $registration)
     {
@@ -362,5 +354,4 @@ class RegistrationController extends Controller
                 ]
             ]);
     }
->>>>>>> 1add5a361016745ea20ccce4f51e42d558f2d930
 }

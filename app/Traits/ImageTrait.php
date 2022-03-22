@@ -106,13 +106,15 @@ trait ImageTrait
             $newImage->directory = 'images/' . $newImage->id;
             $newImage->save();
         }
-        return response()->json([
-            'data' => null,
-            'msg' => [
-                'summary' => 'Imagen subida',
-                'detail' => 'Su petición se procesó correctamente',
-                'code' => '201'
-            ]], 201);
+        return (new ImageResource($newImage))->additional(
+            [
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ]
+        );
     }
 
     public function updateImage(UpdateImageRequest $request, Image $image)

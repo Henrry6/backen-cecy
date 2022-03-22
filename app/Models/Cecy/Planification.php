@@ -58,7 +58,7 @@ class Planification extends Model implements Auditable
     {
         return $this->belongsTo(Authority::class);
     }
-
+    
     public function state()
     {
         return $this->belongsTo(Catalogue::class);

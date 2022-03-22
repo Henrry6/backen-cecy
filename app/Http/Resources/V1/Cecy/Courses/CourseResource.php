@@ -32,7 +32,7 @@ class CourseResource extends JsonResource
             'responsible' => InstructorResource::make($this->responsible),
             'speciality' => CatalogueResource::make($this->speciality),
             'state' => CatalogueResource::make($this->state),
-            'images' => ImageResource::collection($this->images),
+            'image' => ImageResource::make($this->image),
             'abbreviation' => $this->abbreviation,
             'alignment' => $this->alignment,
             'approvedAt' => $this->approved_at,

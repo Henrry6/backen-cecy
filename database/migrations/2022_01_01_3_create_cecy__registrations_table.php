@@ -15,7 +15,7 @@ class CreateCecyRegistrationsTable extends Migration
 
             $table->foreignId('detail_planification_id')
                 ->nullable()
-                ->comment('especificaciones de la planificacion')
+                ->comment('Especificaciones de la planificación')
                 ->constrained('cecy.detail_planifications');
 
             $table->foreignId('participant_id')
@@ -25,19 +25,19 @@ class CreateCecyRegistrationsTable extends Migration
 
             $table->foreignId('state_id')
                 ->nullable()
-                ->comment('Estado de la matrícula. Inscrito, en revisión, matriculado, anulado')
+                ->comment('Estado de la matrícula: Inscrito, en revisión, matriculado, anulado')
                 ->constrained('cecy.catalogues');
 
             $table->foreignId('state_course_id')
                 ->nullable()
-                ->comment('Estado del estudiante en el curso: Aprovado o Reprovado')
+                ->comment('Estado del estudiante en el curso: Aprobado o Reprobado')
                 ->constrained('cecy.catalogues');
 
             $table->foreignId('type_id')
                 ->nullable()
                 ->comment('Tipo de matrícula: Ordinaria, extraordinaria, o especial')
                 ->constrained('cecy.catalogues');
-// DDRC-C: campo extra ya que en la parte de participante ya esta definido el tipo
+
             $table->foreignId('type_participant_id')
                 ->nullable()
                 ->comment('Tipo de participante: Externo, docente, GAD, senecyt')
@@ -45,7 +45,7 @@ class CreateCecyRegistrationsTable extends Migration
 
             $table->unsignedFloat('final_grade')
                 ->nullable()
-                ->comment('nota final');
+                ->comment('Nota final');
 
             $table->unsignedFloat('grade1')
                 ->nullable()

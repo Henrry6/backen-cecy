@@ -22,7 +22,7 @@ class CreateCecyDetailAttendancesTable extends Migration
 
             $table->foreignId('type_id')
                 ->nullable()
-                ->comment('para saber si esta presente,inasistente o atrasado ')
+                ->comment('Para saber si está presente,inasistente o atrasado ')
                 ->constrained('cecy.catalogues');
         });
     }

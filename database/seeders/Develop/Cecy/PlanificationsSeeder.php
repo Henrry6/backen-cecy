@@ -32,7 +32,7 @@ class PlanificationsSeeder extends Seeder
         Catalogue::factory(6)->sequence(
             [
                 'code' => State::TO_BE_APPROVED,
-                'name' => 'POR APROBADO',
+                'name' => 'POR APROBAR',
                 'type' => $catalogue['planification_state']['type'],
                 'description' => 'Falta poner una descripción'
             ],
@@ -85,7 +85,7 @@ class PlanificationsSeeder extends Seeder
         $responsablesCourse = Instructor::get();
         $detailSchoolPeriods = DetailSchoolPeriod::get();
 
-        for ($i = 0; $i <= 29; $i++) {
+        for ($i = 0; $i <= 14; $i++) {
 
             Planification::factory()->create(
                 [
