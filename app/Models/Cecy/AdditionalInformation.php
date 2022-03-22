@@ -33,16 +33,18 @@ class AdditionalInformation extends Model implements Auditable
         'course_follows' => 'array',
         'course_knows' => 'array'
     ];
+
     // Relationships
     public function registration()
     {
         return $this->belongsTo(Registration::class);
     }
+
     public function levelInstruction()
     {
         return $this->belongsTo(Catalogue::class);
     }
-    
+
     // Mutators
     public function setCompanyActivityAttribute($value)
     {
@@ -58,14 +60,17 @@ class AdditionalInformation extends Model implements Auditable
     {
         $this->attributes['company_email'] = strtoupper($value);
     }
+
     public function setCompanyNameAttribute($value)
     {
         $this->attributes['company_name'] = strtoupper($value);
     }
+
     public function setCompanyPhoneAttribute($value)
     {
         $this->attributes['company_phone'] = strtoupper($value);
     }
+
     public function setContactNameAttribute($value)
     {
         $this->attributes['contact_name'] = strtoupper($value);
@@ -113,12 +118,14 @@ class AdditionalInformation extends Model implements Auditable
             return $query->orWhere('contact_name', $contactName);
         }
     }
+
     public function scopeLevelInstruction($query, $levelInstruction)
     {
         if ($levelInstruction) {
             return $query->orWhere('level_instruction', $levelInstruction);
         }
     }
+
     public function scopeCustomOrderBy($query, $sorts)
     {
         if (!empty($sorts[0])) {

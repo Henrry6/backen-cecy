@@ -20,7 +20,6 @@ class Instructor extends Model implements Auditable
     protected $fillable = [];
 
     // Relationships
-
     public function certificates()
     {
         return $this->morphMany(Certificate::class, 'certificateable');
@@ -86,6 +85,7 @@ class Instructor extends Model implements Auditable
             return $query->orWhere('state', $state->id);
         }
     }
+
     public function scopeCustomOrderBy($query, $sorts)
     {
         if (!empty($sorts[0])) {

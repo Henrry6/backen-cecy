@@ -14,8 +14,8 @@ class CreateCecyCoursesTable extends Migration
             $table->softDeletes();
 
             $table->foreignId('academic_period_id')
-                ->comment('Primero, Segundo, Tercero, Cuarto, Quinto, Sexto, Séptimo')
                 ->nullable()
+                ->comment('Primero, segundo, tercero, cuarto, quinto, sexto, séptimo')
                 ->constrained('cecy.catalogues');
 
             $table->foreignId('area_id')
