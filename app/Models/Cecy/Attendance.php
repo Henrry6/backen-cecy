@@ -22,11 +22,11 @@ class Attendance extends Model implements Auditable
     ];
 
     // Relationships
-
     public function detailAttendances()
     {
         return $this->hasMany(DetailAttendance::class);
     }
+
     public function detailAttendance()
     {
         return $this->hasOne(DetailAttendance::class);
@@ -41,11 +41,8 @@ class Attendance extends Model implements Auditable
     {
         return $this->hasMany(PhotographicRecord::class);
     }
-    // Mutators
-
 
     // Scopes
-
     public function scopeCustomOrderBy($query, $sorts)
     {
         if (!empty($sorts[0])) {

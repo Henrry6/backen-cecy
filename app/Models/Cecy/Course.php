@@ -2,23 +2,24 @@
 
 namespace App\Models\Cecy;
 
+use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Auditable as Auditing;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Core\Career;
+use App\Models\Core\File;
 use App\Models\Core\Image;
 use App\Traits\FileTrait;
 use App\Traits\ImageTrait;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use OwenIt\Auditing\Contracts\Auditable;
-use OwenIt\Auditing\Auditable as Auditing;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Course extends Model implements Auditable
 {
-    use HasFactory;
     use Auditing;
-    use SoftDeletes;
-    use ImageTrait;
     use FileTrait;
+    use HasFactory;
+    use ImageTrait;
+    use SoftDeletes;
 
     protected $table = 'cecy.courses';
 
@@ -65,7 +66,6 @@ class Course extends Model implements Auditable
     ];
 
     // Relationships
-
     public function academicPeriod()
     {
         return $this->belongsTo(Catalogue::class);
@@ -95,7 +95,6 @@ class Course extends Model implements Auditable
     {
         return $this->belongsTo(Catalogue::class);
     }
-
 
     public function certifiedType()
     {
@@ -141,10 +140,12 @@ class Course extends Model implements Auditable
     {
         return $this->hasMany(Planification::class);
     }
+
     public function planification()
     {
         return $this->belongsTo(Planification::class);
     }
+
     public function prerequisites()
     {
         return $this->hasMany(Prerequisite::class);
@@ -232,7 +233,7 @@ class Course extends Model implements Auditable
     }
 
     // Scopes
-
+    // Revisar
     public function scopeAcademicPeriod($query, $academicPeriod)
     {
         if ($academicPeriod) {
@@ -243,7 +244,7 @@ class Course extends Model implements Auditable
     public function scopeAbbreviation($query, $abbreviation)
     {
         if ($abbreviation) {
-            return $query->where('abbreviation', $abbreviation);
+            return $query->where('abbreviation', 'iLike', "%$abbreviation%");
         }
     }
 
@@ -292,21 +293,21 @@ class Course extends Model implements Auditable
     public function scopeName($query, $name)
     {
         if ($name) {
-            return $query->Where('name', 'ilike', "%$name%");
+            return $query->Where('name', 'iLike', "%$name%");
         }
     }
 
-    public function scopeNroRecord($query, $nro_record)
+    public function scopeNroRecord($query, $recordNumber)
     {
-        if ($nro_record) {
-            return $query->orWhere('nro_record', $nro_record);
+        if ($recordNumber) {
+            return $query->orWhere('record_number', $recordNumber);
         }
     }
 
-    public function scopeLocalProposal($query, $local_proposal)
+    public function scopeLocalProposal($query, $localProposal)
     {
-        if ($local_proposal) {
-            return $query->orWhere('local_proposal', $local_proposal);
+        if ($localProposal) {
+            return $query->orWhere('local_proposal', $localProposal);
         }
     }
 
