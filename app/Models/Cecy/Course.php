@@ -379,4 +379,11 @@ class Course extends Model implements Auditable
             return $query;
         }
     }
+
+    // Accesors
+
+    public function getTotalHoursAttribute()
+    {
+        return $this->attributes['theory_hours'] + $this->attributes['practice_hours'];
+    }
 }
