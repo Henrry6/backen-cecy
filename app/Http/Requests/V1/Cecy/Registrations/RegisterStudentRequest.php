@@ -24,7 +24,6 @@ class RegisterStudentRequest extends FormRequest
     public function rules()
     {
         return [
-            'number' => ['required'],
             'additionalInformation.levelInstruction.id' => ['required'],
             'additionalInformation.companyActivity' => ['required'],
             'additionalInformation.companyAddress' => ['required'],
@@ -36,26 +35,27 @@ class RegisterStudentRequest extends FormRequest
             'additionalInformation.courseFollows' => ['required'],
             'additionalInformation.courseKnows' => ['required'],
             'additionalInformation.worked' => ['required'],
+            'number' => ['required'],
         ];
     }
 
     public function attributes()
     {
         return [
+            'companyActivity' => 'actividad de la empresa',
+            'companyAddress' => 'direccion fisica de empresa',
+            'companyEmail' => 'correo de empresa',
+            'companyName' => 'nombre de empresa',
+            'companyPhone' => 'teléfono de empresa',
+            'companySponsored' => 'la empresa patrocina',
+            'contactName' => 'nombre de contacto que patrocina',
+            'courseFollows' => 'horas prácticas',
+            'courseKnows' => 'entorno de aprendizaje',
+            'levelInstruction.id' => 'Id del nivel de instrucción',
             'number' => 'numero de matricula',
             'registered_at' => 'fecha de matricula',
-            'levelInstruction.id' => 'Id del nivel de instrucción',
             'registration.id' => 'Id del registro',
-            'companyActivity' => 'Actividad de la empresa',
-            'companyAddress' => 'Direccion fisica de empresa',
-            'companyEmail' => 'Correo de empresa',
-            'companyName' => 'Nombre de empresa',
-            'companyPhone' => 'Teléfono de empresa',
-            'companySponsored' => 'La empresa patrocina',
-            'contactName' => 'Nombre de contacto que patrocina',
-            'courseFollows' => 'Horas prácticas',
-            'courseKnows' => 'Entorno de aprendizaje',
-            'worked' => 'Participante trabaja',
+            'worked' => 'participante que trabaja',
         ];
     }
 }

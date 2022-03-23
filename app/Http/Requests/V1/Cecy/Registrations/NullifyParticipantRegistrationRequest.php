@@ -31,7 +31,7 @@ class NullifyParticipantRegistrationRequest extends FormRequest
     public function attributes()
     {
         return [
-            'observations' => 'Observaciones',
+            'observations' => 'observaciones',
         ];
     }
 }
