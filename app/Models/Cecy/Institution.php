@@ -63,7 +63,7 @@ class Institution extends Model implements Auditable
             return $query->where('name', $name);
         }
     }
-
+    //REVISAR
     // public function scopeLogo($query, $logo)
     // {
     //     if ($logo) {
