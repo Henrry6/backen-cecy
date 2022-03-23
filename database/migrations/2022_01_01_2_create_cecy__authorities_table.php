@@ -20,22 +20,22 @@ class CreateCecyAuthoritiesTable extends Migration
 
             // No tiene relacion el campo con los ejemplos
             $table->foreignId('position_id')
-                ->comment('Cargo en el cecy. activo, inactivo, vacaciones, permiso medico')
+                ->comment('Cargo en el cecy. activo, inactivo, vacaciones, permiso médico')
                 ->constrained('cecy.catalogues');
 
             $table->foreignId('state_id')
-                ->comment('Estado de una autoridad, de vacaciones, activo , incativo, permiso medico')
+                ->comment('Estado de una autoridad, de vacaciones, activo , incativo, permiso médico')
                 ->constrained('cecy.catalogues');
 
             $table->foreignId('user_id')
-                ->comment('Informacion del usuario')
+                ->comment('Información del usuario')
                 ->constrained('authentication.users');
 
             $table->date('position_started_at')
-                ->comment('Fecha de inicio de la gestion');
+                ->comment('Fecha de inicio de la gestión');
 
             $table->date('position_ended_at')
-                ->comment('Fecha final de la gestion');
+                ->comment('Fecha final de la gestión');
 
             $table->string('electronic_signature')
                 ->comment('Código de la firma electrónica');

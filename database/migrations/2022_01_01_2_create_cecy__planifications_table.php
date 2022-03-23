@@ -57,7 +57,7 @@ class CreateCecyPlanificationsTable extends Migration
                 ->comment('Se puede hacer una copia de las propias necesidades del curso de ser necesario');
 
             $table->json('observations')
-                ->comment('En caso de que no se apruebe la planificaciopn se pone una observacion del porque no se acepta');
+                ->comment('En caso de que no se apruebe la planificación se pone una observacion del porque no se acepta');
 
             $table->date('started_at')
                 ->comment('Fecha en que inicia la planificación');

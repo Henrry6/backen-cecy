@@ -2,16 +2,23 @@
 
 namespace App\Models\Cecy;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as Auditing;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Core\Career;
+use App\Models\Core\File;
+use App\Models\Core\Image;
+use App\Traits\FileTrait;
+use App\Traits\ImageTrait;
 
 class Registration extends Model implements Auditable
 {
-    use HasFactory;
     use Auditing;
+    use FileTrait;
+    use HasFactory;
+    use ImageTrait;
     use SoftDeletes;
 
     protected $table = 'cecy.registrations';
@@ -55,6 +62,7 @@ class Registration extends Model implements Auditable
         return $this->belongsTo(Participant::class);
     }
 
+    //revisar
     public function requirements()
     {
         return $this->belongsToMany(Requirement::class, 'cecy.registration_requirement', 'registration_id', 'requirement_id');
@@ -80,55 +88,69 @@ class Registration extends Model implements Auditable
         return $this->belongsTo(Catalogue::class, 'type_participant_id');
     }
 
+    //revisar
     public function detailAttendances()
     {
         return $this->hasMany(DetailAttendance::class);
     }
 
-    // Mutators
     // Scopes
+    //revisar
     public function scopeCode($query, $observations)
     {
         if ($observations) {
             return $query->orWhere('observations', $observations);
         }
     }
+
+    //revisar
     public function scopeDetailPlanification($query, $detailPlanification)
     {
         if ($detailPlanification) {
             return $query->orWhere('detail_planification_id', $detailPlanification->id);
         }
     }
+
+    //revisar
     public function scopeParticipant($query, $participant)
     {
         if ($participant) {
             return $query->orWhere('participant_id', $participant->id);
         }
     }
+
+    //revisar
     public function scopeState($query, $state)
     {
         if ($state) {
             return $query->orWhere('state_id', $state->id);
         }
     }
+
+    //revisar
     public function scopeStateCourse($query, $stateCourse)
     {
         if ($stateCourse) {
             return $query->orWhere('state_course_id', $stateCourse->id);
         }
     }
+
+    //revisar
     public function scopeType($query, $type)
     {
         if ($type) {
             return $query->orWhere('type_id', $type->id);
         }
     }
+
+    //revisar
     public function scopeTypeParticipant($query, $typeParticipant)
     {
         if ($typeParticipant) {
             return $query->orWhere('type_participant_id', $typeParticipant->id);
         }
     }
+    
     public function scopeCustomOrderBy($query, $sorts)
     {
         if (!empty($sorts[0])) {
@@ -143,4 +165,22 @@ class Registration extends Model implements Auditable
             return $query;
         }
     }
+
+    public function scopeCustomSelect($query, $fields)
+    {
+        if (!empty($fields)) {
+            $fields = explode(',', $fields);
+            foreach ($fields as $field) {
+                $fieldExist = array_search(strtolower($field), $fields);
+                if ($fieldExist == false) {
+                    unset($fields[$fieldExist]);
+                }
+            }
+
+            array_unshift($fields, 'id');
+            return $query->select($fields);
+        }
+    }
+    
 }
+

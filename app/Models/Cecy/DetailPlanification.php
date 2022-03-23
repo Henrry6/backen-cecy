@@ -2,16 +2,24 @@
 
 namespace App\Models\Cecy;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as Auditing;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Core\Career;
+use App\Models\Core\File;
+use App\Models\Core\Image;
+use App\Traits\FileTrait;
+use App\Traits\ImageTrait;
+
 
 class DetailPlanification extends Model implements Auditable
 {
-    use HasFactory;
     use Auditing;
+    use FileTrait;
+    use HasFactory;
+    use ImageTrait;
     use SoftDeletes;
 
     protected $table = 'cecy.detail_planifications';
@@ -29,11 +37,13 @@ class DetailPlanification extends Model implements Auditable
     ];
 
     // Relationships
+    //revisar
     public function attendances()
     {
         return $this->hasMany(Attendance::class);
     }
-
+    
+    //revisar
     public function certificates()
     {
         return $this->morphMany(Certificate::class, 'certificateable');
@@ -49,6 +59,7 @@ class DetailPlanification extends Model implements Auditable
         return $this->belongsTo(Catalogue::class);
     }
 
+    //revisar
     public function instructors()
     {
         return $this->belongsToMany(Instructor::class, 'cecy.detail_planification_instructor', 'detail_planification_id', 'instructor_id');
@@ -64,11 +75,13 @@ class DetailPlanification extends Model implements Auditable
         return $this->belongsTo(Planification::class);
     }
 
+    //revisar
     public function photographicRecords()
     {
         return $this->hasMany(PhotographicRecord::class);
     }
 
+    //revisar
     public function registrations()
     {
         return $this->hasMany(Registration::class);
@@ -84,16 +97,15 @@ class DetailPlanification extends Model implements Auditable
         return $this->belongsTo(Catalogue::class);
     }
 
-    // Mutators
-
     // Scopes
+    //revisar
     public function scopeEndedTime($query, $endedTime)
     {
         if ($endedTime) {
             return $query->where('ended_time', $endedTime);
         }
     }
-
+    
     public function scopeObservations($query, $observations)
     {
         if ($observations) {
@@ -101,6 +113,7 @@ class DetailPlanification extends Model implements Auditable
         }
     }
 
+    //revisar
     public function scopePlanEndedAt($query, $planEndedAt)
     {
         if ($planEndedAt) {
@@ -108,6 +121,7 @@ class DetailPlanification extends Model implements Auditable
         }
     }
 
+    //revisar
     public function scopeRegistrationsLeft($query, $registrationsLeft)
     {
         if ($registrationsLeft) {
@@ -115,6 +129,7 @@ class DetailPlanification extends Model implements Auditable
         }
     }
 
+    //revisar
     public function scopeStartedTime($query, $startedTime)
     {
         if ($startedTime) {
@@ -122,6 +137,7 @@ class DetailPlanification extends Model implements Auditable
         }
     }
 
+    //revisar
     public function scopePlanification($query, $planification)
     {
         if ($planification) {
@@ -142,5 +158,26 @@ class DetailPlanification extends Model implements Auditable
             }
             return $query;
         }
+    }
+
+    public function scopeCustomSelect($query, $fields)
+    {
+        if (!empty($fields)) {
+            $fields = explode(',', $fields);
+            foreach ($fields as $field) {
+                $fieldExist = array_search(strtolower($field), $fields);
+                if ($fieldExist == false) {
+                    unset($fields[$fieldExist]);
+                }
+            }
+
+            array_unshift($fields, 'id');
+            return $query->select($fields);
+        }
+        
+    // Accesors
+    public function getScheduleAttribute()
+    {
+        return $this->attributes['started_time'] . '-' . $this->attributes['ended_time'];
     }
 }

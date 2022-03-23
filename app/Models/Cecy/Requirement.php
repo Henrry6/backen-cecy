@@ -2,16 +2,23 @@
 
 namespace App\Models\Cecy;
 
+use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Auditable as Auditing;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use OwenIt\Auditing\Contracts\Auditable;
-use OwenIt\Auditing\Auditable as Auditing;
+use App\Models\Core\Career;
+use App\Models\Core\File;
+use App\Models\Core\Image;
+use App\Traits\FileTrait;
+use App\Traits\ImageTrait;
 
 class Requirement extends Model implements Auditable
 {
-    use HasFactory;
     use Auditing;
+    use FileTrait;
+    use HasFactory;
+    use ImageTrait;
     use SoftDeletes;
 
     protected $table = 'cecy.requirements';
@@ -27,6 +34,8 @@ class Requirement extends Model implements Auditable
     {
         return $this->belongsToMany(Registration::class, 'cecy.registration_requirement', 'requirement_id', 'registration_id');
     }
+
+    //revisar
     public function state()
     {
         return $this->belongsTo(Catalogue::class);
@@ -39,6 +48,10 @@ class Requirement extends Model implements Auditable
     }
 
     // Scopes
+<<<<<<< HEAD
+=======
+    //reevisar
+>>>>>>> edc19f5b7ea5c599e532d168ff27880348f07de1
     public function scopeName($query, $name)
     {
         if ($name) {
@@ -46,13 +59,21 @@ class Requirement extends Model implements Auditable
         }
     }
 
+<<<<<<< HEAD
+=======
+    //reevisar
+>>>>>>> edc19f5b7ea5c599e532d168ff27880348f07de1
     public function scopeState($query, $requirement)
     {
         if ($requirement) {
             return $query->where('state_id', $requirement->state);
         }
     }
+<<<<<<< HEAD
     //REVISAR
+=======
+
+>>>>>>> edc19f5b7ea5c599e532d168ff27880348f07de1
     public function scopeCustomOrderBy($query, $sorts)
     {
         if (!empty($sorts[0])) {
@@ -67,4 +88,23 @@ class Requirement extends Model implements Auditable
             return $query;
         }
     }
+<<<<<<< HEAD
+=======
+
+    public function scopeCustomSelect($query, $fields)
+    {
+        if (!empty($fields)) {
+            $fields = explode(',', $fields);
+            foreach ($fields as $field) {
+                $fieldExist = array_search(strtolower($field), $fields);
+                if ($fieldExist == false) {
+                    unset($fields[$fieldExist]);
+                }
+            }
+
+            array_unshift($fields, 'id');
+            return $query->select($fields);
+        }
+    }
+>>>>>>> edc19f5b7ea5c599e532d168ff27880348f07de1
 }

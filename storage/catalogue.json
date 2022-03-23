@@ -130,7 +130,10 @@
     "parallel_name": {
         "type": "PARALLEL_NAME",
         "a": "A",
-        "b": "B"
+        "b": "B",
+        "c": "C",
+        "d": "D",
+        "e": "E"
     },
     "detail_planification_state": {
         "type": "DETAIL_PLANIFICATION_STATE",
