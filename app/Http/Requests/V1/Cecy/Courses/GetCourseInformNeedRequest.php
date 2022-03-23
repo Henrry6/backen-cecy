@@ -24,7 +24,7 @@ class GetCourseInformNeedRequest extends FormRequest
     public function attributes()
     {
         return [
-            'name' =>  'nombre del curso',
+            'name' =>  'Nombre del curso',
             'courseType.id' => 'Id  del tipo de curso',
             'modality.id' => 'Id  de la modalidad',
 
