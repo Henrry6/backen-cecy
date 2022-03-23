@@ -48,10 +48,7 @@ class Requirement extends Model implements Auditable
     }
 
     // Scopes
-<<<<<<< HEAD
-=======
-    //reevisar
->>>>>>> edc19f5b7ea5c599e532d168ff27880348f07de1
+    //revisar
     public function scopeName($query, $name)
     {
         if ($name) {
@@ -59,21 +56,14 @@ class Requirement extends Model implements Auditable
         }
     }
 
-<<<<<<< HEAD
-=======
-    //reevisar
->>>>>>> edc19f5b7ea5c599e532d168ff27880348f07de1
+    //revisar
     public function scopeState($query, $requirement)
     {
         if ($requirement) {
             return $query->where('state_id', $requirement->state);
         }
     }
-<<<<<<< HEAD
     //REVISAR
-=======
-
->>>>>>> edc19f5b7ea5c599e532d168ff27880348f07de1
     public function scopeCustomOrderBy($query, $sorts)
     {
         if (!empty($sorts[0])) {
@@ -88,8 +78,6 @@ class Requirement extends Model implements Auditable
             return $query;
         }
     }
-<<<<<<< HEAD
-=======
 
     public function scopeCustomSelect($query, $fields)
     {
@@ -106,5 +94,4 @@ class Requirement extends Model implements Auditable
             return $query->select($fields);
         }
     }
->>>>>>> edc19f5b7ea5c599e532d168ff27880348f07de1
 }
