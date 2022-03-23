@@ -3,6 +3,8 @@
 namespace App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+use App\Rules\WorkdayRule;
 
 class RegisterDetailPlanificationRequest extends FormRequest
 {
@@ -16,23 +18,28 @@ class RegisterDetailPlanificationRequest extends FormRequest
             'classroom.id' => ['required', 'integer'],
             'day.id' => ['required', 'integer'],
             'planification.id' => ['required', 'integer'],
-            'workday.id' => ['required', 'integer'],
-            'parallel.id' => ['required', 'integer'],
+            'workday.id' => ['required', 'integer', new WorkdayRule($this->endedTime)],
+            'parallel.id' => [
+                'required', 'integer',
+                Rule::unique('pgsql-cecy.detail_planifications', 'parallel_id')
+                    ->where(fn ($query) => $query->where('planification_id', $this->planification))
+            ],
             'endedTime' => ['required', 'after:startedTime'],
-            'startedTime' => ['required', ],
+            'startedTime' => ['required',],
+            // 'observations' => ['required'], //solo si las horas del curso no coinciden
         ];
     }
 
     public function attributes()
     {
         return [
-            'classroom.id' => 'Aula',
-            'day.id' => 'Días de clase',
-            'planification.id' => 'Planificación',
-            'workday.id' => 'Jornada',
-            'paralel.id' => 'Paralelo del aula o clase',
-            'endedTime' => 'Hora inicio',
-            'startedTime' => 'Hora fin',
+            'classroom.id' => 'aula',
+            'day.id' => 'días de clase',
+            'planification.id' => 'planificación',
+            'workday.id' => 'jornada',
+            'parallel.id' => 'paralelo del aula o clase',
+            'endedTime' => 'hora de inicio',
+            'startedTime' => 'hora de fin',
         ];
     }
 }

@@ -52,13 +52,35 @@ class DetailPlanificationsSeeder extends Seeder
                 'code' => $catalogue['parallel_name']['a'],
                 'name' => 'A',
                 'type' => $catalogue['parallel_name']['type'],
-                'description' => 'Falta poner una descripción'
+                'description' => 'Paralelo de un detalle de planificación'
             ],
             [
                 'code' => $catalogue['parallel_name']['b'],
                 'name' => 'B',
                 'type' => $catalogue['parallel_name']['type'],
-                'description' => 'Falta poner una descripción'
+                'description' => 'Paralelo de un detalle de planificación'
+
+            ],
+            [
+                'code' => $catalogue['parallel_name']['c'],
+                'name' => 'C',
+                'type' => $catalogue['parallel_name']['type'],
+                'description' => 'Paralelo de un detalle de planificación'
+
+            ],
+            [
+                'code' => $catalogue['parallel_name']['d'],
+                'name' => 'D',
+                'type' => $catalogue['parallel_name']['type'],
+                'description' => 'Paralelo de un detalle de planificación'
+
+            ],
+            [
+                'code' => $catalogue['parallel_name']['e'],
+                'name' => 'E',
+                'type' => $catalogue['parallel_name']['type'],
+                'description' => 'Paralelo de un detalle de planificación'
+
             ],
             //days
             [

@@ -19,7 +19,7 @@ class CreateCecySchoolPeriodsTable extends Migration
                 ->constrained('cecy.catalogues');
 
             $table->string('code')->unique()
-                ->comment('Código unico de periodos lectivos ej: 2021-2022');
+                ->comment('Código único de periodos lectivos ej: 2021-2022');
 
             $table->date('ended_at')
                 ->comment('Fecha de finalización del periodo lectivo');

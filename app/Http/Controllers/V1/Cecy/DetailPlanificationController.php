@@ -21,6 +21,8 @@ use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\RegisterDeta
 use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\ShowDetailPlanificationRequest;
 use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\UpdateDetailPlanificationRequest as UpdateDetailPlanification;
 use App\Http\Requests\V1\Cecy\DetailPlanifications\UpdateDetailPlanificationRequest;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Symfony\Component\Translation\Exception\NotFoundResourceException;
 
 class DetailPlanificationController extends Controller
@@ -105,12 +107,12 @@ class DetailPlanificationController extends Controller
         //validar que la planification ha culminado
         if (
             $planification->state()->first()->code === State::CULMINATED ||
-            $planification->state()->first()->code === State::NOT_APPROVED
+            $planification->state()->first()->code === State::APPROVED
         ) {
             return response()->json([
                 'msg' => [
                     'summary' => 'Error',
-                    'detail' => 'La planificación ha culminado o no fue aprobada.',
+                    'detail' => 'La planificación ha culminado o ya fue aprobada.',
                     'code' => '400'
                 ]
             ], 400);
@@ -155,7 +157,7 @@ class DetailPlanificationController extends Controller
      * Return a detailPlanification record
      */
     // DetailPlanificationController
-    public function showDetailPlanification(ShowDetailPlanificationRequest $request, DetailPlanification $detailPlanification) //hecho
+    public function showDetailPlanification(ShowDetailPlanificationRequest $request, DetailPlanification $detailPlanification)
     {
         return (new ResponsibleCourseDetailPlanificationResource($detailPlanification))
             ->additional([
@@ -173,8 +175,6 @@ class DetailPlanificationController extends Controller
      */
     public function updateDetailPlanification(UpdateDetailPlanification $request, DetailPlanification $detailPlanification)
     {
-        // username:1095554529 ->instructor
-        // username:1004242743 ->instructor
         $loggedInInstructor = Instructor::where('user_id', $request->user()->id)->first();
         if (!$loggedInInstructor) {
             return response()->json([
@@ -201,15 +201,15 @@ class DetailPlanificationController extends Controller
             ], 400);
         }
 
-        //validar que la planification ha culminado
+        // validar que la planification ha culminado
         if (
             $planification->state()->first()->code === State::CULMINATED ||
-            $planification->state()->first()->code === State::NOT_APPROVED
+            $planification->state()->first()->code === State::APPROVED
         ) {
             return response()->json([
                 'msg' => [
                     'summary' => 'Error',
-                    'detail' => 'La planificación ha culminado o no fue aprobada.',
+                    'detail' => 'La planificación ha culminado o ya fue aprobada.',
                     'code' => '400'
                 ]
             ], 400);
@@ -344,7 +344,47 @@ class DetailPlanificationController extends Controller
      */
     public function destroysDetailPlanifications(DestroysDetailPlanificationRequest $request)
     {
-        // return 'works!';
+        $detailPlanification = DetailPlanification::find($request->ids[0]);
+        $planification = $detailPlanification->planification()->first();
+        return $planification;
+        $responsibleCourse = $planification->responsibleCourse()->first();
+
+        $loggedInInstructor = Instructor::where('user_id', $request->user()->id)->first();
+        if (!$loggedInInstructor) {
+            return response()->json([
+                'data' => '',
+                'msg' => [
+                    'summary' => 'Error',
+                    'detail' => 'No es instructor o no se encuentra registrado',
+                    'code' => '400'
+                ]
+            ], 400);
+        }
+
+        if ($loggedInInstructor->id !== $responsibleCourse->id) {
+            return response()->json([
+                'data' => '',
+                'msg' => [
+                    'summary' => 'Error',
+                    'detail' => 'No le pertece esta planificación',
+                    'code' => '400'
+                ]
+            ], 400);
+        }
+
+        //validar que la planification ha culminado
+        if (
+            $planification->state()->first()->code === State::CULMINATED ||
+            $planification->state()->first()->code === State::APPROVED
+        ) {
+            return response()->json([
+                'msg' => [
+                    'summary' => 'Error',
+                    'detail' => 'La planificación ha culminado o ya fue aprobada.',
+                    'code' => '400'
+                ]
+            ], 400);
+        }
         $detailPlanifications = DetailPlanification::whereIn('id', $request->input('ids'))->get();
         DetailPlanification::destroy($request->input('ids'));
 

@@ -3,7 +3,8 @@
 namespace App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Rules\Workday;
+use Illuminate\Validation\Rule;
+use App\Rules\WorkdayRule;
 
 class UpdateDetailPlanificationRequest extends FormRequest
 {
@@ -18,8 +19,13 @@ class UpdateDetailPlanificationRequest extends FormRequest
             'classroom.id' => ['required', 'integer'],
             'day.id' => ['required', 'integer'],
             'planification.id' => ['required', 'integer'],
-            'workday.id' => ['required', 'integer', new Workday($this->endedTime)],
-            'parallel.id' => ['required', 'integer'],
+            'workday.id' => ['required', 'integer', new WorkdayRule($this->endedTime)],
+            'parallel.id' => [
+                'required', 'integer',
+                Rule::unique('pgsql-cecy.detail_planifications', 'parallel_id')
+                    ->ignore(request('detailPlanification')->id)
+                    ->where(fn ($query) => $query->where('planification_id', $this->planification)),
+            ],
             'endedTime' => ['required', 'after:startedTime'],
             'startedTime' => ['required',],
             'observations' => ['required'],
@@ -29,13 +35,13 @@ class UpdateDetailPlanificationRequest extends FormRequest
     public function attributes()
     {
         return [
-            'classroom.id' => 'Aula',
-            'day.id' => 'Días de clase',
-            'planification.id' => 'Planificación',
-            'workday.id' => 'Jornada',
-            'paralel.id' => 'Paralelo del aula o clase',
-            'endedTime' => 'Hora de inicio',
-            'startedTime' => 'Hora de fin',
+            'classroom.id' => 'aula',
+            'day.id' => 'días de clase',
+            'planification.id' => 'planificación',
+            'workday.id' => 'jornada',
+            'parallel.id' => 'paralelo del aula o clase',
+            'endedTime' => 'hora de inicio',
+            'startedTime' => 'hora de fin',
         ];
     }
 }

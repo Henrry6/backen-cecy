@@ -23,13 +23,13 @@ class CreateCecyTopicsTable extends Migration
                 ->comment('Id del tema principal')
                 ->constrained('cecy.topics');
 
-            $table->integer('level')
-                ->nullable()
-                ->comment('Nivel de los temas Ej: 1 y 2');
-
             $table->text('description')
                 ->nullable()
                 ->comment('Descripción del tema o subtema');
+
+            $table->integer('level')
+                ->nullable()
+                ->comment('Nivel de los temas Ej: 1 y 2');
         });
     }
 

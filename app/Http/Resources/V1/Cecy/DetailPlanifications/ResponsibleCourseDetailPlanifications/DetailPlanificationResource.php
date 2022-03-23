@@ -23,7 +23,7 @@ class DetailPlanificationResource extends JsonResource
             'endedTime' => $this->ended_time,
             'instructors' => InstructorFullnameResource::collection($this->instructors),
             'observations' => $this->observations,
-            'schedule' => $this->started_time . '-' . $this->ended_time,
+            'schedule' => $this->getScheduleAttribute(),
             'startedTime' => $this->started_time,
         ];
     }

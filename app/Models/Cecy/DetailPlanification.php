@@ -174,5 +174,10 @@ class DetailPlanification extends Model implements Auditable
             array_unshift($fields, 'id');
             return $query->select($fields);
         }
+        
+    // Accesors
+    public function getScheduleAttribute()
+    {
+        return $this->attributes['started_time'] . '-' . $this->attributes['ended_time'];
     }
 }
