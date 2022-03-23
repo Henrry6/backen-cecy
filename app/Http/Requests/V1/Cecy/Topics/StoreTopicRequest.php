@@ -27,8 +27,8 @@ class StoreTopicRequest extends FormRequest
             'course.id' => 'Id del curso',
             'parent.id' => 'Id del tema principa',
             'children' => 'subtemas',
-            'level' => 'Tipo de nivel, tema o subtema',
-            'description' => 'Descripción del tema o subtemas',
+            'level' => 'tipo de nivel, tema o subtema',
+            'description' => 'descripción del tema o subtemas',
         ];
     }
 }

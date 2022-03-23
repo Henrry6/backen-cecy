@@ -2,11 +2,9 @@
 
 namespace App\Http\Resources\V1\Cecy\Attendances;
 
-use App\Http\Resources\V1\Cecy\DetailAttendances\DetailAttendanceDateResource;
-use App\Http\Resources\V1\Cecy\DetailAttendances\DetailAttendanceParticipantsResource;
-use App\Http\Resources\V1\Cecy\DetailAttendances\DetailAttendanceResource;
-use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationResource;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\V1\Cecy\DetailAttendances\DetailAttendanceParticipantsResource;
+use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationResource;
 
 class AttendanceResource extends JsonResource
 {
@@ -14,8 +12,8 @@ class AttendanceResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'detailPlanification' => DetailPlanificationResource::make($this->detailPlanification),
             'detailAttendances' => DetailAttendanceParticipantsResource::collection($this->detailAttendances),
+            'detailPlanification' => DetailPlanificationResource::make($this->detailPlanification),
             'duration' => $this->duration,
             'registeredAt' => $this->registered_at,
         ];

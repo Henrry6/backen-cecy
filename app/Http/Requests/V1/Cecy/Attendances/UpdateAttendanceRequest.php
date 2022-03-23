@@ -23,7 +23,7 @@ class UpdateAttendanceRequest extends FormRequest
     {
         return [
             'type.id' => 'tipo de asistencia',
-            'duration' => 'duracion de la clase',
+            'duration' => 'duración de la clase',
             'registeredAt' => 'fecha de la clase'
         ];
     }
