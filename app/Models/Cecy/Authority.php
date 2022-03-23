@@ -31,14 +31,14 @@ class Authority extends Model implements Auditable
         return $this->belongsTo(Institution::class, 'id','institution_id');
     }
 
+    public function planifications()
+    {
+        return $this->hasMany(Planification::class, 'responsible_cecy_id');
+    }
+
     public function position()
     {
         return $this->belongsTo(State::class);
-    }
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
     }
 
     public function state()
@@ -46,9 +46,9 @@ class Authority extends Model implements Auditable
         return $this->belongsTo(State::class);
     }
 
-    public function planifications()
+    public function user()
     {
-        return $this->hasMany(Planification::class, 'responsible_cecy_id');
+        return $this->belongsTo(User::class);
     }
 
     // Mutators
@@ -89,4 +89,20 @@ class Authority extends Model implements Auditable
             return $query;
         }
     }
+
+    public function scopeCustomSelect($query, $fields)
+    {
+        if (!empty($fields)) {
+            $fields = explode(',', $fields);
+            foreach ($fields as $field) {
+                $fieldExist = array_search(strtolower($field), $fields);
+                if ($fieldExist == false) {
+                    unset($fields[$fieldExist]);
+                }
+            }
+
+            array_unshift($fields, 'id');
+            return $query->select($fields);
+        }
+    }    
 }

@@ -25,6 +25,16 @@ class Participant extends Model implements Auditable
 
     // Relationships
 
+    public function registrations()
+    {
+        return $this->hasMany(Registration::class);
+    }
+
+    public function state()
+    {
+        return $this->belongsTo(Catalogue::class);
+    }
+
     public function type()
     {
         return $this->belongsTo(Catalogue::class);
@@ -33,16 +43,6 @@ class Participant extends Model implements Auditable
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function state()
-    {
-        return $this->belongsTo(Catalogue::class);
-    }
-
-    public function registrations()
-    {
-        return $this->hasMany(Registration::class);
     }
 
     //Scopes
@@ -74,4 +74,20 @@ class Participant extends Model implements Auditable
             return $query;
         }
     }
+    
+    public function scopeCustomSelect($query, $fields)
+    {
+        if (!empty($fields)) {
+            $fields = explode(',', $fields);
+            foreach ($fields as $field) {
+                $fieldExist = array_search(strtolower($field), $fields);
+                if ($fieldExist == false) {
+                    unset($fields[$fieldExist]);
+                }
+            }
+
+            array_unshift($fields, 'id');
+            return $query->select($fields);
+        }
+    }    
 }
