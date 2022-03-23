@@ -2,26 +2,26 @@
 
 namespace App\Models\Cecy;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as Auditing;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Traits\FileTrait;
 use App\Models\Core\File;
+use App\Traits\FileTrait;
 
 class Topic extends Model implements Auditable
 {
-    use HasFactory;
     use Auditing;
     use FileTrait;
+    use HasFactory;
     use SoftDeletes;
 
     protected $table = 'cecy.topics';
 
     protected $fillable = [
-        'level',
         'description',
+        'level',
     ];
 
     // Relationships
@@ -55,7 +55,7 @@ class Topic extends Model implements Auditable
     public function scopeDescription($query, $description)
     {
         if ($description) {
-            return $query->where('description', $description);
+            return $query->orWhere('description', 'iLike', "%$description%");
         }
     }
 
@@ -71,6 +71,22 @@ class Topic extends Model implements Auditable
                 }
             }
             return $query;
+        }
+    }
+
+    public function scopeCustomSelect($query, $fields)
+    {
+        if (!empty($fields)) {
+            $fields = explode(',', $fields);
+            foreach ($fields as $field) {
+                $fieldExist = array_search(strtolower($field), $fields);
+                if ($fieldExist == false) {
+                    unset($fields[$fieldExist]);
+                }
+            }
+
+            array_unshift($fields, 'id');
+            return $query->select($fields);
         }
     }
 }

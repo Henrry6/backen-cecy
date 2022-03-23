@@ -21,7 +21,7 @@ class GetAttendanceTeacherRequest extends FormRequest
     public function attributes()
     {
         return [
-            'duration' => 'duracion',
+            'duration' => 'duración',
             'registered_at' => 'fecha'
         ];
     }

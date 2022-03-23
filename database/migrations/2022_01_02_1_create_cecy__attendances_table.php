@@ -18,10 +18,10 @@ class CreateCecyAttendancesTable extends Migration
 
             // Pendiente el tipo de datos si es entero, time
             $table->integer('duration')
-                ->comment('Duracion de la clase');
+                ->comment('Duración de la clase');
 
             $table->date('registered_at')
-                ->comment('Fecha de la asistencia la cual sera guardada');
+                ->comment('Fecha de la asistencia la cual será guardada');
         });
     }
 

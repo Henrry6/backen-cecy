@@ -11,11 +11,11 @@ class CreateCecyParticipantCourseTable extends Migration
         Schema::connection(env('DB_CONNECTION_CECY'))->create('participant_course', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('course_id')
-                ->constrained('cecy.courses');
-
             $table->foreignId('catalogue_id')
                 ->constrained('cecy.catalogues');
+
+            $table->foreignId('course_id')
+                ->constrained('cecy.courses');
         });
     }
 

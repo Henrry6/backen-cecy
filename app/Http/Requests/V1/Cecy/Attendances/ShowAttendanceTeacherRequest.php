@@ -20,7 +20,7 @@ class ShowAttendanceTeacherRequest extends FormRequest
     public function attributes()
     {
         return [
-            'id' => 'id de la  asistencia'
+            'id' => 'Id de la  asistencia'
         ];
     }
 }

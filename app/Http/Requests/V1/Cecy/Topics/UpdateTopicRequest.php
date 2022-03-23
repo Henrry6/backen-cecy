@@ -15,8 +15,8 @@ class UpdateTopicRequest extends FormRequest
         return [
             'course.id' => ['integer'],
             'parent.id' => ['integer'],
-            'level' => ['integer'],
             'children' => ['json'],
+            'level' => ['integer'],
             'description' => ['required', 'max:240'],
         ];
     }
@@ -27,8 +27,8 @@ class UpdateTopicRequest extends FormRequest
             'course.id' => 'Id del tema principa',
             'parent.id' => 'Id del tema principa',
             'children' => 'json',
-            'level' => 'Tipo de nivel, tema o subtema',
-            'description' => 'Descripción del tema o subtemas',
+            'level' => 'tipo de nivel, tema o subtema',
+            'description' => 'descripción del tema o subtemas',
         ];
     }
 }

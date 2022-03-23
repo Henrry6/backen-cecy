@@ -19,78 +19,78 @@ class CreateCecyCoursesTable extends Migration
                 ->constrained('cecy.catalogues');
 
             $table->foreignId('area_id')
+                ->nullable()
                 ->comment('')
-                ->nullable()
-                ->constrained('cecy.catalogues');
-
-            $table->foreignId('entity_certification_id')
-                ->comment('Institución que lo avala, Senecyt, Setec, Setec')
-                ->nullable()
                 ->constrained('cecy.catalogues');
 
             $table->foreignId('career_id')
-                ->comment('El id de la carrera que oferto el curso')
                 ->nullable()
+                ->comment('El id de la carrera que oferto el curso')
                 ->constrained('core.careers');
 
             $table->foreignId('category_id')
+                ->nullable()
                 ->comment('Categoría a la cual pertenece el curso, ingles, pedagógico, programación ')
-                ->nullable()
-                ->constrained('cecy.catalogues');
-
-            $table->foreignId('formation_type_id')
-                ->comment('Tipo de capacitación puede ser webinar, taller, curso')
-                ->nullable()
                 ->constrained('cecy.catalogues');
 
             $table->foreignId('certified_type_id')
-                ->comment('Curso, Taller, Webinar')
                 ->nullable()
+                ->comment('Curso, Taller, Webinar')
                 ->constrained('cecy.catalogues');
 
             $table->foreignId('compliance_indicator_id')
-                ->comment('Por averigurar campo añadido 21/01')
                 ->nullable()
+                ->comment('Por averigurar campo añadido 21/01')
                 ->constrained('cecy.catalogues');
 
             $table->foreignId('control_id')
-                ->comment('Por averigurar campo añadido 21/01')
                 ->nullable()
+                ->comment('Por averigurar campo añadido 21/01')
                 ->constrained('cecy.catalogues');
 
             $table->foreignId('course_type_id')
-                ->comment('Ténico, Administrativo')
                 ->nullable()
+                ->comment('Ténico, Administrativo')
+                ->constrained('cecy.catalogues');
+
+            $table->foreignId('entity_certification_id')
+                ->nullable()
+                ->comment('Institución que lo avala, Senecyt, Setec, Setec')
+                ->constrained('cecy.catalogues');
+
+            $table->foreignId('formation_type_id')
+                ->nullable()
+                ->comment('Tipo de capacitación puede ser webinar, taller, curso')
                 ->constrained('cecy.catalogues');
 
             $table->foreignId('frequency_id')
+                ->nullable()
                 ->comment('Por averigurar campo añadido 21/01')
-                ->nullable()
-                ->constrained('cecy.catalogues');
-
-            $table->foreignId('modality_id')
-                ->comment('Presencial, Virtual')
-                ->nullable()
                 ->constrained('cecy.catalogues');
 
             $table->foreignId('means_verification_id')
-                ->comment('Por averigurar campo añadido 21/01')
                 ->nullable()
+                ->comment('Por averigurar campo añadido 21/01')
+                ->constrained('cecy.catalogues');
+
+            $table->foreignId('modality_id')
+                ->nullable()
+                ->comment('Presencial, Virtual')
                 ->constrained('cecy.catalogues');
 
             $table->foreignId('responsible_id')
-                ->comment('Id del docente responsable del curso')
                 ->nullable()
+                ->comment('Id del docente responsable del curso')
                 ->constrained('cecy.instructors');
 
             $table->foreignId('speciality_id')
-                ->comment('')
                 ->nullable()
+                ->comment('')
                 ->constrained('cecy.catalogues');
 
             $table->foreignId('state_id')
-                ->comment('Aprobado, Rechazado, Pendiente')
                 ->nullable()
+                ->comment('Aprobado, Rechazado, Pendiente')
                 ->constrained('cecy.catalogues');
 
             $table->string('abbreviation')
@@ -199,7 +199,6 @@ class CreateCecyCoursesTable extends Migration
                 ->comment('Requisitos técnicos y generales del curso')
                 ->nullable();
 
-
             $table->integer('theory_hours')
                 ->comment('Cantidad de horas del curso en teoria')
                 ->nullable();
@@ -211,3 +210,4 @@ class CreateCecyCoursesTable extends Migration
         Schema::connection(env('DB_CONNECTION_CECY'))->dropIfExists('courses');
     }
 }
+

@@ -48,7 +48,7 @@ class Requirement extends Model implements Auditable
     }
 
     // Scopes
-    //reevisar
+    //revisar
     public function scopeName($query, $name)
     {
         if ($name) {
@@ -56,14 +56,14 @@ class Requirement extends Model implements Auditable
         }
     }
 
-    //reevisar
+    //revisar
     public function scopeState($query, $requirement)
     {
         if ($requirement) {
             return $query->where('state_id', $requirement->state);
         }
     }
-
+    //REVISAR
     public function scopeCustomOrderBy($query, $sorts)
     {
         if (!empty($sorts[0])) {

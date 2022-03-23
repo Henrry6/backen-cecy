@@ -14,8 +14,8 @@ class TopicResource extends JsonResource
             'course' => CourseResourceBasic::make($this->course),
             // 'parent' => TopicResource::make($this->parent),
             'children' => TopicResource::collection($this->children),
-            'level' => $this->level,
             'description' => $this->description,
+            'level' => $this->level,
         ];
     }
 }
