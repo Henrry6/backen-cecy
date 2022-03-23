@@ -23,9 +23,9 @@ class UpdateRequirementRequest extends FormRequest
   public function attributes()
   {
     return [
-      'state.id' => 'Estado',
-      'name' => 'Nombre del campo',
-      'required' => 'Requerido',
+      'state.id' => 'estado',
+      'name' => 'nombre del campo',
+      'required' => 'requerido',
     ];
   }
 }

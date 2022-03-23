@@ -14,8 +14,8 @@ class UpdateProfileCourseRequest extends FormRequest
     {
         return [
             'course.id' => ['required', 'integer'],
-            'requiredKnowledges' => ['required'],
             'requiredExperiences' => ['required'],
+            'requiredKnowledges' => ['required'],
             'requiredSkills' => ['required']
         ];
     }
@@ -23,10 +23,10 @@ class UpdateProfileCourseRequest extends FormRequest
     public function attributes()
     {
         return [
-            'course.id' => 'id del curso',
-            'requiredKnowledges' => 'conocimiento requerido',
+            'course.id' => 'ID del curso',
             'requiredExperiences' => 'experiencia requerida',
-            'requiredSkills' => 'Habilidades requeridas'
+            'requiredKnowledges' => 'conocimiento requerido',
+            'requiredSkills' => 'habilidades requeridas'
         ];
     }
 }
