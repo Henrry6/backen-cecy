@@ -14,8 +14,8 @@ class DestroyCertificateRequest  extends FormRequest
     {
         return [
             'ids' => ['required'],
-            'certificateType' => ['required','integer'],
             'state.id' => ['required','integer'],
+            'certificateType' => ['required','integer'],
             'code' => ['required']
         ];
     }
@@ -24,8 +24,8 @@ class DestroyCertificateRequest  extends FormRequest
     {
         return [
             'ids' => 'ID`s de los certificados',
-            'certificateType' => 'Tipo de certificado',
-            'state.id' => 'Estado del certificado',
+            'state.id' => 'estado del certificado',
+            'certificateType' => 'tipo de certificado',
             'code' => 'codigo del certificado'
         ];
     }
