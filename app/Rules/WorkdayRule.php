@@ -8,15 +8,15 @@ use Illuminate\Contracts\Validation\Rule;
 
 use function PHPSTORM_META\map;
 
-class Workday implements Rule
+class WorkdayRule implements Rule
 {
-     /**
+    /**
      * Data under validation.
      *
      * @var string
      */
     protected $endedTime;
-    
+
     /**
      * Create a new rule instance.
      *
@@ -37,7 +37,6 @@ class Workday implements Rule
     public function passes($attribute, $value)
     {
         return $this->checkWorkday($value);
-        // return false;
     }
 
     /**
@@ -48,13 +47,12 @@ class Workday implements Rule
     public function message()
     {
         return 'La jornada es incorrecta';
-        // return    $this->checkWorkday(81);
     }
 
     public function checkWorkday($workdayId)
     {
-        $response = Catalogue::where('id', $workdayId)->first();
-        switch ($response->name) {
+        $workday = Catalogue::where('id', $workdayId)->first();
+        switch ($workday->name) {
             case 'VESPERTINA':
                 if (
                     new DateTime($this->endedTime) <= new DateTime('18:00:00')
@@ -75,7 +73,6 @@ class Workday implements Rule
                 break;
             case 'NOCTURNA':
                 if (
-                    // new DateTime($this->endedTime) <= new DateTime('00:00:00')
                     new DateTime($this->endedTime) > new DateTime('18:00:00')
                 ) {
                     return true;

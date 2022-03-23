@@ -13,6 +13,7 @@ class CourseResourceBasic extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'summary' => $this->summary,
+            'hours' => $this->getTotalHoursAttribute(),
             'participantTypes' => CatalogueResource::collection($this->catalogues)
         ];
     }

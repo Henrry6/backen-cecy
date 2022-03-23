@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Request;
 
 class SchoolPeriodController extends Controller
 {
-    //Obtiene todas los periodos escolares que hay
+    // Obtiene todas los periodos escolares que hay
     public function index(Request $request)
     {
         $schoolPeriods =  SchoolPeriod::get();

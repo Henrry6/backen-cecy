@@ -15,11 +15,11 @@ class CreateCecyPrerequisitesTable extends Migration
 
             $table->foreignId('course_id')
                 ->nullable()
-                ->comment('Id del curso al que pertenece prerequisito académico')
+                ->comment('Id del curso al que pertenece el prerrequisito académico')
                 ->constrained('cecy.courses');
 
             $table->foreignId('prerequisite_id')
-                ->comment('Id del curso que es prerequisito')
+                ->comment('Id del curso que es un prerrequisito')
                 ->constrained('cecy.courses');
 
         });

@@ -15,17 +15,17 @@ class CreateCecyRegistrationRequirementTable extends Migration
 
             $table->foreignId('registration_id')
                 ->nullable()
-                ->comment('fk de registro de estudiante')
+                ->comment('Fk de registro deL estudiante')
                 ->constrained('cecy.registrations');
 
             $table->foreignId('requirement_id')
                 ->nullable()
-                ->comment('fk de requisitos para registro del estudiante')
+                ->comment('Fk de requisitos para registro del estudiante')
                 ->constrained('cecy.requirements');
 
             $table->string('url')
                 ->nullable()
-                ->comment('dirección del archivo donde esta guardado');
+                ->comment('Dirección del archivo donde esta guardado');
         });
     }
     public function down()

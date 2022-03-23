@@ -22,14 +22,13 @@ class CreateCecySchoolPeriodsTable extends Migration
                 ->comment('Código único de periodos lectivos ej: 2021-2022');
 
             $table->date('ended_at')
-                ->comment('Fecha de finalización del perido lectivo');
+                ->comment('Fecha de finalización del periodo lectivo');
 
             $table->integer('minimum_note')
                 ->comment('Mínimo de nota para aprobar los cursos');
 
             $table->string('name')
                 ->comment('Nombre del periodo lectivo');
-
 
             $table->date('started_at')
                 ->comment('Fecha de inicio del perido lectivo');

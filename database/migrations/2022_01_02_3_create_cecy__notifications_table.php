@@ -14,16 +14,16 @@ class CreateCecyNotificationsTable extends Migration
             $table->softDeletes();
 
             $table->foreignId('user_receive_id')
-            ->comment('Informacion del usuario')
+            ->comment('Información del usuario')
             ->constrained('authentication.users');
 
             $table->foreignId('user_send_id')
-            ->comment('Informacion del usuario')
+            ->comment('Información del usuario')
             ->constrained('authentication.users');
 
             // El comentario no corresponde -3
             $table->foreignId('state_id')
-                ->comment('leido, no leido')
+                ->comment('Leído, no leído')
                 ->constrained('cecy.catalogues');
 
             $table->text('description')
@@ -31,7 +31,7 @@ class CreateCecyNotificationsTable extends Migration
                 ->comment('Descripcion');
 
             $table->string('title')
-                ->comment('Titulo del tema de la notificacion');
+                ->comment('Título del tema de la notificacion');
         });
     }
 
