@@ -20,15 +20,13 @@ class CreateCecyPhotographicRecordsTable extends Migration
             $table->string('description')
                 ->comment('Descripción del curso');
 
+            $table->string('image')
+                ->comment('Dirección de la imagen(evidencia fotográfica)');
+
             $table->integer('number_week')
                 ->comment('Número de la semana que se impartio el curso');
 
-            // Debe ir solo image o url
-            $table->string('url_image')
-                ->comment('Dirección de la imagen(evidencia fotográfica)');
-
-            // Deberia ir registered_at
-            $table->date('week_at')
+            $table->date('registered_at')
                 ->comment('Fecha del día que se guardo la evidencia fotográfica');
         });
     }
