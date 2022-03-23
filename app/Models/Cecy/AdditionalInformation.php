@@ -2,16 +2,23 @@
 
 namespace App\Models\Cecy;
 
+use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Auditable as Auditing;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use OwenIt\Auditing\Auditable as Auditing;
-use OwenIt\Auditing\Contracts\Auditable;
+use App\Models\Core\Career;
+use App\Models\Core\File;
+use App\Models\Core\Image;
+use App\Traits\FileTrait;
+use App\Traits\ImageTrait;
 
 class AdditionalInformation extends Model implements Auditable
 {
-    use HasFactory;
     use Auditing;
+    use FileTrait;
+    use HasFactory;
+    use ImageTrait;
     use SoftDeletes;
 
     protected $table = 'cecy.additional_informations';
@@ -35,14 +42,15 @@ class AdditionalInformation extends Model implements Auditable
     ];
 
     // Relationships
-    public function registration()
-    {
-        return $this->belongsTo(Registration::class);
-    }
 
     public function levelInstruction()
     {
         return $this->belongsTo(Catalogue::class);
+    }
+
+    public function registration()
+    {
+        return $this->belongsTo(Registration::class);
     }
 
     // Mutators
@@ -80,45 +88,46 @@ class AdditionalInformation extends Model implements Auditable
     public function scopeCompanyActivity($query, $companyActivity)
     {
         if ($companyActivity) {
-            return $query->where('company_activity', $companyActivity);
+            return $query->where('company_activity', 'iLike', "%$companyActivity%");
         }
     }
 
     public function scopeCompanyAddress($query, $companyAddress)
     {
         if ($companyAddress) {
-            return $query->orWhere('company_address', $companyAddress);
+            return $query->orWhere('company_address', 'iLike', "%$companyAddress%");
         }
     }
 
     public function scopeCompanyEmail($query, $companyEmail)
     {
         if ($companyEmail) {
-            return $query->orWhere('company_email', $companyEmail);
+            return $query->orWhere('company_email', 'iLike', "%$companyEmail%");
         }
     }
 
     public function scopeCompanyName($query, $companyName)
     {
         if ($companyName) {
-            return $query->orWhere('company_name', $companyName);
+            return $query->orWhere('company_name', 'iLike', "%$companyName%");
         }
     }
 
     public function scopeCompanyPhone($query, $companyPhone)
     {
         if ($companyPhone) {
-            return $query->orWhere('company_phone', $companyPhone);
+            return $query->orWhere('company_phone', 'iLike', "%$companyPhone%");
         }
     }
 
     public function scopeContactName($query, $contactName)
     {
         if ($contactName) {
-            return $query->orWhere('contact_name', $contactName);
+            return $query->orWhere('contact_name', 'iLike', "%$contactName%");
         }
     }
 
+    //revisar
     public function scopeLevelInstruction($query, $levelInstruction)
     {
         if ($levelInstruction) {
@@ -140,4 +149,20 @@ class AdditionalInformation extends Model implements Auditable
             return $query;
         }
     }
+
+    public function scopeCustomSelect($query, $fields)
+    {
+        if (!empty($fields)) {
+            $fields = explode(',', $fields);
+            foreach ($fields as $field) {
+                $fieldExist = array_search(strtolower($field), $fields);
+                if ($fieldExist == false) {
+                    unset($fields[$fieldExist]);
+                }
+            }
+
+            array_unshift($fields, 'id');
+            return $query->select($fields);
+        }
+    }    
 }
