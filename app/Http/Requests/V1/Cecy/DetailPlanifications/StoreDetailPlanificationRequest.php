@@ -30,17 +30,17 @@ class StoreDetailPlanificationRequest extends FormRequest
     public function attributes()
     {
         return [
-            'classroom.id' => 'Aula',
-            'day.id' => 'Días de clase',
-            'endedTime' => 'Hora de final',
-            'observations' => 'Observaciones',
-            'parallel.id' => 'Paralelo',
-            'planification.id' => 'Planificación',
-            'planEndedAt' => 'Fecha final real de la planificación',
-            'registrationsLeft' => 'Capacidad restante del paralelo',
-            'state.id' => 'Estado',
-            'startedTime' => 'Hora de inicio',
-            'workday.id' => 'Jornada'
+            'classroom.id' => 'aula',
+            'day.id' => 'días de clase',
+            'endedTime' => 'hora de final',
+            'observations' => 'observaciones',
+            'parallel.id' => 'paralelo',
+            'planification.id' => 'planificación',
+            'planEndedAt' => 'fecha final real de la planificación',
+            'registrationsLeft' => 'capacidad restante del paralelo',
+            'state.id' => 'estado',
+            'startedTime' => 'hora de inicio',
+            'workday.id' => 'jornada'
         ];
     }
 }

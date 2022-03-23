@@ -16,9 +16,9 @@ class RegistrationAttendenceEvaluationRecordResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'state' => CatalogueResource::make($this->state),
+            'detailPlanification' => DetailPlanificationInformNeedResource::collection($this->detail_planification),
             'participant' => ParticipantRecordCompetitorResource::collection($this->participant),
-            'detailPlanification' => DetailPlanificationInformNeedResource::collection($this->detail_planification)
+            'state' => CatalogueResource::make($this->state)
 
         ];
     }
