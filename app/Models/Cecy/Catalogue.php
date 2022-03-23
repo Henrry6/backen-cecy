@@ -76,14 +76,14 @@ class Catalogue extends Model implements Auditable
     public function scopeDescription($query, $description)
     {
         if ($description) {
-            return $query->where('description', 'ILIKE', "%$description%");
+            return $query->where('description', 'iLike', "%$description%");
         }
     }
 
     public function scopeName($query, $name)
     {
         if ($name) {
-            return $query->where('name', 'ILIKE', "%$name%");
+            return $query->where('name', 'iLike', "%$name%");
         }
     }
 

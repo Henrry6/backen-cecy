@@ -40,8 +40,8 @@ class CreateCecyDetailPlanificationsTable extends Migration
                 ->constrained('cecy.catalogues');
 
             $table->foreignId('state_id')
-                ->comment('Si el paralelo esta: En proceso, culminado, aprobado, por aprobar')
-                ->constrained('cecy.catalogues');
+                ->constrained('cecy.catalogues')
+                ->comment('Si el paralelo esta: En proceso, culminado, aprobado, por aprobar');
 
             $table->time('ended_time')
                 ->nullable()
