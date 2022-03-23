@@ -14,23 +14,18 @@ class GetAttendanceDetailPlanificationRequest extends FormRequest
     public function rules()
     {
         return [
-            'start_time' =>  ['integer', 'required'],
-            'end_time' =>  ['integer', 'required'],
-            'planification.id' =>  ['integer', 'required']
-
-
-
+            'planification.id' =>  ['integer', 'required'],
+            'startTime' =>  ['integer', 'required'],
+            'endTime' =>  ['integer', 'required'],
         ];
     }
 
     public function attributes()
     {
         return [
-
-            'start_time' => 'hora de inicio del curso',
-            'end_time' => 'hora de cierre del curso',
             'planification.id' => 'id de la planificacion',
+            'startTime' => 'hora de inicio del curso',
+            'endTime' => 'hora de cierre del curso',
         ];
     }
 }
-
