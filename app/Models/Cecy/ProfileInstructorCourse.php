@@ -46,6 +46,13 @@ class ProfileInstructorCourse extends Model implements Auditable
     // Mis campos son de  tipo JSON 
 
 
+    public function scopeCourse($query, $profile)
+    {
+        if ($profile) {
+            return $query->Where('course_id', $profile->course);
+        }
+    }
+    
     public function scopeCustomOrderBy($query, $sorts)
     {
         if (!empty($sorts[0])) {
@@ -61,10 +68,19 @@ class ProfileInstructorCourse extends Model implements Auditable
         }
     }
 
-    public function scopeCourse($query, $profile)
+    public function scopeCustomSelect($query, $fields)
     {
-        if ($profile) {
-            return $query->Where('course_id', $profile->course);
+        if (!empty($fields)) {
+            $fields = explode(',', $fields);
+            foreach ($fields as $field) {
+                $fieldExist = array_search(strtolower($field), $fields);
+                if ($fieldExist == false) {
+                    unset($fields[$fieldExist]);
+                }
+            }
+
+            array_unshift($fields, 'id');
+            return $query->select($fields);
         }
-    }
+    }   
 }
