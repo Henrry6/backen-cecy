@@ -107,12 +107,12 @@ class DetailPlanificationController extends Controller
         //validar que la planification ha culminado
         if (
             $planification->state()->first()->code === State::CULMINATED ||
-            $planification->state()->first()->code === State::NOT_APPROVED
+            $planification->state()->first()->code === State::APPROVED
         ) {
             return response()->json([
                 'msg' => [
                     'summary' => 'Error',
-                    'detail' => 'La planificación ha culminado o no fue aprobada.',
+                    'detail' => 'La planificación ha culminado o ya fue aprobada.',
                     'code' => '400'
                 ]
             ], 400);
@@ -157,7 +157,7 @@ class DetailPlanificationController extends Controller
      * Return a detailPlanification record
      */
     // DetailPlanificationController
-    public function showDetailPlanification(ShowDetailPlanificationRequest $request, DetailPlanification $detailPlanification) //hecho
+    public function showDetailPlanification(ShowDetailPlanificationRequest $request, DetailPlanification $detailPlanification)
     {
         return (new ResponsibleCourseDetailPlanificationResource($detailPlanification))
             ->additional([
@@ -175,8 +175,6 @@ class DetailPlanificationController extends Controller
      */
     public function updateDetailPlanification(UpdateDetailPlanification $request, DetailPlanification $detailPlanification)
     {
-        // username:1095554529 ->instructor
-        // username:1004242743 ->instructor
         $loggedInInstructor = Instructor::where('user_id', $request->user()->id)->first();
         if (!$loggedInInstructor) {
             return response()->json([
@@ -216,13 +214,6 @@ class DetailPlanificationController extends Controller
                 ]
             ], 400);
         }
-
-        // Validator::make($request, [
-        //     'parallel.id' => [
-        //         'required',
-        //         Rule::unique('cecy.detail_planifications')->ignore($detailPlanification),
-        //     ],
-        // ]);
 
         $classroom = Classroom::find($request->input('classroom.id'));
         $day = Catalogue::find($request->input('day.id'));

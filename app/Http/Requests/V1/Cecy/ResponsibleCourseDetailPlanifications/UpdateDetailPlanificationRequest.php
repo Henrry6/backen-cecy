@@ -3,9 +3,8 @@
 namespace App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Rules\UpdateParallelRule;
-use App\Rules\WorkdayRule;
 use Illuminate\Validation\Rule;
+use App\Rules\WorkdayRule;
 
 class UpdateDetailPlanificationRequest extends FormRequest
 {
@@ -23,7 +22,9 @@ class UpdateDetailPlanificationRequest extends FormRequest
             'workday.id' => ['required', 'integer', new WorkdayRule($this->endedTime)],
             'parallel.id' => [
                 'required', 'integer',
-                // Rule::unique('cecy.detail_planifications')->where(fn ($query) => $query->where('planification_id', $this->planification))
+                Rule::unique('pgsql-cecy.detail_planifications', 'parallel_id')
+                    ->ignore(request('detailPlanification')->id)
+                    ->where(fn ($query) => $query->where('planification_id', $this->planification)),
             ],
             'endedTime' => ['required', 'after:startedTime'],
             'startedTime' => ['required',],
@@ -38,7 +39,7 @@ class UpdateDetailPlanificationRequest extends FormRequest
             'day.id' => 'días de clase',
             'planification.id' => 'planificación',
             'workday.id' => 'jornada',
-            'paralel.id' => 'paralelo del aula o clase',
+            'parallel.id' => 'paralelo del aula o clase',
             'endedTime' => 'hora de inicio',
             'startedTime' => 'hora de fin',
         ];
