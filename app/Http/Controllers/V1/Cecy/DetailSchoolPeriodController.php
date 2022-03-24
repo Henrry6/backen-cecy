@@ -10,7 +10,7 @@ use App\Http\Requests\V1\Cecy\DetailSchoolPeriods\UpdateDetailSchoolPeriodReques
 use App\Http\Resources\V1\Cecy\DetailSchoolPeriods\DetailSchoolPeriodCollection;
 use App\Http\Resources\V1\Cecy\DetailSchoolPeriods\DetailSchoolPeriodResource;
 use App\Models\Cecy\DetailSchoolPeriod;
-use Illuminate\Http\Request;
+//use Illuminate\Http\Request;
 
 class DetailSchoolPeriodController extends Controller
 {
@@ -33,6 +33,25 @@ class DetailSchoolPeriodController extends Controller
                 ]
             ])
             ->response()->setStatusCode(200);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show(DetailSchoolPeriod $detailSchoolPeriod)
+    {
+        return (new DetailSchoolPeriodResource($detailSchoolPeriod))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
     }
 
     /**
@@ -64,26 +83,7 @@ class DetailSchoolPeriodController extends Controller
                 'msg' => [
                     'summary' => 'Registro Creado',
                     'detail' => '',
-                    'code' => '200'
-                ]
-            ])
-            ->response()->setStatusCode(201);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show(DetailSchoolPeriod $detailSchoolPeriod)
-    {
-        return (new DetailSchoolPeriodResource($detailSchoolPeriod))
-            ->additional([
-                'msg' => [
-                    'summary' => 'success',
-                    'detail' => '',
-                    'code' => '200'
+                    'code' => '201'
                 ]
             ])
             ->response()->setStatusCode(201);
@@ -117,7 +117,7 @@ class DetailSchoolPeriodController extends Controller
                 'msg' => [
                     'summary' => 'Registro Actualizado',
                     'detail' => '',
-                    'code' => '200'
+                    'code' => '201'
                 ]
             ])
             ->response()->setStatusCode(201);
@@ -142,6 +142,7 @@ class DetailSchoolPeriodController extends Controller
             ])
             ->response()->setStatusCode(201);
     }
+
     public function destroys (DestroysDetailSchoolPeriodRequest $request)
     {
         $schoolPeriod = DetailSchoolPeriod::whereIn('id', $request->input('ids'))->get();

@@ -11,7 +11,7 @@ use App\Http\Resources\V1\Cecy\Classrooms\ClassroomCollection;
 use App\Http\Resources\V1\Cecy\Classrooms\ClassroomResource;
 use App\Models\Cecy\Catalogue;
 use App\Models\Cecy\Classroom;
-use Illuminate\Support\Facades\Request;
+//use Illuminate\Support\Facades\Request; No se ocupa
 
 class ClassroomController extends Controller
 {
@@ -33,6 +33,7 @@ class ClassroomController extends Controller
             ])
             ->response()->setStatusCode(200);
     }
+
     /*DDRC-C: Obtiene una clase*/
     public function show(Classroom $classroom)
     {
@@ -46,15 +47,16 @@ class ClassroomController extends Controller
             ])
             ->response()->setStatusCode(200);
     }
+
     /*DDRC-C: Crea una clase*/
     public function store(StoreClassroomRequest $request)
     {        
         $classroom = new Classroom();
         $classroom->type()->associate(Catalogue::find($request->input('type.id')));
  
-        $classroom->description = $request->input('description');
         $classroom->capacity = $request->input('capacity');
         $classroom->code = $request->input('code');
+        $classroom->description = $request->input('description');
         $classroom->name = $request->input('name');
         
         $classroom->save();
@@ -64,19 +66,20 @@ class ClassroomController extends Controller
                 'msg' => [
                     'summary' => 'Clase creada',
                     'detail' => '',
-                    'code' => '200'
+                    'code' => '201'
                 ]
             ])
             ->response()->setStatusCode(201);
     }
+
     /*DDRC-C: Actualiza una clase*/
     public function update (UpdateClassroomRequest $request, Classroom $classroom)
     {
         $classroom->type()->associate(Catalogue::find($request->input('type.id')));
  
-        $classroom->description = $request->input('description');
         $classroom->capacity = $request->input('capacity');
         $classroom->code = $request->input('code');
+        $classroom->description = $request->input('description');
         $classroom->name = $request->input('name');
   
         $classroom->save();
@@ -86,15 +89,15 @@ class ClassroomController extends Controller
             'msg' => [
                 'summary' => 'Clase actualizada',
                 'detail' => '',
-                'code' => '200'
+                'code' => '201'
             ]
         ])
         ->response()->setStatusCode(201);
     }
+
     /*DDRC-C: Elimina una clase*/
     public function destroy ( Classroom $classroom)
     {
-        
         $classroom->delete();
 
         return (new ClassroomResource($classroom))
@@ -107,6 +110,7 @@ class ClassroomController extends Controller
             ])
             ->response()->setStatusCode(201);
     }
+    
     /*DDRC-C: Elimina varias clases*/
     public function destroys (DestroysClassroomRequest $request)
     {
