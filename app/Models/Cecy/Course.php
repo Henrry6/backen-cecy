@@ -208,11 +208,6 @@ class Course extends Model implements Auditable
         $this->attributes['name'] = strtoupper($value);
     }
 
-    public function setNroRecordAttribute($value)
-    {
-        $this->attributes['record_number'] = strtoupper($value);
-    }
-
     public function setLocalProposalAttribute($value)
     {
         $this->attributes['local_proposal'] = strtoupper($value);
@@ -226,6 +221,11 @@ class Course extends Model implements Auditable
     public function setProjectAttribute($value)
     {
         $this->attributes['project'] = strtoupper($value);
+    }
+
+    public function setRecordNumberAttribute($value)
+    {
+        $this->attributes['record_number'] = strtoupper($value);
     }
 
     public function setSetecNameAttribute($value)
@@ -257,7 +257,7 @@ class Course extends Model implements Auditable
     public function scopeAlignment($query, $alignment)
     {
         if ($alignment) {
-            return $query->orWhere('alignment', $alignment);
+            return $query->orWhere('alignment', $alignment);//ilike
         }
     }
 
@@ -320,14 +320,14 @@ class Course extends Model implements Auditable
     public function scopeObjective($query, $objective)
     {
         if ($objective) {
-            return $query->orWhere('objective', $objective);
+            return $query->orWhere('objective', $objective);//ilike
         }
     }
 
     public function scopeObservation($query, $observation)
     {
         if ($observation) {
-            return $query->orWhere('observation', $observation);
+            return $query->orWhere('observation', $observation);//ilike
         }
     }
 
@@ -355,7 +355,7 @@ class Course extends Model implements Auditable
     public function scopeState($query, $state)
     {
         if ($state) {
-            return $query->Where('state_id', $state);
+            return $query->orWhere('state_id', $state);
         }
     }
 
@@ -382,7 +382,6 @@ class Course extends Model implements Auditable
     }
 
     // Accesors
-
     public function getTotalHoursAttribute()
     {
         return $this->attributes['theory_hours'] + $this->attributes['practice_hours'];

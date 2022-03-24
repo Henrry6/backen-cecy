@@ -24,7 +24,6 @@ class RegisterStudentRequest extends FormRequest
     public function rules()
     {
         return [
-            'additionalInformation.levelInstruction.id' => ['required'],
             'additionalInformation.companyActivity' => ['required'],
             'additionalInformation.companyAddress' => ['required'],
             'additionalInformation.companyEmail' => ['required'],
@@ -34,6 +33,7 @@ class RegisterStudentRequest extends FormRequest
             'additionalInformation.contactName' => ['required'],
             'additionalInformation.courseFollows' => ['required'],
             'additionalInformation.courseKnows' => ['required'],
+            'additionalInformation.levelInstruction.id' => ['required'],
             'additionalInformation.worked' => ['required'],
             'number' => ['required'],
         ];
@@ -41,6 +41,7 @@ class RegisterStudentRequest extends FormRequest
 
     public function attributes()
     {
+        //revisar
         return [
             'companyActivity' => 'actividad de la empresa',
             'companyAddress' => 'direccion fisica de empresa',

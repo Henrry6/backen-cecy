@@ -15,9 +15,9 @@ class StoreDetailPlanificationRequest extends FormRequest
         return [
             'classroom.id' => ['required', 'integer'],
             'day.id' => ['required', 'integer'],
+            'parallel.id' => ['required', 'integer'],
             'endedTime' => ['required', 'time'],
             'observations' => ['required', 'integer'],
-            'parallel.id' => ['required', 'integer'],
             'planification.id' => ['required', 'integer'],
             'planEndedAt' => ['required', 'date'],
             'registrationsLeft' => ['required', 'integer'],

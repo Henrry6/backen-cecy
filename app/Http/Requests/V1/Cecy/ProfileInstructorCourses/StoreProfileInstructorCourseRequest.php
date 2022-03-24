@@ -19,11 +19,11 @@ class StoreProfileInstructorCourseRequest extends FormRequest
       'requiredSkills' => ['required'],
     ];
   }
-//REVISAR
+
   public function attributes()
   {
     return [
-      'course.id' => 'Fk de curso',
+      'course.id' => 'id de curso',
       'requiredExperiences' => 'experiencias del instructor',
       'requiredKnowledges' => 'conocimientos del instructor',
       'requiredSkills' => 'habilidades del instructor',

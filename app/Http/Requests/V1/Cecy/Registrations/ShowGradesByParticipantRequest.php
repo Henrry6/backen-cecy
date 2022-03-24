@@ -24,7 +24,7 @@ class ShowGradesByParticipantRequest extends FormRequest
     public function rules()
     {
         return [
-            'final_grade' => ['required'],
+            'finalGrade' => ['required'],
             'grade1' => ['required'],
             'grade2' => ['required']
         ];
