@@ -2,11 +2,11 @@
 
 namespace App\Models\Cecy;
 
+use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Auditable as Auditing;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use OwenIt\Auditing\Auditable as Auditing;
-use OwenIt\Auditing\Contracts\Auditable;
 
 class DetailAttendance extends Model implements Auditable
 {

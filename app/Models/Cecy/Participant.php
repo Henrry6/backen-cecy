@@ -2,12 +2,13 @@
 
 namespace App\Models\Cecy;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as Auditing;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Authentication\User;
+
 
 class Participant extends Model implements Auditable
 {
@@ -46,13 +47,15 @@ class Participant extends Model implements Auditable
     }
 
     //Scopes
+
+    //REVISAR
     public function scopeType($query, $type)
     {
         if ($type) {
             return $query->Where('type_id', $type->id);
         }
     }
-
+    //REVISAR
     public function scopeUser($query, $user)
     {
         if ($user) {

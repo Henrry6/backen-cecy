@@ -2,11 +2,13 @@
 
 namespace App\Models\Cecy;
 
+use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Auditable as Auditing;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use OwenIt\Auditing\Auditable as Auditing;
-use OwenIt\Auditing\Contracts\Auditable;
+
+
 
 class PhotographicRecord extends Model implements Auditable
 {
@@ -19,8 +21,8 @@ class PhotographicRecord extends Model implements Auditable
     protected $fillable = [
         'description',
         'number_week',
-        'url_image',
-        'week_at'
+        'image',
+        'registered_at'
     ];
 
     // Relationships
@@ -46,14 +48,14 @@ class PhotographicRecord extends Model implements Auditable
     public function scopeDescription($query, $description)
     {
         if ($description) {
-            return $query->orWhere('description', $description->id);
+            return $query->orWhere('description','iLike', "%$description->id%");
         }
     }
 
-    public function scopeUrlImage($query, $urlImage)
+    public function scopeImage($query, $image)
     {
-        if ($urlImage) {
-            return $query->orWhere('url_image', $urlImage->id);
+        if ($image) {
+            return $query->orWhere('image','iLike', "%$urlImage->id%");
         }
     }
 
