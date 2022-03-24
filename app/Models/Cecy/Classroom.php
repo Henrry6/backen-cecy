@@ -55,7 +55,7 @@ class Classroom extends Model implements Auditable
     public function scopeDescription($query, $description)
     {
         if ($description) {
-            return $query->Where('description', $description);
+            return $query->Where('description', 'iLike', "%$description%");
         }
     }
 
@@ -69,7 +69,7 @@ class Classroom extends Model implements Auditable
     public function scopeName($query, $name)
     {
         if ($name) {
-            return $query->Where('name', $name);
+            return $query->Where('name', 'iLike', "%$name%");
         }
     }
 
