@@ -12,8 +12,8 @@ use App\Models\Authentication\User;
 
 class Participant extends Model implements Auditable
 {
-    use HasFactory;
     use Auditing;
+    use HasFactory;
     use SoftDeletes;
 
     protected $table = 'cecy.participants';
@@ -21,34 +21,32 @@ class Participant extends Model implements Auditable
     protected $fillable = [];
 
     protected $casts = [
-        'observations' => 'array',
+        // 'observations' => 'array',
     ];
 
     // Relationships
-
+    
     public function registrations()
     {
         return $this->hasMany(Registration::class);
     }
-
+    
     public function state()
     {
         return $this->belongsTo(Catalogue::class);
     }
-
+    
     public function type()
     {
         return $this->belongsTo(Catalogue::class);
     }
-
+    
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-
     //Scopes
-
-    //REVISAR
+    //revisar
     public function scopeType($query, $type)
     {
         if ($type) {
@@ -62,6 +60,7 @@ class Participant extends Model implements Auditable
             return $query->Where('user_id', $user->id);
         }
     }
+    //revisar
 
     public function scopeCustomOrderBy($query, $sorts)
     {

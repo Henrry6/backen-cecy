@@ -45,13 +45,19 @@ class Registration extends Model implements Auditable
     {
         return $this->hasMany(AdditionalInformation::class);
     }
-
+    
     public function certificates()
     {
         return $this->morphMany(Certificate::class, 'certificateable');
     }
     
     // Relationships
+    //revisar
+    public function detailAttendances()
+    {
+        return $this->hasMany(DetailAttendance::class);
+    }
+
     public function detailPlanification()
     {
         return $this->belongsTo(DetailPlanification::class);
@@ -88,26 +94,20 @@ class Registration extends Model implements Auditable
         return $this->belongsTo(Catalogue::class, 'type_participant_id');
     }
 
-    //revisar
-    public function detailAttendances()
-    {
-        return $this->hasMany(DetailAttendance::class);
-    }
 
     // Scopes
-    //revisar
-    public function scopeCode($query, $observations)
-    {
-        if ($observations) {
-            return $query->orWhere('observations', $observations);
-        }
-    }
-
     //revisar
     public function scopeDetailPlanification($query, $detailPlanification)
     {
         if ($detailPlanification) {
             return $query->orWhere('detail_planification_id', $detailPlanification->id);
+        }
+    }
+
+    public function scopeNumber($query, $number)
+    {
+        if ($number) {
+            return $query->orWhere('number', 'iLike', "%$number%");
         }
     }
 

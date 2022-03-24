@@ -8,10 +8,6 @@ use App\Http\Resources\V1\Cecy\Participants\ParticipantRecordCompetitorResource;
 use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationInformNeedResource;
 
 
-
-
-
-
 class RegistrationRecordCompetitorResource extends JsonResource
 {
     /**

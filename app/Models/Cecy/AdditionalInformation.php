@@ -69,6 +69,11 @@ class AdditionalInformation extends Model implements Auditable
         $this->attributes['company_email'] = strtoupper($value);
     }
 
+    public function setContactNameAttribute($value)
+    {
+        $this->attributes['contact_name'] = strtoupper($value);
+    }
+
     public function setCompanyNameAttribute($value)
     {
         $this->attributes['company_name'] = strtoupper($value);
@@ -79,16 +84,12 @@ class AdditionalInformation extends Model implements Auditable
         $this->attributes['company_phone'] = strtoupper($value);
     }
 
-    public function setContactNameAttribute($value)
-    {
-        $this->attributes['contact_name'] = strtoupper($value);
-    }
 
     // Scopes
     public function scopeCompanyActivity($query, $companyActivity)
     {
         if ($companyActivity) {
-            return $query->where('company_activity', 'iLike', "%$companyActivity%");
+            return $query->orWhere('company_activity', 'iLike', "%$companyActivity%");
         }
     }
 
@@ -113,13 +114,6 @@ class AdditionalInformation extends Model implements Auditable
         }
     }
 
-    public function scopeCompanyPhone($query, $companyPhone)
-    {
-        if ($companyPhone) {
-            return $query->orWhere('company_phone', 'iLike', "%$companyPhone%");
-        }
-    }
-
     public function scopeContactName($query, $contactName)
     {
         if ($contactName) {
@@ -127,6 +121,13 @@ class AdditionalInformation extends Model implements Auditable
         }
     }
 
+    public function scopeCompanyPhone($query, $companyPhone)
+    {
+        if ($companyPhone) {
+            return $query->orWhere('company_phone', 'iLike', "%$companyPhone%");
+        }
+    }
+    
     //revisar
     public function scopeLevelInstruction($query, $levelInstruction)
     {

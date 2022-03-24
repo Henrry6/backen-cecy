@@ -2,30 +2,31 @@
 
 namespace App\Models\Cecy;
 
+use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Auditable as Auditing;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use OwenIt\Auditing\Auditable as Auditing;
 use App\Models\Authentication\User;
 use App\Models\Core\Institution;
 use App\Models\Core\State;
-use OwenIt\Auditing\Contracts\Auditable;
 
 class Authority extends Model implements Auditable
 {
-    use HasFactory;
     use Auditing;
+    use HasFactory;
     use SoftDeletes;
 
     protected $table = 'cecy.authorities';
 
     protected $fillable = [
+        'electronic_signature',
         'position_started_at',
-        'position_ended_at',
-        'electronic_signature'
+        'position_ended_at'
     ];
 
     // Relationships
+    //revisar
     public function institution()
     {
         return $this->belongsTo(Institution::class, 'id','institution_id');
@@ -55,10 +56,11 @@ class Authority extends Model implements Auditable
 
 
     // Scopes
+    //revisar
     public function scopePositionStartedAt($query, $positionStartedAt)
     {
         if ($positionStartedAt) {
-            return $query->where('position_started_at', $positionStartedAt);
+            return $query->orWhere('position_started_at', $positionStartedAt);
         }
     }
 
@@ -74,6 +76,7 @@ class Authority extends Model implements Auditable
             return $query->orWhere('electronic_signature', $electronicSignature);
         }
     }
+    //revisar
 
     public function scopeCustomOrderBy($query, $sorts)
     {

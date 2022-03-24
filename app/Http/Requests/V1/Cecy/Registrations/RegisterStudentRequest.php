@@ -24,16 +24,16 @@ class RegisterStudentRequest extends FormRequest
     public function rules()
     {
         return [
-            'additionalInformation.levelInstruction.id' => ['required'],
             'additionalInformation.companyActivity' => ['required'],
             'additionalInformation.companyAddress' => ['required'],
             'additionalInformation.companyEmail' => ['required'],
+            'additionalInformation.courseFollows' => ['required'],
             'additionalInformation.companyName' => ['required'],
+            'additionalInformation.contactName' => ['required'],
             'additionalInformation.companyPhone' => ['required'],
             'additionalInformation.companySponsored' => ['required'],
-            'additionalInformation.contactName' => ['required'],
-            'additionalInformation.courseFollows' => ['required'],
             'additionalInformation.courseKnows' => ['required'],
+            'additionalInformation.levelInstruction.id' => ['required'],
             'additionalInformation.worked' => ['required'],
             'number' => ['required'],
         ];
@@ -41,20 +41,21 @@ class RegisterStudentRequest extends FormRequest
 
     public function attributes()
     {
+        //revisar
         return [
+            'levelInstruction.id' => 'Id del nivel de instrucción',
+            'registration.id' => 'Id del registro',
             'companyActivity' => 'actividad de la empresa',
-            'companyAddress' => 'direccion fisica de empresa',
+            'companyAddress' => 'dirección fisica de empresa',
             'companyEmail' => 'correo de empresa',
+            'courseFollows' => 'horas prácticas',
             'companyName' => 'nombre de empresa',
+            'contactName' => 'nombre de contacto que patrocina',
             'companyPhone' => 'teléfono de empresa',
             'companySponsored' => 'la empresa patrocina',
-            'contactName' => 'nombre de contacto que patrocina',
-            'courseFollows' => 'horas prácticas',
             'courseKnows' => 'entorno de aprendizaje',
-            'levelInstruction.id' => 'Id del nivel de instrucción',
             'number' => 'numero de matricula',
-            'registered_at' => 'fecha de matricula',
-            'registration.id' => 'Id del registro',
+            'registeredAt' => 'fecha de matricula',
             'worked' => 'participante que trabaja',
         ];
     }

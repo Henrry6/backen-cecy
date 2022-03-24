@@ -13,7 +13,7 @@ class UpdatePrerequisiteRequest extends FormRequest
     public function rules()
     {
         return [
-            'prerequisite.id' => ['required',],
+            'prerequisite.id' => ['required'],
         ];
     }
 

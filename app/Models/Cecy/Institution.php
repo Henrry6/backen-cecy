@@ -53,28 +53,28 @@ class Institution extends Model implements Auditable
     public function scopeCode($query, $code)
     {
         if ($code) {
-            return $query->where('code', $code);
+            return $query->orWhere('code', $code);
         }
     }
 
     public function scopeName($query, $name)
     {
         if ($name) {
-            return $query->where('name', $name);
+            return $query->orWhere('name', 'iLike', "%$name%");
         }
     }
     //REVISAR
     // public function scopeLogo($query, $logo)
     // {
     //     if ($logo) {
-    //         return $query->where('logo', $logo);
+    //         return $query->orWhere('logo', $logo);
     //     }
     // }
 
     public function scopeSlogan($query, $slogan)
     {
         if ($slogan) {
-            return $query->where('slogan', $slogan);
+            return $query->orWhere('slogan', $slogan);
         }
     }
 

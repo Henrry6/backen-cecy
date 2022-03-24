@@ -20,7 +20,7 @@ class DestroysAdditionalInformationRequest  extends FormRequest
     public function attributes()
     {
         return [
-            'id' => 'Id del additional information',
+            'id' => 'Id de additional information',
         ];
     }
 }

@@ -2,16 +2,16 @@
 
 namespace App\Models\Cecy;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as Auditing;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SchoolPeriod extends Model implements Auditable
 {
-    use HasFactory;
     use Auditing;
+    use HasFactory;
     use SoftDeletes;
 
     protected $table = 'cecy.school_periods';
@@ -25,16 +25,17 @@ class SchoolPeriod extends Model implements Auditable
     ];
 
     // Relationships
+    //revisar
+    public function detailSchoolPeriods()
+    {
+        $this->hasMany(DetailSchoolPeriod::class);
+    }
 
     public function state()
     {
         return $this->belongsTo(Catalogue::class);
     }
 
-    public function detailSchoolPeriods()
-    {
-        $this->hasMany(DetailSchoolPeriod::class);
-    }
     // Mutators
     public function setCodeAttribute($value)
     {
@@ -50,16 +51,17 @@ class SchoolPeriod extends Model implements Auditable
     public function scopeCode($query, $code)
     {
         if ($code) {
-            return $query->where('code', $code);
+            return $query->orWhere('code', $code);
         }
     }
     public function scopeName($query, $name)
     {
         if ($name) {
-            return $query->where('name', $name);
+            return $query->orWhere('name', 'iLike', "%$name%");
         }
     }
-
+    
+    //revisar
     public function scopeCustomOrderBy($query, $sorts)
     {
         if (!empty($sorts[0])) {

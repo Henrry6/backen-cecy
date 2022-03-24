@@ -12,6 +12,7 @@ class StoreDetailAttendanceRequest extends FormRequest
     }
     public function rules()
     {
+        //revisar
         return [
             'attendance_id' => ['required', 'integer'],
             'registration_id' => ['required'],

@@ -13,12 +13,10 @@ class CertificateResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'certificable' => RegistrationsRegistrationResource::collection($this->certificable_id),  
-            'code'=>$this->state_id,
-            'issued'=>$this->issued_at,
-            'state' => CatalogueResource::make($this->state_id)
+            'certificable' => RegistrationsRegistrationResource::collection($this->certificable_id),
+            'state' => CatalogueResource::make($this->state_id),
+            'code' => $this->state_id,
+            'issued' => $this->issued_at,
         ];
     }
 }
-
-

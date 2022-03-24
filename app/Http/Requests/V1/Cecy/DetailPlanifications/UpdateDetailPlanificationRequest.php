@@ -16,15 +16,15 @@ class UpdateDetailPlanificationRequest extends FormRequest
         return [
             'classroom.id' => ['required', 'integer'],
             'day.id' => ['required', 'integer'],
-            'endedTime' => ['required', 'time'],
-            'observations' => ['required', 'string'],
             'parallel.id' => ['required', 'integer'],
             'planification.id' => ['required', 'integer'],
+            'state.id' => ['required', 'integer'],
+            'workday.id' => ['required', 'integer'],
+            'endedTime' => ['required', 'time'],
+            'observations' => ['required', 'string'],
             'planEndedAt' => ['required', 'date'],
             'registrationsLeft' => ['required', 'integer'],
-            'state.id' => ['required', 'integer'],
             'startedTime' => ['required', 'time'],
-            'workday.id' => ['required', 'integer'],
         ];
     }
     
@@ -33,15 +33,15 @@ class UpdateDetailPlanificationRequest extends FormRequest
         return [
             'classroom.id' => 'aula',
             'day.id' => 'días de clase',
-            'endedTime' => 'hora final',
-            'observations' => 'observaciones',
             'parallel.id' => 'paralelo',
             'planification.id' => 'planificación',
+            'state.id' => 'estado',
+            'workday.id' => 'jornada',
+            'endedTime' => 'hora final',
+            'observations' => 'observaciones',
             'planEndedAt' => 'fecha final real de la planificación',
             'registrationsLeft' => 'capacidad restante del paralelo',
-            'state.id' => 'estado',
-            'startedTime' => 'hora inicio',
-            'workday.id' => 'jornada'
+            'startedTime' => 'hora de inicio'
         ];
     }
 }

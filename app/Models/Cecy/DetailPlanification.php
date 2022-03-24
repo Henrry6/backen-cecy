@@ -13,7 +13,6 @@ use App\Models\Core\Image;
 use App\Traits\FileTrait;
 use App\Traits\ImageTrait;
 
-
 class DetailPlanification extends Model implements Auditable
 {
     use Auditing;
@@ -37,13 +36,11 @@ class DetailPlanification extends Model implements Auditable
     ];
 
     // Relationships
-    //revisar
     public function attendances()
     {
         return $this->hasMany(Attendance::class);
     }
     
-    //revisar
     public function certificates()
     {
         return $this->morphMany(Certificate::class, 'certificateable');
@@ -59,7 +56,6 @@ class DetailPlanification extends Model implements Auditable
         return $this->belongsTo(Catalogue::class);
     }
 
-    //revisar
     public function instructors()
     {
         return $this->belongsToMany(Instructor::class, 'cecy.detail_planification_instructor', 'detail_planification_id', 'instructor_id');
@@ -75,13 +71,11 @@ class DetailPlanification extends Model implements Auditable
         return $this->belongsTo(Planification::class);
     }
 
-    //revisar
     public function photographicRecords()
     {
         return $this->hasMany(PhotographicRecord::class);
     }
 
-    //revisar
     public function registrations()
     {
         return $this->hasMany(Registration::class);
@@ -102,14 +96,14 @@ class DetailPlanification extends Model implements Auditable
     public function scopeEndedTime($query, $endedTime)
     {
         if ($endedTime) {
-            return $query->where('ended_time', $endedTime);
+            return $query->orWhere('ended_time', $endedTime);
         }
     }
     
     public function scopeObservations($query, $observations)
     {
         if ($observations) {
-            return $query->where('observations', $observations);
+            return $query->orWhere('observations', 'iLike', "%$observations%");
         }
     }
 
@@ -117,26 +111,10 @@ class DetailPlanification extends Model implements Auditable
     public function scopePlanEndedAt($query, $planEndedAt)
     {
         if ($planEndedAt) {
-            return $query->where('plan_ended_at', $planEndedAt);
+            return $query->orWhere('plan_ended_at', $planEndedAt);
         }
     }
-
-    //revisar
-    public function scopeRegistrationsLeft($query, $registrationsLeft)
-    {
-        if ($registrationsLeft) {
-            return $query->where('registrations_left', $registrationsLeft);
-        }
-    }
-
-    //revisar
-    public function scopeStartedTime($query, $startedTime)
-    {
-        if ($startedTime) {
-            return $query->where('started_time', $startedTime);
-        }
-    }
-
+    
     //revisar
     public function scopePlanification($query, $planification)
     {
@@ -144,13 +122,7 @@ class DetailPlanification extends Model implements Auditable
             return $query->orWhere('planification_id', $planification->id);
         }
     }
-
-    // Accesors
-    public function getScheduleAttribute()
-    {
-        return $this->attributes['started_time'] . '-' . $this->attributes['ended_time'];
-    }
-
+    
     public function scopeCustomOrderBy($query, $sorts)
     {
         if (!empty($sorts[0])) {
@@ -181,5 +153,11 @@ class DetailPlanification extends Model implements Auditable
             return $query->select($fields);
         }
     }  
+
+    // Accesors
+    public function getScheduleAttribute()
+    {
+        return $this->attributes['started_time'] . '-' . $this->attributes['ended_time'];
+    }
     
 }

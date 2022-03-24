@@ -24,7 +24,7 @@ class UpdateProfileInstructorCourseRequest extends FormRequest
   public function attributes()
   {
     return [
-      'course.id' => 'curso',
+      'course.id' => 'ID de curso',
       'requiredExperiences' => 'experiencias del instructor',
       'requiredKnowledges' => 'conocimientos del instructor',
       'requiredSkills' => 'habilidades del instructor',
