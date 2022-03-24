@@ -27,7 +27,7 @@ class DestroysProfileCourseRequest extends FormRequest
     public function messages()
     {
         return [
-            'ids' => 'Es obligatorio enviar un Id de tipo número entero',
+            'ids' => 'es obligatorio enviar un Id de tipo número entero',
         ];
     }
 }

@@ -22,7 +22,7 @@ class GetPhotographicRecordRequest extends FormRequest
     {
         return [
 
-            'detailPlanification.id' => 'Id  del dtalle de planificacion',
+            'detailPlanification.id' => 'Id  del detalle de planificacion',
 
         ];
     }

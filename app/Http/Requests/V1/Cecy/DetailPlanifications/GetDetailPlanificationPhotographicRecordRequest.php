@@ -15,9 +15,6 @@ class GetDetailPlanificationPhotographicRecordRequest extends FormRequest
     {
         return [
             'workday.id' =>  ['integer', 'required'],
-        
-
-
         ];
     }
 
@@ -26,7 +23,6 @@ class GetDetailPlanificationPhotographicRecordRequest extends FormRequest
         return [
 
             'workday.id' => 'Id  de la jornada',
-    
         ];
     }
 }

@@ -27,9 +27,9 @@ class UpdateSchoolPeriodRequest extends FormRequest
     {
         return [
             'state.id' =>  'Id del estado del periodo lectivo',
-            'code' =>  'codigo unico del periodo lectivo',
+            'code' =>  'Codigo unico del periodo lectivo',
             'ended_at' =>  'Fecha de finalización del perido lectivo',
-            'minimum_note' =>  'minimo de nota para aprovar los cursos',
+            'minimum_note' =>  'Minimo de nota para aprovar los cursos',
             'name' =>  'Nombre del periodo lectivo',
             'started_at' =>  'Fecha de inicio del perido lectivo',
         ];

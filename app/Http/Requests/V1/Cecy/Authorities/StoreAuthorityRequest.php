@@ -29,7 +29,7 @@ class StoreAuthorityRequest extends FormRequest
       'intitution.id' => 'Id de la institucion',
       'position.id' => 'Id de la posicion',
       'user.id' => 'Id del usuario',
-      'state.id' => 'Id del estato',
+      'state.id' => 'Id del estado',
       'positionStartedAt' => 'Fecha inicio',
       'positionEndedAt' => 'Fecha final',
       'electronicSignature' => ' Firma electronica ',

@@ -2,17 +2,17 @@
 
 namespace App\Models\Cecy;
 
-use App\Models\Core\State;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as Auditing;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Core\State;
 
 class Planification extends Model implements Auditable
 {
-    use HasFactory;
     use Auditing;
+    use HasFactory;
     use SoftDeletes;
 
     protected $table = 'cecy.planifications';
@@ -31,6 +31,7 @@ class Planification extends Model implements Auditable
         'observations' => 'array',
     ];
     // Relationships
+    //revisar
     public function course()
     {
         return $this->belongsTo(Course::class);
@@ -38,6 +39,11 @@ class Planification extends Model implements Auditable
     public function courses()
     {
         return $this->hasMany(Course::class);
+    }
+    //revisar
+    public function detailPlanifications()
+    {
+        return $this->hasMany(DetailPlanification::class);
     }
 
     public function detailSchoolPeriod()
@@ -69,18 +75,16 @@ class Planification extends Model implements Auditable
         return $this->belongsTo(Authority::class);
     }
 
-    public function detailPlanifications()
-    {
-        return $this->hasMany(DetailPlanification::class);
-    }
 
     //Mutators
+    //revisar
     public function setCodeAttribute($value)
     {
         $this->attributes['code'] = strtoupper($value);
     }
 
     //Scopes
+    //revisar
     public function scopeCode($query, $code)
     {
         if ($code) {
@@ -133,7 +137,7 @@ class Planification extends Model implements Auditable
         }
     }
 
-
+    //revisar
     public function scopeCustomOrderBy($query, $sorts)
     {
         if (!empty($sorts[0])) {

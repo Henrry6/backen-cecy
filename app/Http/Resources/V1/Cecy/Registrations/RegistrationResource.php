@@ -21,17 +21,17 @@ class RegistrationResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'participant' => ParticipantResource::make($this->participant),
-            'state' => CatalogueResource::make($this->state),
-            'stateCourse' => CatalogueResource::make($this->stateCourse),
-            'type' => CatalogueResource::make($this->type),
-            'typeParticipant' => CatalogueResource::make($this->typeParticipant),
             'finalGrade' => $this->final_grade,
             'grade1' => $this->grade1,
             'grade2' => $this->grade2,
             'number' => $this->number,
             'observations' => $this->observations,
-            'registeredAt' => $this->registered_at
+            'participant' => ParticipantResource::make($this->participant),
+            'registeredAt' => $this->registered_at,
+            'state' => CatalogueResource::make($this->state),
+            'stateCourse' => CatalogueResource::make($this->stateCourse),
+            'type' => CatalogueResource::make($this->type),
+            'typeParticipant' => CatalogueResource::make($this->typeParticipant)
         ];
     }
 }

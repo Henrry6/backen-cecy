@@ -13,7 +13,7 @@ class ShowParticipantsRequest extends FormRequest
     public function rules()
     {
         return [
-            'course_id' => ['required','integer'],
+            'course.id' => ['required','integer'],
            
         ];
     }
@@ -21,7 +21,7 @@ class ShowParticipantsRequest extends FormRequest
     public function attributes()
     {
         return [
-            'course_id' => 'id del curso',
+            'course.id' => 'Id del curso',
            
         ];
     }

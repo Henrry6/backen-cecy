@@ -18,7 +18,7 @@ class RegisterParticipantResource extends JsonResource
         return [
         
         'id' => $this->id,
-        'person_type_id' => Participant::make($this->person_type_id),
+        'personTypeId' => Participant::make($this->person_type_id),
         
 
         ];
