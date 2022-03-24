@@ -23,7 +23,7 @@ class GetCoursesByCareerRequest extends FormRequest
   {
     return [
       'career.id' => 'Id de la carrera ',
-      'academicPeriod.id' => 'Id de periodo academico ',
+      'academicPeriod.id' => 'Id de periodo académico ',
       'state.id' => 'Id del estado ',
     ];
   }

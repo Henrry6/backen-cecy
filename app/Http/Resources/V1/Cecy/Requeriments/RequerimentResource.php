@@ -19,9 +19,9 @@ class RequerimentResource extends JsonResource
         return [
             'id' => $this->id,
             // 'registrations' => RegistrationResource::collection($this->registrations),
+            'state' => CatalogueResource::make($this->state),
             'name' => $this->name,
             'required' => $this->required,
-            'state' => CatalogueResource::make($this->state),
         ];
     }
 }

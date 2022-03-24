@@ -30,16 +30,16 @@ class UpdateCurricularDesign extends FormRequest
   public function attributes()
   {
     return [
-      'area.id' => 'Id del Area',
+      'area.id' => 'Id del Área',
       'speciality.id' => 'Id de la especialidad',
       'alignment' => 'Alineaciones',
-      'bibliographies' => 'Bibliografias',
+      'bibliographies' => 'Bibliografías',
       'evaluationMechanisms' => 'Mecanismos de evaluación',
       'learningEnvironments' => 'Entornos de aprendizaje',
       'objective' => 'Objetivo',
       'practiceHours' => 'Horas prácticas',
       'teachingStrategies' => 'Estrategias de enseñanza',
-      'techniquesRequisites' => 'Requistos ténicos',
+      'techniquesRequisites' => 'Requisitos técnicos',
       'theoryHours' => 'Horas teóricas'
     ];
   }

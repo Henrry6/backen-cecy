@@ -16,7 +16,13 @@ class DetailAttendance extends Model implements Auditable
 
     protected $table = 'cecy.detail_attendances';
 
-    protected $fillable = [];
+    protected $fillable = [
+        'ended_time',
+        'observations',
+        'plan_ended_at',
+        'registrations_left',
+        'started_time',
+    ];
 
     // Relationships
     public function attendance()
@@ -29,12 +35,6 @@ class DetailAttendance extends Model implements Auditable
         return $this->belongsTo(Registration::class);
     }
 
-    public function scopeRegistration($query, $registration)
-    {
-        if ($registration) {
-            return $query->orWhere('registration_id', $registration->id);
-        }
-    }
 
     public function type()
     {
@@ -45,6 +45,21 @@ class DetailAttendance extends Model implements Auditable
 
 
     // Scopes
+    public function scopeObservations($query, $observations)
+    {
+        if ($observations) {
+            return $query->orWhere('observations', 'iLike', "%$observations%");
+        }
+    }
+    
+    //revisar
+    public function scopeRegistration($query, $registration)
+    {
+        if ($registration) {
+            return $query->orWhere('registration_id', $registration->id);
+        }
+    }
+
     public function scopeCustomOrderBy($query, $sorts)
     {
         if (!empty($sorts[0])) {
@@ -74,5 +89,5 @@ class DetailAttendance extends Model implements Auditable
             array_unshift($fields, 'id');
             return $query->select($fields);
         }
-    }    
+    }
 }

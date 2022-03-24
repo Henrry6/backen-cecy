@@ -77,7 +77,6 @@ class Planification extends Model implements Auditable
 
 
     //Mutators
-    //revisar
     public function setCodeAttribute($value)
     {
         $this->attributes['code'] = strtoupper($value);
@@ -106,6 +105,7 @@ class Planification extends Model implements Auditable
         }
     }
 
+    //revisar, no es ilike es between
     public function scopeStartedAt($query, $started_at)
     {
         if ($started_at) {
