@@ -103,7 +103,7 @@ class DetailPlanification extends Model implements Auditable
     public function scopeObservations($query, $observations)
     {
         if ($observations) {
-            return $query->where('observations', 'iLike', "%$observations%");
+            return $query->orWhere('observations', 'iLike', "%$observations%");
         }
     }
 

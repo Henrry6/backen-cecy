@@ -18,17 +18,17 @@ class DetailPlanificationInverseResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'endedTime' => $this->ended_time,
-            'observations' => $this->observations,
-            'planEndedAt' => $this->plan_ended_at,
-            'startedTime' => $this->started_time,
             'classroom' => ClassroomResource::make($this->classroom),
             'day' => CatalogueResource::make($this->day),
             'planification' => PlanificationInverseResource::make($this->planification),
             'parallel' => CatalogueResource::make($this->parallel),
             'registrationsLeft' => $this->registrations_left,
             'state' => CatalogueResource::make($this->state),
-            'workday' => CatalogueResource::make($this->workday)
+            'workday' => CatalogueResource::make($this->workday),
+            'endedTime' => $this->ended_time,
+            'observations' => $this->observations,
+            'planEndedAt' => $this->plan_ended_at,
+            'startedTime' => $this->started_time
         ];
     }
 }

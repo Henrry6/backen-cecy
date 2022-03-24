@@ -17,11 +17,11 @@ class AdditionalInformationRecordCompetitorResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'registration' => RegistrationRecordCompetitorResource::colletion($this->registration),
             'companyActivity' => $this->company_activity,
             'companyAddres' => $this->company_addres,
             'companyName' => $this->companyName,
             'companyPhone' => $this->company_phone,
-            'registration' => RegistrationRecordCompetitorResource::colletion($this->registration),
 
 
         ];

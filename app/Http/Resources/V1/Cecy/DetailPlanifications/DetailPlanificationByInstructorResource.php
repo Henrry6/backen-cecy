@@ -20,11 +20,6 @@ class DetailPlanificationByInstructorResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'endedTime' => $this->ended_time,
-            'observations' => $this->observations,
-            'planEndedAt' => $this->plan_ended_at,
-            'registrationsLeft' => $this->registrations_left,
-            'startedTime' => $this->started_time,
             'classroom' => ClassroomResource::make($this->classroom),
             'day' => CatalogueResource::make($this->day),
             'instructors' => InstructorResource::collection($this->instructors),
@@ -32,7 +27,12 @@ class DetailPlanificationByInstructorResource extends JsonResource
             'planification' => PlanificationByInstructorResource::make($this->planification),
             'registrations' => RegistrationResource::collection($this->registrations),
             'state' => CatalogueResource::make($this->state),
-            'workday' => CatalogueResource::make($this->workday)
+            'workday' => CatalogueResource::make($this->workday),
+            'endedTime' => $this->ended_time,
+            'observations' => $this->observations,
+            'planEndedAt' => $this->plan_ended_at,
+            'registrationsLeft' => $this->registrations_left,
+            'startedTime' => $this->started_time
         ];
     }
 }

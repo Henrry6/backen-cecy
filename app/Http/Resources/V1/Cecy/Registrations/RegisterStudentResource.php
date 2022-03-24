@@ -22,11 +22,11 @@ class RegisterStudentResource extends JsonResource
     {
         return [
             'levelInstruction' => CatalogueResource::make($this->levelInstruction),
-            'number' => $this->number,
             'participant' => ParticipantResource::make($this->participant),
-            'registeredAt' => $this->registered_at,
             'state' =>CatalogueResource::make($this->state),
             'type' =>CatalogueResource::make($this->type),
+            'number' => $this->number,
+            'registeredAt' => $this->registered_at,
         //    'typeParticipant' => CatalogueResource::make($this->typeParticipant),
         //    'additionalInformation' => AdditionalInformationResource::make($this->additionalInformation),
         ];
