@@ -24,9 +24,9 @@ class GetRegistrationRecordCompetitorRequest extends FormRequest
     public function rules()
     {
         return [
-            'state.id' =>  ['integer', 'required'],
-            'participant.id' =>  ['integer', 'required'],
             'detailPlanification.id' =>  ['integer', 'required'],
+            'participant.id' =>  ['integer', 'required'],
+            'state.id' =>  ['integer', 'required'],
 
         ];
     }
@@ -34,9 +34,9 @@ class GetRegistrationRecordCompetitorRequest extends FormRequest
     public function attributes()
     {
         return [
+            'detailPlanification.id' => 'Id del detalle de planificación',
+            'participant.id' => 'Id del participante',
             'state.id' => 'matriculado o inscrito',
-            'participant.id' => 'id del participante',
-            'detailPlanification.id' => 'id del detalle de planificacion',
 
 
         ];

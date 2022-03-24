@@ -21,12 +21,12 @@ class RegisterStudentResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'number' => $this->number,
-            'registeredAt' => $this->registered_at,
-            'participant' => ParticipantResource::make($this->participant),
-            'type' =>CatalogueResource::make($this->type),
-            'state' =>CatalogueResource::make($this->state),
             'levelInstruction' => CatalogueResource::make($this->levelInstruction),
+            'number' => $this->number,
+            'participant' => ParticipantResource::make($this->participant),
+            'registeredAt' => $this->registered_at,
+            'state' =>CatalogueResource::make($this->state),
+            'type' =>CatalogueResource::make($this->type),
         //    'typeParticipant' => CatalogueResource::make($this->typeParticipant),
         //    'additionalInformation' => AdditionalInformationResource::make($this->additionalInformation),
         ];

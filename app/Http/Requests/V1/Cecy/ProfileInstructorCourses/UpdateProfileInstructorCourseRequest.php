@@ -10,6 +10,7 @@ class UpdateProfileInstructorCourseRequest extends FormRequest
   {
     return true;
   }
+
   public function rules()
   {
     return [
@@ -23,10 +24,10 @@ class UpdateProfileInstructorCourseRequest extends FormRequest
   public function attributes()
   {
     return [
-      'course.id' => 'Fk de curso',
-      'requiredExperiences' => 'Experiencias del instructor',
-      'requiredKnowledges' => 'Conocimientos del instructor',
-      'requiredSkills' => 'Habilidades del instructor',
+      'course.id' => 'ID de curso',
+      'requiredExperiences' => 'experiencias del instructor',
+      'requiredKnowledges' => 'conocimientos del instructor',
+      'requiredSkills' => 'habilidades del instructor',
     ];
   }
 }

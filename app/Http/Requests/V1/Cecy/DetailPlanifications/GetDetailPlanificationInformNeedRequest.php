@@ -14,10 +14,10 @@ class GetDetailPlanificationInformNeedRequest extends FormRequest
     public function rules()
     {
         return [
-            'responsibleCourse.id' =>  ['integer', 'required'],
-            'sector.id' =>  ['integer', 'required'],
             'area.id' =>  ['integer', 'required'],
-            'course.id' =>  ['integer', 'required']
+            'course.id' =>  ['integer', 'required'],
+            'responsibleCourse.id' =>  ['integer', 'required'],
+            'sector.id' =>  ['integer', 'required']
 
 
         ];
@@ -26,11 +26,10 @@ class GetDetailPlanificationInformNeedRequest extends FormRequest
     public function attributes()
     {
         return [
-
-            'responsibleCourse.id' => 'Id  del responsable del curso',
-            'sector.id' => 'Id  del sector',
             'area.id' => 'Id  del area',
             'course.id' => 'Id  del curso',
+            'responsibleCourse.id' => 'Id  del responsable del curso',
+            'sector.id' => 'Id  del sector',
         ];
     }
 }

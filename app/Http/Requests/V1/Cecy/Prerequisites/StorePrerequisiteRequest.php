@@ -13,7 +13,7 @@ class StorePrerequisiteRequest extends FormRequest
     public function rules()
     {
         return [
-            'prerequisite.id' => ['required', 'max:240'],
+            'prerequisite.id' => ['required',],
         ];
     }
 

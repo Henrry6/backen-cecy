@@ -26,10 +26,10 @@ class StorePhotographicRecordRequest extends FormRequest
     {
         return [
             'detailPlanification.id' => 'Id detalle de la planificacion',
-            'description' => 'Descripción',
-            'numberWeek' => 'Numero de semanas',
-            'urlImage' => 'Url de la imagen',
-            'weekAt' => 'Fecha',
+            'description' => 'descripción',
+            'numberWeek' => 'numero de semanas',
+            'urlImage' => 'url de la imagen',
+            'weekAt' => 'fecha',
         ];
     }
 }

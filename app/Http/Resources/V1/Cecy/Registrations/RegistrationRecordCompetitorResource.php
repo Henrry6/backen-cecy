@@ -24,9 +24,9 @@ class RegistrationRecordCompetitorResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'state' => CatalogueResource::make($this->state),
+            'detailPlanification' => DetailPlanificationInformNeedResource::make($this->detail_planification),
             'participant' => ParticipantRecordCompetitorResource::collection($this->participant),
-            'detailPlanification' => DetailPlanificationInformNeedResource::make($this->detail_planification)
+            'state' => CatalogueResource::make($this->state)
 
         ];
     }

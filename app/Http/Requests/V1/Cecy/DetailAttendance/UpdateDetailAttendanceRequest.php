@@ -22,8 +22,8 @@ class UpdateDetailAttendanceRequest extends FormRequest
     public function attributes()
     {
         return [
-            'attendance_id' => 'id de la asistencia',
-            'registration_id' => 'id del registro',
+            'attendance_id' => 'Id de la asistencia',
+            'registration_id' => 'Id del registro',
             'type_id' => 'tipo de asistencia'
         ];
     }

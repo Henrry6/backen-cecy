@@ -25,17 +25,17 @@ class UpdateRegistrationRequest extends FormRequest
     {
         return [
             'detailPlanification.id' => ['required', 'integer'],
-            'participant.id' => ['required', 'integer'],
-            'state.id' => ['required', 'integer'],
-            'stateCourse.id' => ['required', 'integer'],
-            'type.id' => ['required', 'integer'],
-            'typeParticipant.id' => ['required', 'integer'],
             'finalGrade' => ['required', 'number'],
             'grade1' => ['required', 'number'],
             'grade2' => ['required', 'number'],
             'number' => ['required', 'number'],
             'observations' => ['required'],
+            'participant.id' => ['required', 'integer'],
             'registeredAt' => ['required', 'date'],
+            'state.id' => ['required', 'integer'],
+            'stateCourse.id' => ['required', 'integer'],
+            'type.id' => ['required', 'integer'],
+            'typeParticipant.id' => ['required', 'integer'],
         ];
     }
 
@@ -43,17 +43,17 @@ class UpdateRegistrationRequest extends FormRequest
     {
         return [
             'detailPlanification.id' => 'Id de planificación',
+            'finalGrade' => 'nota final',
+            'grade1' => 'nota 1',
+            'grade2' => 'nota 2',
+            'number' => 'número de identificación de la matrícula',
+            'observations' => 'observaciones',
             'participant.id' => 'Id de participante',
+            'registeredAt' => 'fecha en que se matriculó',
             'state.id' => 'Id de estado de matrícula',
             'stateCourse.id' => 'Id del estado del curso',
             'type.id' => 'Id de tipo de matrícula',
             'typeParticipant.id' => 'Id del tipo de participante',
-            'finalGrade' => 'Nota final',
-            'grade1' => 'Nota 1',
-            'grade2' => 'Nota 2',
-            'number' => 'Número de identificación de la matrícula',
-            'observations' => 'Observaciones',
-            'registeredAt' => 'Fecha en que se matriculó',
         ];
     }
 }

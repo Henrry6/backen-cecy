@@ -24,11 +24,6 @@ class DetailAttendance extends Model implements Auditable
         return $this->belongsTo(Attendance::class);
     }
 
-    public function type()
-    {
-        return $this->belongsTo(Catalogue::class);
-    }
-
     public function registration()
     {
         return $this->belongsTo(Registration::class);
@@ -41,6 +36,10 @@ class DetailAttendance extends Model implements Auditable
         }
     }
 
+    public function type()
+    {
+        return $this->belongsTo(Catalogue::class);
+    }
 
     // Mutators
 
@@ -60,4 +59,20 @@ class DetailAttendance extends Model implements Auditable
             return $query;
         }
     }
+
+    public function scopeCustomSelect($query, $fields)
+    {
+        if (!empty($fields)) {
+            $fields = explode(',', $fields);
+            foreach ($fields as $field) {
+                $fieldExist = array_search(strtolower($field), $fields);
+                if ($fieldExist == false) {
+                    unset($fields[$fieldExist]);
+                }
+            }
+
+            array_unshift($fields, 'id');
+            return $query->select($fields);
+        }
+    }    
 }

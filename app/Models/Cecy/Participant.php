@@ -24,26 +24,46 @@ class Participant extends Model implements Auditable
     ];
 
     // Relationships
+<<<<<<< HEAD
     //revisar
+=======
+
+>>>>>>> b95e6ba2e967b6c8f61499bbc483f415ceb0333a
     public function registrations()
     {
         return $this->hasMany(Registration::class);
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> b95e6ba2e967b6c8f61499bbc483f415ceb0333a
     public function state()
     {
         return $this->belongsTo(Catalogue::class);
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> b95e6ba2e967b6c8f61499bbc483f415ceb0333a
     public function type()
     {
         return $this->belongsTo(Catalogue::class);
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> b95e6ba2e967b6c8f61499bbc483f415ceb0333a
     public function user()
     {
         return $this->belongsTo(User::class);
     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> b95e6ba2e967b6c8f61499bbc483f415ceb0333a
     //Scopes
     //revisar
     public function scopeType($query, $type)
@@ -75,4 +95,20 @@ class Participant extends Model implements Auditable
             return $query;
         }
     }
+    
+    public function scopeCustomSelect($query, $fields)
+    {
+        if (!empty($fields)) {
+            $fields = explode(',', $fields);
+            foreach ($fields as $field) {
+                $fieldExist = array_search(strtolower($field), $fields);
+                if ($fieldExist == false) {
+                    unset($fields[$fieldExist]);
+                }
+            }
+
+            array_unshift($fields, 'id');
+            return $query->select($fields);
+        }
+    }    
 }
