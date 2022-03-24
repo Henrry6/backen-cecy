@@ -2,8 +2,9 @@
 
 namespace App\Http\Resources\V1\Cecy\Registrations;
 
-use App\Models\Cecy\Participant;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Models\Cecy\Participant;
+use App\Http\Resources\V1\Cecy\Participants\ParticipantResource;
 
 class RegisterParticipantResource extends JsonResource
 {
@@ -18,7 +19,7 @@ class RegisterParticipantResource extends JsonResource
         return [
         
         'id' => $this->id,
-        'personTypeId' => Participant::make($this->person_type_id),
+        'personTypeId' => ParticipantResource::make($this->person_type_id),
         
 
         ];

@@ -52,7 +52,7 @@ class Requirement extends Model implements Auditable
     public function scopeName($query, $name)
     {
         if ($name) {
-            return $query->where('name', $name);
+            return $query->where('name', 'iLike', "%$name%");
         }
     }
 
@@ -63,7 +63,7 @@ class Requirement extends Model implements Auditable
             return $query->where('state_id', $requirement->state);
         }
     }
-    
+
     public function scopeCustomOrderBy($query, $sorts)
     {
         if (!empty($sorts[0])) {

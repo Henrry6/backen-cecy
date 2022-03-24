@@ -14,9 +14,9 @@ class GetCourseInformNeedRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' =>  ['string', 'required'],
             'courseType.id' =>  ['integer', 'required'],
             'modality.id' =>  ['integer', 'required'],
+            'name' =>  ['string', 'required'],
 
         ];
     }
@@ -24,7 +24,7 @@ class GetCourseInformNeedRequest extends FormRequest
     public function attributes()
     {
         return [
-            'name' =>  'Nombre del curso',
+            'name' =>  'nombre del curso',
             'courseType.id' => 'Id  del tipo de curso',
             'modality.id' => 'Id  de la modalidad',
 

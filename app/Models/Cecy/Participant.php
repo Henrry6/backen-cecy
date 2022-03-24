@@ -20,7 +20,7 @@ class Participant extends Model implements Auditable
     protected $fillable = [];
 
     protected $casts = [
-        'observations' => 'array',
+        // 'observations' => 'array',
     ];
 
     // Relationships

@@ -24,14 +24,13 @@ class Certificate extends Model implements Auditable
         'certificateable_type',
         'certificateable_id',
         'state_id',
-        'code',
         'issued_at',
     ];
 
-    protected $user = [ 
+    protected $user = [
 
         'username',
-        
+
     ];
 
 
@@ -61,7 +60,7 @@ class Certificate extends Model implements Auditable
     public function scopeCodeSources($query, $code)
     {
         if ($code) {
-            return $query->Where('code', $code);
+            return $query->where('code', $code);
         }
     }
 
@@ -94,5 +93,5 @@ class Certificate extends Model implements Auditable
             array_unshift($fields, 'id');
             return $query->select($fields);
         }
-    }    
+    }
 }
