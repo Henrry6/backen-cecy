@@ -50,14 +50,14 @@ class Participant extends Model implements Auditable
     public function scopeType($query, $type)
     {
         if ($type) {
-            return $query->Where('type_id', $type->id);
+            return $query->orWhere('type_id', $type->id);
         }
     }
     //REVISAR
     public function scopeUser($query, $user)
     {
         if ($user) {
-            return $query->Where('user_id', $user->id);
+            return $query->orWhere('user_id', $user->id);
         }
     }
     //revisar
