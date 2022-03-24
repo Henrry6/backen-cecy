@@ -23,7 +23,8 @@ class UpdateDetailPlanificationRequest extends FormRequest
             'parallel.id' => [
                 'required', 'integer',
                 Rule::unique('pgsql-cecy.detail_planifications', 'parallel_id')
-                    ->ignore(request('detailPlanification')->id)
+                    // ->ignore(request('detailPlanification')->id)
+                    ->ignore($this->route('detailPlanification')->id)
                     ->where(fn ($query) => $query->where('planification_id', $this->planification)),
             ],
             'endedTime' => ['required', 'after:startedTime'],

@@ -2,8 +2,9 @@
 
 namespace App\Http\Resources\V1\Cecy\DetailPlanifications;
 
-use App\Http\Resources\V1\Cecy\DetailInstructors\DetailInstructorResource;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\V1\Cecy\Catalogues\CatalogueResource;
+use App\Http\Resources\V1\Cecy\DetailInstructors\DetailInstructorResource;
 
 class DetailPlanificationPhotographicRecordResource extends JsonResource
 {
@@ -14,7 +15,7 @@ class DetailPlanificationPhotographicRecordResource extends JsonResource
             'workday' => CatalogueResource::make($this->workday),
             'endTime' => $this->end_time,
             'startTime' => $this->start_time,
-            'planificacion' => PlanificationInformNeedResource::collection($this->planification),
+            // 'planificacion' => PlanificationInformNeedResource::collection($this->planification),
         ];
     }
 }
