@@ -3,17 +3,17 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\V1\Cecy\AdditionalInformations\IndexAdditionalInformationRequest;
-use App\Http\Requests\V1\Cecy\AdditionalInformations\StoreAdditionalInformationRequest;
-use App\Http\Requests\V1\Cecy\AdditionalInformations\UpdateAdditionalInformationRequest;
 use App\Http\Requests\V1\Core\Files\DestroysFileRequest;
 use App\Http\Requests\V1\Core\Files\IndexFileRequest;
 use App\Http\Requests\V1\Core\Files\UpdateFileRequest;
 use App\Http\Requests\V1\Core\Files\UploadFileRequest;
+use App\Http\Requests\V1\Cecy\AdditionalInformations\IndexAdditionalInformationRequest;
+use App\Http\Requests\V1\Cecy\AdditionalInformations\StoreAdditionalInformationRequest;
+use App\Http\Requests\V1\Cecy\AdditionalInformations\UpdateAdditionalInformationRequest;
 use App\Http\Resources\V1\Cecy\AdditionalInformations\AdditionalInformationCollection;
 use App\Http\Resources\V1\Cecy\AdditionalInformations\AdditionalInformationResource;
-use App\Models\Cecy\AdditionalInformation;
 use App\Models\Core\File;
+use App\Models\Cecy\AdditionalInformation;
 
 class AdditionalInformationController extends Controller
 {
@@ -23,19 +23,20 @@ class AdditionalInformationController extends Controller
         //$this->middleware('permission:update-additionalInformations')->only(['update']);
         //$this->middleware('permission:delete-additionalInformations')->only(['destroy', 'destroys']);
     }
+
     public function index(IndexAdditionalInformationRequest $request)
     {
         $sorts = explode(',', $request->sort);
 
         $additionalInformations = AdditionalInformation::customOrderBy($sorts)
-            ->companyActivity($request->input('company_activity'))
-            ->companyAddress($request->input('company_address'))
-            ->companyEmail($request->input('company_email'))
-            ->companyName($request->input('company_name'))
-            ->companyPhone($request->input('company_phone'))
-            ->contactName($request->input('contactName'))
-            ->levelInstruction($request->input('levelInstruction'))
-            ->paginate($request->per_page);
+            ->companyActivity($request->input('search'))
+            ->companyAddress($request->input('search'))
+            ->companyEmail($request->input('search'))
+            ->companyName($request->input('search'))
+            ->companyPhone($request->input('search'))
+            ->contactName($request->input('search'))
+            ->levelInstruction($request->input('search'))
+            ->paginate($request->input('per_page'));
 
         return (new AdditionalInformationCollection($additionalInformations))
             ->additional([
@@ -48,19 +49,25 @@ class AdditionalInformationController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    public function show(AdditionalInformation $additionalInformation)
+    {
+        return (new AdditionalInformationResource($additionalInformation))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
 
     public function store(StoreAdditionalInformationRequest $request)
     {
         $additionalInformation = new AdditionalInformation();
 
         $additionalInformation->registration()
-            ->associate(AdditionalInformation::find($request->input('additional_information.id')));
+            ->associate(AdditionalInformation::find($request->input('additionalInformation.id')));
 
         $additionalInformation->company_activity = $request->input('companyActivity');
         $additionalInformation->company_address = $request->input('companyAddress');
@@ -81,43 +88,16 @@ class AdditionalInformationController extends Controller
                 'msg' => [
                     'summary' => 'Registro Creado',
                     'detail' => '',
-                    'code' => '200'
+                    'code' => '201'
                 ]
             ])
             ->response()->setStatusCode(201);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show(AdditionalInformation $additionalInformation)
-    {
-        return (new AdditionalInformationResource($additionalInformation))
-            ->additional([
-                'msg' => [
-                    'summary' => 'success',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ])
-            ->response()->setStatusCode(201);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(UpdateAdditionalInformationRequest $request, AdditionalInformation $additionalInformation)
     {
-        //db
         $additionalInformation->registration()
-            ->associate(AdditionalInformation::find($request->input('additional_information.id')));
+            ->associate(AdditionalInformation::find($request->input('additionalInformation.id')));
 
         $additionalInformation->company_activity = $request->input('companyActivity');
         $additionalInformation->company_address = $request->input('companyAddress');
@@ -138,18 +118,12 @@ class AdditionalInformationController extends Controller
                 'msg' => [
                     'summary' => 'Registro Actualizado',
                     'detail' => '',
-                    'code' => '200'
+                    'code' => '201'
                 ]
             ])
             ->response()->setStatusCode(201);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(AdditionalInformation $additionalInformation)
     {
         $additionalInformation->delete();
@@ -163,14 +137,6 @@ class AdditionalInformationController extends Controller
             ])
             ->response()->setStatusCode(201);
     }
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    // funcionalidades
-
 
     // Files
     public function indexFiles(IndexFileRequest $request, AdditionalInformation $additionalInformation)
