@@ -52,13 +52,13 @@ class SchoolPeriod extends Model implements Auditable
     public function scopeCode($query, $code)
     {
         if ($code) {
-            return $query->where('code', $code);
+            return $query->orWhere('code', $code);
         }
     }
     public function scopeName($query, $name)
     {
         if ($name) {
-            return $query->where('name', 'iLike', "%$name%");
+            return $query->orWhere('name', 'iLike', "%$name%");
         }
     }
     //revisar

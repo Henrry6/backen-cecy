@@ -60,7 +60,7 @@ class Certificate extends Model implements Auditable
     public function scopeCodeSources($query, $code)
     {
         if ($code) {
-            return $query->where('code', $code);
+            return $query->orWhere('code', $code);
         }
     }
 

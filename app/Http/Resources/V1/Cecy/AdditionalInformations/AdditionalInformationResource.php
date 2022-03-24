@@ -19,6 +19,8 @@ class AdditionalInformationResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'levelInstruction' => CatalogueResource::make($this->levelInstruction),
+            'registration' => RegistrationResource::make($this->registration),
             'companyActivity' => $this->company_activity,
             'companyAddress' => $this->company_address,
             'companyEmail' => $this->company_email,
@@ -29,8 +31,6 @@ class AdditionalInformationResource extends JsonResource
             'courseFollows' => $this->course_follows,
             'courseKnows' => $this->course_knows,
             'worked' => $this->worked,
-            'levelInstruction' => CatalogueResource::make($this->levelInstruction),
-            'registration' => RegistrationResource::make($this->registration),
         ];
     }
 }

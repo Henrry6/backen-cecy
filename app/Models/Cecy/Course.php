@@ -250,7 +250,7 @@ class Course extends Model implements Auditable
     public function scopeAbbreviation($query, $abbreviation)
     {
         if ($abbreviation) {
-            return $query->where('abbreviation', 'iLike', "%$abbreviation%");
+            return $query->orWhere('abbreviation', 'iLike', "%$abbreviation%");
         }
     }
 

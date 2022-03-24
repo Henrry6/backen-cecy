@@ -41,14 +41,14 @@ class Notification extends Model implements Auditable
     public function scopeDescription($query, $description)
     {
         if ($description) {
-            return $query->where('description', $description);
+            return $query->orWhere('description', $description);
         }
     }
 
     public function scopeTitle($query, $title)
     {
         if ($title) {
-            return $query->where('title', $title);
+            return $query->orWhere('title', $title);
         }
     }
 

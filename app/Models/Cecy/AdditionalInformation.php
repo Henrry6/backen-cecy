@@ -89,7 +89,7 @@ class AdditionalInformation extends Model implements Auditable
     public function scopeCompanyActivity($query, $companyActivity)
     {
         if ($companyActivity) {
-            return $query->where('company_activity', 'iLike', "%$companyActivity%");
+            return $query->orWhere('company_activity', 'iLike', "%$companyActivity%");
         }
     }
 
