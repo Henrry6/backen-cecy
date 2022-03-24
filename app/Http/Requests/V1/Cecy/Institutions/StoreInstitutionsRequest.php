@@ -23,10 +23,10 @@ class StoreInstitutionsRequest extends FormRequest
   public function attributes()
   {
     return [
-      'code'=> 'Codigo de la institucion',
-      'name'=> 'Nombre de la institucion',
-      'logo'=> 'Logo de la institucion',
-      'slogan'=> 'Slogan de la institucion',
+      'code'=> 'código de la institución',
+      'name'=> 'Nombre de la institución',
+      'logo'=> 'Logo de la institución',
+      'slogan'=> 'Slogan de la institución',
     ];
   }
 }

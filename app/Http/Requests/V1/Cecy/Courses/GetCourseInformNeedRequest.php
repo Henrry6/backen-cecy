@@ -27,7 +27,6 @@ class GetCourseInformNeedRequest extends FormRequest
             'name' =>  'nombre del curso',
             'courseType.id' => 'Id  del tipo de curso',
             'modality.id' => 'Id  de la modalidad',
-
         ];
     }
 }
