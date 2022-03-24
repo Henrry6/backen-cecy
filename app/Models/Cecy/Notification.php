@@ -2,11 +2,12 @@
 
 namespace App\Models\Cecy;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as Auditing;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 class Notification extends Model implements Auditable
 {
@@ -41,14 +42,14 @@ class Notification extends Model implements Auditable
     public function scopeDescription($query, $description)
     {
         if ($description) {
-            return $query->where('description', $description);
+            return $query->orWhere('description', 'iLike', "%$description%");
         }
     }
 
     public function scopeTitle($query, $title)
     {
         if ($title) {
-            return $query->where('title', $title);
+            return $query->orWhere('title', 'iLike', "%$title&");
         }
     }
 

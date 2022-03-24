@@ -52,7 +52,7 @@ class Requirement extends Model implements Auditable
     public function scopeName($query, $name)
     {
         if ($name) {
-            return $query->where('name', 'iLike', "%$name%");
+            return $query->orWhere('name', 'iLike', "%$name%");
         }
     }
 
@@ -60,7 +60,7 @@ class Requirement extends Model implements Auditable
     public function scopeState($query, $requirement)
     {
         if ($requirement) {
-            return $query->where('state_id', $requirement->state);
+            return $query->orWhere('state_id', $requirement->state);
         }
     }
 

@@ -101,20 +101,12 @@ class Registration extends Model implements Auditable
         }
     }
 
-    public function scopeNumbers($query, $numbers)
+    public function scopeNumber($query, $number)
     {
-        if ($numbers) {
-            return $query->orWhere('numbers', 'iLike', "%$numbers%");
+        if ($number) {
+            return $query->orWhere('number', 'iLike', "%$number%");
         }
     }
-
-     //revisar
-     public function scopeCode($query, $observations)
-     {
-         if ($observations) {
-             return $query->orWhere('observations', $observations);
-         }
-     }
 
     //revisar
     public function scopeParticipant($query, $participant)
