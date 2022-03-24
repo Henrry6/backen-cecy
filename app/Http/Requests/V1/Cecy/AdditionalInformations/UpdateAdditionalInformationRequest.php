@@ -24,6 +24,8 @@ class UpdateAdditionalInformationRequest extends FormRequest
     public function rules()
     {
         return [
+            'levelInstruction.id' => ['required', 'integer'],
+            'registration.id' => ['required', 'integer'],
             'companyActivity' => ['required'],
             'companyAddress' => ['required'],
             'companyEmail' => ['required'],
@@ -33,8 +35,6 @@ class UpdateAdditionalInformationRequest extends FormRequest
             'contactName' => ['required'],
             'courseFollows' => ['required'],
             'courseKnows' => ['required'],
-            'levelInstruction.id' => ['required', 'integer'],
-            'registration.id' => ['required', 'integer'],
             'worked' => ['required'],
         ];
     }
@@ -42,8 +42,10 @@ class UpdateAdditionalInformationRequest extends FormRequest
     public function attributes()
     {
         return [
+            'levelInstruction.id' => 'Id del nivel de instrucción',
+            'registration.id' => 'Id del registro',
             'companyActivity' => 'actividad de la empresa',
-            'companyAddress' => 'direccion fisica de empresa',
+            'companyAddress' => 'dirección fiísica de empresa',
             'companyEmail' => 'correo de empresa',
             'companyName' => 'nombre de empresa',
             'companyPhone' => 'teléfono de empresa',
@@ -51,8 +53,6 @@ class UpdateAdditionalInformationRequest extends FormRequest
             'contactName' => 'nombre de contacto que patrocina',
             'courseFollows' => 'horas prácticas',
             'courseKnows' => 'entorno de aprendizaje',
-            'levelInstruction.id' => 'Id del nivel de instrucción',
-            'registration.id' => 'Id del registro',
             'worked' => 'participante que trabaja',
         ];
     }

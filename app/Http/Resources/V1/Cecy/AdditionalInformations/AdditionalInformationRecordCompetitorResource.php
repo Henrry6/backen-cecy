@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\V1\Cecy\AdditionalInformationRecordCompetitors;
 
+use App\Http\Resources\V1\Cecy\Registrations\RegistrationRecordCompetitorResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class AdditionalInformationRecordCompetitorResource extends JsonResource

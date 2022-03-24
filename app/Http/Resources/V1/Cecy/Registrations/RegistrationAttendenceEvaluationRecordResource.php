@@ -2,8 +2,10 @@
 
 namespace App\Http\Resources\V1\Cecy\Registrations;
 
+use App\Http\Resources\V1\Cecy\Catalogues\CatalogueResource;
+use App\Http\Resources\V1\Cecy\Participants\ParticipantRecordCompetitorResource;
+use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationInformNeedResource;
 use Illuminate\Http\Resources\Json\JsonResource;
-
 class RegistrationAttendenceEvaluationRecordResource extends JsonResource
 {
     /**

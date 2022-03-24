@@ -24,7 +24,7 @@ class ShowGradesByParticipantRequest extends FormRequest
     public function rules()
     {
         return [
-            'final_grade' => ['required'],
+            'finalGrade' => ['required'],
             'grade1' => ['required'],
             'grade2' => ['required']
         ];
@@ -33,9 +33,9 @@ class ShowGradesByParticipantRequest extends FormRequest
     public function attributes()
     {
         return [
-            'final_grade' => 'Nota final',
-            'grade1' => 'Nota primer parcial',
-            'grade2' => 'Nota segundo parcial'
+            'finalGrade' => 'nota final',
+            'grade1' => 'nota primer parcial',
+            'grade2' => 'nota segundo parcial'
 
         ];
     }
