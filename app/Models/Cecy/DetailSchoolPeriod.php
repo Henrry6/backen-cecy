@@ -2,16 +2,16 @@
 
 namespace App\Models\Cecy;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as Auditing;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class DetailSchoolPeriod extends Model implements Auditable
 {
-    use HasFactory;
     use Auditing;
+    use HasFactory;
     use SoftDeletes;
 
     protected $table = 'cecy.detail_school_periods';
@@ -28,7 +28,7 @@ class DetailSchoolPeriod extends Model implements Auditable
     ];
 
     // Relationships
-
+    //revisar
     public function planifications()
     {
         $this->hasMany(Planification::class);
@@ -43,7 +43,7 @@ class DetailSchoolPeriod extends Model implements Auditable
 
 
     // Scopes
-
+    // Revisar
     public function scopeCustomOrderBy($query, $sorts)
     {
         if (!empty($sorts[0])) {
