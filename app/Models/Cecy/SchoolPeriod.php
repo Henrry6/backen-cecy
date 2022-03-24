@@ -35,8 +35,8 @@ class SchoolPeriod extends Model implements Auditable
     {
         return $this->belongsTo(Catalogue::class);
     }
+
     // Mutators
-    //revisar
     public function setCodeAttribute($value)
     {
         $this->attributes['code'] = strtoupper($value);
@@ -48,7 +48,6 @@ class SchoolPeriod extends Model implements Auditable
     }
 
     // Scopes
-    //revisar
     public function scopeCode($query, $code)
     {
         if ($code) {
@@ -61,6 +60,7 @@ class SchoolPeriod extends Model implements Auditable
             return $query->orWhere('name', 'iLike', "%$name%");
         }
     }
+    
     //revisar
     public function scopeCustomOrderBy($query, $sorts)
     {

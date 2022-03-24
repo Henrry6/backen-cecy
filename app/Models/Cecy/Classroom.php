@@ -52,12 +52,6 @@ class Classroom extends Model implements Auditable
     }
 
     // Scopes
-    public function scopeDescription($query, $description)
-    {
-        if ($description) {
-            return $query->orWhere('description', 'iLike', "%$description%");
-        }
-    }
 
     public function scopeCode($query, $code)
     {
@@ -70,6 +64,13 @@ class Classroom extends Model implements Auditable
     {
         if ($name) {
             return $query->orWhere('name', 'iLike', "%$name%");
+        }
+    }
+    
+    public function scopeDescription($query, $description)
+    {
+        if ($description) {
+            return $query->orWhere('description', 'iLike', "%$description%");
         }
     }
 

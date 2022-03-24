@@ -123,23 +123,6 @@ class DetailPlanification extends Model implements Auditable
         }
     }
     
-    //revisar
-    public function scopeRegistrationsLeft($query, $registrationsLeft)
-    {
-        if ($registrationsLeft) {
-            return $query->orWhere('registrations_left', $registrationsLeft);
-        }
-    }
-
-    //revisar
-    public function scopeStartedTime($query, $startedTime)
-    {
-        if ($startedTime) {
-            return $query->orWhere('started_time', $startedTime);
-        }
-    }
-
-
     public function scopeCustomOrderBy($query, $sorts)
     {
         if (!empty($sorts[0])) {
