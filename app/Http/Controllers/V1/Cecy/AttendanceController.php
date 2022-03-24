@@ -3,31 +3,23 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
+use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
+use App\Http\Requests\V1\Core\Images\UploadImageRequest;
 use App\Http\Requests\V1\Cecy\Attendances\GetAttendancesByParticipantRequest;
 use App\Http\Requests\V1\Cecy\Attendance\SaveDetailAttendanceRequest;
 use App\Http\Requests\V1\Cecy\Attendance\ShowAttendanceTeacherRequest;
 use App\Http\Requests\V1\Cecy\Attendance\StoreAttendanceRequest;
 use App\Http\Requests\V1\Cecy\Courses\GetCoursesByNameRequest;
-use App\Http\Requests\V1\Core\Images\UploadImageRequest;
 use App\Http\Resources\V1\Cecy\Attendances\AttendanceCollection;
 use App\Http\Resources\V1\Cecy\Attendances\AttendanceResource;
-use App\Models\Cecy\DetailPlanification;
-use App\Models\Cecy\Course;
-use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\GetDetailPlanificationsByResponsibleCourseRequest;
-use App\Http\Resources\V1\Cecy\Attendances\GetAttendanceByParticipantCollection;
-use App\Http\Resources\V1\Cecy\Attendances\SaveDetailAttendanceResource;
-use App\Http\Resources\V1\Cecy\PhotographicRecords\PhotographicRecordResource;
 use App\Http\Resources\V1\Cecy\Registrations\RegistrationRecordCompetitorResource;
+use App\Http\Resources\V1\Cecy\Attendances\SaveDetailAttendanceResource;
 use App\Models\Authentication\User;
 use App\Models\Cecy\Attendance;
-use App\Models\Cecy\DetailAttendance;
+use App\Models\Cecy\Course;
+use App\Models\Cecy\DetailPlanification;
 use App\Models\Cecy\Institution;
 use App\Models\Cecy\Instructor;
-use App\Models\Cecy\Participant;
-use App\Models\Cecy\PhotographicRecord;
-use App\Models\Cecy\Registration;
-use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
-use Illuminate\Pagination\Cursor;
 
 class AttendanceController extends Controller
 {
@@ -43,20 +35,20 @@ class AttendanceController extends Controller
                 'msg' => [
                     'sumary' => 'consulta exitosa',
                     'detail' => '',
-                    'code' => '200'
+                    'code' => '201'
                 ]
             ])
-            ->response()->setStatusCode(200);
+            ->response()->setStatusCode(201);
     }
+
     // AttendanceController
     public function showPhotographicRecord(Course $course, DetailPlanification $detailPlanification)
     {
         //trae el registro fotografico de un curso en especifico por el docente que se loguea
-
         $planification = $course->planifications()->first();
-        $detailPlanification = $planification->detailPlanifications()->with(['day','workday'])->first();
+        $detailPlanification = $planification->detailPlanifications()->with(['day', 'workday'])->first();
         $photographicRecords = $detailPlanification->photographicRecords()->first();
-            //return $photographicRecords;
+        //return $photographicRecords;
         $pdf = PDF::loadView('reports/photographic-record', [
             'course' => $course,
             'planification' => $planification,
@@ -165,6 +157,7 @@ class AttendanceController extends Controller
             ])
             ->response()->setStatusCode(200);
     }
+
     public function index()
     {
         return (new AttendanceCollection(Attendance::paginate()))
@@ -177,9 +170,9 @@ class AttendanceController extends Controller
             ])
             ->response()->setStatusCode(200);
     }
+
     public function show(Attendance $attendance)
     {
-
         return (new AttendanceResource($attendance))
             ->additional([
                 'msg' => [
@@ -191,51 +184,44 @@ class AttendanceController extends Controller
             ->response()->setStatusCode(200);
     }
 
-
-
     //trae informacion del informe de asistencia evaluacion
-    public function attendanceEvaluation( Course $course)
+    public function attendanceEvaluation(Course $course)
     {
         $planification = $course->planifications()->first();
         $detailPlanification = $planification->detailPlanifications()->first();
         $registrations = $detailPlanification->registrations()->get();
-        $responsiblececy =$planification->responsibleCecy()->first();
-        $institution =Institution::firstWhere('id',$responsiblececy->intitution_id);
+        $responsiblececy = $planification->responsibleCecy()->first();
+        $institution = Institution::firstWhere('id', $responsiblececy->intitution_id);
         $instructor = Instructor::where('id', $planification->responsible_course_id)->first();
         //$user =  $instructor->user();
         $user = User::firstWhere('id', $instructor->user_id);
-        $grade1=$registrations[0]['grade1'];
-        $grade2=$registrations[0]['grade2'];
-        $final_grade=$registrations[0]['final_grade'];
-
-
+        $grade1 = $registrations[0]['grade1'];
+        $grade2 = $registrations[0]['grade2'];
+        $final_grade = $registrations[0]['final_grade'];
 
 
         //return $registrations['grade1'];
         //return $registrations[0]['grade1'];
         //return $course;
         //return $planification;
-       
-
-            $pdf = PDF::loadView('reports/atendence-evaluation', [
-                'planification' => $planification,
-                'course' => $course,
-                'registrations'=>$registrations,
-                'institution'=> $institution,
-                'instructor'=>$instructor,
-                'user'=>$user,
-                'grade1'=>$grade1,
-                'grade2'=>$grade2,
-                'final_grade'=>$final_grade,
 
 
+        $pdf = PDF::loadView('reports/atendence-evaluation', [
+            'planification' => $planification,
+            'course' => $course,
+            'registrations' => $registrations,
+            'institution' => $institution,
+            'instructor' => $instructor,
+            'user' => $user,
+            'grade1' => $grade1,
+            'grade2' => $grade2,
+            'final_grade' => $final_grade,
 
 
-                
-            ]);
-    
-            return $pdf->stream('Asistencia-evaluacion.pdf');
-        }
+        ]);
+
+        return $pdf->stream('Asistencia-evaluacion.pdf');
+    }
     /*******************************************************************************************************************
      * IMAGES
      ******************************************************************************************************************/

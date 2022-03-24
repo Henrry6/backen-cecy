@@ -303,7 +303,7 @@ class Course extends Model implements Auditable
         }
     }
 
-    public function scopeNroRecord($query, $recordNumber)
+    public function scopeRecordNumber($query, $recordNumber)
     {
         if ($recordNumber) {
             return $query->orWhere('record_number', $recordNumber);

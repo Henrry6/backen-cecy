@@ -22,15 +22,15 @@ class AdditionalInformationResource extends JsonResource
             'companyActivity' => $this->company_activity,
             'companyAddress' => $this->company_address,
             'companyEmail' => $this->company_email,
-            'companyPhone' => $this->company_phone,
-            'companySponsored' => $this->company_sponsored,
             'companyName' => $this->company_name,
             'contactName' => $this->contact_name,
+            'companyPhone' => $this->company_phone,
+            'companySponsored' => $this->company_sponsored,
             'courseFollows' => $this->course_follows,
             'courseKnows' => $this->course_knows,
+            'worked' => $this->worked,
             'levelInstruction' => CatalogueResource::make($this->levelInstruction),
             'registration' => RegistrationResource::make($this->registration),
-            'worked' => $this->worked,
         ];
     }
 }
