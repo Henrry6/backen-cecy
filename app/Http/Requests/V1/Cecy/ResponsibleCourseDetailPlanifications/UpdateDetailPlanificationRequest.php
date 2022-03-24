@@ -40,7 +40,7 @@ class UpdateDetailPlanificationRequest extends FormRequest
             'day.id' => 'días de clase',
             'planification.id' => 'planificación',
             'workday.id' => 'jornada',
-            'parallel.id' => 'paralelo del aula o clase',
+            'parallel.id' => 'paralelo del aula',
             'endedTime' => 'hora de inicio',
             'startedTime' => 'hora de fin',
         ];
