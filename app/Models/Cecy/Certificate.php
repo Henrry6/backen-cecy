@@ -22,10 +22,9 @@ class Certificate extends Model implements Auditable
     protected $fillable = [
         'code',
         'issued_at',
-        'certificateable_type',
+        'certificateable_type', //revisar 
         'certificateable_id',
         'state_id',
-        'issued_at',
     ];
 
     protected $user = [
@@ -33,9 +32,6 @@ class Certificate extends Model implements Auditable
         'username',
 
     ];
-
-
-
 
     public function certificateable()
     {
@@ -61,7 +57,7 @@ class Certificate extends Model implements Auditable
     public function scopeCodeSources($query, $code)
     {
         if ($code) {
-            return $query->Where('code','iLike', "% $code&");
+            return $query->orWhere('code','iLike', "%$code&");
         }
     }
 
