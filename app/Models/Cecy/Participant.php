@@ -24,46 +24,26 @@ class Participant extends Model implements Auditable
     ];
 
     // Relationships
-<<<<<<< HEAD
-    //revisar
-=======
-
->>>>>>> b95e6ba2e967b6c8f61499bbc483f415ceb0333a
+    
     public function registrations()
     {
         return $this->hasMany(Registration::class);
     }
-<<<<<<< HEAD
     
-=======
-
->>>>>>> b95e6ba2e967b6c8f61499bbc483f415ceb0333a
     public function state()
     {
         return $this->belongsTo(Catalogue::class);
     }
-<<<<<<< HEAD
     
-=======
-
->>>>>>> b95e6ba2e967b6c8f61499bbc483f415ceb0333a
     public function type()
     {
         return $this->belongsTo(Catalogue::class);
     }
-<<<<<<< HEAD
     
-=======
-
->>>>>>> b95e6ba2e967b6c8f61499bbc483f415ceb0333a
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-<<<<<<< HEAD
-=======
-
->>>>>>> b95e6ba2e967b6c8f61499bbc483f415ceb0333a
     //Scopes
     //revisar
     public function scopeType($query, $type)
