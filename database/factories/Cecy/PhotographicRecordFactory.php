@@ -27,8 +27,8 @@ class PhotographicRecordFactory extends Factory
             'detail_planification_id' => $detail[rand(0, sizeof($detail) - 1)],
             'description' =>$this->faker->word(),
             'number_week' => $this->faker->numberBetween(1,4),
-            'url_image' => $this->faker->word(),
-            'week_at' => $this->faker->date(),
+            'image' => $this->faker->word(),
+            'registered_at' => $this->faker->date(),
         ];
     }
 }
