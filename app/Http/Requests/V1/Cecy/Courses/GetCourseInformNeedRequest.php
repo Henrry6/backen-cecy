@@ -25,8 +25,8 @@ class GetCourseInformNeedRequest extends FormRequest
     {
         return [
             'name' =>  'Nombre del curso',
-            'courseType.id' => 'Id  del tipo de curso',
-            'modality.id' => 'Id  de la modalidad',
+            'courseType.id' => 'Id del tipo de curso',
+            'modality.id' => 'Id de la modalidad',
 
         ];
     }

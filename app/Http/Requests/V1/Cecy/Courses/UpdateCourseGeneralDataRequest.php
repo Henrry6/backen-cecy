@@ -35,13 +35,13 @@ class UpdateCourseGeneralDataRequest extends FormRequest
   {
     return [
 
-      'category.id' => 'Id de la categoria',
+      'category.id' => 'Id de la categoría',
       'career.id' => 'Id de la carrera',
-      'certifiedType.id' => 'Id del tipo de certitificado',
+      'certifiedType.id' => 'Id del tipo de certificado',
       'courseType.id' => 'Id del tipo de curso',
       'entityCertification.id' => 'Id de entidad que valida',
-      'formationType.id' => 'Id del tipo de formacion',
-      'modality.id' => 'Id  de la modalidad',
+      'formationType.id' => 'Id del tipo de formación',
+      'modality.id' => 'Id de la modalidad',
       'abbreviation' => 'Abreviación',
       'duration' => 'Duración',
       'needs' => 'Necesidades',
