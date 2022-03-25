@@ -4,19 +4,45 @@ namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Cecy\Institutions\DestroysInstitutionsRequest;
+use App\Http\Requests\V1\Cecy\Institutions\IndexInstitutionsRequest;
 use App\Http\Requests\V1\Cecy\Institutions\StoreInstitutionsRequest;
 use App\Http\Requests\V1\Cecy\Institutions\UpdateInstitutionsRequest;
-use App\Http\Resources\V1\Cecy\Institutions\InstitutionResource;
 use App\Http\Resources\V1\Core\InstitutionCollection;
+use App\Http\Resources\V1\Cecy\Institutions\InstitutionResource;
 use App\Models\Cecy\Institution;
 
 
 class InstitutionController extends Controller
 {
-    public function index()
+    public function __construct()
     {
+    }
+
+    public function index(IndexInstitutionsRequest $request)
+    {
+        $sorts = explode(',', $request->sort);
+
+        $institution = Institution::customOrderBy($sorts)
+            ->code($request->input('search'))
+            ->name($request->input('search'))
+            ->slogan($request->input('search'))
+            ->paginate($request->input('per_page'));
+
         //return Institution::paginate();
         return (new InstitutionCollection(Institution::paginate()))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'Institution' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
+    
+    public function show(Institution $institution)
+    {
+        return (new InstitutionResource($institution))
             ->additional([
                 'msg' => [
                     'summary' => 'success',
@@ -40,25 +66,12 @@ class InstitutionController extends Controller
         return (new InstitutionResource($institution))
             ->additional([
                 'msg' => [
-                    'summary' => 'Institution Creado',
+                    'summary' => 'Institución creada',
                     'Institution' => '',
-                    'code' => '200'
+                    'code' => '201'
                 ]
             ])
-            ->response()->setStatusCode(200);
-    }
-
-    public function show(Institution $institution)
-    {
-        return (new InstitutionResource($institution))
-            ->additional([
-                'msg' => [
-                    'summary' => 'success',
-                    'Institution' => '',
-                    'code' => '200'
-                ]
-            ])
-            ->response()->setStatusCode(200);
+            ->response()->setStatusCode(201);
     }
 
     public function update(UpdateInstitutionsRequest $request, Institution $institution)
@@ -71,31 +84,28 @@ class InstitutionController extends Controller
         return (new InstitutionResource($institution))
             ->additional([
                 'msg' => [
-                    'summary' => 'Institution Actualizado',
+                    'summary' => 'Institución actualizada',
                     'Institution' => '',
-                    'code' => '200'
-                ]
-            ]);
-    }
-
-
-    public function destroy(Institution $institution)
-    {
-
-        $institution->delete();
-
-        return (new InstitutionResource($institution))
-            ->additional([
-                'msg' => [
-                    'summary' => 'Institucion Eliminada',
-                    'detail' => '',
                     'code' => '201'
                 ]
             ])
             ->response()->setStatusCode(201);
     }
 
+    public function destroy(Institution $institution)
+    {
+        $institution->delete();
 
+        return (new InstitutionResource($institution))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Institución eliminada',
+                    'detail' => '',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
+    }
 
     public function destroys(DestroysInstitutionsRequest $request)
     {
@@ -106,7 +116,7 @@ class InstitutionController extends Controller
         return (new InstitutionCollection($institution))
             ->additional([
                 'msg' => [
-                    'summary' => 'instituciones Eliminadas',
+                    'summary' => 'Instituciones eliminadas',
                     'detail' => '',
                     'code' => '201'
                 ]
