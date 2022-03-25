@@ -20,8 +20,8 @@ class PhotographicRecord extends Model implements Auditable
 
     protected $fillable = [
         'description',
-        'number_week',
         'image',
+        'number_week',
         'registered_at'
     ];
 
@@ -31,7 +31,7 @@ class PhotographicRecord extends Model implements Auditable
         return $this->belongsTo(DetailPlanification::class);
     }
 
-    public function images()
+    public function images() //revisar image o images
     {
         return $this->morphMany(Image::class, 'imageable');
     }
@@ -55,7 +55,7 @@ class PhotographicRecord extends Model implements Auditable
     public function scopeImage($query, $image)
     {
         if ($image) {
-            return $query->orWhere('image','iLike', "%$urlImage->id%");
+            return $query->orWhere('image','iLike', "%$image->id%");
         }
     }
 

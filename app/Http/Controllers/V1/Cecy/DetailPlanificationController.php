@@ -3,17 +3,6 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
-use App\Models\Cecy\Authority;
-use App\Models\Cecy\Catalogue;
-use App\Models\Cecy\Classroom;
-use App\Models\Cecy\Course;
-use App\Models\Cecy\DetailPlanification;
-use App\Models\Cecy\Instructor;
-use App\Models\Cecy\Planification;
-use App\Models\Core\State;
-use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationResource;
-use App\Http\Resources\V1\Cecy\DetailPlanifications\ResponsibleCourseDetailPlanifications\DetailPlanificationCollection as ResponsibleCourseDetailPlanificationCollection;
-use App\Http\Resources\V1\Cecy\DetailPlanifications\ResponsibleCourseDetailPlanifications\DetailPlanificationResource as ResponsibleCourseDetailPlanificationResource;
 use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\DeleteDetailPlanificationRequest;
 use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\DestroysDetailPlanificationRequest;
 use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\GetDetailPlanificationsByPlanificationRequest;
@@ -21,9 +10,20 @@ use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\RegisterDeta
 use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\ShowDetailPlanificationRequest;
 use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\UpdateDetailPlanificationRequest as UpdateDetailPlanification;
 use App\Http\Requests\V1\Cecy\DetailPlanifications\UpdateDetailPlanificationRequest;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
-use Symfony\Component\Translation\Exception\NotFoundResourceException;
+use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationResource;
+use App\Http\Resources\V1\Cecy\DetailPlanifications\ResponsibleCourseDetailPlanifications\DetailPlanificationCollection as ResponsibleCourseDetailPlanificationCollection;
+use App\Http\Resources\V1\Cecy\DetailPlanifications\ResponsibleCourseDetailPlanifications\DetailPlanificationResource as ResponsibleCourseDetailPlanificationResource;
+use App\Models\Core\State;
+use App\Models\Cecy\Authority;
+use App\Models\Cecy\Catalogue;
+use App\Models\Cecy\Classroom;
+use App\Models\Cecy\Course;
+use App\Models\Cecy\DetailPlanification;
+use App\Models\Cecy\Instructor;
+use App\Models\Cecy\Planification;
+//use Illuminate\Support\Facades\Validator;
+//use Illuminate\Validation\Rule;
+//use Symfony\Component\Translation\Exception\NotFoundResourceException;
 
 class DetailPlanificationController extends Controller
 {
@@ -87,7 +87,7 @@ class DetailPlanificationController extends Controller
                     'detail' => 'No es instructor o no se encuentra registrado',
                     'code' => '400'
                 ]
-            ], 400);
+            ], 400); //revisar ->response()->setStatusCode(400)
         }
 
         $planification = Planification::find($request->input('planification.id'));
@@ -101,7 +101,7 @@ class DetailPlanificationController extends Controller
                     'detail' => 'No le pertece esta planificación',
                     'code' => '400'
                 ]
-            ], 400);
+            ], 400); //revisar ->response()->setStatusCode(400)
         }
 
         //validar que la planification ha culminado
@@ -115,7 +115,7 @@ class DetailPlanificationController extends Controller
                     'detail' => 'La planificación ha culminado o ya fue aprobada.',
                     'code' => '400'
                 ]
-            ], 400);
+            ], 400);  //revisar ->response()->setStatusCode(400)
         }
 
         $state = Catalogue::firstWhere('code', State::TO_BE_APPROVED);
@@ -147,7 +147,7 @@ class DetailPlanificationController extends Controller
                 'msg' => [
                     'summary' => 'Éxito',
                     'detail' => 'Registro Creado',
-                    'code' => '200'
+                    'code' => '201'
                 ]
             ])
             ->response()->setStatusCode(201);
@@ -184,7 +184,7 @@ class DetailPlanificationController extends Controller
                     'detail' => 'No es instructor o no se encuentra registrado',
                     'code' => '400'
                 ]
-            ], 400);
+            ], 400); //revisar ->response()->setStatusCode(400)
         }
 
         $planification = Planification::find($request->input('planification.id'));
@@ -198,7 +198,7 @@ class DetailPlanificationController extends Controller
                     'detail' => 'No le pertece esta planificación',
                     'code' => '400'
                 ]
-            ], 400);
+            ], 400); //revisar ->response()->setStatusCode(400)
         }
 
         // validar que la planification ha culminado
@@ -212,7 +212,7 @@ class DetailPlanificationController extends Controller
                     'detail' => 'La planificación ha culminado o ya fue aprobada.',
                     'code' => '400'
                 ]
-            ], 400);
+            ], 400);  //revisar ->response()->setStatusCode(400)
         }
 
         $classroom = Classroom::find($request->input('classroom.id'));
@@ -263,7 +263,7 @@ class DetailPlanificationController extends Controller
                     'detail' => 'No es instructor o no se encuentra registrado',
                     'code' => '400'
                 ]
-            ], 400);
+            ], 400); //revisar ->response()->setStatusCode(400)
         }
 
         if ($loggedInInstructor->id !== $responsibleCourse->id) {
@@ -274,7 +274,7 @@ class DetailPlanificationController extends Controller
                     'detail' => 'No le pertece esta planificación',
                     'code' => '400'
                 ]
-            ], 400);
+            ], 400); //revisar ->response()->setStatusCode(400)
         }
 
         //validar que la planification ha culminado
@@ -288,7 +288,7 @@ class DetailPlanificationController extends Controller
                     'detail' => 'La planificación ha culminado o no fue aprobada.',
                     'code' => '400'
                 ]
-            ], 400);
+            ], 400); //revisar ->response()->setStatusCode(400)
         }
 
         $detailPlanification->delete();
@@ -336,7 +336,7 @@ class DetailPlanificationController extends Controller
                     'detail' => '',
                     'code' => '200'
                 ]
-            ]);
+            ])->response()->setStatusCode(200);
     }
 
     /**
@@ -358,7 +358,7 @@ class DetailPlanificationController extends Controller
                     'detail' => 'No es instructor o no se encuentra registrado',
                     'code' => '400'
                 ]
-            ], 400);
+            ], 400);//revisar ->response()->setStatusCode(400)
         }
 
         if ($loggedInInstructor->id !== $responsibleCourse->id) {
@@ -369,7 +369,7 @@ class DetailPlanificationController extends Controller
                     'detail' => 'No le pertece esta planificación',
                     'code' => '400'
                 ]
-            ], 400);
+            ], 400);//revisar ->response()->setStatusCode(400)
         }
 
         //validar que la planification ha culminado
@@ -383,7 +383,7 @@ class DetailPlanificationController extends Controller
                     'detail' => 'La planificación ha culminado o ya fue aprobada.',
                     'code' => '400'
                 ]
-            ], 400);
+            ], 400);//revisar ->response()->setStatusCode(400)
         }
         $detailPlanifications = DetailPlanification::whereIn('id', $request->input('ids'))->get();
         DetailPlanification::destroy($request->input('ids'));

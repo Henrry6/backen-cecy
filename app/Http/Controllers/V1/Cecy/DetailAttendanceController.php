@@ -28,7 +28,7 @@ class DetailAttendanceController extends Controller
                     'detail' => '',
                     'code' => '200'
                 ]
-            ]);
+            ])->response()->setStatusCode(200);
     }
 
     // Guardar asistencia
