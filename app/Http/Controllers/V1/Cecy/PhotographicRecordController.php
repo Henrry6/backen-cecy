@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\V1\Cecy;
+
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Cecy\PhotographicRecords\DestroyPhotographicRecordRequest;
 use App\Http\Requests\V1\Cecy\PhotographicRecords\StorePhotographicRecordRequest;
@@ -18,7 +19,7 @@ class PhotographicRecordController extends Controller
             ->additional([
                 'msg' => [
                     'summary' => 'success',
-                    'Institution' => '',
+                    'institution' => '',
                     'code' => '200'
                 ]
             ])
@@ -30,76 +31,73 @@ class PhotographicRecordController extends Controller
             ->additional([
                 'msg' => [
                     'summary' => 'success',
-                    'Institution' => '',
+                    'institution' => '',
                     'code' => '200'
                 ]
             ])
             ->response()->setStatusCode(200);
     }
-
 
     public function store(StorePhotographicRecordRequest $request)
     {
         $photographicRecord = new PhotographicRecord();
         $photographicRecord->detailPlanification()
             ->associate(DetailPlanification::find($request->input('detail_planification.id')));
+
         $photographicRecord->description = $request->input('description');
         $photographicRecord->number_week = $request->input('number_week');
         $photographicRecord->url_image = $request->input('url_image');
         $photographicRecord->week_at = $request->input('week_at');
+
         $photographicRecord->save();
 
         return (new PhotographicRecordResource($photographicRecord))
             ->additional([
                 'msg' => [
-                    'summary' => 'Registro fotografico Creado',
-                    'Institution' => '',
-                    'code' => '200'
-                ]
-            ])
-            ->response()->setStatusCode(200);
-    }
-
-
-    public function update(UpdatePhotographicRecordRequest $request, PhotographicRecord $photographicRecord)
-    {
-        $photographicRecord->detailPlanification()
-            ->associate(DetailPlanification::find($request->input('detail_planification.id')));
-        $photographicRecord->description = $request->input('description');
-        $photographicRecord->number_week = $request->input('number_week');
-        $photographicRecord->url_image = $request->input('url_image');
-        $photographicRecord->week_at = $request->input('week_at');
-        $photographicRecord->save();
-
-        return (new PhotographicRecordResource($photographicRecord))
-            ->additional([
-                'msg' => [
-                    'summary' => 'Registro fotografico Creado',
-                    'Institution' => '',
-                    'code' => '200'
-                ]
-            ])
-            ->response()->setStatusCode(200);
-    }
-
-
-    public function destroy(PhotographicRecord $photographicRecord)
-    {
-
-        $photographicRecord->delete();
-
-        return (new PhotographicRecordResource($photographicRecord))
-            ->additional([
-                'msg' => [
-                    'summary' => 'Registro Eliminada',
-                    'detail' => '',
+                    'summary' => 'Registro Fotográfico Creado',
+                    'institution' => '',
                     'code' => '201'
                 ]
             ])
             ->response()->setStatusCode(201);
     }
 
+    public function update(UpdatePhotographicRecordRequest $request, PhotographicRecord $photographicRecord)
+    {
+        $photographicRecord->detailPlanification()
+            ->associate(DetailPlanification::find($request->input('detail_planification.id')));
 
+        $photographicRecord->description = $request->input('description');
+        $photographicRecord->number_week = $request->input('number_week');
+        $photographicRecord->url_image = $request->input('url_image');
+        $photographicRecord->week_at = $request->input('week_at');
+
+        $photographicRecord->save();
+
+        return (new PhotographicRecordResource($photographicRecord))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Registro Fotográfico Creado',
+                    'institution' => '',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
+    }
+
+    public function destroy(PhotographicRecord $photographicRecord)
+    {
+        $photographicRecord->delete();
+        return (new PhotographicRecordResource($photographicRecord))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Registro Eliminado',
+                    'detail' => '',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
+    }
 
     public function destroys(DestroyPhotographicRecordRequest $request)
     {
@@ -117,6 +115,7 @@ class PhotographicRecordController extends Controller
             ])
             ->response()->setStatusCode(201);
     }
+    //revisar
     public function getDetails(DetailPlanification $detailPlanification){
         $photographicRecords = $detailPlanification->photographicRecords()->get();
         return(new PhotographicRecordCollection($photographicRecords))
