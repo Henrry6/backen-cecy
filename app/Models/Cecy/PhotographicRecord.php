@@ -48,10 +48,11 @@ class PhotographicRecord extends Model implements Auditable
     public function scopeDescription($query, $description)
     {
         if ($description) {
-            return $query->orWhere('description','iLike', "%$description->id%");
+            return $query->orWhere('description','iLike', "%$description%");
         }
     }
-
+    
+    //revisar
     public function scopeImage($query, $image)
     {
         if ($image) {

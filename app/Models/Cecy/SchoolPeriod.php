@@ -51,7 +51,7 @@ class SchoolPeriod extends Model implements Auditable
     public function scopeCode($query, $code)
     {
         if ($code) {
-            return $query->orWhere('code', $code);
+            return $query->orWhere('code', 'iLike', "%$code%");
         }
     }
     public function scopeName($query, $name)
@@ -60,7 +60,7 @@ class SchoolPeriod extends Model implements Auditable
             return $query->orWhere('name', 'iLike', "%$name%");
         }
     }
-    
+
     //revisar
     public function scopeCustomOrderBy($query, $sorts)
     {
@@ -91,5 +91,5 @@ class SchoolPeriod extends Model implements Auditable
             array_unshift($fields, 'id');
             return $query->select($fields);
         }
-    } 
+    }
 }

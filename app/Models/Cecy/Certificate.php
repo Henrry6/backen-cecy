@@ -2,13 +2,11 @@
 
 namespace App\Models\Cecy;
 
-
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as Auditing;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
 
 class Certificate extends Model implements Auditable
 {
@@ -28,9 +26,7 @@ class Certificate extends Model implements Auditable
     ];
 
     protected $user = [
-
         'username',
-
     ];
 
     public function certificateable()
@@ -57,7 +53,7 @@ class Certificate extends Model implements Auditable
     public function scopeCodeSources($query, $code)
     {
         if ($code) {
-            return $query->orWhere('code','iLike', "%$code&");
+            return $query->orWhere('code', 'iLike', "%$code&");
         }
     }
 
