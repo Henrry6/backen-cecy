@@ -4,7 +4,7 @@ namespace App\Http\Resources\V1\Cecy\Requeriments;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class RequerimentCollection extends ResourceCollection
+class RequirementCollection extends ResourceCollection
 {
     /**
      * Transform the resource collection into an array.

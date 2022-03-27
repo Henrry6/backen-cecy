@@ -3,10 +3,9 @@
 namespace App\Http\Resources\V1\Cecy\Requeriments;
 
 use App\Http\Resources\V1\Cecy\Catalogues\CatalogueResource;
-use App\Http\Resources\V1\Cecy\Registrations\RegistrationResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class RequerimentResource extends JsonResource
+class RequirementResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
