@@ -3,25 +3,25 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\V1\Cecy\Topics\DestroysTopicRequest;
 use Illuminate\Http\Request;
-use App\Models\Cecy\Topic;
-use App\Models\Cecy\Course;
-use App\Models\Cecy\Instructor;
+use App\Http\Requests\V1\Core\Files\DestroysFileRequest;
+use App\Http\Requests\V1\Core\Files\IndexFileRequest;
+use App\Http\Requests\V1\Core\Files\UpdateFileRequest;
+use App\Http\Requests\V1\Core\Files\UploadFileRequest;
+use App\Http\Resources\V1\Cecy\Courses\TopicsByCourseCollection;
+use App\Http\Requests\V1\Cecy\Topics\DestroysTopicRequest;
+use App\Http\Requests\V1\Cecy\Topics\StoreTopicRequest;
+use App\Http\Requests\V1\Cecy\Topics\UpdateTopicRequest;
+use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\GetDetailPlanificationsByResponsibleCourseRequest;
 use App\Http\Resources\V1\Cecy\Courses\CourseCollection;
 use App\Http\Resources\V1\Cecy\Instructors\InstructorResource;
 use App\Http\Resources\V1\Cecy\Instructors\InstructorCollection;
 use App\Http\Resources\V1\Cecy\Topics\TopicResource;
 use App\Http\Resources\V1\Cecy\Topics\TopicCollection;
-use App\Http\Requests\V1\Cecy\Topics\StoreTopicRequest;
-use App\Http\Requests\V1\Cecy\Topics\UpdateTopicRequest;
-use App\Http\Resources\V1\Cecy\Courses\TopicsByCourseCollection;
-use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\GetDetailPlanificationsByResponsibleCourseRequest;
-use App\Http\Requests\V1\Core\Files\DestroysFileRequest;
-use App\Http\Requests\V1\Core\Files\IndexFileRequest;
-use App\Http\Requests\V1\Core\Files\UpdateFileRequest;
-use App\Http\Requests\V1\Core\Files\UploadFileRequest;
 use App\Models\Core\File;
+use App\Models\Cecy\Course;
+use App\Models\Cecy\Instructor;
+use App\Models\Cecy\Topic;
 
 class TopicController extends Controller
 {
@@ -32,14 +32,16 @@ class TopicController extends Controller
     //     $this->middleware('permission:delete-catalogues')->only(['destroy', 'destroys']);
     // }
 
-    // Devuelve los cursos que le fueron asignados al docente responsable
-    // InstructorCotroller
 
-    // Devuelve los temas y subtemas de un curso
-    // TopicController
-    public function getTopics(Course $course)
+    public function getTopics($request, Course $course)
     {
-        $topics = $course->topics()->Where('level', 1)->get();
+        $sorts = explode(',', $request->sort);
+
+        $topics = $course->topics()->where('level', 1)
+            ->customOrderBy($sorts)
+            ->description($request->input('search'))
+            ->paginate($request->input('perPage'));
+
         return (new TopicCollection($topics))
             ->additional([
                 'msg' => [
@@ -47,7 +49,7 @@ class TopicController extends Controller
                     'detail' => '',
                     'code' => '200'
                 ]
-            ]);
+            ])->response()->setStatusCode(200);
     }
 
     public function getInstructors(Request $request, Course $course)
@@ -57,6 +59,7 @@ class TopicController extends Controller
         //     ->detailPlanifications()
         //     ->paginate($request->input('per_page'));
         // return $detailPlanifications;
+
         return (new InstructorCollection(Instructor::paginate(100)))
             ->additional([
                 'msg' => [
@@ -64,24 +67,59 @@ class TopicController extends Controller
                     'detail' => '',
                     'code' => '200'
                 ]
-            ]);
+            ])->response()->setStatusCode(200);
     }
 
-    public function getAllTopics(Course $course)
+    public function getAllTopics($request, Course $course)
     {
-        return (new TopicCollection(Topic::paginate(200)))
+        $sorts = explode(',', $request->sort);
+
+        $topics = Topic::customOrderBy($sorts)
+            ->description($request->input('search'))
+            ->paginate($request->input('perPage'));
+
+        return (new TopicCollection($topics))
             ->additional([
                 'msg' => [
                     'summary' => 'success',
                     'detail' => '',
                     'code' => '200'
                 ]
-            ]);
+            ])->response()->setStatusCode(200);
     }
 
-    // Crea un nuevo tema o subtema para un curso
-    // TopicController
-    public function storesTopics(Request $request, Course $course )
+    public function show(Course $course, Topic $topic)
+    {
+        return (new TopicResource($topic))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Tema o subtema Actualizado',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])->response()->setStatusCode(200);
+    }
+
+    public function getTopicsByCourse($request, Course $course)
+    {
+        $sorts = explode(',', $request->sort);
+
+        $topics = $course->topics()
+            ->customOrderBy($sorts)
+            ->description($request->input('search'))
+            ->paginate($request->input('perPage'));
+
+        return (new TopicsByCourseCollection($topics))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])->response()->setStatusCode(200);
+    }
+
+    public function storesTopics(Request $request, Course $course)
     {
         $topics = $request->input('topics');
         foreach ($topics as $topic) {
@@ -94,7 +132,7 @@ class TopicController extends Controller
             $newTopic->save();
 
             foreach ($topic['children'] as $subTopic) {
-                
+
                 $newSubTopic = new Topic();
                 $newSubTopic->course()->associate($course);
                 $newSubTopic->parent()->associate($newTopic);
@@ -108,9 +146,9 @@ class TopicController extends Controller
                 'msg' => [
                     'summary' => 'Tema o subtema Creado',
                     'detail' => '',
-                    'code' => '200'
+                    'code' => '201'
                 ]
-            ]);
+            ])->response()->setStatusCode(201);
     }
 
     public function updateTopics(Request $request, Course $course)
@@ -122,7 +160,7 @@ class TopicController extends Controller
             $newTopic->save();
 
             foreach ($topic['children'] as $subTopic) {
-                
+
                 $newSubTopic = Topic::find($subTopic['id']);
                 $newSubTopic->description = $subTopic['description'];
                 $newSubTopic->save();
@@ -133,12 +171,12 @@ class TopicController extends Controller
                 'msg' => [
                     'summary' => 'Tema o subtema Creado',
                     'detail' => '',
-                    'code' => '200'
+                    'code' => '201'
                 ]
-            ]);
+            ])->response()->setStatusCode(201);
     }
 
-    public function storeTopic(StoreTopicRequest $request, Course $course )
+    public function storeTopic(StoreTopicRequest $request, Course $course)
     {
         $topic = new Topic();
         $topic->course()->associate($course);
@@ -146,45 +184,35 @@ class TopicController extends Controller
         $topic->parent()->associate($request->input('parent.id'));
         $topic->description = $request->input('description');
         $topic->save();
+
         return (new TopicResource($topic))
             ->additional([
                 'msg' => [
                     'summary' => 'Tema o subtema Creado',
                     'detail' => '',
-                    'code' => '200'
+                    'code' => '201'
                 ]
-            ]);
+            ])->response()->setStatusCode(201);
     }
 
-    // Actualiza el tema o subtema de un curso
-    // TopicController
+
     public function updateTopic(UpdateTopicRequest $request, Course $course, Topic $topic)
     {
         $topic->description = $request->input('description');
         $topic->save();
+
         return (new TopicResource($topic))
             ->additional([
                 'msg' => [
                     'summary' => 'Tema o subtema Actualizado',
                     'detail' => '',
-                    'code' => '200'
+                    'code' => '201'
                 ]
-            ]);
-    }
-    public function show(Course $course, Topic $topic)
-    {
-        return (new TopicResource($topic))
-            ->additional([
-                'msg' => [
-                    'summary' => 'Tema o subtema Actualizado',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ]);
+            ])->response()->setStatusCode(201);
     }
 
-    // Elimina un tema o subtema de un curso
-    // TopicCotroller
+
+
     public function destroyTopic(Course $course, Topic $topic)
     {
         $topicFilter = Topic::find($topic->id);
@@ -195,18 +223,18 @@ class TopicController extends Controller
             Topic::destroy($idsChildren);
         }
         $topic->delete();
+
         return (new TopicResource($topic))
             ->additional([
                 'msg' => [
                     'summary' => 'Tema o subtema Eliminado',
                     'detail' => '',
-                    'code' => '200'
+                    'code' => '201'
                 ]
-            ]);
+            ])->response()->setStatusCode(201);
     }
 
-    // Elimina varios temas o subtemas de un curso
-    // TopicController
+
     public function destroysTopics(DestroysTopicRequest $request)
     {
         $topic = Topic::whereIn('id', $request->input('ids'))->get();
@@ -217,28 +245,12 @@ class TopicController extends Controller
                 'msg' => [
                     'summary' => 'Temas o subtemas Eliminados',
                     'detail' => '',
-                    'code' => '200'
+                    'code' => '201'
                 ]
-            ]);
+            ])->response()->setStatusCode(201);
     }
-    /*
-        Obtener los topicos  dado un curso
-    */
-    // TopicsController
-    public function getTopicsByCourse(Course $course)
-    {
-        $topics = $course->topics()->get();
 
-        return (new TopicsByCourseCollection($topics))
-            ->additional([
-                'msg' => [
-                    'summary' => 'success',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ]);
-    }
-     /*******************************************************************************************************************
+    /*******************************************************************************************************************
      * FILES
      ******************************************************************************************************************/
     public function indexFiles(IndexFileRequest $request, Topic $topic)
