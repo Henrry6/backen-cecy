@@ -109,8 +109,6 @@ class CourseController extends Controller
     // Obtiene los cursos privados aprobados por tipo de participante (Done)
     public function getPrivateCoursesByParticipantType(IndexPlanificationRequest $request)
     {
-        $sorts = explode(',', $request->input('sort'));
-
         $participant = Participant::where('user_id', $request->user()->id)->first();
 
         $catalogue = Catalogue::find($participant->type_id);
@@ -274,8 +272,6 @@ class CourseController extends Controller
         $course->modality()->associate(Catalogue::find($request->input('modality.id'))); //modalidad presencial, virtual
         $course->catalogues()->sync($request->input('participantTypes.ids'));
 
-
-
         //campos propios
         $course->abbreviation = $request->input('abbreviation');
         $course->duration = $request->input('duration');
@@ -380,7 +376,7 @@ class CourseController extends Controller
      $data= new InformCourseNeedsResource($planification);
         $pdf = PDF::loadView('reports/report-needs', ['planification' => $data]);
 
-        return $pdf->stream('informNeeds.pdf'); 
+        return $pdf->stream('informNeeds.pdf');
     } */
 
     // Mostrar las necesidades de un curso (Done)
@@ -409,7 +405,7 @@ class CourseController extends Controller
     }
 
     //Traer todos los cursos planificados de un año en especifico (Done)
-    // el que hizo esto debe enviar el año en especifico bien por el url 
+    // el que hizo esto debe enviar el año en especifico bien por el url
     // o por params
     public function showYearSchedule(Planification $planification)
     {
@@ -525,7 +521,7 @@ class CourseController extends Controller
     }
 
 
-    //traer participante de un curso 
+    //traer participante de un curso
 
     public function certificateParticipants(Course $course)
     {
