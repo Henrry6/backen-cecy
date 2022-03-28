@@ -2,11 +2,9 @@
 
 namespace App\Rules;
 
-use App\Models\Cecy\Catalogue;
-use DateTime;
 use Illuminate\Contracts\Validation\Rule;
-
-use function PHPSTORM_META\map;
+use DateTime;
+use App\Models\Cecy\Catalogue;
 
 class WorkdayRule implements Rule
 {
@@ -37,6 +35,7 @@ class WorkdayRule implements Rule
     public function passes($attribute, $value)
     {
         return $this->checkWorkday($value);
+        // return false;
     }
 
     /**
@@ -52,6 +51,7 @@ class WorkdayRule implements Rule
     public function checkWorkday($workdayId)
     {
         $workday = Catalogue::where('id', $workdayId)->first();
+
         switch ($workday->name) {
             case 'VESPERTINA':
                 if (
@@ -81,7 +81,7 @@ class WorkdayRule implements Rule
                 break;
 
             default:
-                return true;
+                return false;
                 break;
         }
     }
