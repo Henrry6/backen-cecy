@@ -51,6 +51,27 @@ class SchoolPeriodController extends Controller
             ->response()->setStatusCode(200);
     }
 
+    public function catalogue(CatalogueSchoolPeriodRequest $request)
+    {
+        $sorts = explode(',', $request->sort);
+
+        $schoolPeriods =  SchoolPeriod::customOrderBy($sorts)
+            ->code($request->input('search'))
+            ->name($request->input('search'))
+            ->limit(1000)
+            ->get();
+
+        return (new SchoolPeriodCollection($schoolPeriods))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
+
     public function store(StoreSchoolPeriodRequest $request)
     {
         $schoolPeriod = new SchoolPeriod();

@@ -47,6 +47,25 @@ class CourseController extends Controller
     {
     }
 
+    public function index(IndexCourseRequest $request)
+    {
+        $sorts = explode(',', $request->input('sort'));
+
+        $courses = Course::customOrderBy($sorts)
+            ->schoolPeriod($request->input('schoolPeriod.id'))
+            ->paginate($request->input('per_page'));
+
+        return (new CourseCollection($courses))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
+
     // Función privada que permite obtener cursos aprobados
     private function getApprovedPlanifications()
     {
@@ -574,6 +593,20 @@ class CourseController extends Controller
     /**
      * updatePlanification
      */
+
+
+    /*
+        * getCourseByAcademicPeriod
+    */
+    /*
+        * getCourseByCarrer
+    */
+    /*
+        * getCourseByState
+    */
+    /*
+        * approveCourse
+    */
 
 
     // Files
