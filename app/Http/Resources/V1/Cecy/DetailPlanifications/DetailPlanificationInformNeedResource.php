@@ -13,10 +13,10 @@ class DetailPlanificationInformNeedResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'endTime' => $this->end_time,
-            'startTime' => $this->start_time,
             'day' => CatalogueResource::make($this->day),
             'planificacion' => PlanificationsInformNeedResource::make($this->planification),
+            'endTime' => $this->end_time,
+            'startTime' => $this->start_time,
             // 'classroom' => ClassroomInformNeedResource::make($this->classroom)
         ];
     }

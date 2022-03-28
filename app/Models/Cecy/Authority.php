@@ -60,7 +60,7 @@ class Authority extends Model implements Auditable
     public function scopePositionStartedAt($query, $positionStartedAt)
     {
         if ($positionStartedAt) {
-            return $query->where('position_started_at', $positionStartedAt);
+            return $query->orWhere('position_started_at', $positionStartedAt);
         }
     }
 

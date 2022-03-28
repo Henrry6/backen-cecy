@@ -3,19 +3,15 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
+use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
+use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\GetPlanificationsByCourseRequest;
 use App\Http\Requests\V1\Cecy\Authorities\IndexAuthorityRequest;
-use App\Http\Requests\V1\Cecy\Courses\getCoursesByResponsibleRequest;
-use App\Http\Requests\V1\Cecy\KPI\Planifications\ShowKpiRequest;
-use App\Http\Requests\V1\Cecy\Instructors\InstructorRequest;
-use App\Http\Requests\V1\Cecy\Planifications\IndexPlanificationRequest;
+use App\Http\Requests\V1\Cecy\Planifications\StorePlanificationByCourseRequest;
 use App\Http\Requests\V1\Cecy\Planifications\UpdateAssignResponsibleCecyRequest;
 use App\Http\Requests\V1\Cecy\Planifications\UpdateDatesinPlanificationRequest;
-use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\GetPlanificationsByCourseRequest;
-use App\Http\Requests\V1\Cecy\Planifications\StorePlanificationByCourseRequest;
 use App\Http\Requests\V1\Cecy\Planifications\UpdatePlanificationRequest;
 use App\Http\Requests\V1\Cecy\Planifications\UpdateStatePlanificationRequest;
 use App\Http\Resources\V1\Cecy\Courses\CourseCollection;
-use App\Http\Resources\V1\Cecy\Planifications\Kpi\KpiPlanificationResourse;
 use App\Http\Resources\V1\Cecy\Planifications\ResponsibleCoursePlanifications\PlanificationByCourseCollection;
 use App\Http\Resources\V1\Cecy\Planifications\ResponsibleCoursePlanifications\PlanificationByCourseResource;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationResource;
@@ -24,53 +20,82 @@ use App\Models\Authentication\User;
 use App\Models\Cecy\Authority;
 use App\Models\Cecy\Catalogue;
 use App\Models\Cecy\Course;
-use App\Models\Cecy\DetailPlanification;
 use App\Models\Cecy\DetailSchoolPeriod;
 use App\Models\Cecy\Institution;
 use App\Models\Cecy\Instructor;
 use App\Models\Cecy\Planification;
 use App\Models\Cecy\SchoolPeriod;
 use App\Models\Core\State;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 
 
 class PlanificationController extends Controller
 {
-    // Función privada que permite obtener cursos aprobados
-    private function getApprovedPlanificationsId()
+    public function __construct()
     {
-        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
-        $planificationsTypes = Catalogue::where('type',  $catalogue['planification_state']['type'])->get();
-        $planificationApproved = $planificationsTypes->where('code', $catalogue['planification_state']['approved'])->first();
-        return $planificationApproved;
     }
 
-    /**
-     * Get all planifications filtered by and course
-     */
-    public function getPlanificationsByCourse(GetPlanificationsByCourseRequest $request, Course $course)
+    public function storePlanificationByCourse(StorePlanificationByCourseRequest $request, Planification $planification)
     {
-        $sorts = explode(',', $request->sort);
-
-        $planifications = $course->planifications()->customOrderBy($sorts)
-            ->paginate($request->input('per_page'));
-
-        return (new PlanificationByCourseCollection($planifications))
+        $planification->responsibleCourse()->associate(Instructor::find($request->input('responsibleCourse.id')));
+        $planification->course()->associate(Course::find($request->input('name')));
+        $planification->participantType()->associate(Course::find($request->input('participant_type.id')));
+        $planification->duration()->associate(Course::find($request->input('duration')));
+        $planification->endedAt = $request->input('fin de la planificación');
+        $planification->startedAt = $request->input('inicio de la planificación');
+        $planification->state = $request->input('Estado de la planificacion');
+        $planification->save();
+        return (new PlanificationResource($planification))
             ->additional([
                 'msg' => [
-                    'summary' => 'success',
+                    'summary' => 'planificación creada',
                     'detail' => '',
                     'code' => '200'
                 ]
             ])
             ->response()->setStatusCode(200);
     }
-    /*
-    * Asignar docente responsable de cecy de la planificación
-    */
-    // PlanificationController
+
+    public function updatePlanificationByCecy(UpdatePlanificationRequest $request, Planification $planification)
+    {
+        $loggedAuthority = Authority::where('user_id', $request->user()->id)->get();
+        $planification = Planification::find($request->input('planification.id'));
+        $planification->responsibleCecy()->associate(Authority::find($request->input('responsibleCecy.id')));
+
+        $planification->course()->associate(Course::find($request->input('course.id')));
+        $planification->detailSchoolPeriod()->associate(DetailSchoolPeriod::find($request->input('detail_school_period.id')));
+        $planification->vicerrector()->associate(Authority::find($request->input('vicerrector.id')));
+        $planification->responsibleOcs()->associate(Authority::find($request->input('responsible_ocs.id')));
+        $planification->endedAt = $request->input('ended_at');
+        $planification->startedAt = $request->input('started_at');
+        $planification->save();
+        return (new PlanificationResource($planification))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Actualizado correctamente',
+                    'detail' => '',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
+    }
+
+    public function updateStatePlanification(UpdateStatePlanificationRequest $request, Planification $planification)
+    {
+        $planification->state_id = $request->id;
+        $planification->save();
+
+        return (new PlanificationResource($planification))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Estado de la planificación actualizado',
+                    'detail' => 'El estado de la planificación pudo haber cambiado de posición',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
+    }
+
     public function updateAssignResponsibleCecy(UpdateAssignResponsibleCecyRequest $request, Planification $planification)
     {
         $planification->responsibleCecy()->associate(Authority::find($request->input('responsibleCecy.id')));
@@ -81,14 +106,12 @@ class PlanificationController extends Controller
                 'msg' => [
                     'summary' => 'success',
                     'detail' => '',
-                    'code' => '200'
+                    'code' => '201'
                 ]
             ])
-            ->response()->setStatusCode(200);
+            ->response()->setStatusCode(201);
     }
-    /**
-     * Update start_at and ended_at and needs in planification
-     */
+
     public function updateDatesAndNeedsInPlanification(UpdateDatesinPlanificationRequest $request, Planification $planification)
     {
         $loggedInInstructor = Instructor::where('user_id', $request->user()->id)->first();
@@ -146,8 +169,32 @@ class PlanificationController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    //Trae todos los cursos
-    // PlanificationController ya esta
+    private function getApprovedPlanificationsId()
+    {
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+        $planificationsTypes = Catalogue::where('type',  $catalogue['planification_state']['type'])->get();
+        $planificationApproved = $planificationsTypes->where('code', $catalogue['planification_state']['approved'])->first();
+        return $planificationApproved;
+    }
+
+    public function getPlanificationsByCourse(GetPlanificationsByCourseRequest $request, Course $course)
+    {
+        $sorts = explode(',', $request->sort);
+
+        $planifications = $course->planifications()->customOrderBy($sorts)
+            ->paginate($request->input('per_page'));
+
+        return (new PlanificationByCourseCollection($planifications))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
+
     public function getPlanitifications()
     {
         return "hola";
@@ -182,8 +229,6 @@ class PlanificationController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    /*DDRC-C: Busca planificaciones vigentes por periodo asignadas al usuario logueado(responsable del CECY)*/
-    // PlanificationController ya esta, no vale el metodo
     public function getPlanificationsByPeriodState(IndexAuthorityRequest $request)
     {
 
@@ -222,54 +267,7 @@ class PlanificationController extends Controller
                 ]
             ])->response()->setStatusCode(200);
     }
-    
 
-    // asignar docente responsable de curso a una planificacion ya esta
-    public function storePlanificationByCourse(StorePlanificationByCourseRequest $request, Planification $planification)
-    {
-        $planification->responsibleCourse()->associate(Instructor::find($request->input('responsibleCourse.id')));
-        $planification->course()->associate(Course::find($request->input('name')));
-        $planification->participantType()->associate(Course::find($request->input('participant_type.id')));
-        $planification->duration()->associate(Course::find($request->input('duration')));
-        $planification->endedAt = $request->input('fin de la planificación');
-        $planification->startedAt = $request->input('inicio de la planificación');
-        $planification->state = $request->input('Estado de la planificacion');
-        $planification->save();
-        return (new PlanificationResource($planification))
-            ->additional([
-                'msg' => [
-                    'summary' => 'planificación creada',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ]);
-    }
-
-    //actualizar informacion de la planificacion ya esta
-    public function updatePlanificationByCecy(UpdatePlanificationRequest $request, Planification $planification)
-    {
-        $loggedAuthority = Authority::where('user_id', $request->user()->id)->get();
-        $planification = Planification::find($request->input('planification.id'));
-        $planification->responsibleCecy()->associate(Authority::find($request->input('responsibleCecy.id')));
-
-        $planification->course()->associate(Course::find($request->input('course.id')));
-        $planification->detailSchoolPeriod()->associate(DetailSchoolPeriod::find($request->input('detail_school_period.id')));
-        $planification->vicerrector()->associate(Authority::find($request->input('vicerrector.id')));
-        $planification->responsibleOcs()->associate(Authority::find($request->input('responsible_ocs.id')));
-        $planification->endedAt = $request->input('ended_at');
-        $planification->startedAt = $request->input('started_at');
-        $planification->save();
-        return (new PlanificationResource($planification))
-            ->additional([
-                'msg' => [
-                    'summary' => 'Actualizado correctamente',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ]);
-    }
-
-    //Asignar codigo a la planificacion ya esta
     public function assignCodeToPlanification(Planification $planification, $request)
     {
         $planification->code = $request->input('code');
@@ -280,10 +278,10 @@ class PlanificationController extends Controller
                     'detail' => '',
                     'code' => '200'
                 ]
-            ]);
+            ])
+            ->response()->setStatusCode(200);
     }
 
-    //Aprobacion de planificacion ya esta
     public function approvePlanification($request, Planification $planification)
     {
         $planification->state()->associate(Catalogue::FirstWhere('code', State::APPROVED));
@@ -293,106 +291,70 @@ class PlanificationController extends Controller
         return (new PlanificationResource($planification))
             ->additional([
                 'msg' => [
-                    'summary' => 'Planificacion actualizada',
+                    'summary' => 'Planificación actualizada',
                     'detail' => '',
                     'code' => '200'
                 ]
-            ]);
-    }
-
-    public function updateStatePlanification(UpdateStatePlanificationRequest $request, Planification $planification)
-    {
-        $planification->state_id = $request -> id;
-        $planification ->save();
-
-        return (new PlanificationResource($planification))
-            ->additional([
-                'msg' => [
-                    'summary' => 'Estado de la planificación actualizado',
-                    'detail' => 'El estado de la planificación pudo haber cambiado de posición',
-                    'code' => '201'
-                ]
             ])
-            ->response()->setStatusCode(201);
+            ->response()->setStatusCode(200);
     }
-    //Traer la informacion de diseño curricular (Done)
-    public function curricularDesign( Planification $planification)
+
+    public function curricularDesign(Planification $planification)
     {
-        $planification = Planification::firstWhere('id',$planification->id);
+        $planification = Planification::firstWhere('id', $planification->id);
         $course = $planification->course()->first();
         $topics = $course->topics()->first();
-        $course_tec=$course->techniques_requisites['technical'];
-        $course_gen=$course->techniques_requisites['general'];
+        $course_tec = $course->techniques_requisites['technical'];
+        $course_gen = $course->techniques_requisites['general'];
         $instructor = Instructor::where('id', $planification->responsible_course_id)->first();
         //$user =  $instructor->user();
         $user = User::firstWhere('id', $instructor->user_id);
-
-
-
 
         //return $course->evaluation_mechanisms->diagnostic['tecnique'];
         //return $topics;
         //return $course;
-       
 
-            $pdf = PDF::loadView('reports/desing-curricular', [
-                'planification' => $planification,
-                'course' => $course,
-                'course_tec' => $course_tec,
-                'topics' => $topics,
-                'course_gen' => $course_gen,
-                'user'=> $user,
-                'instructor'=>$instructor,
+        $pdf = PDF::loadView('reports/desing-curricular', [
+            'planification' => $planification,
+            'course' => $course,
+            'course_tec' => $course_tec,
+            'topics' => $topics,
+            'course_gen' => $course_gen,
+            'user' => $user,
+            'instructor' => $instructor,
 
-                
-                
-                
-            ]);
-    
-            return $pdf->stream('Diseño Curricular.pdf');
-        }
+        ]);
 
+        return $pdf->stream('Diseño Curricular.pdf');
+    }
 
-
-        //Traer la informacion de informe final del curso (Done)
-    public function informeFinal( Planification $planification)
+    public function informeFinal(Planification $planification)
     {
-        $planification = Planification::firstWhere('id',$planification->id);
+        $planification = Planification::firstWhere('id', $planification->id);
         $course = $planification->course()->first();
         $topics = $course->topics()->first();
-        $responsiblececy =$planification->responsibleCecy()->first();
-        $institution =Institution::firstWhere('id',$responsiblececy->intitution_id);
+        $responsiblececy = $planification->responsibleCecy()->first();
+        $institution = Institution::firstWhere('id', $responsiblececy->intitution_id);
 
         $instructor = Instructor::where('id', $planification->responsible_course_id)->first();
         //$user =  $instructor->user();
         $user = User::firstWhere('id', $instructor->user_id);
 
-
         //return $institution;
-
 
         //return $course;
         //return $planification;
-       
 
-            $pdf = PDF::loadView('reports/informe-final', [
-                'planification' => $planification,
-                'course' => $course,
-                'topics' => $topics,
-                'institution'=> $institution,
-                'user'=> $user,
-                'instructor'=>$instructor,
+        $pdf = PDF::loadView('reports/informe-final', [
+            'planification' => $planification,
+            'course' => $course,
+            'topics' => $topics,
+            'institution' => $institution,
+            'user' => $user,
+            'instructor' => $instructor,
 
+        ]);
 
-
-                
-                
-            ]);
-    
-            return $pdf->stream('Informe final del curso.pdf');
-        }
-
-         
+        return $pdf->stream('Informe final del curso.pdf');
+    }
 }
-
-

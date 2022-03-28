@@ -36,7 +36,7 @@ class AdditionalInformationController extends Controller
             ->companyPhone($request->input('search'))
             ->contactName($request->input('search'))
             ->levelInstruction($request->input('search'))
-            ->paginate($request->input('per_page'));
+            ->paginate($request->input('perPage'));
 
         return (new AdditionalInformationCollection($additionalInformations))
             ->additional([

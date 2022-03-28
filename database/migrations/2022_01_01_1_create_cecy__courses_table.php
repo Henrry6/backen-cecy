@@ -145,8 +145,8 @@ class CreateCecyCoursesTable extends Migration
                 ->nullable();
 
             $table->string('record_number')
-                ->comment('Número de record')
-                ->nullable();
+                ->nullable()
+                ->comment('Número de record');
 
             $table->json('learning_environments')
                 ->comment('Entorno de aprendizaje')
@@ -210,4 +210,3 @@ class CreateCecyCoursesTable extends Migration
         Schema::connection(env('DB_CONNECTION_CECY'))->dropIfExists('courses');
     }
 }
-

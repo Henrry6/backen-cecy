@@ -7,9 +7,6 @@ use OwenIt\Auditing\Auditable as Auditing;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\Core\Career;
-use App\Models\Core\File;
-use App\Models\Core\Image;
 use App\Traits\FileTrait;
 use App\Traits\ImageTrait;
 
@@ -89,7 +86,7 @@ class AdditionalInformation extends Model implements Auditable
     public function scopeCompanyActivity($query, $companyActivity)
     {
         if ($companyActivity) {
-            return $query->where('company_activity', 'iLike', "%$companyActivity%");
+            return $query->orWhere('company_activity', 'iLike', "%$companyActivity%");
         }
     }
 

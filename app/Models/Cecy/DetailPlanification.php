@@ -96,14 +96,14 @@ class DetailPlanification extends Model implements Auditable
     public function scopeEndedTime($query, $endedTime)
     {
         if ($endedTime) {
-            return $query->where('ended_time', $endedTime);
+            return $query->orWhere('ended_time', $endedTime);
         }
     }
     
     public function scopeObservations($query, $observations)
     {
         if ($observations) {
-            return $query->where('observations', 'iLike', "%$observations%");
+            return $query->orWhere('observations', 'iLike', "%$observations%");
         }
     }
 
@@ -111,7 +111,7 @@ class DetailPlanification extends Model implements Auditable
     public function scopePlanEndedAt($query, $planEndedAt)
     {
         if ($planEndedAt) {
-            return $query->where('plan_ended_at', $planEndedAt);
+            return $query->orWhere('plan_ended_at', $planEndedAt);
         }
     }
     
@@ -123,23 +123,6 @@ class DetailPlanification extends Model implements Auditable
         }
     }
     
-    //revisar
-    public function scopeRegistrationsLeft($query, $registrationsLeft)
-    {
-        if ($registrationsLeft) {
-            return $query->where('registrations_left', $registrationsLeft);
-        }
-    }
-
-    //revisar
-    public function scopeStartedTime($query, $startedTime)
-    {
-        if ($startedTime) {
-            return $query->where('started_time', $startedTime);
-        }
-    }
-
-
     public function scopeCustomOrderBy($query, $sorts)
     {
         if (!empty($sorts[0])) {

@@ -30,6 +30,7 @@ class Planification extends Model implements Auditable
         'needs' => 'array',
         'observations' => 'array',
     ];
+    
     // Relationships
     //revisar
     public function course()
@@ -109,7 +110,7 @@ class Planification extends Model implements Auditable
     public function scopeStartedAt($query, $started_at)
     {
         if ($started_at) {
-            return $query->Where('started_at', 'ilike', "%$started_at%");
+            return $query->orWhere('started_at', 'ilike', "%$started_at%");
         }
     }
 
@@ -152,4 +153,20 @@ class Planification extends Model implements Auditable
             return $query;
         }
     }
+
+    public function scopeCustomSelect($query, $fields)
+    {
+        if (!empty($fields)) {
+            $fields = explode(',', $fields);
+            foreach ($fields as $field) {
+                $fieldExist = array_search(strtolower($field), $fields);
+                if ($fieldExist == false) {
+                    unset($fields[$fieldExist]);
+                }
+            }
+
+            array_unshift($fields, 'id');
+            return $query->select($fields);
+        }
+    } 
 }

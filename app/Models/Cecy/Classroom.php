@@ -36,14 +36,14 @@ class Classroom extends Model implements Auditable
     }
 
     // Mutators
-    public function setDescriptionAttribute($value)
-    {
-        $this->attributes['description'] = strtoupper($value);
-    }
-
     public function setCodeAttribute($value)
     {
         $this->attributes['code'] = strtoupper($value);
+    }
+
+    public function setDescriptionAttribute($value)
+    {
+        $this->attributes['description'] = strtoupper($value);
     }
 
     public function setNameAttribute($value)
@@ -52,31 +52,32 @@ class Classroom extends Model implements Auditable
     }
 
     // Scopes
-    public function scopeDescription($query, $description)
-    {
-        if ($description) {
-            return $query->Where('description', 'iLike', "%$description%");
-        }
-    }
 
     public function scopeCode($query, $code)
     {
         if ($code) {
-            return $query->Where('code', $code);
+            return $query->orWhere('code', 'iLike', "%$code%");
         }
     }
 
     public function scopeName($query, $name)
     {
         if ($name) {
-            return $query->Where('name', 'iLike', "%$name%");
+            return $query->orWhere('name', 'iLike', "%$name%");
+        }
+    }
+    
+    public function scopeDescription($query, $description)
+    {
+        if ($description) {
+            return $query->orWhere('description', 'iLike', "%$description%");
         }
     }
 
     public function scopeType($query, $classroom)
     {
         if ($classroom) {
-            return $query->Where('type_id', $classroom->type);
+            return $query->orWhere('type_id', $classroom->type);
         }
     }
 
@@ -94,4 +95,20 @@ class Classroom extends Model implements Auditable
             return $query;
         }
     }
+
+    public function scopeCustomSelect($query, $fields)
+    {
+        if (!empty($fields)) {
+            $fields = explode(',', $fields);
+            foreach ($fields as $field) {
+                $fieldExist = array_search(strtolower($field), $fields);
+                if ($fieldExist == false) {
+                    unset($fields[$fieldExist]);
+                }
+            }
+
+            array_unshift($fields, 'id');
+            return $query->select($fields);
+        }
+    } 
 }

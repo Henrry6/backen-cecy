@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
+use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
+use App\Http\Requests\V1\Core\Images\IndexImageRequest;
+use App\Http\Requests\V1\Core\Images\UploadImageRequest;
 use App\Http\Requests\V1\Cecy\Courses\CoordinatorCecy\GetCoursesByCoordinatorCecyRequest;
 use App\Http\Requests\V1\Cecy\Courses\GetCoursesByCategoryRequest;
 use App\Http\Requests\V1\Cecy\Courses\GetCoursesByNameRequest;
@@ -10,43 +13,33 @@ use App\Http\Requests\V1\Cecy\Courses\getCoursesByResponsibleRequest;
 use App\Http\Requests\V1\Cecy\Courses\IndexCourseRequest;
 use App\Http\Requests\V1\Cecy\Courses\GetCoursesByCareerRequest;
 use App\Http\Requests\V1\Cecy\Courses\UpdateCourseGeneralDataRequest;
-use App\Http\Requests\V1\Cecy\Courses\StoreCourseNewRequest;
-use App\Http\Requests\V1\Cecy\Planifications\GetPlanificationByResponsableCourseRequest;
-use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationCollection;
-use Illuminate\Http\Request;
-use App\Models\Cecy\Course;
-use App\Models\Cecy\Catalogue;
-use App\Http\Resources\V1\Cecy\Courses\CourseResource;
-use App\Http\Resources\V1\Cecy\Courses\CourseCollection;
 use App\Http\Requests\V1\Cecy\Courses\UpdateCurricularDesign;
 use App\Http\Requests\V1\Cecy\Courses\UpdateStateCourseRequest;
 use App\Http\Requests\V1\Cecy\Courses\UploadCertificateOfApprovalRequest;
-use App\Http\Requests\V1\Cecy\Planifications\GetDateByshowYearScheduleRequest;
+use App\Http\Requests\V1\Cecy\Courses\StoreCourseNewRequest;
+use App\Http\Requests\V1\Cecy\Planifications\GetPlanificationByResponsableCourseRequest;
 use App\Http\Requests\V1\Cecy\Planifications\IndexPlanificationRequest;
-use App\Http\Requests\V1\Core\Images\IndexImageRequest;
-use App\Http\Requests\V1\Core\Images\UploadImageRequest;
-use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationInformNeedResource;
+use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationCollection;
 use App\Http\Resources\V1\Cecy\Planifications\InformCourseNeedsResource;
 use App\Http\Resources\V1\Cecy\Courses\CoursesByResponsibleCollection;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationCollection;
 use App\Http\Resources\V1\Cecy\Certificates\CertificateResource;
 use App\Http\Resources\V1\Cecy\Courses\CoordinatorCecy\CourseByCoordinatorCecyCollection;
-use App\Http\Resources\V1\Cecy\Instructors\InstructorResource;
-use App\Http\Resources\V1\Cecy\Planifications\CoordinatorCecy\PlanificationResource;
-
-use App\Http\Resources\V1\Cecy\Planifications\InformCourseNeedsCollection;
-use App\Http\Resources\V1\Core\Users\UserResource;
-use App\Models\Authentication\User;
+use App\Http\Resources\V1\Cecy\Courses\CourseResource;
+use App\Http\Resources\V1\Cecy\Courses\CourseCollection;
+use App\Models\Core\File;
+use App\Models\Core\State;
+use App\Models\Core\Career;
+use App\Models\Cecy\Course;
+use App\Models\Cecy\Catalogue;
 use App\Models\Cecy\Authority;
 use App\Models\Cecy\Instructor;
 use App\Models\Cecy\Participant;
 use App\Models\Cecy\Planification;
-use App\Models\Core\File;
-use App\Models\Core\Image;
-use App\Models\Core\State;
-use App\Models\Core\Career;
-use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
+use App\Models\Authentication\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+
 
 class CourseController extends Controller
 {
@@ -132,7 +125,6 @@ class CourseController extends Controller
             ->paginate($request->input('per_page'));
 
 
-
         return (new PlanificationCollection($planifications))
             ->additional([
                 'msg' => [
@@ -204,7 +196,7 @@ class CourseController extends Controller
                     'detail' => '',
                     'code' => '200'
                 ]
-            ]);
+            ])->response()->setStatusCode(200);
     }
 
     //visualizar todos los cursos (Done)
@@ -217,13 +209,12 @@ class CourseController extends Controller
                     'detail' => '',
                     'code' => '200'
                 ]
-            ]);
+            ])->response()->setStatusCode(200);
     }
 
     //obtener los cursos asignados a un docente responsable logueado (Done)
     public function getCoursesByResponsibleCourse(getCoursesByResponsibleRequest $request)
     {
-
         $instructor = Instructor::FirstWhere('user_id', $request->user()->id);
         if (!isset($instructor)) {
             return response()->json([
@@ -233,8 +224,9 @@ class CourseController extends Controller
                     'code' => '404'
                 ],
                 'data' => null
-            ], 404);
+            ], 404); //revisar ->response()->setStatusCode(404)
         }
+
         $courses = Course::where('responsible_id', $instructor->id)->get();
         return (new CoursesByResponsibleCollection($courses))
             ->additional([
@@ -243,7 +235,7 @@ class CourseController extends Controller
                     'detail' => '',
                     'code' => '200'
                 ]
-            ]);
+            ])->response()->setStatusCode(200);
     }
 
     //Trae toda la info de un curso seleccionado (?)
@@ -256,7 +248,7 @@ class CourseController extends Controller
                     'detail' => '',
                     'code' => '200'
                 ]
-            ]);
+            ])->response()->setStatusCode(200);
     }
 
     //actualiza datos generales de un curso seleccionado  (Done)
@@ -276,9 +268,9 @@ class CourseController extends Controller
         $course->abbreviation = $request->input('abbreviation');
         $course->duration = $request->input('duration');
         $course->needs = $request->input('needs');
-        $course->target_groups = $request->input("targetGroups"); //poblacion a la que va dirigda
         $course->project = $request->input('project');
         $course->summary = $request->input('summary');
+        $course->target_groups = $request->input("targetGroups"); //poblacion a la que va dirigda
         $course->save();
 
         return (new CourseResource($course))
@@ -288,7 +280,7 @@ class CourseController extends Controller
                     'detail' => '',
                     'code' => '200'
                 ]
-            ]);
+            ])->response()->setStatusCode(200);
     }
 
     //Obtener cursos y Filtrarlos por peridos lectivos , carrera o estado (Done)
@@ -389,7 +381,7 @@ class CourseController extends Controller
         $classrooms = $planification->detailPlanifications()->with('classroom')->get();
         $instructor = Instructor::where('id', $planification->responsible_course_id)->first();
         //$user =  $instructor->user();
-        $responsibleOcs= Authority::firstWhere('id', $planification->responsible_ocs_id);
+        $responsibleOcs = Authority::firstWhere('id', $planification->responsible_ocs_id);
         $user = User::firstWhere('id', $instructor->user_id);
         //return $responsibleOcs;
         $pdf = PDF::loadView('reports/report-needs', [
@@ -398,7 +390,7 @@ class CourseController extends Controller
             'days' => $days,
             'classrooms' => $classrooms,
             'user' => $user,
-            'responsibleOcs'=>$responsibleOcs
+            'responsibleOcs' => $responsibleOcs
         ]);
 
         return $pdf->stream('informNeeds.pdf');
@@ -410,7 +402,7 @@ class CourseController extends Controller
     public function showYearSchedule(Planification $planification)
     {
         // $year = $planificacion->whereYear('started_at')->first();
-        $planifications = Planification::whereYear('started_at', '=', 2022)->with(['course','detailPlanifications'])->get();
+        $planifications = Planification::whereYear('started_at', '=', 2022)->with(['course', 'detailPlanifications'])->get();
         //$detailPlanifications = $planification->detailPlanifications()->get();
         $detailPlanifications = Planification::whereYear('started_at', '=', 2022)->with('detailPlanifications')->get();
         $responsibleCourse = Planification::whereYear('started_at', '=', 2022)->with('responsibleCourse.user')->get();
@@ -418,7 +410,7 @@ class CourseController extends Controller
         $detailPlanifications=$planifications->detailPlanifications()->get(); */
 
 
-       // return $planifications ;
+        // return $planifications ;
 
         $pdf = PDF::loadView('reports/report-year-schedule', [
             'planifications' => $planifications,
@@ -454,7 +446,7 @@ class CourseController extends Controller
                     'detail' => '',
                     'code' => '200'
                 ]
-            ]);
+            ])->response()->setStatusCode(200);
     }
 
     //Traer cursos de un docente instructor (Deberia estar en planificacion dice cursos pero trae planificaciones)(Done)
@@ -494,7 +486,7 @@ class CourseController extends Controller
                     'detail' => '',
                     'code' => '200'
                 ]
-            ]);
+            ])->response()->setStatusCode(200);
     }
 
     // Crear curso nuevo completamente (Done)
@@ -517,7 +509,7 @@ class CourseController extends Controller
                     'detail' => '',
                     'code' => '200'
                 ]
-            ]);
+            ])->response()->setStatusCode(200);
     }
 
 
@@ -559,6 +551,27 @@ class CourseController extends Controller
     {
         return $file->uploadFile($request);
     }
+
+    /**
+     * getCoursesBySchoolPeriod
+     */
+
+    /**
+     * storePlanificationByCourse
+     */
+
+    /**
+     * storePlanificationByNewCourse
+     */
+
+    /**
+     * updateCourseName
+     */
+
+    /**
+     * updatePlanification
+     */
+
 
     // Files
     public function showFileCourse(Course $course, File $file)

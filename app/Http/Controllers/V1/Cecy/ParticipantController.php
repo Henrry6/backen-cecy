@@ -3,27 +3,17 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\V1\Cecy\Participants\StoreParticipantUserRequest;
 use App\Http\Requests\V1\Cecy\Planifications\IndexPlanificationRequest;
-use App\Http\Requests\V1\Cecy\Registrations\IndexRegistrationRequest;
-use App\Http\Requests\V1\Cecy\Registrations\RegisterParticipantRequest;
-use App\Http\Requests\V1\Cecy\Registrations\RegisterStudentRequest;
 use App\Http\Requests\V1\Cecy\Registrations\RegistrationStateModificationRequest;
-use App\Http\Requests\V1\Cecy\Registrations\UpdateRegistrationRequest;
-use App\Http\Resources\V1\Cecy\Participants\ParticipantInformationResource;
+use App\Http\Requests\V1\Cecy\Participants\StoreParticipantUserRequest;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationParticipants\PlanificationParticipantCollection;
-use App\Http\Resources\V1\Cecy\Registrations\RegisterParticipantResource;
-use Illuminate\Http\Request;
-use App\Models\Cecy\Catalogue;
 use App\Http\Resources\V1\Cecy\Registrations\RegistrationResource;
 use App\Http\Resources\V1\Core\Users\UserResource;
 use App\Models\Authentication\User;
-use App\Models\Cecy\AdditionalInformation;
+use App\Models\Cecy\Catalogue;
 use App\Models\Cecy\DetailPlanification;
 use App\Models\Cecy\Participant;
-use App\Models\Cecy\Planification;
 use App\Models\Cecy\Registration;
-use App\Models\Cecy\Requirement;
 use App\Models\Core\Address;
 use App\Models\Core\Catalogue as CoreCatalogue;
 use App\Models\Core\File;
@@ -37,7 +27,7 @@ class ParticipantController extends Controller
     {
     }
 
-    // ParticipantController
+
     public function registerParticipantUser(StoreParticipantUserRequest $request)
     {
 
@@ -53,7 +43,7 @@ class ParticipantController extends Controller
                         'code' => '200'
                     ]
                 ])
-                ->response()->setStatusCode(400);
+                ->response()->setStatusCode(200);
         }
 
         if (isset($user) && $user->email === $request->input('email')) {
@@ -64,7 +54,7 @@ class ParticipantController extends Controller
                         'detail' => 'Intente con otro correo electrónico',
                         'code' => '200'
                     ]
-                ])->response()->setStatusCode(400);
+                ])->response()->setStatusCode(200);
         }
 
         $user = new User();
@@ -128,25 +118,14 @@ class ParticipantController extends Controller
         return $participant;
     }
 
-    public function showFileInstructor(User $user, File $file)
-    {
-        return $user->showFile($file);
-    }
-
-    public function showImageInstructor(User $user, Image $image)
-    {
-        return $user->showImage($image);
-    }
-    /*DDRC-C: Busca los participantes inscritos a una planificación especifica*/
-    // ParticipantController
     public function getParticipantsByPlanification(IndexPlanificationRequest $request, DetailPlanification $detailPlanification)
     {
         // return Registration::firstWhere('detail_planification_id', $detailPlanification->id)->requirements('yolo');
-        
+
 
         $participants = Registration::where('detail_planification_id', $detailPlanification->id)
             ->paginate($request->input('per_page'));
-         
+
         return (new PlanificationParticipantCollection($participants))
             ->additional([
                 'msg' => [
@@ -154,9 +133,10 @@ class ParticipantController extends Controller
                     'detail' => '',
                     'code' => '200'
                 ]
-            ])->response()->setStatusCode(200);
+            ])
+            ->response()->setStatusCode(200);
     }
-   
+
 
     /*DDRC-C: actualiza una inscripcion, cambiando la observacion,y estado de una inscripción de un participante en un curso especifico  */
     // ParticipantController
@@ -164,8 +144,9 @@ class ParticipantController extends Controller
     {
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
 
-        if (($request->observations === null || $request->observations === '' ) &&
-        ($registration->state->code !== 'REGISTERED' || $registration->state->code !== 'CANCELLED')) {
+        if (($request->observations === null || $request->observations === '') &&
+            ($registration->state->code !== 'REGISTERED' || $registration->state->code !== 'CANCELLED')
+        ) {
             $currentState = Catalogue::firstWhere('code', $catalogue['registration_state']['registered']);
             $registration->observations = $request->input('observations');
             $registration->state()->associate(Catalogue::find($currentState->id));
@@ -175,7 +156,7 @@ class ParticipantController extends Controller
             $registration->observations = $request->input('observations');
             $registration->state()->associate(Catalogue::find($currentState->id));
             $registration->save();
-        } elseif($registration->state->code === 'REGISTERED'){
+        } elseif ($registration->state->code === 'REGISTERED') {
             return response()->json([
                 'data' => '',
                 'msg' => [
@@ -184,7 +165,7 @@ class ParticipantController extends Controller
                     'code' => '400'
                 ]
             ], 400);
-        } elseif($registration->state->code === 'CANCELLED'){
+        } elseif ($registration->state->code === 'CANCELLED') {
             return response()->json([
                 'data' => '',
                 'msg' => [
@@ -202,15 +183,24 @@ class ParticipantController extends Controller
                     'detail' => 'Proceso exitoso',
                     'code' => '201'
                 ]
-            ])->response()->setStatusCode(201);
+            ])
+            ->response()->setStatusCode(201);
     }
 
-    /*DDRC-C: notifica a un participante de una observacion en su inscripcion*/
-    // ParticipantController
-    // Pendiente
     public function notifyParticipant()
     {
         //TODO: revisar sobre el envio de notificaciones
         return 'por revisar';
+    }
+
+    //Files
+    public function showFileInstructor(User $user, File $file)
+    {
+        return $user->showFile($file);
+    }
+    //Images
+    public function showImageInstructor(User $user, Image $image)
+    {
+        return $user->showImage($image);
     }
 }

@@ -35,8 +35,8 @@ class SchoolPeriod extends Model implements Auditable
     {
         return $this->belongsTo(Catalogue::class);
     }
+
     // Mutators
-    //revisar
     public function setCodeAttribute($value)
     {
         $this->attributes['code'] = strtoupper($value);
@@ -48,19 +48,19 @@ class SchoolPeriod extends Model implements Auditable
     }
 
     // Scopes
-    //revisar
     public function scopeCode($query, $code)
     {
         if ($code) {
-            return $query->where('code', $code);
+            return $query->orWhere('code', 'iLike', "%$code%");
         }
     }
     public function scopeName($query, $name)
     {
         if ($name) {
-            return $query->where('name', 'iLike', "%$name%");
+            return $query->orWhere('name', 'iLike', "%$name%");
         }
     }
+
     //revisar
     public function scopeCustomOrderBy($query, $sorts)
     {
@@ -74,6 +74,22 @@ class SchoolPeriod extends Model implements Auditable
                 }
             }
             return $query;
+        }
+    }
+
+    public function scopeCustomSelect($query, $fields)
+    {
+        if (!empty($fields)) {
+            $fields = explode(',', $fields);
+            foreach ($fields as $field) {
+                $fieldExist = array_search(strtolower($field), $fields);
+                if ($fieldExist == false) {
+                    unset($fields[$fieldExist]);
+                }
+            }
+
+            array_unshift($fields, 'id');
+            return $query->select($fields);
         }
     }
 }

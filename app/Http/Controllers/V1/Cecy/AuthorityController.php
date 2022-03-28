@@ -32,9 +32,9 @@ class AuthorityController extends Controller
     {
         $authority = new Authority();
 
-        $authority->position_started_at = $request->input('position_started_at');
-        $authority->position_ended_at = $request->input('position_ended_at');
-        $authority->electronic_signature = $request->input('electronic_signature');
+        $authority->position_started_at = $request->input('positionStarted_at');
+        $authority->position_ended_at = $request->input('positionEnded_at');
+        $authority->electronic_signature = $request->input('electronicSignature');
         $authority->save();
 
         return (new AuthorityResource($authority))
@@ -63,9 +63,9 @@ class AuthorityController extends Controller
 
     public function update(UpdateAuthorityRequest $request, Authority $authority)
     {
-        $authority->position_started_at = $request->input('position_started_at');
-        $authority->position_ended_at = $request->input('position_ended_at');
-        $authority->electronic_signature = $request->input('electronic_signature');
+        $authority->position_started_at = $request->input('positionStarted_at');
+        $authority->position_ended_at = $request->input('positionEnded_at');
+        $authority->electronic_signature = $request->input('electronicSignature');
         $authority->save();
         return (new AuthorityResource($authority))
             ->additional([

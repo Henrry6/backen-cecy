@@ -4,7 +4,7 @@ namespace App\Http\Requests\V1\Cecy\Instructors;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class IndexInstrcutorRequest extends FormRequest
+class IndexInstructorRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

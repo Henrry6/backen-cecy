@@ -23,7 +23,7 @@ class StoreRequirementRequest extends FormRequest
   {
     return [
       'state.id' => 'estado',
-      'name' => 'nombre del campo',
+      'name' => 'nombre',
       'required' => 'requerido',
     ];
   }

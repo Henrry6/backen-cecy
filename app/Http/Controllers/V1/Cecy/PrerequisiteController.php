@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Cecy\Course;
-use App\Models\Cecy\Prerequisite;
-use App\Http\Resources\V1\Cecy\Prerequisites\PrerequisiteCollection;
-use App\Http\Resources\V1\Cecy\Prerequisites\PrerequisiteResource;
 use App\Http\Requests\V1\Cecy\Prerequisites\DestroyPrerequisiteRequest;
 use App\Http\Requests\V1\Cecy\Prerequisites\StorePrerequisiteRequest;
 use App\Http\Requests\V1\Cecy\Prerequisites\UpdatePrerequisiteRequest;
+use App\Http\Resources\V1\Cecy\Prerequisites\PrerequisiteCollection;
+use App\Http\Resources\V1\Cecy\Prerequisites\PrerequisiteResource;
+use App\Models\Cecy\Course;
+use App\Models\Cecy\Prerequisite;
+use Illuminate\Http\Request;
 
 
 class PrerequisiteController extends Controller
@@ -25,6 +25,19 @@ class PrerequisiteController extends Controller
     // PREREQUISITOS
     // Obtiene todos los prerequisitos para un curso
     // PrerequisteController
+    public function getPrerequisitesAll(Course $course)
+    {
+        return (new PrerequisiteCollection(Prerequisite::paginate(100)))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
+
     public function getPrerequisites(Course $course)
     {
         $prerequisites = $course->prerequisites()->get();
@@ -36,19 +49,8 @@ class PrerequisiteController extends Controller
                     'detail' => '',
                     'code' => '200'
                 ]
-            ]);
-    }
-
-    public function getPrerequisitesAll(Course $course)
-    {
-        return (new PrerequisiteCollection(Prerequisite::paginate(100)))
-            ->additional([
-                'msg' => [
-                    'summary' => 'success',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ]);
+            ])
+            ->response()->setStatusCode(200);
     }
 
     // Agrega prerequsitos para un curso
@@ -72,7 +74,8 @@ class PrerequisiteController extends Controller
                     'detail' => '',
                     'code' => '200'
                 ]
-            ]);
+            ])
+            ->response()->setStatusCode(200);
     }
 
     // Actualiza el prerequisito para un curso
@@ -88,7 +91,8 @@ class PrerequisiteController extends Controller
                     'detail' => '',
                     'code' => '200'
                 ]
-            ]);
+            ])
+            ->response()->setStatusCode(200);
     }
 
     // Eliminda los prerequisitos para un curso
@@ -103,7 +107,8 @@ class PrerequisiteController extends Controller
                     'detail' => '',
                     'code' => '200'
                 ]
-            ]);
+            ])
+            ->response()->setStatusCode(200);
     }
 
     //Elimina varios prerequisitos de un curso
@@ -120,7 +125,8 @@ class PrerequisiteController extends Controller
                     'detail' => '',
                     'code' => '200'
                 ]
-            ]);
+            ])
+            ->response()->setStatusCode(200);
     }
 
 

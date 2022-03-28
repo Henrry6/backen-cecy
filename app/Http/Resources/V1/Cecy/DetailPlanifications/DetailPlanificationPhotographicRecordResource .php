@@ -12,9 +12,9 @@ class DetailPlanificationPhotographicRecordResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'workday' => CatalogueResource::make($this->workday),
             'endTime' => $this->end_time,
             'startTime' => $this->start_time,
-            'workday' => CatalogueResource::make($this->workday),
             // 'planificacion' => PlanificationInformNeedResource::collection($this->planification),
         ];
     }
