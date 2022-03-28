@@ -3,18 +3,16 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\Core\Files\UploadFileRequest;
 use App\Http\Requests\V1\Cecy\Certificates\ShowParticipantsRequest;
 use App\Http\Requests\V1\Cecy\Courses\GetCoursesByNameRequest;
 use App\Http\Requests\V1\Cecy\Participants\GetCoursesByParticipantRequest;
 use App\Http\Requests\V1\Cecy\Registrations\RegisterStudentRequest;
-use App\Http\Requests\V1\Core\Files\UploadFileRequest;
-use App\Http\Resources\V1\Cecy\Registrations\RegisterStudentCollection;
-use App\Http\Resources\V1\Cecy\Registrations\RegisterStudentResource;
-use App\Models\Cecy\AdditionalInformation;
-use App\Models\Cecy\Course;
 use App\Http\Requests\V1\Cecy\Registrations\IndexRegistrationRequest;
 use App\Http\Requests\V1\Cecy\Registrations\NullifyParticipantRegistrationRequest;
 use App\Http\Requests\V1\Cecy\Registrations\NullifyRegistrationRequest;
+use App\Http\Resources\V1\Cecy\Registrations\RegisterStudentCollection;
+use App\Http\Resources\V1\Cecy\Registrations\RegisterStudentResource;
 use App\Http\Resources\V1\Cecy\Certificates\CertificateResource;
 use App\Http\Resources\V1\Cecy\Participants\CoursesByParticipantCollection;
 use App\Http\Resources\V1\Cecy\Registrations\RegistrationCollection;
@@ -22,12 +20,14 @@ use App\Http\Resources\V1\Cecy\Registrations\RegistrationRecordCompetitorResourc
 use App\Http\Resources\V1\Cecy\Registrations\RegistrationResource;
 use App\Http\Resources\V1\Cecy\Users\UserResource;
 use App\Models\Authentication\User;
+use App\Models\Cecy\AdditionalInformation;
+use App\Models\Core\Catalogue as CoreCatalogue;
+use App\Models\Core\File;
+use App\Models\Cecy\Course;
 use App\Models\Cecy\Catalogue;
 use App\Models\Cecy\DetailPlanification;
 use App\Models\Cecy\Participant;
 use App\Models\Cecy\Registration;
-use App\Models\Core\Catalogue as CoreCatalogue;
-use App\Models\Core\File;
 use http\Env\Request;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\DB;
@@ -36,6 +36,10 @@ use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 
 class RegistrationController extends Controller
 {
+    public function additionalInformation(Registration $registration){
+        $additionalInformation=$registration->additionalInformation()->get();
+    }
+    
     //Ver todos los cursos del estudiante en el cual esta matriculado
     // RegistrationController
     public function getCoursesByParticipant(GetCoursesByParticipantRequest $request)
@@ -63,8 +67,23 @@ class RegistrationController extends Controller
             ])
             ->response()->setStatusCode(200);
     }
-    //recuperar las matriculas
 
+    //participantes de un curso por detalle de la planificacion 
+    public function getParticipant(DetailPlanification $detailPlanification)
+    {
+        $registration = $detailPlanification->registrations()->get();
+        return (new RegistrationCollection($registration))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'records' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
+
+    //recuperar las matriculas
     public function recordsReturnedByRegistration(IndexRegistrationRequest $request)
     {
         //dd($request->user()->id);
@@ -102,20 +121,7 @@ class RegistrationController extends Controller
             ])
             ->response()->setStatusCode(200);
     }
-    //participantes de un curso por detalle de la planificacion 
-    public function getParticipant(DetailPlanification $detailPlanification)
-    {
-        $registration = $detailPlanification->registrations()->get();
-        return (new RegistrationCollection($registration))
-            ->additional([
-                'msg' => [
-                    'summary' => 'success',
-                    'records' => '',
-                    'code' => '200'
-                ]
-            ])
-            ->response()->setStatusCode(200);
-    }
+    
 
     //Descargar matriz
     // RegistrationController
@@ -244,9 +250,7 @@ class RegistrationController extends Controller
         ]);
         return $pdf->stream('reporte registro participantes.pdf', []);
     }
-    public function additionalInformation(Registration $registration){
-        $additionalInformation=$registration->additionalInformation()->get();
-    }
+
     //estudiantes de un curso y sus notas
     // RegistrationController
     public function ShowParticipantGrades(ShowParticipantsRequest $request, DetailPlanification $detailPlanification)
@@ -260,8 +264,10 @@ class RegistrationController extends Controller
                     'detail' => '',
                     'code' => '200'
                 ]
-            ]);
+            ])
+            ->response()->setStatusCode(200);
     }
+    
     //subir notas de los estudiantes
     // RegistrationController
     public function uploadFile(UploadFileRequest $request, FIle $file)
@@ -352,6 +358,7 @@ class RegistrationController extends Controller
                     'Institution' => '',
                     'code' => '200'
                 ]
-            ]);
+            ])
+            ->response()->setStatusCode(200);
     }
 }
