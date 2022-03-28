@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
-use App\Models\Cecy\Course;
 use App\Http\Requests\V1\Cecy\ProfileInstructorCourses\StoreProfileCourseRequest;
 use App\Http\Resources\V1\Cecy\ProfileInstructorCourses\ProfileInstructorCourseResource;
+use App\Models\Cecy\Course;
 use App\Models\Cecy\ProfileInstructorCourse;
 
 class ProfileInstructorCourseController extends Controller
@@ -28,7 +28,7 @@ class ProfileInstructorCourseController extends Controller
 
         $profile->required_knowledge = $request->input('required_knowledge');
 
-        $profile->required_experience = $request->input('required_experiences');
+        $profile->required_experience = $request->input('required_experience');
 
         $profile->required_skills = $request->input('required_skills');
 
