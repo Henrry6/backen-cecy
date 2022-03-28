@@ -555,7 +555,8 @@ class CourseController extends Controller
     }
 
     /**
-     * getCoursesBySchoolPeriod
+     * getCoursesByCarrer
+     * scope schoolPeriod
      */
 
     /**

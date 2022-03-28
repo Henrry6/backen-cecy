@@ -26,11 +26,11 @@ class UpdateDetailPlanificationRequest extends FormRequest
                     ->ignore($this->route('detailPlanification')->id)
                     ->where(fn ($query) => $query->where('planification_id', $this->planification)),
             ],
+            'workday.id' => ['required', 'integer', new WorkdayRule($this->endedTime)],
             'planification.id' => [
                 'required', 'integer',
                 new HoursRule($this->day, $this->startedTime, $this->endedTime)
             ],
-            'workday.id' => ['required', 'integer', new WorkdayRule($this->endedTime)],
             'endedTime' => ['required', 'after:startedTime'],
             'startedTime' => ['required',],
             'observations' => ['required'],
