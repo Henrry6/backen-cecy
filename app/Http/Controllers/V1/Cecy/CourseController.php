@@ -39,14 +39,7 @@ use App\Models\Cecy\Planification;
 use App\Models\Authentication\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-//use App\Http\Requests\V1\Cecy\Planifications\GetDateByshowYearScheduleRequest; No se utiliza
-//use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationInformNeedResource; No se utiliza
-//use App\Http\Resources\V1\Cecy\Instructors\InstructorResource;
-//use App\Http\Resources\V1\Cecy\Planifications\CoordinatorCecy\PlanificationResource;
 
-//use App\Http\Resources\V1\Cecy\Planifications\InformCourseNeedsCollection;
-//use App\Http\Resources\V1\Core\Users\UserResource;
-//use App\Models\Core\Image;
 
 class CourseController extends Controller
 {
@@ -390,7 +383,7 @@ class CourseController extends Controller
         $classrooms = $planification->detailPlanifications()->with('classroom')->get();
         $instructor = Instructor::where('id', $planification->responsible_course_id)->first();
         //$user =  $instructor->user();
-        $responsibleOcs= Authority::firstWhere('id', $planification->responsible_ocs_id);
+        $responsibleOcs = Authority::firstWhere('id', $planification->responsible_ocs_id);
         $user = User::firstWhere('id', $instructor->user_id);
         //return $responsibleOcs;
         $pdf = PDF::loadView('reports/report-needs', [
@@ -399,7 +392,7 @@ class CourseController extends Controller
             'days' => $days,
             'classrooms' => $classrooms,
             'user' => $user,
-            'responsibleOcs'=>$responsibleOcs
+            'responsibleOcs' => $responsibleOcs
         ]);
 
         return $pdf->stream('informNeeds.pdf');
@@ -411,7 +404,7 @@ class CourseController extends Controller
     public function showYearSchedule(Planification $planification)
     {
         // $year = $planificacion->whereYear('started_at')->first();
-        $planifications = Planification::whereYear('started_at', '=', 2022)->with(['course','detailPlanifications'])->get();
+        $planifications = Planification::whereYear('started_at', '=', 2022)->with(['course', 'detailPlanifications'])->get();
         //$detailPlanifications = $planification->detailPlanifications()->get();
         $detailPlanifications = Planification::whereYear('started_at', '=', 2022)->with('detailPlanifications')->get();
         $responsibleCourse = Planification::whereYear('started_at', '=', 2022)->with('responsibleCourse.user')->get();
@@ -419,7 +412,7 @@ class CourseController extends Controller
         $detailPlanifications=$planifications->detailPlanifications()->get(); */
 
 
-       // return $planifications ;
+        // return $planifications ;
 
         $pdf = PDF::loadView('reports/report-year-schedule', [
             'planifications' => $planifications,
@@ -560,6 +553,27 @@ class CourseController extends Controller
     {
         return $file->uploadFile($request);
     }
+
+    /**
+     * getCoursesBySchoolPeriod
+     */
+
+    /**
+     * storePlanificationByCourse
+     */
+
+    /**
+     * storePlanificationByNewCourse
+     */
+
+    /**
+     * updateCourseName
+     */
+
+    /**
+     * updatePlanification
+     */
+
 
     // Files
     public function showFileCourse(Course $course, File $file)

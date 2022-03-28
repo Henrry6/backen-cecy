@@ -26,19 +26,10 @@ class ParticipantController extends Controller
     public function __construct()
     {
     }
-    
-    public function showFileInstructor(User $user, File $file)
-    {
-        return $user->showFile($file);
-    }
-    
-    public function showImageInstructor(User $user, Image $image)
-    {
-        return $user->showImage($image);
-    }
-    
+
+
     public function registerParticipantUser(StoreParticipantUserRequest $request)
-    {  
+    {
 
         $user = User::where('username', $request->input('username'))
             ->orWhere('email', $request->input('email'))->first();
@@ -76,7 +67,7 @@ class ParticipantController extends Controller
         // $user->bloodType()->associate(Catalogue::find($request->input('bloodType.id')));
         // $user->civilStatus()->associate(Catalogue::find($request->input('civilStatus.id')));
         // $user->sex()->associate(Catalogue::find($request->input('sex.id')));
-        
+
         $user->username = $request->input('username');
         $user->name = $request->input('name');
         $user->lastname =  $request->input('lastname');
@@ -91,21 +82,21 @@ class ParticipantController extends Controller
             $participant = $this->createParticipant($request->input('participantType.id'), $user);
             $participant->save();
         });
-        
+
         return (new UserResource($user))
-        ->additional([
-            'msg' => [
-                'summary' => 'Participante Creado',
-                'detail' => '',
-                'code' => '200'
+            ->additional([
+                'msg' => [
+                    'summary' => 'Participante Creado',
+                    'detail' => '',
+                    'code' => '200'
                 ]
-                ])
-                ->response()->setStatusCode(200);
-            }
-            
-            
-            private function createUserAddress($addressUser)
-            {
+            ])
+            ->response()->setStatusCode(200);
+    }
+
+
+    private function createUserAddress($addressUser)
+    {
         $address =  new Address();
         $address->location()->associate(Location::find($addressUser['cantonLocation']['id']));
         $address->sector()->associate(CoreCatalogue::find(1));
@@ -118,7 +109,7 @@ class ParticipantController extends Controller
     {
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
         $state = Catalogue::where('type',  $catalogue['participant_state']['type'])
-        ->where('code', $catalogue['participant_state']['to_be_approved'])->first();
+            ->where('code', $catalogue['participant_state']['to_be_approved'])->first();
 
         $participant = new Participant();
         $participant->user()->associate($user);
@@ -126,35 +117,36 @@ class ParticipantController extends Controller
         $participant->state()->associate($state);
         return $participant;
     }
-    
+
     public function getParticipantsByPlanification(IndexPlanificationRequest $request, DetailPlanification $detailPlanification)
     {
         // return Registration::firstWhere('detail_planification_id', $detailPlanification->id)->requirements('yolo');
-        
-        
+
+
         $participants = Registration::where('detail_planification_id', $detailPlanification->id)
-        ->paginate($request->input('per_page'));
-        
+            ->paginate($request->input('per_page'));
+
         return (new PlanificationParticipantCollection($participants))
-        ->additional([
+            ->additional([
                 'msg' => [
                     'summary' => 'success',
                     'detail' => '',
                     'code' => '200'
                 ]
-                ])
-                ->response()->setStatusCode(200);
-            }
-            
+            ])
+            ->response()->setStatusCode(200);
+    }
 
-            /*DDRC-C: actualiza una inscripcion, cambiando la observacion,y estado de una inscripción de un participante en un curso especifico  */
-            // ParticipantController
-            public function participantRegistrationStateModification(RegistrationStateModificationRequest $request, Registration $registration)
+
+    /*DDRC-C: actualiza una inscripcion, cambiando la observacion,y estado de una inscripción de un participante en un curso especifico  */
+    // ParticipantController
+    public function participantRegistrationStateModification(RegistrationStateModificationRequest $request, Registration $registration)
     {
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
 
-        if (($request->observations === null || $request->observations === '' ) &&
-        ($registration->state->code !== 'REGISTERED' || $registration->state->code !== 'CANCELLED')) {
+        if (($request->observations === null || $request->observations === '') &&
+            ($registration->state->code !== 'REGISTERED' || $registration->state->code !== 'CANCELLED')
+        ) {
             $currentState = Catalogue::firstWhere('code', $catalogue['registration_state']['registered']);
             $registration->observations = $request->input('observations');
             $registration->state()->associate(Catalogue::find($currentState->id));
@@ -164,16 +156,16 @@ class ParticipantController extends Controller
             $registration->observations = $request->input('observations');
             $registration->state()->associate(Catalogue::find($currentState->id));
             $registration->save();
-        } elseif($registration->state->code === 'REGISTERED'){
+        } elseif ($registration->state->code === 'REGISTERED') {
             return response()->json([
                 'data' => '',
                 'msg' => [
                     'summary' => 'failed',
                     'detail' => 'El usuario ya esta matriculado.',
                     'code' => '400'
-                    ]
+                ]
             ], 400);
-        } elseif($registration->state->code === 'CANCELLED'){
+        } elseif ($registration->state->code === 'CANCELLED') {
             return response()->json([
                 'data' => '',
                 'msg' => [
@@ -199,5 +191,16 @@ class ParticipantController extends Controller
     {
         //TODO: revisar sobre el envio de notificaciones
         return 'por revisar';
+    }
+
+    //Files
+    public function showFileInstructor(User $user, File $file)
+    {
+        return $user->showFile($file);
+    }
+    //Images
+    public function showImageInstructor(User $user, Image $image)
+    {
+        return $user->showImage($image);
     }
 }

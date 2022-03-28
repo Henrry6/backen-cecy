@@ -30,6 +30,7 @@ class Planification extends Model implements Auditable
         'needs' => 'array',
         'observations' => 'array',
     ];
+    
     // Relationships
     //revisar
     public function course()
