@@ -29,3 +29,4 @@ Route::prefix('permission/{permission}')->group(function () {
     Route::post('sync-roles', [PermissionController::class, 'syncRoles']);
     Route::patch('remove-roles', [PermissionController::class, 'removeRoles']);
 });
+

@@ -157,12 +157,12 @@ class User extends Authenticatable implements Auditable, MustVerifyEmail
 
     public function instructor()
     {
-        $this->hasOne(Instructor::class);
+        return $this->hasOne(Instructor::class);  
     }
 
     public function participant()
     {
-        $this->hasOne(Participant::class);
+        return $this->hasOne(Participant::class);    
     }
 
     // Scopes

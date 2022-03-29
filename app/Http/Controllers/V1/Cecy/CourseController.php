@@ -39,8 +39,9 @@ use App\Models\Cecy\Course;
 use App\Models\Cecy\Instructor;
 use App\Models\Cecy\Participant;
 use App\Models\Cecy\Planification;
-use App\Models\Authentication\User;
 use App\Models\Cecy\Requirement;
+use App\Models\Cecy\SchoolPeriod;
+use App\Models\Authentication\User;
 
 class CourseController extends Controller
 {
@@ -509,17 +510,23 @@ class CourseController extends Controller
             ])->response()->setStatusCode(200);
     }
 
-    // Crear curso nuevo completamente (Done)
     public function storeNewCourse(StoreCourseNewRequest $request)
     {
         return "storeNewCourse";
         $course = new Course();
-        $course->name = $request->input('search');
-        $course->participant_type = $request->input('search');
-        $course->state = $request->input('estado del curso');
-        $course->duration = $request->input('search');
-        // $courses->started_at()->associate(Planification::find($request->input('fecha inicio de planificacion')));
-        // $courses->ended_at()->associate(Planification::find($request->input('fecha fin de planificacion')));
+
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+        $toBeApproved = Catalogue::where('code',  $catalogue['planification_state']['to_be_approved'])->first();
+        $career = Career::find();
+        $schoolPeriod = SchoolPeriod::find();
+
+        $course->state()->associate($toBeApproved);
+        $course->schoolPeriod()->associate($schoolPeriod);
+        $course->career()->associate($career);
+
+        $course->duration = $request->input('duration');
+        $course->name = $request->input('name');
+
         $course->save();
 
         return (new CourseResource($course))
@@ -527,9 +534,9 @@ class CourseController extends Controller
                 'msg' => [
                     'summary' => 'Curso creado',
                     'detail' => '',
-                    'code' => '200'
+                    'code' => '201'
                 ]
-            ])->response()->setStatusCode(200);
+            ])->response()->setStatusCode(201);
     }
 
 
@@ -578,12 +585,31 @@ class CourseController extends Controller
      */
 
     /**
-     * storeCourse
+     * storeNewCourse
      */
 
     /**
-     * updateCourseName
+     * Samantha
+     * updateCourse
+     * Actualizar nombre y duracion de curso
      */
+
+    public function updateCourse(UpdateUserRequest $request, User $user)
+    {
+        $user->username = $request->input('username');
+
+        $user->save();
+
+        return (new UserResource($user))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Usuario Actualizado',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(201);
+    }
 
 
 
