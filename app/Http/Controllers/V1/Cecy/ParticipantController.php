@@ -223,24 +223,39 @@ class ParticipantController extends Controller
             ])
             ->response()->setStatusCode(201);
     }
-    //Aceptacion de Participante
-    public function acceptParticipante(/*AcceptParticipantRequest*/ $request, Participant $participant){
 
+    //Metodo para ver listado de los Participante
+    public function getParticipants(){
+        /*return (new ParticipantCollection(Course::paginate(100)))
+        ->additional([
+            'msg' => [
+                'summary' => 'Me trae el listado de participantes',
+                'detail' => '',
+                'code' => '200'
+            ]
+        ])->response()->setStatusCode(200);*/
     }
 
-    //Eliminacion de Participante
+    //Metodo de Aceptación de Participante
+    public function acceptParticipante(/*AcceptParticipantRequest*/ $request, Participant $participant){
+        $participant = Participant::where('user_id', $request->user()->id)->first();
+       
+        $participant->sucess();
+
+        return (new ParticipantResource($participant))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Participante Aceptado',
+                    'detail' => '',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
+    }
+
+    //Metodo de Eliminación de Participante
     public function destroyParticipant(/*DestroyParticipantRequest*/ $request, Participant $participant)
     {
-        if ($request->user()->id === $participant->id) {
-            return response()->json([
-                'msg' => [
-                    'summary' => 'Error al eliminar',
-                    'detail' => 'El usuario se encuentra logueado',
-                    'code' => '400'
-                ],
-            ], 400);
-        }
-
         $participant->delete();
 
         return (new ParticipantResource($participant))
