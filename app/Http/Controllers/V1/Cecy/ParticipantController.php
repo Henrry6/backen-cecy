@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\Cecy\Participants\AcceptParticipantRequest;
+use App\Http\Requests\V1\Cecy\Participants\DestroyParticipantRequest;
 use App\Http\Requests\V1\Cecy\Participants\DestroysParticipantRequest;
+use App\Http\Requests\V1\Cecy\Participants\UpdateParticipantRequest;
 use App\Http\Requests\V1\Cecy\Participants\StoreParticipantRequest;
 use App\Http\Requests\V1\Cecy\Planifications\IndexPlanificationRequest;
-use App\Http\Requests\V1\Cecy\Planifications\DestroysPlanificationRequest;
 use App\Http\Requests\V1\Cecy\Registrations\RegistrationStateModificationRequest;
 use App\Http\Requests\V1\Cecy\Participants\StoreParticipantUserRequest;
 use App\Http\Resources\V1\Cecy\Participants\ParticipantResource;
@@ -196,7 +198,7 @@ class ParticipantController extends Controller
     }
 
     //Modificacion de Participante
-    public function chageDataParticipante(/*ChageDataParticipantRequest*/ $request, Participant $participant){
+    public function updateParticipante(UpdateParticipantRequest $request, Participant $participant){
         $participant->identificationType()->associate(Catalogue::find($request->input('identificationType.id')));
         $participant->sex()->associate(Catalogue::find($request->input('sex.id')));
         $participant->gender()->associate(Catalogue::find($request->input('gender.id')));
@@ -237,10 +239,10 @@ class ParticipantController extends Controller
     }
 
     //Metodo de Aceptación de Participante
-    public function acceptParticipante(/*AcceptParticipantRequest*/ $request, Participant $participant){
+    public function acceptParticipant(/*AcceptParticipantRequest*/ $request, Participant $participant){
         $participant = Participant::where('user_id', $request->user()->id)->first();
        
-        $participant->sucess();
+        $participant->success();
 
         return (new ParticipantResource($participant))
             ->additional([
