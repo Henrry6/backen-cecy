@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\Cecy\SchoolPeriods\CatalogueSchoolPeriodRequest;
 use App\Http\Requests\V1\Cecy\SchoolPeriods\DestroysSchoolPeriodRequest;
 use App\Http\Requests\V1\Cecy\SchoolPeriods\StoreSchoolPeriodRequest;
 use App\Http\Requests\V1\Cecy\SchoolPeriods\UpdateSchoolPeriodRequest;

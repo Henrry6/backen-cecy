@@ -9,6 +9,7 @@ use App\Http\Requests\V1\Core\Files\IndexFileRequest;
 use App\Http\Requests\V1\Core\Files\UpdateFileRequest;
 use App\Http\Requests\V1\Core\Files\UploadFileRequest;
 use App\Http\Resources\V1\Cecy\Courses\TopicsByCourseCollection;
+use App\Http\Requests\V1\Cecy\Topics\CatalogueTopicRequest;
 use App\Http\Requests\V1\Cecy\Topics\DestroysTopicRequest;
 use App\Http\Requests\V1\Cecy\Topics\StoreTopicRequest;
 use App\Http\Requests\V1\Cecy\Topics\UpdateTopicRequest;
@@ -32,6 +33,25 @@ class TopicController extends Controller
     //     $this->middleware('permission:delete-catalogues')->only(['destroy', 'destroys']);
     // }
 
+    public function catalogue(CatalogueTopicRequest $request)
+    {
+        $sorts = explode(',', $request->sort);
+
+        $topics =  Topic::customOrderBy($sorts)
+            ->description($request->input('search'))
+            ->limit(1000)
+            ->get();
+
+        return (new TopicCollection($topics))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
 
     public function getTopics($request, Course $course)
     {
