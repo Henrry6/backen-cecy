@@ -592,12 +592,6 @@ class CourseController extends Controller
         * getCourseByAcademicPeriod
     */
     /*
-        * getCourseByCarrer
-    */
-    /*
-        * getCourseByState
-    */
-    /*
         * approveCourse
     */
     public function approveCourse(ApproveCourseRequest $request, Course $course)
