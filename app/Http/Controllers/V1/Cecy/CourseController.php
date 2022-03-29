@@ -585,12 +585,31 @@ class CourseController extends Controller
      */
 
     /**
-     * storeCourse
+     * storeNewCourse
      */
 
     /**
-     * updateCourseName
+     * Samantha
+     * updateCourse
+     * Actualizar nombre y duracion de curso
      */
+
+    public function updateCourse(UpdateUserRequest $request, User $user)
+    {
+        $user->username = $request->input('username');
+
+        $user->save();
+
+        return (new UserResource($user))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Usuario Actualizado',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(201);
+    }
 
 
 
