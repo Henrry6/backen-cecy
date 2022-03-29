@@ -82,13 +82,7 @@ Route::prefix('planification/{planification}')->group(function () {
     Route::put('approve-planification', [PlanificationController::class, 'approvePlanification']);
     Route::get('/curricular-design', [PlanificationController::class, 'curricularDesign']);
     Route::get('/informe-final', [PlanificationController::class, 'informeFinal']);
-
-
-
 });
-
-
-
 
 /***********************************************************************************************************************
  * DETAIL PLANIFICATIONS
@@ -126,7 +120,7 @@ Route::prefix('courses')->group(function () {
     Route::get('kpi', [CourseController::class, 'getCoursesKPI']);
     Route::get('year-schedule', [CourseController::class, 'showYearSchedule']);
     Route::get('career/{career}', [CourseController::class, 'getCoursesByCareer']);
-    Route::put('{course}', [CourseController::class, 'updateStateCourse']);
+    // Route::put('{course}', [CourseController::class, 'updateStateCourse']);
 });
 
 Route::prefix('courses')->group(function () {
@@ -139,8 +133,8 @@ Route::prefix('courses')->group(function () {
 
 Route::prefix('courses/{course}')->group(function () {
     Route::get('', [CourseController::class, 'show']);
+    Route::put('', [CourseController::class, 'approveCourse']);
     Route::prefix('')->group(function () {
-
         Route::get('/topics', [TopicController::class, 'getTopics']);
         Route::get('/topics/all', [TopicController::class, 'getAllTopics']);
         Route::post('/topics', [TopicController::class, 'storesTopics']);
@@ -211,13 +205,11 @@ Route::prefix('certificate')->group(function () {
     Route::post('excel-reading', [CertificateController::class, 'ExcelImport']);
     Route::post('pdf-student', [CertificateController::class, 'generatePdfStudent']);
     Route::get('pdf-instructor', [CertificateController::class, 'generatePdfInstructor']);
-    
+
     Route::post('registration/{registration}/catalogue/{catalogue}/file/{file}', [CertificateController::class, 'downloadCertificateByParticipant']);
     Route::get('catalogue/{catalogue}/file/{file}', [CertificateController::class, 'downloadFileCertificates']);
     Route::post('catalogue/{catalogue}', [CertificateController::class, 'uploadFileCertificate']);
     Route::post('firm/catalogue/{catalogue}', [CertificateController::class, 'uploadFileCertificateFirm']);
-
-    
 });
 
 /***********************************************************************************************************************
@@ -254,6 +246,9 @@ Route::prefix('instructor')->group(function () {
     Route::get('destroy/{instructor}', [InstructorController::class, 'destroyInstructors']);
 });
 
+Route::prefix('instructor/{instructor}')->group(function () {
+});
+
 /***********************************************************************************************************************
  * REGISTRATIONS
  **********************************************************************************************************************/
@@ -275,6 +270,11 @@ Route::prefix('participant')->group(function () {
     Route::get('information/{registration}', [ParticipantController::class, 'getParticipantInformation']);
     Route::patch('participant-registration/{registration}', [ParticipantController::class, 'registerParticipant']);
 });
+
+Route::prefix('participant/{participant}')->group(function () {
+    Route::delete('', [ParticipantController::class, 'destroyParticipant']);
+});
+
 /***********************************************************************************************************************
  * DETAIL SCHOOL PERIOD
  **********************************************************************************************************************/
@@ -380,3 +380,12 @@ Route::prefix('topic/{topic}')->group(function () {
         Route::patch('', [TopicController::class, 'destroyFiles']);
     });
 });
+
+
+/**
+ * get      index, show, get    1
+ * put      update              2
+ * post     store               1
+ * delete   delete/destroy              2
+ * patch    
+ */
