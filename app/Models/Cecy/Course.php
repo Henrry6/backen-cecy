@@ -243,7 +243,7 @@ class Course extends Model implements Auditable
     public function scopeAcademicPeriod($query, $academicPeriod)
     {
         if ($academicPeriod) {
-            return $query->orWhere('academic_period_id', $academicPeriod->id);
+            return $query->orWhere('academicPeriod_id', $academicPeriod->id);
         }
     }
 
@@ -306,14 +306,14 @@ class Course extends Model implements Auditable
     public function scopeRecordNumber($query, $recordNumber)
     {
         if ($recordNumber) {
-            return $query->orWhere('record_number', $recordNumber);
+            return $query->orWhere('recordNumber', $recordNumber);
         }
     }
 
     public function scopeLocalProposal($query, $localProposal)
     {
         if ($localProposal) {
-            return $query->orWhere('local_proposal', $localProposal);
+            return $query->orWhere('localProposal', $localProposal);
         }
     }
 
@@ -345,10 +345,10 @@ class Course extends Model implements Auditable
         }
     }
 
-    public function scopeSetecName($query, $setec_name)
+    public function scopeSetecName($query, $setecName)
     {
-        if ($setec_name) {
-            return $query->orWhere('setec_name', $setec_name);
+        if ($setecName) {
+            return $query->orWhere('setecName', $setecName);
         }
     }
 
