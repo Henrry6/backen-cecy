@@ -121,6 +121,7 @@ Route::prefix('courses')->group(function () {
     Route::get('kpi', [CourseController::class, 'getCoursesKPI']);
     Route::get('year-schedule', [CourseController::class, 'showYearSchedule']);
     Route::get('career/{career}', [CourseController::class, 'getCoursesByCareer']);
+    Route::get('academicPeriod/{academicPeriod}', [CourseController::class, 'getCoursesByAcademicPeriod']);
     // Route::put('{course}', [CourseController::class, 'updateStateCourse']);
 });
 
@@ -276,7 +277,9 @@ Route::prefix('participant')->group(function () {
 });
 
 Route::prefix('participant/{participant}')->group(function () {
+    Route::success('', [ParticipantController::class, 'acceptParticipant']);
     Route::delete('', [ParticipantController::class, 'destroyParticipant']);
+    Route::put('', [ParticipantController::class, 'updateRequirement']);
 });
 
 /***********************************************************************************************************************
