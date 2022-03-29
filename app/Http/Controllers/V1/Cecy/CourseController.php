@@ -617,6 +617,23 @@ class CourseController extends Controller
             ->response()->setStatusCode(201);
     }
 
+    /*
+        * declineCourse
+    */
+    public function declineCourse(DeclineCourseRequest $request, Course $course)
+    {
+        $course->save();
+
+        return (new CourseResource($course))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Curso Rechazado',
+                    'detail' => '',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
+    }
 
     // Files
     public function showFileCourse(Course $course, File $file)
