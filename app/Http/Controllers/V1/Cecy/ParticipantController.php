@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Cecy\Planifications\IndexPlanificationRequest;
 use App\Http\Requests\V1\Cecy\Registrations\RegistrationStateModificationRequest;
 use App\Http\Requests\V1\Cecy\Participants\StoreParticipantUserRequest;
+use App\Http\Resources\V1\Cecy\Participants\ParticipantResource;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationParticipants\PlanificationParticipantCollection;
 use App\Http\Resources\V1\Cecy\Registrations\RegistrationResource;
 use App\Http\Resources\V1\Core\Users\UserResource;
@@ -26,7 +27,6 @@ class ParticipantController extends Controller
     public function __construct()
     {
     }
-
 
     public function registerParticipantUser(StoreParticipantUserRequest $request)
     {
@@ -191,6 +191,21 @@ class ParticipantController extends Controller
     {
         //TODO: revisar sobre el envio de notificaciones
         return 'por revisar';
+    }
+
+    public function destroyParticipant(DestroyParticipantRequest $request, Participant $participant)
+    {
+        $participant->delete();
+
+        return (new ParticipantResource($participant))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Participante Eliminado',
+                    'detail' => '',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
     }
 
     //Files
