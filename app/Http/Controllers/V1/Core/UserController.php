@@ -13,6 +13,7 @@ use App\Http\Requests\V1\Core\Files\UploadFileRequest;
 use App\Http\Requests\V1\Core\Images\IndexImageRequest;
 use App\Http\Requests\V1\Core\Images\UploadImageRequest;
 use App\Http\Requests\V1\Core\Users\DestroysUserRequest;
+use App\Http\Requests\V1\Core\Users\GetUsersArentInstructorsRequest;
 use App\Http\Requests\V1\Core\Users\IndexUserRequest;
 use App\Http\Requests\V1\Core\Users\StoreUserRequest;
 use App\Http\Requests\V1\Core\Users\UpdateUserRequest;
@@ -229,6 +230,22 @@ class UserController extends Controller
                 ]
             ])
             ->response()->setStatusCode(200);
+    }
+ 
+    public function getUsersArentInstructors(GetUsersArentInstructorsRequest $request  ) 
+    {
+        // return 'w';
+
+        $users = User::doesntHave('instructor')->get();
+
+        return (new UserCollection($users))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Trae los usuarios que no son instructores',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])->response()->setStatusCode(200);
     }
 
     // Images
