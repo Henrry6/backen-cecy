@@ -27,6 +27,7 @@ class ProfileInstructorCourse extends Model implements Auditable
         'required_knowledges' => 'array',
         'required_skills' => 'array'
     ];
+
     // Relationships
     public function course()
     {
@@ -37,22 +38,18 @@ class ProfileInstructorCourse extends Model implements Auditable
     {
         return $this->belongsToManyy(Instructor::class, 'cecy.authorized_instructors', 'instructor_id', 'profile_instructor_course_id');
     }
+
     // Mutators
 
-    //Mis campos son de tipo JSON
 
     // Scopes
-
-    // Mis campos son de  tipo JSON 
-
-
-    public function scopeCourse($query, $profile)
+    public function scopeCourse($query, $courseId)
     {
-        if ($profile) {
-            return $query->Where('course_id', $profile->course);
+        if ($courseId) {
+            return $query->orWhere('course_id', $courseId);
         }
     }
-    
+
     public function scopeCustomOrderBy($query, $sorts)
     {
         if (!empty($sorts[0])) {
@@ -82,5 +79,5 @@ class ProfileInstructorCourse extends Model implements Auditable
             array_unshift($fields, 'id');
             return $query->select($fields);
         }
-    }   
+    }
 }
