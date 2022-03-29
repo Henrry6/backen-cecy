@@ -277,7 +277,7 @@ Route::prefix('participant')->group(function () {
 });
 
 Route::prefix('participant/{participant}')->group(function () {
-    Route::success('', [ParticipantController::class, 'acceptParticipant']);
+    // Route::success('', [ParticipantController::class, 'acceptParticipant']);por qué success?
     Route::delete('', [ParticipantController::class, 'destroyParticipant']);
     Route::put('', [ParticipantController::class, 'updateRequirement']);
 });

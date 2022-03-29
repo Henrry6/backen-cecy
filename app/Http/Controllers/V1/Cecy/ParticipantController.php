@@ -242,7 +242,7 @@ class ParticipantController extends Controller
     public function acceptParticipant(/*AcceptParticipantRequest*/ $request, Participant $participant){
         $participant = Participant::where('user_id', $request->user()->id)->first();
        
-        $participant->success();
+        // $participant->success(); ? No existe el metodo success
 
         return (new ParticipantResource($participant))
             ->additional([
