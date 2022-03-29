@@ -248,7 +248,7 @@ class Course extends Model implements Auditable
     public function scopeAcademicPeriod($query, $academicPeriod)
     {
         if ($academicPeriod) {
-            return $query->orWhere('academic_period_id', $academicPeriod->id);
+            return $query->orWhere('academicPeriod_id', $academicPeriod->id);
         }
     }
 
@@ -269,14 +269,14 @@ class Course extends Model implements Auditable
     public function scopeCatalogue($query, $catalogue)
     {
         if ($catalogue) {
-            return $query->Where('catalogue_id', $catalogue);
+            return $query->where('catalogue_id', $catalogue);
         }
     }
 
     public function scopeCategory($query, $category)
     {
         if ($category) {
-            return $query->Where('category_id', $category->id);
+            return $query->where('category_id', $category->id);
         }
     }
 
@@ -311,14 +311,14 @@ class Course extends Model implements Auditable
     public function scopeRecordNumber($query, $recordNumber)
     {
         if ($recordNumber) {
-            return $query->orWhere('record_number', $recordNumber);
+            return $query->orWhere('recordNumber', $recordNumber);
         }
     }
 
     public function scopeLocalProposal($query, $localProposal)
     {
         if ($localProposal) {
-            return $query->orWhere('local_proposal', $localProposal);
+            return $query->orWhere('localProposal', $localProposal);
         }
     }
 
@@ -362,14 +362,14 @@ class Course extends Model implements Auditable
     public function scopeSchoolPeriodId($query, $schoolPeriodId)
     {
         if ($schoolPeriodId) {
-            return $query->where('school_period_id', $schoolPeriodId);
+            return $query->where('schoolPeriod_id', $schoolPeriodId);
         }
     }
 
-    public function scopeSetecName($query, $setec_name)
+    public function scopeSetecName($query, $setecName)
     {
-        if ($setec_name) {
-            return $query->orWhere('setec_name', $setec_name);
+        if ($setecName) {
+            return $query->orWhere('setecName', $setecName);
         }
     }
 
