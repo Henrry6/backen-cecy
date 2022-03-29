@@ -70,7 +70,8 @@ Route::prefix('planification')->group(function () {
     Route::get('course_parallels-works', [PlanificationController::class, 'getCoursesParallelsWorkdays']);
     Route::get('planfications-course/{course}', [PlanificationController::class, 'getPlanificationsByCourse']);
     Route::get('kpis/{state}', [PlanificationController::class, 'getKpi']);
-    Route::put('{planification}', [PlanificationController::class, 'updateStatePlanification']);
+    // Route::put('{planification}', [PlanificationController::class, 'updateStatePlanification']);
+    Route::post('course/{course}', [PlanificationController::class, 'storePlanificationByCourse']);
 });
 
 Route::prefix('planification/{planification}')->group(function () {
@@ -134,6 +135,7 @@ Route::prefix('courses')->group(function () {
 Route::prefix('courses/{course}')->group(function () {
     Route::get('', [CourseController::class, 'show']);
     Route::put('', [CourseController::class, 'approveCourse']);
+    Route::put('', [CourseController::class, 'declineCourse']);
     Route::prefix('')->group(function () {
         Route::get('/topics', [TopicController::class, 'getTopics']);
         Route::get('/topics/all', [TopicController::class, 'getAllTopics']);

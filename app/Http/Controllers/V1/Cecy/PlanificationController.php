@@ -35,25 +35,35 @@ class PlanificationController extends Controller
     {
     }
 
-    public function storePlanificationByCourse(StorePlanificationByCourseRequest $request, Planification $planification)
+    public function storePlanificationByCourse(StorePlanificationByCourseRequest $request, Course $course)
     {
+        return 'works';
+        $planification = new Planification();
+
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+        //state
+        $toBeApproved = Catalogue::where('code',  $catalogue['planification_state']['to_be_approved'])->first();
+
+        $planification->course()->associate($course);
         $planification->responsibleCourse()->associate(Instructor::find($request->input('responsibleCourse.id')));
-        $planification->course()->associate(Course::find($request->input('name')));
-        $planification->participantType()->associate(Course::find($request->input('participant_type.id')));
-        $planification->duration()->associate(Course::find($request->input('duration')));
-        $planification->endedAt = $request->input('fin de la planificación');
-        $planification->startedAt = $request->input('inicio de la planificación');
-        $planification->state = $request->input('Estado de la planificacion');
+        $planification->state()->associate($toBeApproved);
+
+        $planification->duration = $request->input('duration');
+        $planification->name = $request->input('name');
+        $planification->ended_at = $request->input('endedAt');
+        $planification->started_at = $request->input('startedAt');
+
         $planification->save();
+
         return (new PlanificationResource($planification))
             ->additional([
                 'msg' => [
-                    'summary' => 'planificación creada',
+                    'summary' => 'Planificación creada',
                     'detail' => '',
-                    'code' => '200'
+                    'code' => '201'
                 ]
             ])
-            ->response()->setStatusCode(200);
+            ->response()->setStatusCode(201);
     }
 
     public function updatePlanificationByCecy(UpdatePlanificationRequest $request, Planification $planification)
@@ -181,8 +191,9 @@ class PlanificationController extends Controller
     {
         $sorts = explode(',', $request->sort);
 
-        $planifications = $course->planifications()->customOrderBy($sorts)
-            ->paginate($request->input('per_page'));
+        $planifications = $course->planifications()
+            ->customOrderBy($sorts)
+            ->paginate($request->input('perPage'));
 
         return (new PlanificationByCourseCollection($planifications))
             ->additional([
@@ -360,13 +371,13 @@ class PlanificationController extends Controller
 
 
     /**
-     * getPlanificationsByCourse
+     * getPlanificationsByCourse hecho
      */
     /**
      * storePlanification
      */
 
-      /**
+    /**
      * updatePlanification
      */
 }

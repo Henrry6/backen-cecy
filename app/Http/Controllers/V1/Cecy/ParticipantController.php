@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\Cecy\Participants\DestroysParticipantRequest;
+use App\Http\Requests\V1\Cecy\Participants\StoreParticipantRequest;
 use App\Http\Requests\V1\Cecy\Planifications\IndexPlanificationRequest;
+use App\Http\Requests\V1\Cecy\Planifications\DestroysPlanificationRequest;
 use App\Http\Requests\V1\Cecy\Registrations\RegistrationStateModificationRequest;
 use App\Http\Requests\V1\Cecy\Participants\StoreParticipantUserRequest;
 use App\Http\Resources\V1\Cecy\Participants\ParticipantResource;
@@ -93,7 +96,6 @@ class ParticipantController extends Controller
             ])
             ->response()->setStatusCode(200);
     }
-
 
     private function createUserAddress($addressUser)
     {
@@ -193,7 +195,66 @@ class ParticipantController extends Controller
         return 'por revisar';
     }
 
-    public function destroyParticipant(DestroyParticipantRequest $request, Participant $participant)
+    //Modificacion de Participante
+    public function chageDataParticipante(/*ChageDataParticipantRequest*/ $request, Participant $participant){
+        $participant->identificationType()->associate(Catalogue::find($request->input('identificationType.id')));
+        $participant->sex()->associate(Catalogue::find($request->input('sex.id')));
+        $participant->gender()->associate(Catalogue::find($request->input('gender.id')));
+        $participant->bloodType()->associate(Catalogue::find($request->input('bloodType.id')));
+        $participant->ethnicOrigin()->associate(Catalogue::find($request->input('ethnicOrigin.id')));
+        $participant->civilStatus()->associate(Catalogue::find($request->input('civilStatus.id')));
+
+        $participant->username = $request->input('username');
+        $participant->name = $request->input('name');
+        $participant->lastname = $request->input('lastname');
+        $participant->birthdate = $request->input('birthdate');
+        $participant->email = $request->input('email');
+
+        $participant->save();
+        $participant->addEmails($request->input('emails'));
+
+        return (new UserResource($participant))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Usuario Actualizado',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(201);
+    }
+
+    //Metodo para ver listado de los Participante
+    public function getParticipants(){
+        /*return (new ParticipantCollection(Course::paginate(100)))
+        ->additional([
+            'msg' => [
+                'summary' => 'Me trae el listado de participantes',
+                'detail' => '',
+                'code' => '200'
+            ]
+        ])->response()->setStatusCode(200);*/
+    }
+
+    //Metodo de Aceptación de Participante
+    public function acceptParticipante(/*AcceptParticipantRequest*/ $request, Participant $participant){
+        $participant = Participant::where('user_id', $request->user()->id)->first();
+       
+        $participant->sucess();
+
+        return (new ParticipantResource($participant))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Participante Aceptado',
+                    'detail' => '',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
+    }
+
+    //Metodo de Eliminación de Participante
+    public function destroyParticipant(/*DestroyParticipantRequest*/ $request, Participant $participant)
     {
         $participant->delete();
 
