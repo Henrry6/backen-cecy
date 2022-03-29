@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\Cecy\Participants\DestroysParticipantRequest;
+use App\Http\Requests\V1\Cecy\Participants\StoreParticipantRequest;
 use App\Http\Requests\V1\Cecy\Planifications\IndexPlanificationRequest;
 use App\Http\Requests\V1\Cecy\Registrations\RegistrationStateModificationRequest;
 use App\Http\Requests\V1\Cecy\Participants\StoreParticipantUserRequest;
@@ -26,7 +28,6 @@ class ParticipantController extends Controller
     public function __construct()
     {
     }
-
 
     public function registerParticipantUser(StoreParticipantUserRequest $request)
     {
@@ -93,7 +94,6 @@ class ParticipantController extends Controller
             ])
             ->response()->setStatusCode(200);
     }
-
 
     private function createUserAddress($addressUser)
     {
@@ -191,6 +191,37 @@ class ParticipantController extends Controller
     {
         //TODO: revisar sobre el envio de notificaciones
         return 'por revisar';
+    }
+
+    //Aceptación de Parpicipantes
+    public function acceptParticipantUser(StoreParticipantRequest $request, User $user){
+
+    }
+
+    //Eliminación de Parpicipantes
+    public function destroyParticipant(DestroyParticipantRequest $request, Participant $participant)
+    {
+        if ($request->user()->id === $participant->id) {
+            return response()->json([
+                'msg' => [
+                    'summary' => 'Error al eliminar',
+                    'detail' => 'El usuario se encuentra logueado',
+                    'code' => '400'
+                ],
+            ], 400);
+        }
+
+        $participant->delete();
+
+        return (new UserResource($participant))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Participante Eliminado',
+                    'detail' => '',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
     }
 
     //Files
