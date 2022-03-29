@@ -269,14 +269,14 @@ class Course extends Model implements Auditable
     public function scopeCatalogue($query, $catalogue)
     {
         if ($catalogue) {
-            return $query->Where('catalogue_id', $catalogue);
+            return $query->where('catalogue_id', $catalogue);
         }
     }
 
     public function scopeCategory($query, $category)
     {
         if ($category) {
-            return $query->Where('category_id', $category->id);
+            return $query->where('category_id', $category->id);
         }
     }
 
