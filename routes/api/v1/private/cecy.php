@@ -134,6 +134,7 @@ Route::prefix('courses')->group(function () {
 Route::prefix('courses/{course}')->group(function () {
     Route::get('', [CourseController::class, 'show']);
     Route::put('', [CourseController::class, 'approveCourse']);
+    Route::put('', [CourseController::class, 'declineCourse']);
     Route::prefix('')->group(function () {
         Route::get('/topics', [TopicController::class, 'getTopics']);
         Route::get('/topics/all', [TopicController::class, 'getAllTopics']);
