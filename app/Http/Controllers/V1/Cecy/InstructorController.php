@@ -5,7 +5,7 @@ namespace App\Http\Controllers\V1\Cecy;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\V1\Cecy\Courses\getCoursesByResponsibleRequest;
-use App\Http\Requests\V1\Cecy\Instructors\IndexInstructorRequest; 
+use App\Http\Requests\V1\Cecy\Instructors\IndexInstructorRequest;
 use App\Http\Requests\V1\Cecy\Instructor\DestroysInstructorRequest;
 use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationByInstructorCollection;
 use App\Http\Resources\V1\Cecy\Courses\CourseCollection;
@@ -21,9 +21,9 @@ class InstructorController extends Controller
 {
     public function __construct()
     {
-       //$this->middleware('permission:store-catalogues')->only(['store']);
-       //$this->middleware('permission:update-catalogues')->only(['update']);
-       //$this->middleware('permission:delete-catalogues')->only(['destroy', 'destroys']);
+        //$this->middleware('permission:store-catalogues')->only(['store']);
+        //$this->middleware('permission:update-catalogues')->only(['update']);
+        //$this->middleware('permission:delete-catalogues')->only(['destroy', 'destroys']);
     }
 
     public function index(IndexInstructorRequest $request)
@@ -91,26 +91,26 @@ class InstructorController extends Controller
 
     public function storeInstructor(Instructor $instructor, Request $request)
     {
-        {
-            $instructor = new Instructor();
-            $instructor->state()
+        $instructor = new Instructor();
+
+        $instructor->state()
             ->associate(Catalogue::find($request->input('state')));
-            $instructor->type()
+        $instructor->type()
             ->associate(Catalogue::find($request->input('type')));
-            $instructor->user()
+        $instructor->user()
             ->associate(User::find($request->input('user')));
-            $instructor->save();
-    
-            return (new InstructorResource($instructor))
-                ->additional([
-                    'msg' => [
-                        'summary' => 'Instructor creado',
-                        'Institution' => '',
-                        'code' => '201'
-                    ]
-                ])
-                ->response()->setStatusCode(201);
-        }
+
+        $instructor->save();
+
+        return (new InstructorResource($instructor))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Instructor creado',
+                    'Institution' => '',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
     }
 
     public function updateTypeInstructors(Request $request, Instructor $instructor)
@@ -127,7 +127,6 @@ class InstructorController extends Controller
                 ]
             ])
             ->response()->setStatusCode(201);
-
     }
 
     public function destroy(Instructor $instructor)
@@ -159,8 +158,5 @@ class InstructorController extends Controller
                 ]
             ])
             ->response()->setStatusCode(201);
-
     }
-
-    
 }

@@ -15,12 +15,35 @@ use App\Models\Cecy\Classroom;
 
 class ClassroomController extends Controller
 {
+    public function catalogue(CatalogueClassroomRequest $request)
+    {
+        $sorts = explode(',', $request->sort);
+
+        $classrooms =  Classroom::customOrderBy($sorts)
+            ->code($request->input('search'))
+            ->name($request->input('search'))
+            ->limit(1000)
+            ->get();
+
+        return (new ClassroomCollection($classrooms))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
+
     /*DDRC-C: Obtiene todas las clases que hay*/
     public function index(IndexClassroomRequest $request)
     {
         $sorts = explode(',', $request->input('sort'));
 
         $classrooms = Classroom::customOrderBy($sorts)
+            ->code($request->input('search'))
+            ->name($request->input('search'))
             ->paginate($request->input('per_page'));
 
         return (new ClassroomCollection($classrooms))
@@ -50,15 +73,15 @@ class ClassroomController extends Controller
 
     /*DDRC-C: Crea una clase*/
     public function store(StoreClassroomRequest $request)
-    {        
+    {
         $classroom = new Classroom();
         $classroom->type()->associate(Catalogue::find($request->input('type.id')));
- 
+
         $classroom->capacity = $request->input('capacity');
         $classroom->code = $request->input('code');
         $classroom->description = $request->input('description');
         $classroom->name = $request->input('name');
-        
+
         $classroom->save();
 
         return (new ClassroomResource($classroom))
@@ -73,30 +96,30 @@ class ClassroomController extends Controller
     }
 
     /*DDRC-C: Actualiza una clase*/
-    public function update (UpdateClassroomRequest $request, Classroom $classroom)
+    public function update(UpdateClassroomRequest $request, Classroom $classroom)
     {
         $classroom->type()->associate(Catalogue::find($request->input('type.id')));
- 
+
         $classroom->capacity = $request->input('capacity');
         $classroom->code = $request->input('code');
         $classroom->description = $request->input('description');
         $classroom->name = $request->input('name');
-  
+
         $classroom->save();
 
         return (new ClassroomResource($classroom))
-        ->additional([
-            'msg' => [
-                'summary' => 'Clase actualizada',
-                'detail' => '',
-                'code' => '201'
-            ]
-        ])
-        ->response()->setStatusCode(201);
+            ->additional([
+                'msg' => [
+                    'summary' => 'Clase actualizada',
+                    'detail' => '',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
     }
 
     /*DDRC-C: Elimina una clase*/
-    public function destroy ( Classroom $classroom)
+    public function destroy(Classroom $classroom)
     {
         $classroom->delete();
 
@@ -110,9 +133,9 @@ class ClassroomController extends Controller
             ])
             ->response()->setStatusCode(201);
     }
-    
+
     /*DDRC-C: Elimina varias clases*/
-    public function destroys (DestroysClassroomRequest $request)
+    public function destroys(DestroysClassroomRequest $request)
     {
         $classrooms = Classroom::whereIn('id', $request->input('ids'))->get();
 

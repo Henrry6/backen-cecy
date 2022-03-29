@@ -357,4 +357,16 @@ class PlanificationController extends Controller
 
         return $pdf->stream('Informe final del curso.pdf');
     }
+
+
+    /**
+     * getPlanificationsByCourse
+     */
+    /**
+     * storePlanification
+     */
+
+      /**
+     * updatePlanification
+     */
 }

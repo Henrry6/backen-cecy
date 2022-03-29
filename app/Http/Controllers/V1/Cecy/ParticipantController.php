@@ -8,6 +8,7 @@ use App\Http\Requests\V1\Cecy\Participants\StoreParticipantRequest;
 use App\Http\Requests\V1\Cecy\Planifications\IndexPlanificationRequest;
 use App\Http\Requests\V1\Cecy\Registrations\RegistrationStateModificationRequest;
 use App\Http\Requests\V1\Cecy\Participants\StoreParticipantUserRequest;
+use App\Http\Resources\V1\Cecy\Participants\ParticipantResource;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationParticipants\PlanificationParticipantCollection;
 use App\Http\Resources\V1\Cecy\Registrations\RegistrationResource;
 use App\Http\Resources\V1\Core\Users\UserResource;
@@ -193,27 +194,11 @@ class ParticipantController extends Controller
         return 'por revisar';
     }
 
-    //Aceptación de Parpicipantes
-    public function acceptParticipantUser(StoreParticipantRequest $request, User $user){
-
-    }
-
-    //Eliminación de Parpicipantes
     public function destroyParticipant(DestroyParticipantRequest $request, Participant $participant)
     {
-        if ($request->user()->id === $participant->id) {
-            return response()->json([
-                'msg' => [
-                    'summary' => 'Error al eliminar',
-                    'detail' => 'El usuario se encuentra logueado',
-                    'code' => '400'
-                ],
-            ], 400);
-        }
-
         $participant->delete();
 
-        return (new UserResource($participant))
+        return (new ParticipantResource($participant))
             ->additional([
                 'msg' => [
                     'summary' => 'Participante Eliminado',

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\Cecy\Courses\ApproveCourseRequest;
 use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -39,7 +40,7 @@ use App\Models\Cecy\Instructor;
 use App\Models\Cecy\Participant;
 use App\Models\Cecy\Planification;
 use App\Models\Authentication\User;
-
+use App\Models\Cecy\Requirement;
 
 class CourseController extends Controller
 {
@@ -236,7 +237,7 @@ class CourseController extends Controller
     //obtener los cursos asignados a un docente responsable logueado (Done)
     public function getCoursesByResponsibleCourse(getCoursesByResponsibleRequest $request)
     {
-        $instructor = Instructor::FirstWhere('user_id', $request->user()->id);
+        $instructor = Instructor::firstWhere('user_id', $request->user()->id);
         if (!isset($instructor)) {
             return response()->json([
                 'msg' => [
@@ -488,22 +489,20 @@ class CourseController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    // Filtrar cursos por carrera (Done)
     public function getCoursesByCareer(GetCoursesByCareerRequest $request, Career $career)
     {
-        return "getCoursesByCareer";
+        // return 'w123';
         $sorts = explode(',', $request->sort);
-        $course = Course::where('career.id', $career->id);
 
-        $course = Course::customOrderBy($sorts)
-            ->academicPeriod(($request->input('academicPeriod.id')))
-            ->state(($request->input('state.id')))
-            ->paginate($request->input('per_page'));
+        $courses = $career->courses()
+            ->customOrderBy($sorts)
+            ->schoolPeriodId(($request->input('schoolPeriod.id')))
+            ->paginate($request->input('perPage'));
 
-        return (new CourseResource($course))
+        return (new CourseCollection($courses))
             ->additional([
                 'msg' => [
-                    'summary' => '',
+                    'summary' => 'success',
                     'detail' => '',
                     'code' => '200'
                 ]
@@ -579,20 +578,14 @@ class CourseController extends Controller
      */
 
     /**
-     * storePlanificationByCourse
-     */
-
-    /**
-     * storePlanificationByNewCourse
+     * storeCourse
      */
 
     /**
      * updateCourseName
      */
 
-    /**
-     * updatePlanification
-     */
+
 
 
     /*
@@ -607,6 +600,22 @@ class CourseController extends Controller
     /*
         * approveCourse
     */
+    public function approveCourse(ApproveCourseRequest $request, Course $course)
+    {
+        return '123';
+
+        $course->save();
+
+        return (new CourseResource($course))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Curso Aprobado',
+                    'detail' => '',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
+    }
 
 
     // Files
@@ -629,3 +638,13 @@ class CourseController extends Controller
         return $course->indexPublicImages($request);
     }
 }
+
+
+
+/**
+ * get
+ * store
+ * update
+ * delete
+ * destroy
+ */
