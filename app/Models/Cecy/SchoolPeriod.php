@@ -61,23 +61,6 @@ class SchoolPeriod extends Model implements Auditable
         }
     }
 
-    public function scopeSchoolPeriodId($query, $schoolPeriodId)
-    {
-        if ($schoolPeriodId) {
-            return $query->where('school_period_id', "%$schoolPeriodId%");
-        }
-    }
-
-    public function scopeSchoolPeriod($query, $search)
-    {
-        if ($search) {
-            return $query->whereHas('schoolPeriod', function($schoolPeriod) use($search) {
-                $schoolPeriod->where('name', 'iLike', "%$search%");
-            });
-        }
-    }
-
-    //revisar
     public function scopeCustomOrderBy($query, $sorts)
     {
         if (!empty($sorts[0])) {

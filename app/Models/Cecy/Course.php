@@ -161,6 +161,11 @@ class Course extends Model implements Auditable
         return $this->belongsTo(Instructor::class);
     }
 
+    public function schoolPeriod()
+    {
+        return $this->belongsTo(SchoolPeriod::class);
+    }
+
     public function speciality()
     {
         return $this->belongsTo(Catalogue::class);
@@ -257,7 +262,7 @@ class Course extends Model implements Auditable
     public function scopeAlignment($query, $alignment)
     {
         if ($alignment) {
-            return $query->orWhere('alignment', $alignment);//ilike
+            return $query->orWhere('alignment', $alignment); //ilike
         }
     }
 
@@ -299,7 +304,7 @@ class Course extends Model implements Auditable
     public function scopeName($query, $name)
     {
         if ($name) {
-            return $query->Where('name', 'iLike', "%$name%");
+            return $query->where('name', 'iLike', "%$name%");
         }
     }
 
@@ -320,21 +325,21 @@ class Course extends Model implements Auditable
     public function scopeObjective($query, $objective)
     {
         if ($objective) {
-            return $query->orWhere('objective', $objective);//ilike
+            return $query->orWhere('objective', 'iLike', "%$objective%");
         }
     }
 
     public function scopeObservation($query, $observation)
     {
         if ($observation) {
-            return $query->orWhere('observation', $observation);//ilike
+            return $query->orWhere('observation', 'iLike', "%$observation%");
         }
     }
 
     public function scopeProject($query, $project)
     {
         if ($project) {
-            return $query->orWhere('project', $project);
+            return $query->orWhere('project', 'iLike', "%$project%");
         }
     }
 
@@ -342,6 +347,22 @@ class Course extends Model implements Auditable
     {
         if ($public) {
             return $query->orWhere('public', $public);
+        }
+    }
+    
+    public function scopeSchoolPeriod($query, $search)
+    {
+        if ($search) {
+            return $query->whereHas('schoolPeriod', function ($schoolPeriod) use ($search) {
+                $schoolPeriod->where('name', 'iLike', "%$search%");
+            });
+        }
+    }
+
+    public function scopeSchoolPeriodId($query, $schoolPeriodId)
+    {
+        if ($schoolPeriodId) {
+            return $query->where('school_period_id', $schoolPeriodId);
         }
     }
 
@@ -395,7 +416,7 @@ class Course extends Model implements Auditable
             array_unshift($fields, 'id');
             return $query->select($fields);
         }
-    } 
+    }
 
     // Accesors
     public function getTotalHoursAttribute()
