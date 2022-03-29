@@ -362,7 +362,7 @@ class Course extends Model implements Auditable
     public function scopeSchoolPeriodId($query, $schoolPeriodId)
     {
         if ($schoolPeriodId) {
-            return $query->where('school_period_id', $schoolPeriodId);
+            return $query->where('schoolPeriod_id', $schoolPeriodId);
         }
     }
 
