@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\Cecy\Participants\AcceptParticipantRequest;
+use App\Http\Requests\V1\Cecy\Participants\DestroyParticipantRequest;
 use App\Http\Requests\V1\Cecy\Participants\DestroysParticipantRequest;
+use App\Http\Requests\V1\Cecy\Participants\UpdateParticipantRequest;
 use App\Http\Requests\V1\Cecy\Participants\StoreParticipantRequest;
 use App\Http\Requests\V1\Cecy\Planifications\IndexPlanificationRequest;
-use App\Http\Requests\V1\Cecy\Planifications\DestroysPlanificationRequest;
 use App\Http\Requests\V1\Cecy\Registrations\RegistrationStateModificationRequest;
 use App\Http\Requests\V1\Cecy\Participants\StoreParticipantUserRequest;
 use App\Http\Resources\V1\Cecy\Participants\ParticipantResource;
@@ -196,7 +198,7 @@ class ParticipantController extends Controller
     }
 
     //Modificacion de Participante
-    public function chageDataParticipante(/*ChageDataParticipantRequest*/ $request, Participant $participant){
+    public function updateParticipante(UpdateParticipantRequest $request, Participant $participant){
         $participant->identificationType()->associate(Catalogue::find($request->input('identificationType.id')));
         $participant->sex()->associate(Catalogue::find($request->input('sex.id')));
         $participant->gender()->associate(Catalogue::find($request->input('gender.id')));
@@ -223,24 +225,39 @@ class ParticipantController extends Controller
             ])
             ->response()->setStatusCode(201);
     }
-    //Aceptacion de Participante
-    public function acceptParticipante(/*AcceptParticipantRequest*/ $request, Participant $participant){
 
+    //Metodo para ver listado de los Participante
+    public function getParticipants(){
+        /*return (new ParticipantCollection(Course::paginate(100)))
+        ->additional([
+            'msg' => [
+                'summary' => 'Me trae el listado de participantes',
+                'detail' => '',
+                'code' => '200'
+            ]
+        ])->response()->setStatusCode(200);*/
     }
 
-    //Eliminacion de Participante
+    //Metodo de Aceptación de Participante
+    public function acceptParticipant(/*AcceptParticipantRequest*/ $request, Participant $participant){
+        $participant = Participant::where('user_id', $request->user()->id)->first();
+       
+        $participant->success();
+
+        return (new ParticipantResource($participant))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Participante Aceptado',
+                    'detail' => '',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
+    }
+
+    //Metodo de Eliminación de Participante
     public function destroyParticipant(/*DestroyParticipantRequest*/ $request, Participant $participant)
     {
-        if ($request->user()->id === $participant->id) {
-            return response()->json([
-                'msg' => [
-                    'summary' => 'Error al eliminar',
-                    'detail' => 'El usuario se encuentra logueado',
-                    'code' => '400'
-                ],
-            ], 400);
-        }
-
         $participant->delete();
 
         return (new ParticipantResource($participant))

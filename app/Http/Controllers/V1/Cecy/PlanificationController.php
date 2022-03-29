@@ -48,8 +48,6 @@ class PlanificationController extends Controller
         $planification->responsibleCourse()->associate(Instructor::find($request->input('responsibleCourse.id')));
         $planification->state()->associate($toBeApproved);
 
-        $planification->duration = $request->input('duration');
-        $planification->name = $request->input('name');
         $planification->ended_at = $request->input('endedAt');
         $planification->started_at = $request->input('startedAt');
 

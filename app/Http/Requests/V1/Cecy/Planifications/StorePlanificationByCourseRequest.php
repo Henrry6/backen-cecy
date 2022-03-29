@@ -14,9 +14,7 @@ class StorePlanificationByCourseRequest extends FormRequest
   {
     return [
       'responsible.id' => ['required', 'integer'],
-      'duration' => ['required', 'integer'],
       'endedAt' => ['required', 'date'],
-      'name' => ['required'],
       'startedAt' => ['required', 'date'],
 
     ];
@@ -26,9 +24,7 @@ class StorePlanificationByCourseRequest extends FormRequest
   {
     return [
       'responsible.id' => 'responsable de planificación',
-      'duration' => 'duración',
       'endedAt' => 'fecha de finalización',
-      'name' => 'nombre',
       'startedAt' => 'fecha de inicio',
     ];
   }
