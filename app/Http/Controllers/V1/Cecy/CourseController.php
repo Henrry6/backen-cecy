@@ -4,6 +4,8 @@ namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
 use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 use App\Http\Requests\V1\Core\Images\IndexImageRequest;
 use App\Http\Requests\V1\Core\Images\UploadImageRequest;
 use App\Http\Requests\V1\Cecy\Courses\CoordinatorCecy\GetCoursesByCoordinatorCecyRequest;
@@ -28,23 +30,40 @@ use App\Http\Resources\V1\Cecy\Courses\CoordinatorCecy\CourseByCoordinatorCecyCo
 use App\Http\Resources\V1\Cecy\Courses\CourseResource;
 use App\Http\Resources\V1\Cecy\Courses\CourseCollection;
 use App\Models\Core\File;
-use App\Models\Core\State;
 use App\Models\Core\Career;
-use App\Models\Cecy\Course;
-use App\Models\Cecy\Catalogue;
+use App\Models\Core\State;
 use App\Models\Cecy\Authority;
+use App\Models\Cecy\Catalogue;
+use App\Models\Cecy\Course;
 use App\Models\Cecy\Instructor;
 use App\Models\Cecy\Participant;
 use App\Models\Cecy\Planification;
 use App\Models\Authentication\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 
 class CourseController extends Controller
 {
     public function __construct()
     {
+    }
+
+    public function index(IndexCourseRequest $request)
+    {
+        $sorts = explode(',', $request->input('sort'));
+
+        $courses = Course::customOrderBy($sorts)
+            ->schoolPeriodId($request->input('schoolPeriod.id'))
+            ->paginate($request->input('per_page'));
+
+        return (new CourseCollection($courses))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
     }
 
     // Función privada que permite obtener cursos aprobados
@@ -555,7 +574,8 @@ class CourseController extends Controller
     }
 
     /**
-     * getCoursesBySchoolPeriod
+     * getCoursesByCarrer
+     * scope schoolPeriod
      */
 
     /**
@@ -573,6 +593,20 @@ class CourseController extends Controller
     /**
      * updatePlanification
      */
+
+
+    /*
+        * getCourseByAcademicPeriod
+    */
+    /*
+        * getCourseByCarrer
+    */
+    /*
+        * getCourseByState
+    */
+    /*
+        * approveCourse
+    */
 
 
     // Files
