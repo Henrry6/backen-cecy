@@ -111,6 +111,11 @@ Route::prefix('detailPlanification/{detailPlanification}')->group(function () {
  **********************************************************************************************************************/
 
 Route::prefix('courses')->group(function () {
+    Route::prefix('career/{career}')->group(function () {
+        Route::get('', [CourseController::class, 'getCoursesByCareer']);
+        Route::post('', [CourseController::class, 'storeNewCourse']);
+    });
+
     Route::get('', [CourseController::class, 'getCourses']);
     Route::post('', [CourseController::class, 'storeNewCourse']);
     Route::get('private-courses-participant', [CourseController::class, 'getPrivateCoursesByParticipantType']);
@@ -120,9 +125,9 @@ Route::prefix('courses')->group(function () {
     Route::get('by-coodinator', [CourseController::class, 'getCoursesByCoordinator']);
     Route::get('kpi', [CourseController::class, 'getCoursesKPI']);
     Route::get('year-schedule', [CourseController::class, 'showYearSchedule']);
-    Route::get('career/{career}', [CourseController::class, 'getCoursesByCareer']);
-    Route::post('career/{career}', [CourseController::class, 'storeNewCourse']);
+
     Route::get('academicPeriod/{academicPeriod}', [CourseController::class, 'getCoursesByAcademicPeriod']);
+    Route::get('schoolPeriod/{schoolPeriod}', [CourseController::class, 'getCoursesBySchoolPeriod']);
     // Route::put('{course}', [CourseController::class, 'updateStateCourse']);
 });
 
@@ -282,7 +287,8 @@ Route::prefix('participant')->group(function () {
 Route::prefix('participant/{participant}')->group(function () {
     // Route::post('', [ParticipantController::class, 'acceptParticipant']);
     Route::delete('', [ParticipantController::class, 'destroyParticipant']);
-    Route::put('', [ParticipantController::class, 'updateRequirement']);
+    Route::get('', [ParticipantController::class, 'getParticipants']);
+    Route::put('', [ParticipantController::class, 'updateParticipant']);
 });
 
 /***********************************************************************************************************************

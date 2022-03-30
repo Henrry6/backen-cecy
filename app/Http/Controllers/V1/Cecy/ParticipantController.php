@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\V1\Cecy\Participants\AcceptParticipantRequest;
 use App\Http\Requests\V1\Cecy\Participants\DestroyParticipantRequest;
-use App\Http\Requests\V1\Cecy\Participants\DestroysParticipantRequest;
+use App\Http\Requests\V1\Cecy\Participants\GetParticipantsRequest;
 use App\Http\Requests\V1\Cecy\Participants\UpdateParticipantRequest;
 use App\Http\Requests\V1\Cecy\Participants\StoreParticipantRequest;
 use App\Http\Requests\V1\Cecy\Planifications\IndexPlanificationRequest;
@@ -199,7 +199,7 @@ class ParticipantController extends Controller
     }
 
     //Modificacion de Participante
-    public function updateParticipante(UpdateParticipantRequest $request, Participant $participant)
+    public function updateParticipant(UpdateParticipantRequest $request, Participant $participant)
     {
         $participant->identificationType()->associate(Catalogue::find($request->input('identificationType.id')));
         $participant->sex()->associate(Catalogue::find($request->input('sex.id')));
@@ -248,7 +248,7 @@ class ParticipantController extends Controller
     }
 
     //Metodo de Aceptación de Participante
-    public function acceptParticipant(/*AcceptParticipantRequest*/$request, Participant $participant)
+    public function acceptParticipant( AcceptParticipantRequest $request, Participant $participant)
     {
         $participant = Participant::where('user_id', $request->user()->id)->first();
 
@@ -264,7 +264,7 @@ class ParticipantController extends Controller
     }
 
     //Metodo de Eliminación de Participante
-    public function destroyParticipant(/*DestroyParticipantRequest*/$request, Participant $participant)
+    public function destroyParticipant(DestroyParticipantRequest $request, Participant $participant)
     {
         $participant->delete();
 
