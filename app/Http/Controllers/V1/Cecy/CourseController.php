@@ -604,7 +604,7 @@ class CourseController extends Controller
         return (new CourseResource($course))
             ->additional([
                 'msg' => [
-                    'summary' => 'Usuario Actualizado',
+                    'summary' => 'Curso Actualizado',
                     'detail' => '',
                     'code' => '201'
                 ]

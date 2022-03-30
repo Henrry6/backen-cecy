@@ -376,7 +376,37 @@ class PlanificationController extends Controller
      * updatePlanificationByCourse
      */
 
+    public function updatePlanificationByCourse(UpdatePlanificationByCourseRequest $request, Course $course)
+    {
+        $course->course = $request->input('course');
+
+        $course->save();
+
+        return (new CourseResource($course))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Planificación Actualizado',
+                    'detail' => '',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
+    }
+
     /**
      * deletePlanification
      */
+    public function destroyPlanification(DestroyPlanificationRequest $planification)
+    {
+        $planification->delete();
+        return (new PlanificationResource($planification))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Registro Eliminado',
+                    'detail' => '',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
+    }
 }

@@ -144,6 +144,7 @@ Route::prefix('courses/{course}')->group(function () {
     Route::put('', [CourseController::class, 'approveCourse']);
     Route::put('', [CourseController::class, 'declineCourse']);
     Route::put('', [CourseController::class, 'updateCourse']);
+    Route::put('', [CourseController::class, 'updatePlanificationByCourse']);
 
     Route::prefix('')->group(function () {
         Route::get('/topics', [TopicController::class, 'getTopics']);
@@ -153,6 +154,7 @@ Route::prefix('courses/{course}')->group(function () {
         Route::delete('/topics/{topic}', [TopicController::class, 'destroyTopic']);
         Route::get('/topics/{topic}', [TopicController::class, 'show']);
         Route::get('/instructors', [TopicController::class, 'getInstructors']);
+        Route::delete('/planification/{planification}', [PlanificationController::class, 'destroyPlanification']);
     });
     Route::prefix('')->group(function () {
         Route::get('/prerequisites/all', [PrerequisiteController::class, 'getPrerequisitesAll']);
