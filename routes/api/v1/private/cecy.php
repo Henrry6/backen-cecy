@@ -244,9 +244,9 @@ Route::apiResource('instructors', InstructorController::class);
 Route::prefix('instructor')->group(function () {
     Route::post('create', [InstructorController::class, 'storeInstructor']);
     Route::get('', [InstructorController::class, 'indexInstructor']);
-    Route::get('courses', [InstructorController::class, 'getCourses']);//r
-    Route::get('instructor-courses', [InstructorController::class, 'getInstructorByCourses']);//r
-    Route::get('instructor-information', [InstructorController::class, 'getInstructorsInformationByCourse']);//r
+    Route::get('courses', [InstructorController::class, 'getCourses']); //r
+    Route::get('instructor-courses', [InstructorController::class, 'getInstructorByCourses']); //r
+    Route::get('instructor-information', [InstructorController::class, 'getInstructorsInformationByCourse']); //r
     Route::get('destroy/{instructor}', [InstructorController::class, 'destroyInstructors']); //r
 });
 
@@ -278,7 +278,7 @@ Route::prefix('participant')->group(function () {
 });
 
 Route::prefix('participant/{participant}')->group(function () {
-    // Route::success('', [ParticipantController::class, 'acceptParticipant']);
+    // Route::('', [ParticipantController::class, 'acceptParticipant']);
     Route::delete('', [ParticipantController::class, 'destroyParticipant']);
     Route::put('', [ParticipantController::class, 'updateRequirement']);
 });

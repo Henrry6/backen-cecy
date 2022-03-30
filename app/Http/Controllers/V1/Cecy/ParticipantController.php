@@ -252,8 +252,6 @@ class ParticipantController extends Controller
     {
         $participant = Participant::where('user_id', $request->user()->id)->first();
 
-        // $participant->success();
-
         return (new ParticipantResource($participant))
             ->additional([
                 'msg' => [
