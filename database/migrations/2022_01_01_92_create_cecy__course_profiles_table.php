@@ -4,11 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCecyProfileInstructorCoursesTable extends Migration
+class CreateCecyCourseProfilesTable extends Migration
 {
     public function up()
     {
-        Schema::connection(env('DB_CONNECTION_CECY'))->create('profile_instructor_courses', function (Blueprint $table) {
+        Schema::connection(env('DB_CONNECTION_CECY'))->create('course_profiles', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->softDeletes();
@@ -26,12 +26,12 @@ class CreateCecyProfileInstructorCoursesTable extends Migration
                 ->comment('Conocimientos del instructor para impartir un curso');
 
             $table->json('required_skills')
-            ->comment('Habilidades del instructor para impartir un curso');
+                ->comment('Habilidades del instructor para impartir un curso');
         });
     }
 
     public function down()
     {
-        Schema::connection(env('DB_CONNECTION_CECY'))->dropIfExists('profile_instructor_courses');
+        Schema::connection(env('DB_CONNECTION_CECY'))->dropIfExists('course_profiles');
     }
 }

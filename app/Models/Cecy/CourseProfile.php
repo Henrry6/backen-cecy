@@ -8,13 +8,13 @@ use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as Auditing;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ProfileInstructorCourse extends Model implements Auditable
+class CourseProfile extends Model implements Auditable
 {
     use HasFactory;
     use Auditing;
     use SoftDeletes;
 
-    protected $table = 'cecy.profile_instructor_courses';
+    protected $table = 'cecy.course_profiles';
 
     protected $fillable = [
         'required_experiences',

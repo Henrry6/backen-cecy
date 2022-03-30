@@ -22,7 +22,7 @@ class AuthorizedInstructorsSeeder extends Seeder
 
         foreach ($instructors as $instructor) {
             foreach ($profileInstructorCourses as $profileInstructorCourse) {
-                $instructor->profileInstructorCourses()->attach(
+                $instructor->courseProfiles()->attach(
                     $profileInstructorCourse->id
                 );
             }

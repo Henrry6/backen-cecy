@@ -151,9 +151,9 @@ class Course extends Model implements Auditable
         return $this->hasMany(Prerequisite::class);
     }
 
-    public function profileInstructorCourses()
+    public function courseProfiles()
     {
-        return $this->hasMany(ProfileInstructorCourses::class);
+        return $this->hasMany(CourseProfile::class);
     }
 
     public function responsible()

@@ -2,13 +2,12 @@
 
 namespace Database\Seeders\Develop\Cecy;
 
-use App\Models\Cecy\Course;
-use App\Models\Cecy\ProfileInstructorCourse;
-use Faker\Factory;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+use Faker\Factory;
+use App\Models\Cecy\Course;
+use App\Models\Cecy\CourseProfile;
 
-class ProfileInstructorCoursesSeeder extends Seeder
+class CourseProfilesSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -17,7 +16,7 @@ class ProfileInstructorCoursesSeeder extends Seeder
      */
     public function run()
     {
-        $this->createProfileInstructorCoursesCatalogue();
+        // $this->createProfileInstructorCoursesCatalogue();
         $this->createProfileInstructorCourses();
     }
 
@@ -27,14 +26,12 @@ class ProfileInstructorCoursesSeeder extends Seeder
     }
     public function createProfileInstructorCourses()
     {
-
         $faker = Factory::create();
 
         $courses = Course::get();
 
-
         foreach ($courses as $course) {
-            ProfileInstructorCourse::factory()->create([
+            CourseProfile::factory()->create([
                 'course_id' => $course,
                 'required_knowledges' => $faker->sentences(),
                 'required_experiences' => $faker->sentences(),

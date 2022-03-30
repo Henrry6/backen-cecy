@@ -40,9 +40,9 @@ class Instructor extends Model implements Auditable
         return $this->hasMany(Planification::class);
     }
 
-    public function profileInstructorCourses()
+    public function courseProfiles()
     {
-        return $this->belongsToMany(ProfileInstructorCourse::class, 'cecy.authorized_instructors', 'profile_instructor_course_id', 'instructor_id');
+        return $this->belongsToMany(CourseProfile::class, 'cecy.authorized_instructors', 'course_profile_id', 'instructor_id');
     }
 
     public function state()
