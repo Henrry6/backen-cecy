@@ -594,18 +594,18 @@ class CourseController extends Controller
      * Actualizar nombre y duracion de curso
      */
 
-    public function updateCourse(UpdateUserRequest $request, User $user)
+    public function updateCourse(UpdateCourseRequest $request, Course $course)
     {
-        $user->username = $request->input('username');
+        $course-> course = $request->input('course');
 
-        $user->save();
+        $course->save();
 
-        return (new UserResource($user))
+        return (new CourseResource($course))
             ->additional([
                 'msg' => [
                     'summary' => 'Usuario Actualizado',
                     'detail' => '',
-                    'code' => '200'
+                    'code' => '201'
                 ]
             ])
             ->response()->setStatusCode(201);

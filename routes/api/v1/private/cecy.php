@@ -123,6 +123,7 @@ Route::prefix('courses')->group(function () {
     Route::get('career/{career}', [CourseController::class, 'getCoursesByCareer']);
     Route::get('academicPeriod/{academicPeriod}', [CourseController::class, 'getCoursesByAcademicPeriod']);
     // Route::put('{course}', [CourseController::class, 'updateStateCourse']);
+    Route::put('update-course', [CourseController::class, 'updateCourse']);
 });
 
 Route::prefix('courses')->group(function () {
