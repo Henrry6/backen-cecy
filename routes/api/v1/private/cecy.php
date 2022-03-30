@@ -121,7 +121,7 @@ Route::prefix('courses')->group(function () {
     Route::get('kpi', [CourseController::class, 'getCoursesKPI']);
     Route::get('year-schedule', [CourseController::class, 'showYearSchedule']);
     Route::get('career/{career}', [CourseController::class, 'getCoursesByCareer']);
-    Route::get('academicPeriod/{academicPeriod}', [CourseController::class, 'getCoursesByAcademicPeriod']);
+    Route::get('schoolPeriod/{schoolPeriod}', [CourseController::class, 'getCoursesBySchoolPeriod']);
     // Route::put('{course}', [CourseController::class, 'updateStateCourse']);
     Route::put('update-course', [CourseController::class, 'updateCourse']);
 });

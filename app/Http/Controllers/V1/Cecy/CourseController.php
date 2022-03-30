@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\V1\Cecy\Courses\ApproveCourseRequest;
 use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Http\Requests\V1\Core\Images\IndexImageRequest;
 use App\Http\Requests\V1\Core\Images\UploadImageRequest;
+use App\Http\Requests\V1\Cecy\Courses\ApproveCourseRequest;
+use App\Http\Requests\V1\Cecy\Courses\DeclineCourseRequest;
 use App\Http\Requests\V1\Cecy\Courses\CoordinatorCecy\GetCoursesByCoordinatorCecyRequest;
 use App\Http\Requests\V1\Cecy\Courses\GetCoursesByCategoryRequest;
 use App\Http\Requests\V1\Cecy\Courses\GetCoursesByNameRequest;
@@ -39,9 +40,9 @@ use App\Models\Cecy\Course;
 use App\Models\Cecy\Instructor;
 use App\Models\Cecy\Participant;
 use App\Models\Cecy\Planification;
-use App\Models\Cecy\Requirement;
 use App\Models\Cecy\SchoolPeriod;
 use App\Models\Authentication\User;
+//use App\Models\Cecy\Requirement;
 
 class CourseController extends Controller
 {
@@ -618,9 +619,7 @@ class CourseController extends Controller
 
 
 
-    /*
-        * getCourseByAcademicPeriod
-    */
+
     /*
         * approveCourse
     */
