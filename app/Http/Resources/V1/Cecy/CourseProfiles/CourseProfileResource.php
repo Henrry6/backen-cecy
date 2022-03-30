@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Resources\V1\Cecy\ProfileInstructorCourses;
+namespace App\Http\Resources\V1\Cecy\CourseProfiles;
 
 use App\Http\Resources\V1\Cecy\Courses\CourseCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProfileInstructorCourseResource extends JsonResource
+class CourseProfileResource extends JsonResource
 {
     public function toArray($request)
     {

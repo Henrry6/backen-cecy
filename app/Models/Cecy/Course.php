@@ -141,6 +141,7 @@ class Course extends Model implements Auditable
         return $this->hasMany(Planification::class);
     }
 
+    //esto esta mal
     public function planification()
     {
         return $this->belongsTo(Planification::class);
@@ -153,7 +154,7 @@ class Course extends Model implements Auditable
 
     public function courseProfiles()
     {
-        return $this->hasMany(CourseProfile::class);
+        return $this->hasOne(CourseProfile::class);
     }
 
     public function responsible()

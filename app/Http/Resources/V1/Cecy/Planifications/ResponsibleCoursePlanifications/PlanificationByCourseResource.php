@@ -5,7 +5,7 @@ namespace App\Http\Resources\V1\Cecy\Planifications\ResponsibleCoursePlanificati
 use App\Http\Resources\V1\Cecy\Catalogues\CatalogueCollection;
 use App\Http\Resources\V1\Cecy\Catalogues\CatalogueResource;
 use App\Http\Resources\V1\Cecy\Courses\CourseResource;
-use App\Http\Resources\V1\Cecy\Courses\CourseResourceBasic;
+use App\Http\Resources\V1\Cecy\Courses\BasicCourseResource;
 use App\Http\Resources\V1\Cecy\DetailPlanifications\ResponsibleCourseDetailPlanifications\DetailPlanificationResource;
 use App\Http\Resources\V1\Cecy\DetailPlanifications\ResponsibleCourseDetailPlanifications\InstructorsOfPlanificationResource;
 use App\Http\Resources\V1\Cecy\DetailSchoolPeriods\DetailSchoolPeriodResource;
@@ -23,7 +23,7 @@ class PlanificationByCourseResource extends JsonResource
         return [
             'id' => $this->id,
             'detailPlanifications' => InstructorsOfPlanificationResource::collection($this->detailPlanifications),
-            'course' => CourseResourceBasic::make($this->course),
+            'course' => BasicCourseResource::make($this->course),
             'responsibleCourse' => InstructorFullnameResource::make($this->responsibleCourse),
             'detailSchoolPeriod' => DetailSchoolPeriodShortResource::make($this->detailSchoolPeriod),
             'state' => CatalogueResource::make($this->state),
