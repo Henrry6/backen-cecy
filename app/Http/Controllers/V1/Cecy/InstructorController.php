@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 // use App\Http\Requests\V1\Cecy\Courses\getCoursesByResponsibleRequest;
 use App\Http\Requests\V1\Cecy\Instructors\IndexInstructorRequest;
+use App\Http\Requests\V1\Cecy\Instructors\StoreInstructorRequest;
 // use App\Http\Requests\V1\Cecy\Instructor\DestroysInstructorRequest;
 // use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationByInstructorCollection;
 use App\Http\Resources\V1\Cecy\Courses\CourseCollection;
@@ -28,18 +29,24 @@ class InstructorController extends Controller
 
     public function index(IndexInstructorRequest $request)
     {
-        return (new InstructorCollection(Instructor::paginate()))
+        $sorts = explode(',', $request->input('sort'));
+
+        $instructors = Instructor::customOrderBy($sorts)
+            ->schoolPeriodId($request->input('schoolPeriod.id'))
+            ->paginate($request->input('per_page'));
+
+        return (new InstructorCollection($instructors))
             ->additional([
                 'msg' => [
                     'summary' => 'success',
-                    'Institution' => '',
+                    'detail' => '',
                     'code' => '200'
                 ]
             ])
             ->response()->setStatusCode(200);
     }
 
-    public function storeInstructor(Instructor $instructor, Request $request)
+    public function storeInstructor(StoreInstructorRequest $request, Instructor $instructor )
     {
         $instructor = new Instructor();
 
