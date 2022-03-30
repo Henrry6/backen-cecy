@@ -15,7 +15,6 @@ class CreateCecyCourseProfilesTable extends Migration
 
             // Pendiente
             $table->foreignId('course_id')
-                ->nullable()
                 ->comment('Fk de curso al que se le asigna el perfil del instructor')
                 ->constrained('cecy.courses');
 

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\V1\Cecy\ProfileInstructorCourses;
+namespace App\Http\Requests\V1\Cecy\CourseProfiles;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateProfileCourseRequest extends FormRequest
+class StoreProfileCourseRequest extends FormRequest
 {
     public function authorize()
     {

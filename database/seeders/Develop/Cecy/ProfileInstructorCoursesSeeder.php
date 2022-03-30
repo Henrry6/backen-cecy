@@ -16,15 +16,15 @@ class CourseProfilesSeeder extends Seeder
      */
     public function run()
     {
-        // $this->createProfileInstructorCoursesCatalogue();
-        $this->createProfileInstructorCourses();
+        // $this->createCourseProfilesCatalogue();
+        $this->createCourseProfiles();
     }
 
-    public function createProfileInstructorCoursesCatalogue()
+    public function createCourseProfilesCatalogue()
     {
         //Campos que son de catalogo
     }
-    public function createProfileInstructorCourses()
+    public function createCourseProfiles()
     {
         $faker = Factory::create();
 

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\V1\Cecy\ProfileInstructorCourses\StoreProfileCourseRequest;
-use App\Http\Resources\V1\Cecy\ProfileInstructorCourses\ProfileInstructorCourseResource;
+use App\Http\Requests\V1\Cecy\CourseProfiles\StoreProfileCourseRequest;
+use App\Http\Resources\V1\Cecy\CourseProfiles\CourseProfileResource;
 use App\Models\Cecy\Course;
 use App\Models\Cecy\ProfileInstructorCourse;
 
@@ -46,7 +46,7 @@ class ProfileInstructorCourseController extends Controller
 
         $profile->save();
 
-        return (new ProfileInstructorCourseResource($profile))
+        return (new CourseProfileResource($profile))
             ->additional([
                 'msg' => [
                     'summary' => 'Perfil del curso creado',
@@ -65,7 +65,7 @@ class ProfileInstructorCourseController extends Controller
         $profileInstructorCourse->required_skills = $request->input('requiredSkills');
         $profileInstructorCourse->save();
 
-        return (new ProfileInstructorCourseResource($profileInstructorCourse))
+        return (new CourseProfileResource($profileInstructorCourse))
             ->additional([
                 'msg' => [
                     'summary' => 'success',

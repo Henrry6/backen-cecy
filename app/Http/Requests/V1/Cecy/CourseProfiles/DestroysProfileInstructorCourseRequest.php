@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\V1\Cecy\ProfileInstructorCourses;
+namespace App\Http\Requests\V1\Cecy\CourseProfiles;
 
 use Illuminate\Foundation\Http\FormRequest;
 
