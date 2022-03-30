@@ -280,7 +280,8 @@ Route::prefix('participant')->group(function () {
 Route::prefix('participant/{participant}')->group(function () {
     // Route::('', [ParticipantController::class, 'acceptParticipant']);
     Route::delete('', [ParticipantController::class, 'destroyParticipant']);
-    Route::put('', [ParticipantController::class, 'updateRequirement']);
+    Route::get('', [ParticipantController::class, 'getParticipants']);
+    Route::put('', [ParticipantController::class, 'updateParticipant']);
 });
 
 /***********************************************************************************************************************
