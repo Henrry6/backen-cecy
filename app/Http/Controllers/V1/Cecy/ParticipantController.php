@@ -3,18 +3,20 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use App\Http\Requests\V1\Cecy\Participants\AcceptParticipantRequest;
 use App\Http\Requests\V1\Cecy\Participants\DestroyParticipantRequest;
 use App\Http\Requests\V1\Cecy\Participants\DestroysParticipantRequest;
 use App\Http\Requests\V1\Cecy\Participants\UpdateParticipantRequest;
 use App\Http\Requests\V1\Cecy\Participants\StoreParticipantRequest;
 use App\Http\Requests\V1\Cecy\Planifications\IndexPlanificationRequest;
-use App\Http\Requests\V1\Cecy\Registrations\RegistrationStateModificationRequest;
 use App\Http\Requests\V1\Cecy\Participants\StoreParticipantUserRequest;
+use App\Http\Resources\V1\Cecy\Participants\ParticipantCollection;
 use App\Http\Resources\V1\Cecy\Participants\ParticipantResource;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationParticipants\PlanificationParticipantCollection;
-use App\Http\Resources\V1\Cecy\Registrations\RegistrationResource;
+use App\Http\Requests\V1\Cecy\Registrations\RegistrationStateModificationRequest;
 use App\Http\Resources\V1\Core\Users\UserResource;
+use App\Http\Resources\V1\Cecy\Registrations\RegistrationResource;
 use App\Models\Authentication\User;
 use App\Models\Cecy\Catalogue;
 use App\Models\Cecy\DetailPlanification;
@@ -25,7 +27,6 @@ use App\Models\Core\Catalogue as CoreCatalogue;
 use App\Models\Core\File;
 use App\Models\Core\Image;
 use App\Models\Core\Location;
-use Illuminate\Support\Facades\DB;
 
 class ParticipantController extends Controller
 {
@@ -198,7 +199,8 @@ class ParticipantController extends Controller
     }
 
     //Modificacion de Participante
-    public function updateParticipante(UpdateParticipantRequest $request, Participant $participant){
+    public function updateParticipante(UpdateParticipantRequest $request, Participant $participant)
+    {
         $participant->identificationType()->associate(Catalogue::find($request->input('identificationType.id')));
         $participant->sex()->associate(Catalogue::find($request->input('sex.id')));
         $participant->gender()->associate(Catalogue::find($request->input('gender.id')));
@@ -227,22 +229,30 @@ class ParticipantController extends Controller
     }
 
     //Metodo para ver listado de los Participante
-    public function getParticipants(){
-        /*return (new ParticipantCollection(Course::paginate(100)))
-        ->additional([
-            'msg' => [
-                'summary' => 'Me trae el listado de participantes',
-                'detail' => '',
-                'code' => '200'
-            ]
-        ])->response()->setStatusCode(200);*/
+    public function getParticipants(GetParticipantsRequest $request)
+    {
+        $sorts = explode(',', $request->input('sort'));
+
+        $participants = Participant::customOrderBy($sorts)
+            // ->username($request->input('search'))
+            ->paginate($request->input('perPage'));
+
+        return (new ParticipantCollection($participants))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Éxito',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])->response()->setStatusCode(200);
     }
 
     //Metodo de Aceptación de Participante
-    public function acceptParticipant(/*AcceptParticipantRequest*/ $request, Participant $participant){
+    public function acceptParticipant(/*AcceptParticipantRequest*/$request, Participant $participant)
+    {
         $participant = Participant::where('user_id', $request->user()->id)->first();
-       
-        // $participant->success(); ? No existe el metodo success
+
+        // $participant->success();
 
         return (new ParticipantResource($participant))
             ->additional([
@@ -256,7 +266,7 @@ class ParticipantController extends Controller
     }
 
     //Metodo de Eliminación de Participante
-    public function destroyParticipant(/*DestroyParticipantRequest*/ $request, Participant $participant)
+    public function destroyParticipant(/*DestroyParticipantRequest*/$request, Participant $participant)
     {
         $participant->delete();
 
