@@ -121,9 +121,9 @@ Route::prefix('courses')->group(function () {
     Route::get('kpi', [CourseController::class, 'getCoursesKPI']);
     Route::get('year-schedule', [CourseController::class, 'showYearSchedule']);
     Route::get('career/{career}', [CourseController::class, 'getCoursesByCareer']);
+    Route::post('career/{career}', [CourseController::class, 'storeNewCourse']);
     Route::get('academicPeriod/{academicPeriod}', [CourseController::class, 'getCoursesByAcademicPeriod']);
     // Route::put('{course}', [CourseController::class, 'updateStateCourse']);
-    Route::put('update-course', [CourseController::class, 'updateCourse']);
 });
 
 Route::prefix('courses')->group(function () {
@@ -138,6 +138,8 @@ Route::prefix('courses/{course}')->group(function () {
     Route::get('', [CourseController::class, 'show']);
     Route::put('', [CourseController::class, 'approveCourse']);
     Route::put('', [CourseController::class, 'declineCourse']);
+    Route::put('', [CourseController::class, 'updateCourse']);
+
     Route::prefix('')->group(function () {
         Route::get('/topics', [TopicController::class, 'getTopics']);
         Route::get('/topics/all', [TopicController::class, 'getAllTopics']);
@@ -247,12 +249,12 @@ Route::prefix('instructor')->group(function () {
     Route::get('courses', [InstructorController::class, 'getCourses']); //r
     Route::get('instructor-courses', [InstructorController::class, 'getInstructorByCourses']); //r
     Route::get('instructor-information', [InstructorController::class, 'getInstructorsInformationByCourse']); //r
-    Route::get('destroy/{instructor}', [InstructorController::class, 'destroyInstructors']); //r
+    // Route::get('destroy/{instructor}', [InstructorController::class, 'destroyInstructors']); //r
 });
 
 Route::prefix('instructor/{instructor}')->group(function () {
-    Route::put('type-instructor/{instructor}', [InstructorController::class, 'updateStateInstructors']);
-    Route::put('state-instructor/{instructor}', [InstructorController::class, 'updateTypeInstructors']);
+    Route::put('type-instructor', [InstructorController::class, 'updateStateInstructors']);
+    Route::put('state-instructor', [InstructorController::class, 'updateTypeInstructors']);
 });
 
 /***********************************************************************************************************************
@@ -278,7 +280,7 @@ Route::prefix('participant')->group(function () {
 });
 
 Route::prefix('participant/{participant}')->group(function () {
-    // Route::('', [ParticipantController::class, 'acceptParticipant']);
+    // Route::post('', [ParticipantController::class, 'acceptParticipant']);
     Route::delete('', [ParticipantController::class, 'destroyParticipant']);
     Route::put('', [ParticipantController::class, 'updateRequirement']);
 });
@@ -391,9 +393,10 @@ Route::prefix('topic/{topic}')->group(function () {
 
 
 /**
- * get      index, show, get    1
- * put      update              2
- * post     store               1
- * delete   delete/destroy              2
+ * get      index, , get    1
+ * put      update          2
+ * post     store           1
+ * delete   delete/destroy  2
+ * get      show            2
  * patch    
  */
