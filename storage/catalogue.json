@@ -1,4 +1,16 @@
 {
+    "attendances": {
+        "type": "ATTENDANCES",
+        "duration": "DURATION",
+        "registered_at": "REGISTERED_AT"
+    },
+    "authority_state": {
+        "type": "AUTHORITY_STATE",
+        "on_vocation": "ON_VOCATION",
+        "medical_consent": "MEDICAL_CONSENT",
+        "active": "ACTIVE",
+        "inactive": "INACTIVE"
+    },
     "civil_status": {
         "type": "CIVIL_STATUS",
         "married": "MARRIED",
@@ -8,11 +20,6 @@
     },
     "ethnic_origin": {
         "type": "ETHNIC_ORIGIN"
-    },
-    "attendances": {
-        "type": "ATTENDANCES",
-        "duration": "DURATION",
-        "registered_at": "REGISTERED_AT"
     },
     "entity_certification": {
         "type": "ENTITY_CERTIFICATION",
@@ -226,14 +233,8 @@
         "vicerector": "VICERECTOR",
         "representative_ocs": "REPRESENTATIVE_OCS",
         "logistics": "LOGISTICS",
-        "cecy": "CECY"
-    },
-    "authority_state": {
-        "type": "AUTHORITY_STATE",
-        "on_vocation": "ON_VOCATION",
-        "medical_consent": "MEDICAL_CONSENT",
-        "active": "ACTIVE",
-        "inactive": "INACTIVE"
+        "cecy": "CECY",
+        "career_coordinator": "CAREER_COORDINATOR"
     },
     "level_instruction": {
         "type": "LEVEL_INSTRUCTION",
@@ -260,9 +261,9 @@
         "past": "PAST"
     },
     "target_groups": {
-        "type":"TARGET_GROUPS",
-        "children":"CHILDREN",
-        "young":"YOUNG",
-        "adult":"ADULT"
+        "type": "TARGET_GROUPS",
+        "children": "CHILDREN",
+        "young": "YOUNG",
+        "adult": "ADULT"
     }
 }

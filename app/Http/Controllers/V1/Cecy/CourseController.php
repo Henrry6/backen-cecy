@@ -490,56 +490,6 @@ class CourseController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    public function getCoursesByCareer(GetCoursesByCareerRequest $request, Career $career)
-    {
-        // return 'w123';
-        $sorts = explode(',', $request->sort);
-
-        $courses = $career->courses()
-            ->customOrderBy($sorts)
-            ->schoolPeriodId(($request->input('schoolPeriod.id')))
-            ->paginate($request->input('perPage'));
-
-        return (new CourseCollection($courses))
-            ->additional([
-                'msg' => [
-                    'summary' => 'success',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ])->response()->setStatusCode(200);
-    }
-
-    public function storeNewCourse(StoreCourseNewRequest $request)
-    {
-        return "storeNewCourse";
-        $course = new Course();
-
-        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
-        $toBeApproved = Catalogue::where('code',  $catalogue['planification_state']['to_be_approved'])->first();
-        $career = Career::find();
-        $schoolPeriod = SchoolPeriod::find();
-
-        $course->state()->associate($toBeApproved);
-        $course->schoolPeriod()->associate($schoolPeriod);
-        $course->career()->associate($career);
-
-        $course->duration = $request->input('duration');
-        $course->name = $request->input('name');
-
-        $course->save();
-
-        return (new CourseResource($course))
-            ->additional([
-                'msg' => [
-                    'summary' => 'Curso creado',
-                    'detail' => '',
-                    'code' => '201'
-                ]
-            ])->response()->setStatusCode(201);
-    }
-
-
     //traer participante de un curso 
 
     public function certificateParticipants(Course $course)
@@ -580,23 +530,73 @@ class CourseController extends Controller
     }
 
     /**
-     * getCoursesByCarrer
+     * getCoursesByCareer
      * scope schoolPeriod
+     * filtros estado, codigo
      */
+    public function getCoursesByCareer(GetCoursesByCareerRequest $request, Career $career)
+    {
+        $sorts = explode(',', $request->sort);
+
+        $courses = $career->courses()
+            ->customOrderBy($sorts)
+            ->code(($request->input('search')))
+            ->name(($request->input('search')))
+            ->schoolPeriodId(($request->input('schoolPeriod.id')))
+            ->paginate($request->input('perPage'));
+
+        return (new CourseCollection($courses))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])->response()->setStatusCode(200);
+    }
 
     /**
      * storeNewCourse
      */
+    public function storeNewCourse(StoreCourseNewRequest $request)
+    {
+        return "storeNewCourse";
+        $course = new Course();
+ 
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+        $toBeApproved = Catalogue::where('code',  $catalogue['planification_state']['to_be_approved'])->first();
+        $career = Career::find();
+        $schoolPeriod = SchoolPeriod::find($request->input('schoolPeriod.id'));
+        $responsible = Instructor::find($request->input('instructor.id'));
+
+        $course->responsible()->associate($responsible);
+        $course->state()->associate($toBeApproved);
+        $course->schoolPeriod()->associate($schoolPeriod);
+        $course->career()->associate($career);
+
+        $course->duration = $request->input('duration');
+        $course->name = $request->input('name');
+
+        $course->save();
+
+        return (new CourseResource($course))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Curso creado',
+                    'detail' => '',
+                    'code' => '201'
+                ]
+            ])->response()->setStatusCode(201);
+    }
 
     /**
      * Samantha
      * updateCourse
      * Actualizar nombre y duracion de curso
      */
-
     public function updateCourse(UpdateCourseRequest $request, Course $course)
     {
-        $course-> course = $request->input('course');
+        $course->course = $request->input('course');
 
         $course->save();
 
@@ -610,6 +610,10 @@ class CourseController extends Controller
             ])
             ->response()->setStatusCode(201);
     }
+
+    /**
+     * deleteCourse
+     */
 
 
 

@@ -35,35 +35,6 @@ class PlanificationController extends Controller
     {
     }
 
-    public function storePlanificationByCourse(StorePlanificationByCourseRequest $request, Course $course)
-    {
-        return 'works';
-        $planification = new Planification();
-
-        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
-        //state
-        $toBeApproved = Catalogue::where('code',  $catalogue['planification_state']['to_be_approved'])->first();
-
-        $planification->course()->associate($course);
-        $planification->responsibleCourse()->associate(Instructor::find($request->input('responsibleCourse.id')));
-        $planification->state()->associate($toBeApproved);
-
-        $planification->ended_at = $request->input('endedAt');
-        $planification->started_at = $request->input('startedAt');
-
-        $planification->save();
-
-        return (new PlanificationResource($planification))
-            ->additional([
-                'msg' => [
-                    'summary' => 'Planificación creada',
-                    'detail' => '',
-                    'code' => '201'
-                ]
-            ])
-            ->response()->setStatusCode(201);
-    }
-
     public function updatePlanificationByCecy(UpdatePlanificationRequest $request, Planification $planification)
     {
         $loggedAuthority = Authority::where('user_id', $request->user()->id)->get();
@@ -367,15 +338,45 @@ class PlanificationController extends Controller
         return $pdf->stream('Informe final del curso.pdf');
     }
 
+    /**
+     * storePlanificationByCourse 
+     */
+    public function storePlanificationByCourse(StorePlanificationByCourseRequest $request, Course $course)
+    {
+        return 'works';
+        $planification = new Planification();
+
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+        //state
+        $toBeApproved = Catalogue::where('code',  $catalogue['planification_state']['to_be_approved'])->first();
+
+        $planification->course()->associate($course);
+        $planification->responsibleCourse()->associate(Instructor::find($request->input('responsibleCourse.id')));
+        $planification->state()->associate($toBeApproved);
+
+        $planification->ended_at = $request->input('endedAt');
+        $planification->started_at = $request->input('startedAt');
+
+        $planification->save();
+
+        return (new PlanificationResource($planification))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Planificación creada',
+                    'detail' => '',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
+    }
+
+
 
     /**
-     * getPlanificationsByCourse hecho
-     */
-    /**
-     * storePlanification
+     * updatePlanificationByCourse
      */
 
     /**
-     * updatePlanification
+     * deletePlanification
      */
 }
