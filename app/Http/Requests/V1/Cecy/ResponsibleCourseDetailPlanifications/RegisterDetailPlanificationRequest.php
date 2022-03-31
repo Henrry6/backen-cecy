@@ -19,14 +19,19 @@ class RegisterDetailPlanificationRequest extends FormRequest
             'day.id' => ['required', 'integer'],
             'planification.id' => ['required', 'integer'],
             'workday.id' => ['required', 'integer', new WorkdayRule($this->endedTime)],
-            'parallel.id' => [
+            'parallel.id' => [ //1 retrieve softdelete models with withTrashed method
+                //2 apply rule not in with this field,
+                //other option: use a available validation rule such as exist, exclude if,etc,
                 'required', 'integer',
-                Rule::unique('pgsql-cecy.detail_planifications', 'parallel_id')
-                    ->where(fn ($query) => $query->where('planification_id', $this->planification))
+                // Rule::unique('pgsql-cecy.detail_planifications', 'parallel_id')
+                //     ->where(
+                //         fn ($query) => $query
+                //             ->where('planification_id', $this->planification)
+                //     )
             ],
             'endedTime' => ['required', 'after:startedTime'],
             'startedTime' => ['required',],
-            // 'observations' => ['required'], //solo si las horas del curso no coinciden
+            'observations' => ['sometimes', 'required', 'array'], //solo si las horas del curso no coinciden
         ];
     }
 

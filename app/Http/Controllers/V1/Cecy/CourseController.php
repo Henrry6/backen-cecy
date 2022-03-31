@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
-use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
+
 use App\Http\Requests\V1\Core\Images\IndexImageRequest;
 use App\Http\Requests\V1\Core\Images\UploadImageRequest;
 use App\Http\Requests\V1\Cecy\Courses\ApproveCourseRequest;
@@ -42,7 +44,6 @@ use App\Models\Cecy\Participant;
 use App\Models\Cecy\Planification;
 use App\Models\Cecy\SchoolPeriod;
 use App\Models\Authentication\User;
-use Illuminate\Database\Eloquent\Builder;
 
 //use App\Models\Cecy\Requirement;
 
@@ -564,14 +565,16 @@ class CourseController extends Controller
      */
     public function storeCourse(StoreCourseRequest $request, Career $career)
     {
-        $course = new Course();
-
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
 
-        $currentState = Catalogue::where('code',  $catalogue['school_period_state']['current'])->first();
-        $toBeApprovedState = Catalogue::where('code',  $catalogue['planification_state']['to_be_approved'])->first();
+        $currentState = Catalogue::where('type', $catalogue['school_period_state']['type'])
+            ->where('code', $catalogue['school_period_state']['current'])->first();
+        $toBeApprovedState = Catalogue::where('type', $catalogue['planification_state']['type'])
+            ->where('code', $catalogue['planification_state']['to_be_approved'])->first();
         $currentSchoolPeriod = SchoolPeriod::where('state_id', $currentState->id)->first();
         $responsible = Instructor::find($request->input('responsible.id'));
+
+        $course = new Course();
 
         $course->career()->associate($career);
         $course->responsible()->associate($responsible);
@@ -580,6 +583,7 @@ class CourseController extends Controller
 
         $course->duration = $request->input('duration');
         $course->name = $request->input('name');
+        // $course->proposed_at = now();
 
         $course->save();
 

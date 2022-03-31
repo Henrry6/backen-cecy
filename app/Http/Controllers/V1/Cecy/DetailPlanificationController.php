@@ -184,7 +184,7 @@ class DetailPlanificationController extends Controller
                     'detail' => 'No es instructor o no se encuentra registrado',
                     'code' => '400'
                 ]
-            ], 400); //revisar ->response()->setStatusCode(400)
+            ], 400);
         }
 
         $planification = Planification::find($request->input('planification.id'));
@@ -198,10 +198,9 @@ class DetailPlanificationController extends Controller
                     'detail' => 'No le pertece esta planificación',
                     'code' => '400'
                 ]
-            ], 400); //revisar ->response()->setStatusCode(400)
+            ], 400);
         }
 
-        // validar que la planification ha culminado
         if (
             $planification->state()->first()->code === State::CULMINATED ||
             $planification->state()->first()->code === State::APPROVED
@@ -212,7 +211,7 @@ class DetailPlanificationController extends Controller
                     'detail' => 'La planificación ha culminado o ya fue aprobada.',
                     'code' => '400'
                 ]
-            ], 400);  //revisar ->response()->setStatusCode(400)
+            ], 400);
         }
 
         $classroom = Classroom::find($request->input('classroom.id'));
@@ -358,7 +357,7 @@ class DetailPlanificationController extends Controller
                     'detail' => 'No es instructor o no se encuentra registrado',
                     'code' => '400'
                 ]
-            ], 400);//revisar ->response()->setStatusCode(400)
+            ], 400); //revisar ->response()->setStatusCode(400)
         }
 
         if ($loggedInInstructor->id !== $responsibleCourse->id) {
@@ -369,7 +368,7 @@ class DetailPlanificationController extends Controller
                     'detail' => 'No le pertece esta planificación',
                     'code' => '400'
                 ]
-            ], 400);//revisar ->response()->setStatusCode(400)
+            ], 400); //revisar ->response()->setStatusCode(400)
         }
 
         //validar que la planification ha culminado
@@ -383,11 +382,11 @@ class DetailPlanificationController extends Controller
                     'detail' => 'La planificación ha culminado o ya fue aprobada.',
                     'code' => '400'
                 ]
-            ], 400);//revisar ->response()->setStatusCode(400)
+            ], 400); //revisar ->response()->setStatusCode(400)
         }
         $detailPlanifications = DetailPlanification::whereIn('id', $request->input('ids'))->get();
-        DetailPlanification::destroy($request->input('ids'));//esta llenandose el delete_at en lugar de borrar el registro, resolver
-        
+        DetailPlanification::destroy($request->input('ids'));
+
         return (new ResponsibleCourseDetailPlanificationCollection($detailPlanifications))
             ->additional([
                 'msg' => [

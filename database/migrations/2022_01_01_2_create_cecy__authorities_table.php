@@ -20,7 +20,7 @@ class CreateCecyAuthoritiesTable extends Migration
                 ->constrained('cecy.institutions');
 
             $table->foreignId('position_id')
-                ->comment('Cecy, Rector, Vicerrector, etc.')
+                ->comment('Cecy, Rector, Vicerrector, Coordinador de carrera, etc.')
                 ->constrained('cecy.catalogues');
 
             $table->foreignId('state_id')
