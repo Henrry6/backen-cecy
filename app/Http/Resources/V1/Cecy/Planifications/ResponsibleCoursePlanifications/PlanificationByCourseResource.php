@@ -22,15 +22,15 @@ class PlanificationByCourseResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'detailPlanifications' => InstructorsOfPlanificationResource::collection($this->detailPlanifications),
             'course' => BasicCourseResource::make($this->course),
-            'responsibleCourse' => InstructorFullnameResource::make($this->responsibleCourse),
+            'detailPlanifications' => InstructorsOfPlanificationResource::collection($this->detailPlanifications),
             'detailSchoolPeriod' => DetailSchoolPeriodShortResource::make($this->detailSchoolPeriod),
+            'responsibleCourse' => InstructorFullnameResource::make($this->responsibleCourse),
             'state' => CatalogueResource::make($this->state),
             'code' => $this->code,
             'endedAt' => $this->ended_at,
-            'observations' => $this->observations,
             'needs' => $this->needs,
+            'observations' => $this->observations,
             'startedAt' => $this->started_at,
         ];
     }

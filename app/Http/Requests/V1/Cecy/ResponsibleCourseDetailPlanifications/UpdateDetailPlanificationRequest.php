@@ -29,7 +29,7 @@ class UpdateDetailPlanificationRequest extends FormRequest
             'workday.id' => ['required', 'integer', new WorkdayRule($this->endedTime)],
             'planification.id' => [
                 'required', 'integer',
-                new HoursRule($this->day, $this->startedTime, $this->endedTime)
+                // new HoursRule($this->day, $this->startedTime, $this->endedTime)
             ],
             'endedTime' => ['required', 'after:startedTime'],
             'startedTime' => ['required',],

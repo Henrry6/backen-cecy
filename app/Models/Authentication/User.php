@@ -261,6 +261,12 @@ class User extends Authenticatable implements Auditable, MustVerifyEmail
         $this->attributes['password'] = Hash::make(trim($value));
     }
 
+    // Accessors
+    public function getFullnameAttribute()
+    {
+        return $this->attributes['name'] . "" . $this->attributes['lastname'];
+    }
+
     // Functions
     public function reducePasswordAttempts()
     {

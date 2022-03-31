@@ -42,6 +42,8 @@ use App\Models\Cecy\Participant;
 use App\Models\Cecy\Planification;
 use App\Models\Cecy\SchoolPeriod;
 use App\Models\Authentication\User;
+use Illuminate\Database\Eloquent\Builder;
+
 //use App\Models\Cecy\Requirement;
 
 class CourseController extends Controller
@@ -248,10 +250,16 @@ class CourseController extends Controller
                     'code' => '404'
                 ],
                 'data' => null
-            ], 404); //revisar ->response()->setStatusCode(404)
+            ], 404);
         }
 
-        $courses = Course::where('responsible_id', $instructor->id)->get();
+        // $courses = Course::where('responsible_id', $instructor->id)->get();
+        $courses = Course::where('responsible_id', $instructor->id)
+            ->orWhereHas('planifications', function (Builder $query) use ($instructor) {
+                $query->where('responsible_course_id', $instructor->id);
+            })
+            ->get();
+
         return (new CoursesByResponsibleCollection($courses))
             ->additional([
                 'msg' => [
@@ -567,12 +575,12 @@ class CourseController extends Controller
         $toBeApprovedState = Catalogue::where('code',  $catalogue['planification_state']['to_be_approved'])->first();
         $currentSchoolPeriod = SchoolPeriod::where('state_id', $currentState->id)->first();
         $responsible = Instructor::find($request->input('responsible.id'));
-        
+
         $course->career()->associate($career);
         $course->responsible()->associate($responsible);
         $course->schoolPeriod()->associate($currentSchoolPeriod);
         $course->state()->associate($toBeApprovedState);
-        
+
         $course->duration = $request->input('duration');
         $course->name = $request->input('name');
 

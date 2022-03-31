@@ -346,7 +346,7 @@ class DetailPlanificationController extends Controller
     {
         $detailPlanification = DetailPlanification::find($request->ids[0]);
         $planification = $detailPlanification->planification()->first();
-        return $planification;
+        // return $planification;
         $responsibleCourse = $planification->responsibleCourse()->first();
 
         $loggedInInstructor = Instructor::where('user_id', $request->user()->id)->first();
@@ -386,8 +386,8 @@ class DetailPlanificationController extends Controller
             ], 400);//revisar ->response()->setStatusCode(400)
         }
         $detailPlanifications = DetailPlanification::whereIn('id', $request->input('ids'))->get();
-        DetailPlanification::destroy($request->input('ids'));
-
+        DetailPlanification::destroy($request->input('ids'));//esta llenandose el delete_at en lugar de borrar el registro, resolver
+        
         return (new ResponsibleCourseDetailPlanificationCollection($detailPlanifications))
             ->additional([
                 'msg' => [
