@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\V1\Cecy\Participants\AcceptParticipantRequest;
 use App\Http\Requests\V1\Cecy\Participants\DestroyParticipantRequest;
-use App\Http\Requests\V1\Cecy\Participants\GetParticipantsRequest;
+use App\Http\Requests\V1\Cecy\Participants\IndexParticipantRequest;
 use App\Http\Requests\V1\Cecy\Participants\UpdateParticipantRequest;
 use App\Http\Requests\V1\Cecy\Participants\StoreParticipantRequest;
 use App\Http\Requests\V1\Cecy\Planifications\IndexPlanificationRequest;
@@ -228,7 +228,7 @@ class ParticipantController extends Controller
     }
 
     //Metodo para ver listado de los Participante
-    public function index (IndexParticipantsRequest $request)
+    public function index (IndexParticipantRequest $request)
     {
         $sorts = explode(',', $request->input('sort'));
 
@@ -249,7 +249,7 @@ class ParticipantController extends Controller
     //Metodo de Aceptación de Participante
     public function acceptParticipant(AcceptParticipantRequest $request, Participant $participant)
     {
-
+        $participant->state_id = $request->id;
         $participant->save();
 
         return (new ParticipantResource($participant))
