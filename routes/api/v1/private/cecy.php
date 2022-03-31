@@ -113,7 +113,7 @@ Route::prefix('detailPlanification/{detailPlanification}')->group(function () {
 Route::prefix('courses')->group(function () {
     Route::prefix('career/{career}')->group(function () {
         Route::get('', [CourseController::class, 'getCoursesByCareer']);
-        Route::post('', [CourseController::class, 'storeNewCourse']);
+        Route::post('', [CourseController::class, 'storeCourse']);
     });
 
     Route::get('', [CourseController::class, 'getCourses']);
