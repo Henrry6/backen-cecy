@@ -126,8 +126,8 @@ Route::prefix('courses')->group(function () {
     Route::get('kpi', [CourseController::class, 'getCoursesKPI']);
     Route::get('year-schedule', [CourseController::class, 'showYearSchedule']);
 
-    Route::get('academicPeriod/{academicPeriod}', [CourseController::class, 'getCoursesByAcademicPeriod']);
-    Route::get('schoolPeriod/{schoolPeriod}', [CourseController::class, 'getCoursesBySchoolPeriod']);
+    //Route::get('academicPeriod/{academicPeriod}', [CourseController::class, 'getCoursesByAcademicPeriod']);
+    //Route::get('schoolPeriod/{schoolPeriod}', [CourseController::class, 'getCoursesBySchoolPeriod']);
     // Route::put('{course}', [CourseController::class, 'updateStateCourse']);
 });
 
@@ -229,11 +229,18 @@ Route::prefix('certificate')->group(function () {
  * SCHOOL PERIODS
  **********************************************************************************************************************/
 
-Route::apiResource('school-periods', SchoolPeriodController::class);
+Route::controller(SchoolPeriodController::class)->group(function () {
+    Route::prefix('school-periods/{school_period}')->group(function () {
+        Route::patch('accept', 'accpetTicket'); //ejemplo
 
-Route::prefix('school-period')->group(function () {
-    Route::patch('{school-period}', [SchoolPeriodController::class, 'destroys']);
+    });
+
+    Route::prefix('school-periods')->group(function () {
+        Route::get('catalogue', 'catalogue');
+
+    });
 });
+Route::apiResource('school-periods', SchoolPeriodController::class);
 
 /***********************************************************************************************************************
  * CLASSROOMS
