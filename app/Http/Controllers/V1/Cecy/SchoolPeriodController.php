@@ -52,9 +52,8 @@ class SchoolPeriodController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    public function catalogue(CatalogueSchoolPeriodRequest $request, SchoolPeriod $schoolPeriod)
+    public function catalogue(CatalogueSchoolPeriodRequest $request)
     {
-        return '123';
         $sorts = explode(',', $request->sort);
 
         $schoolPeriods =  SchoolPeriod::customOrderBy($sorts)

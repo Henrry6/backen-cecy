@@ -629,8 +629,11 @@ class CourseController extends Controller
     */
     public function approveCourse(ApproveCourseRequest $request, Course $course)
     {
-        return '123';
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+        $state = Catalogue::where('type',$catalogue['course_state']['type'])
+        ->where('code',$catalogue['course_state']['approved'])->first();
 
+        $course->state()->associate($state);
         $course->save();
 
         return (new CourseResource($course))
@@ -649,6 +652,11 @@ class CourseController extends Controller
     */
     public function declineCourse(DeclineCourseRequest $request, Course $course)
     {
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+        $state = Catalogue::where('type',$catalogue['course_state']['type'])
+        ->where('code',$catalogue['course_state']['not_approved'])->first();
+
+        $course->state()->associate($state);
         $course->save();
 
         return (new CourseResource($course))
