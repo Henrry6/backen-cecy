@@ -287,7 +287,7 @@ Route::prefix('participant')->group(function () {
 });
 
 Route::prefix('participant/{participant}')->group(function () {
-    // Route::post('', [ParticipantController::class, 'acceptParticipant']);
+    Route::patch('', [ParticipantController::class, 'acceptParticipant']);
     Route::delete('', [ParticipantController::class, 'destroyParticipant']);
     Route::get('', [ParticipantController::class, 'getParticipants']);
     Route::put('', [ParticipantController::class, 'updateParticipant']);

@@ -201,6 +201,7 @@ class ParticipantController extends Controller
     //Modificacion de Participante
     public function updateParticipant(UpdateParticipantRequest $request, Participant $participant)
     {
+        $user= $participant -> user();
         $participant->identificationType()->associate(Catalogue::find($request->input('identificationType.id')));
         $participant->sex()->associate(Catalogue::find($request->input('sex.id')));
         $participant->gender()->associate(Catalogue::find($request->input('gender.id')));
@@ -212,15 +213,13 @@ class ParticipantController extends Controller
         $participant->name = $request->input('name');
         $participant->lastname = $request->input('lastname');
         $participant->birthdate = $request->input('birthdate');
-        $participant->email = $request->input('email');
 
         $participant->save();
-        $participant->addEmails($request->input('emails'));
 
         return (new UserResource($participant))
             ->additional([
                 'msg' => [
-                    'summary' => 'Usuario Actualizado',
+                    'summary' => 'Datos Actualizados',
                     'detail' => '',
                     'code' => '200'
                 ]
@@ -229,7 +228,7 @@ class ParticipantController extends Controller
     }
 
     //Metodo para ver listado de los Participante
-    public function getParticipants(GetParticipantsRequest $request)
+    public function index (IndexParticipantsRequest $request)
     {
         $sorts = explode(',', $request->input('sort'));
 
@@ -248,9 +247,10 @@ class ParticipantController extends Controller
     }
 
     //Metodo de Aceptación de Participante
-    public function acceptParticipant( AcceptParticipantRequest $request, Participant $participant)
+    public function acceptParticipant(AcceptParticipantRequest $request, Participant $participant)
     {
-        $participant = Participant::where('user_id', $request->user()->id)->first();
+
+        $participant->save();
 
         return (new ParticipantResource($participant))
             ->additional([
@@ -264,7 +264,7 @@ class ParticipantController extends Controller
     }
 
     //Metodo de Eliminación de Participante
-    public function destroyParticipant(DestroyParticipantRequest $request, Participant $participant)
+    public function destroyParticipant(Participant $participant)
     {
         $participant->delete();
 
