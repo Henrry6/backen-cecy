@@ -75,7 +75,7 @@ class CourseController extends Controller
     private function getApprovedPlanifications()
     {
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
-        $planificationApproved = Catalogue::where('type',  $catalogue['planification_state']['type'])
+        $planificationApproved = Catalogue::where('type', $catalogue['planification_state']['type'])
             ->where('code', $catalogue['planification_state']['approved'])->first();
         return $planificationApproved;
     }
@@ -126,8 +126,6 @@ class CourseController extends Controller
     // Obtiene los cursos privados aprobados por tipo de participante (Done)
     public function getPrivateCoursesByParticipantType(IndexPlanificationRequest $request)
     {
-        $sorts = explode(',', $request->input('sort'));
-
         $participant = Participant::where('user_id', $request->user()->id)->first();
 
         $catalogue = Catalogue::find($participant->type_id);
@@ -400,7 +398,7 @@ class CourseController extends Controller
      $data= new InformCourseNeedsResource($planification);
         $pdf = PDF::loadView('reports/report-needs', ['planification' => $data]);
 
-        return $pdf->stream('informNeeds.pdf'); 
+        return $pdf->stream('informNeeds.pdf');
     } */
 
     // Mostrar las necesidades de un curso (Done)
@@ -429,7 +427,7 @@ class CourseController extends Controller
     }
 
     //Traer todos los cursos planificados de un año en especifico (Done)
-    // el que hizo esto debe enviar el año en especifico bien por el url 
+    // el que hizo esto debe enviar el año en especifico bien por el url
     // o por params
     public function showYearSchedule(Planification $planification)
     {
@@ -499,8 +497,7 @@ class CourseController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    //traer participante de un curso 
-
+    //traer participante de un curso
     public function certificateParticipants(Course $course)
     {
 
@@ -610,7 +607,7 @@ class CourseController extends Controller
         return (new CourseResource($course))
             ->additional([
                 'msg' => [
-                    'summary' => 'Usuario Actualizado',
+                    'summary' => 'Curso Actualizado',
                     'detail' => '',
                     'code' => '201'
                 ]
@@ -621,9 +618,6 @@ class CourseController extends Controller
     /**
      * deleteCourse
      */
-
-
-
 
 
     /*
