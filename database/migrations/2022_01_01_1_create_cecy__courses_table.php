@@ -103,48 +103,48 @@ class CreateCecyCoursesTable extends Migration
                 ->nullable();
 
             $table->string('alignment')
-                ->comment('Alineación del curso')
-                ->nullable();
+                ->nullable()
+                ->comment('Alineación del curso');
 
             $table->date('approved_at')
-                ->comment('Fecha en que se aprobo el curso')
-                ->nullable();
+                ->nullable()
+                ->comment('Fecha en que se aprobo el curso');
 
             $table->json('bibliographies')
-                ->comment('Bibliografías')
-                ->nullable();
+                ->nullable()
+                ->comment('Bibliografías');
 
             $table->string('code')
-                ->comment('Código del curso')
-                ->nullable();
+                ->nullable()
+                ->comment('Código del curso');
 
             $table->double('cost')
-                ->comment('Costo del curso')
-                ->nullable();
+                ->nullable()
+                ->comment('Costo del curso');
 
             $table->integer('duration')
-                ->comment('Duración medida en horas')
-                ->nullable();
+                ->nullable()
+                ->comment('Duración medida en horas');
 
             $table->json('evaluation_mechanisms')
-                ->comment('Mecanismos de evaluación')
-                ->nullable();
+                ->nullable()
+                ->comment('Mecanismos de evaluación');
 
             $table->date('expired_at')
-                ->comment('Fecha de expiración del curso')
-                ->nullable();
+                ->nullable()
+                ->comment('Fecha de expiración del curso');
 
             $table->boolean('free')
-                ->comment('Si el curso es gratuito es true y si no es false')
-                ->nullable();
+                ->nullable()
+                ->comment('Si el curso es gratuito es true y si no es false');
 
             $table->string('name')
-                ->comment('Nombre del curso')
-                ->nullable();
+                ->nullable()
+                ->comment('Nombre del curso');
 
             $table->json('needs')
-                ->comment('Necesidades')
-                ->nullable();
+                ->nullable()
+                ->comment('Necesidades');
 
             $table->date('needed_at')
                 ->nullable();
@@ -154,59 +154,60 @@ class CreateCecyCoursesTable extends Migration
                 ->comment('Número de record');
 
             $table->json('learning_environments')
-                ->comment('Entorno de aprendizaje')
-                ->nullable();
+                ->nullable()
+                ->comment('Entorno de aprendizaje');
 
             $table->string('local_proposal')
-                ->comment('Propuesta local')
-                ->nullable();
+                ->nullable()
+                ->comment('Propuesta local');
 
             $table->string('objective')
-                ->comment('Objetivo del curso')
-                ->nullable();
+                ->nullable()
+                ->comment('Objetivo del curso');
 
             $table->json('observations')
-                ->comment('Observación de curso')
-                ->nullable();
+                ->nullable()
+                ->comment('Observación de curso');
 
             $table->integer('practice_hours')
-                ->comment('Cantidad de horas practicas del curso')
-                ->nullable();
+                ->nullable()
+                ->comment('Cantidad de horas practicas del curso');
 
             $table->date('proposed_at')
-                ->comment('Fecha en que se propuso el curso')
-                ->nullable();
+                ->nullable()
+                ->comment('Fecha en que se propuso el curso');
 
             $table->string('project')
                 ->comment('Si el curso persigue generar un proyecto que nombre tiene')
                 ->nullable();
 
             $table->boolean('public')
+                ->nullable()
                 ->comment('Si el curso el público o no');
 
             $table->string('setec_name')
-                ->comment('Nombre del setec')
-                ->nullable();
+                ->nullable()
+                ->comment('Nombre del setec');
 
             $table->string('summary')
-                ->comment('Resumen del curso')
-                ->nullable();
+                ->nullable()
+                ->comment('Resumen del curso');
 
             $table->json('target_groups')
-                ->comment('Grupo al que va dirigido el curso: niños, jóvenes, adultos')
-                ->nullable();
+                ->nullable()
+                ->comment('Grupo al que va dirigido el curso: niños, jóvenes, adultos');
 
             $table->json('teaching_strategies')
-                ->comment('Estrategias de enseñanza')
-                ->nullable();
+                ->nullable()
+                ->comment('Estrategias de enseñanza');
 
             $table->json('techniques_requisites')
-                ->comment('Requisitos técnicos y generales del curso')
-                ->nullable();
+                ->nullable()
+                ->comment('Requisitos técnicos y generales del curso');
 
             $table->integer('theory_hours')
-                ->comment('Cantidad de horas del curso en teoria')
-                ->nullable();
+                ->nullable()
+                ->comment('Cantidad de horas del curso en teoria');
         });
     }
 
