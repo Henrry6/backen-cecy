@@ -83,6 +83,11 @@ class CreateCecyCoursesTable extends Migration
                 ->comment('Id del docente responsable del curso')
                 ->constrained('cecy.instructors');
 
+            $table->foreignId('school_period_id')
+                ->nullable()
+                ->comment('Periodo lectivo en que se creó el curso')
+                ->constrained('cecy.courses');
+
             $table->foreignId('speciality_id')
                 ->nullable()
                 ->comment('')

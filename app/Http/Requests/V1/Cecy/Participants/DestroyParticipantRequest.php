@@ -1,10 +1,9 @@
 <?php
-
-namespace App\Http\Requests\V1\Cecy\ProfileInstructorCourses;
+namespace App\Http\Requests\V1\Cecy\Participants;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class DestroysProfileCourseRequest extends FormRequest
+class DestroysParticipantRequest extends FormRequest
 {
     public function authorize()
     {
@@ -20,7 +19,7 @@ class DestroysProfileCourseRequest extends FormRequest
     public function attributes()
     {
         return [
-            'ids' => 'ID`s del perfil del instructor',
+            'ids' => 'ID`s de los participantes',
         ];
     }
 

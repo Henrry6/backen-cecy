@@ -35,27 +35,6 @@ class PlanificationController extends Controller
     {
     }
 
-    public function storePlanificationByCourse(StorePlanificationByCourseRequest $request, Planification $planification)
-    {
-        $planification->responsibleCourse()->associate(Instructor::find($request->input('responsibleCourse.id')));
-        $planification->course()->associate(Course::find($request->input('name')));
-        $planification->participantType()->associate(Course::find($request->input('participant_type.id')));
-        $planification->duration()->associate(Course::find($request->input('duration')));
-        $planification->endedAt = $request->input('fin de la planificación');
-        $planification->startedAt = $request->input('inicio de la planificación');
-        $planification->state = $request->input('Estado de la planificacion');
-        $planification->save();
-        return (new PlanificationResource($planification))
-            ->additional([
-                'msg' => [
-                    'summary' => 'planificación creada',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ])
-            ->response()->setStatusCode(200);
-    }
-
     public function updatePlanificationByCecy(UpdatePlanificationRequest $request, Planification $planification)
     {
         $loggedAuthority = Authority::where('user_id', $request->user()->id)->get();
@@ -181,8 +160,9 @@ class PlanificationController extends Controller
     {
         $sorts = explode(',', $request->sort);
 
-        $planifications = $course->planifications()->customOrderBy($sorts)
-            ->paginate($request->input('per_page'));
+        $planifications = $course->planifications()
+            ->customOrderBy($sorts)
+            ->paginate($request->input('perPage'));
 
         return (new PlanificationByCourseCollection($planifications))
             ->additional([
@@ -356,5 +336,77 @@ class PlanificationController extends Controller
         ]);
 
         return $pdf->stream('Informe final del curso.pdf');
+    }
+
+    /**
+     * storePlanificationByCourse 
+     */
+    public function storePlanificationByCourse(StorePlanificationByCourseRequest $request, Course $course)
+    {
+        return 'works';
+        $planification = new Planification();
+
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+        //state
+        $toBeApproved = Catalogue::where('code',  $catalogue['planification_state']['to_be_approved'])->first();
+
+        $planification->course()->associate($course);
+        $planification->responsibleCourse()->associate(Instructor::find($request->input('responsibleCourse.id')));
+        $planification->state()->associate($toBeApproved);
+
+        $planification->ended_at = $request->input('endedAt');
+        $planification->started_at = $request->input('startedAt');
+
+        $planification->save();
+
+        return (new PlanificationResource($planification))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Planificación creada',
+                    'detail' => '',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
+    }
+
+
+
+    /**
+     * updatePlanificationByCourse
+     */
+
+    public function updatePlanificationByCourse(UpdatePlanificationByCourseRequest $request, Course $course)
+    {
+        $course->course = $request->input('course');
+
+        $course->save();
+
+        return (new CourseResource($course))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Planificación Actualizado',
+                    'detail' => '',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
+    }
+
+    /**
+     * deletePlanification
+     */
+    public function destroyPlanification(DestroyPlanificationRequest $planification)
+    {
+        $planification->delete();
+        return (new PlanificationResource($planification))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Registro Eliminado',
+                    'detail' => '',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
     }
 }

@@ -90,6 +90,11 @@ class User extends Authenticatable implements Auditable, MustVerifyEmail
         return $this->belongsTo(Address::class);
     }
 
+    public function authority()
+    {
+        return $this->hasOne(Authority::class);
+    }
+
     public function bloodType()
     {
         return $this->belongsTo(Catalogue::class);
@@ -130,6 +135,11 @@ class User extends Authenticatable implements Auditable, MustVerifyEmail
         return $this->belongsTo(Catalogue::class);
     }
 
+    public function instructor()
+    {
+        return $this->hasOne(Instructor::class);
+    }
+
     public function nationality()
     {
         return $this->belongsTo(Location::class);
@@ -138,6 +148,11 @@ class User extends Authenticatable implements Auditable, MustVerifyEmail
     public function images()
     {
         return $this->morphMany(Image::class, 'imageable');
+    }
+
+    public function participant()
+    {
+        return $this->hasOne(Participant::class);
     }
 
     public function phones()
@@ -150,20 +165,10 @@ class User extends Authenticatable implements Auditable, MustVerifyEmail
         return $this->belongsTo(Catalogue::class);
     }
 
-    public function authority()
-    {
-        return $this->hasOne(Authority::class);
-    }
 
-    public function instructor()
-    {
-        $this->hasOne(Instructor::class);
-    }
 
-    public function participant()
-    {
-        $this->hasOne(Participant::class);
-    }
+
+
 
     // Scopes
     public function scopeEmail($query, $email)

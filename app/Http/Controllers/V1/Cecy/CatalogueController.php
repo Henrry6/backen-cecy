@@ -66,6 +66,7 @@ class CatalogueController extends Controller
             ->description($request->input('description'))
             ->name($request->input('name'))
             ->type($request->input('type'))
+            ->limit(5000)
             ->paginate();
 
         return (new CatalogueCollection($catalogues))

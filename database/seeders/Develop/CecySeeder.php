@@ -23,7 +23,7 @@ use Database\Seeders\Develop\Cecy\ParticipantsSeeder;
 use Database\Seeders\Develop\Cecy\PhotographicRecordsSeeder;
 use Database\Seeders\Develop\Cecy\PlanificationsSeeder;
 use Database\Seeders\Develop\Cecy\PrerequisitesSeeder;
-use Database\Seeders\Develop\Cecy\ProfileInstructorCoursesSeeder;
+use Database\Seeders\Develop\Cecy\CourseProfilesSeeder;
 use Database\Seeders\Develop\Cecy\RegistrationRequerimentsSeeder;
 use Database\Seeders\Develop\Cecy\RegistrationsSeeder;
 use Database\Seeders\Develop\Cecy\RequirementsSeeder;
@@ -52,7 +52,7 @@ class CecySeeder extends Seeder
             AdditionalInformationsSeeder::class,
             RegistrationRequerimentsSeeder::class,
             PrerequisitesSeeder::class,
-            ProfileInstructorCoursesSeeder::class,
+            CourseProfilesSeeder::class,
             TopicsSeeder::class,
             AttendancesSeeder::class,
             ParticipantCourseSeeder::class,

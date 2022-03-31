@@ -5,7 +5,7 @@ namespace App\Http\Resources\V1\Cecy\Courses;
 use App\Http\Resources\V1\Cecy\Catalogues\CatalogueResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CourseResourceBasic extends JsonResource
+class BasicCourseResource extends JsonResource
 {
     public function toArray($request)
     {
@@ -15,6 +15,7 @@ class CourseResourceBasic extends JsonResource
             'name' => $this->name,
             'summary' => $this->summary,
             'hours' => $this->getTotalHoursAttribute(),
+            'duration' => $this->duration,
         ];
     }
 }
