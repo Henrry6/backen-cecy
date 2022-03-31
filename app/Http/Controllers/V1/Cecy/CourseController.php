@@ -20,7 +20,7 @@ use App\Http\Requests\V1\Cecy\Courses\UpdateCourseGeneralDataRequest;
 use App\Http\Requests\V1\Cecy\Courses\UpdateCurricularDesign;
 use App\Http\Requests\V1\Cecy\Courses\UpdateStateCourseRequest;
 use App\Http\Requests\V1\Cecy\Courses\UploadCertificateOfApprovalRequest;
-use App\Http\Requests\V1\Cecy\Courses\StoreCourseNewRequest;
+use App\Http\Requests\V1\Cecy\Courses\CareerCoordinator\StoreCourseRequest;
 use App\Http\Requests\V1\Cecy\Planifications\GetPlanificationByResponsableCourseRequest;
 use App\Http\Requests\V1\Cecy\Planifications\IndexPlanificationRequest;
 use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationCollection;
@@ -532,8 +532,6 @@ class CourseController extends Controller
 
     /**
      * getCoursesByCareer
-     * scope schoolPeriod
-     * filtros estado, codigo
      */
     public function getCoursesByCareer(GetCoursesByCareerRequest $request, Career $career)
     {
@@ -559,22 +557,22 @@ class CourseController extends Controller
     /**
      * storeNewCourse
      */
-    public function storeNewCourse(StoreCourseNewRequest $request)
+    public function storeCourse(StoreCourseRequest $request, Career $career)
     {
-        return "storeNewCourse";
         $course = new Course();
- 
+
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
-        $toBeApproved = Catalogue::where('code',  $catalogue['planification_state']['to_be_approved'])->first();
-        $career = Career::find();
-        $schoolPeriod = SchoolPeriod::find($request->input('schoolPeriod.id'));
-        $responsible = Instructor::find($request->input('instructor.id'));
 
-        $course->responsible()->associate($responsible);
-        $course->state()->associate($toBeApproved);
-        $course->schoolPeriod()->associate($schoolPeriod);
+        $currentState = Catalogue::where('code',  $catalogue['school_period_state']['current'])->first();
+        $toBeApprovedState = Catalogue::where('code',  $catalogue['planification_state']['to_be_approved'])->first();
+        $currentSchoolPeriod = SchoolPeriod::where('state_id', $currentState->id)->first();
+        $responsible = Instructor::find($request->input('responsible.id'));
+        
         $course->career()->associate($career);
-
+        $course->responsible()->associate($responsible);
+        $course->schoolPeriod()->associate($currentSchoolPeriod);
+        $course->state()->associate($toBeApprovedState);
+        
         $course->duration = $request->input('duration');
         $course->name = $request->input('name');
 

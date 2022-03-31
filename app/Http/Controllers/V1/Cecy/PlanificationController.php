@@ -343,7 +343,6 @@ class PlanificationController extends Controller
      */
     public function storePlanificationByCourse(StorePlanificationByCourseRequest $request, Course $course)
     {
-        return 'works';
         $planification = new Planification();
 
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
