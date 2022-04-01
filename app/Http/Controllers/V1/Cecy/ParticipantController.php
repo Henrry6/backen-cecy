@@ -198,6 +198,48 @@ class ParticipantController extends Controller
         return 'por revisar';
     }
 
+    //Creación de Participante
+    public function createParticipantUser(StoreParticipantUserRequest $request){
+        $user = User::where('username', $request->input('username'))
+        ->orWhere('email', $request->input('email'))->first();
+
+    $user = new User();
+    $user->identificationType()->associate(CoreCatalogue::find($request->input('identificationType.id')));
+    $user->disability()->associate(CoreCatalogue::find($request->input('disability.id')));
+    $user->gender()->associate(CoreCatalogue::find($request->input('gender.id')));
+    $user->nationality()->associate(Location::find($request->input('nationality.id')));
+    $user->ethnicOrigin()->associate(CoreCatalogue::find($request->input('ethnicOrigin.id')));
+    $user->address()->associate($this->createUserAddress($request->input('address')));
+    // $user->bloodType()->associate(Catalogue::find($request->input('bloodType.id')));
+    // $user->civilStatus()->associate(Catalogue::find($request->input('civilStatus.id')));
+    // $user->sex()->associate(Catalogue::find($request->input('sex.id')));
+
+    $user->username = $request->input('username');
+    $user->name = $request->input('name');
+    $user->lastname =  $request->input('lastname');
+    $user->birthdate = $request->input('birthdate');
+    $user->email = $request->input('email');
+    $user->password =  '12345678';
+
+    DB::transaction(function () use ($request, $user) {
+        $user->save();
+        $user->addPhones($request->input('phones'));
+        $user->addEmails($request->input('emails'));
+        $participant = $this->createParticipant($request->input('participantType.id'), $user);
+        $participant->save();
+    });
+
+    return (new UserResource($user))
+        ->additional([
+            'msg' => [
+                'summary' => 'Participante Creado',
+                'detail' => '',
+                'code' => '200'
+            ]
+        ])
+        ->response()->setStatusCode(200);
+    }
+
     //Modificacion de Participante
     public function updateParticipant(UpdateParticipantRequest $request, Participant $participant)
     {
