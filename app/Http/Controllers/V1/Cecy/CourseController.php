@@ -23,6 +23,7 @@ use App\Http\Requests\V1\Cecy\Courses\UpdateCurricularDesign;
 use App\Http\Requests\V1\Cecy\Courses\UpdateStateCourseRequest;
 use App\Http\Requests\V1\Cecy\Courses\UploadCertificateOfApprovalRequest;
 use App\Http\Requests\V1\Cecy\Courses\CareerCoordinator\StoreCourseRequest;
+use App\Http\Requests\V1\Cecy\Courses\CatalogueCourseRequest;
 use App\Http\Requests\V1\Cecy\Planifications\GetPlanificationByResponsableCourseRequest;
 use App\Http\Requests\V1\Cecy\Planifications\IndexPlanificationRequest;
 use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationCollection;
@@ -60,6 +61,35 @@ class CourseController extends Controller
         $courses = Course::customOrderBy($sorts)
             ->schoolPeriodId($request->input('schoolPeriod.id'))
             ->paginate($request->input('per_page'));
+
+        return (new CourseCollection($courses))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
+
+    public function catalogue(CatalogueCourseRequest $request)
+    {
+        $sorts = explode(',', $request->sort);
+
+        $courses =  Course::customOrderBy($sorts)
+            ->abbreviation($request->input('search'))
+            ->alignment($request->input('search'))
+            ->code($request->input('search'))
+            ->name($request->input('search'))
+            ->record_number($request->input('search'))
+            ->local_proposal($request->input('search'))
+            ->objective($request->input('search'))
+            ->project($request->input('search'))
+            ->setec_name($request->input('search'))
+            ->summary($request->input('search'))
+            ->limit(1000)
+            ->get();
 
         return (new CourseCollection($courses))
             ->additional([

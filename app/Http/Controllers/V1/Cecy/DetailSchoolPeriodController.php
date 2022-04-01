@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\Cecy\DetailSchoolPeriods\CatalogueDetailSchoolPeriodRequest;
 use App\Http\Requests\V1\Cecy\DetailSchoolPeriods\DestroysDetailSchoolPeriodRequest;
 use App\Http\Requests\V1\Cecy\DetailSchoolPeriods\IndexDetailSchoolPeriodRequest;
 use App\Http\Requests\V1\Cecy\DetailSchoolPeriods\StoreDetailSchoolPeriodRequest;
@@ -24,6 +25,25 @@ class DetailSchoolPeriodController extends Controller
         $sorts = explode(',', $request->sort);
         $detailSchoolPeriods = DetailSchoolPeriod::customOrderBy($sorts)
             ->paginate($request->per_page);
+        return (new DetailSchoolPeriodCollection($detailSchoolPeriods))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
+
+    public function catalogue(CatalogueDetailSchoolPeriodRequest $request)
+    {
+        $sorts = explode(',', $request->sort);
+
+        $detailSchoolPeriods =  DetailSchoolPeriod::customOrderBy($sorts)
+            ->limit(1000)
+            ->get();
+
         return (new DetailSchoolPeriodCollection($detailSchoolPeriods))
             ->additional([
                 'msg' => [

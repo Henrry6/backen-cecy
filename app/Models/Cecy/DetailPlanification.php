@@ -96,7 +96,7 @@ class DetailPlanification extends Model implements Auditable
     public function scopeEndedTime($query, $endedTime)
     {
         if ($endedTime) {
-            return $query->orWhere('ended_time', $endedTime);
+            return $query->orWhere('ended_time', 'iLike', "%$endedTime%");
         }
     }
     
@@ -107,11 +107,10 @@ class DetailPlanification extends Model implements Auditable
         }
     }
 
-    //revisar
     public function scopePlanEndedAt($query, $planEndedAt)
     {
         if ($planEndedAt) {
-            return $query->orWhere('plan_ended_at', $planEndedAt);
+            return $query->orWhere('plan_ended_at', 'iLike', "%$planEndedAt%");
         }
     }
     

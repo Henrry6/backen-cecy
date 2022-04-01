@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\Cecy\DetailPlanifications\CatalogueDetailPlanificationRequest;
 use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\DeleteDetailPlanificationRequest;
 use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\DestroysDetailPlanificationRequest;
 use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\GetDetailPlanificationsByPlanificationRequest;
@@ -10,6 +11,7 @@ use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\RegisterDeta
 use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\ShowDetailPlanificationRequest;
 use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\UpdateDetailPlanificationRequest as UpdateDetailPlanification;
 use App\Http\Requests\V1\Cecy\DetailPlanifications\UpdateDetailPlanificationRequest;
+use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationCollection;
 use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationResource;
 use App\Http\Resources\V1\Cecy\DetailPlanifications\ResponsibleCourseDetailPlanifications\DetailPlanificationCollection as ResponsibleCourseDetailPlanificationCollection;
 use App\Http\Resources\V1\Cecy\DetailPlanifications\ResponsibleCourseDetailPlanifications\DetailPlanificationResource as ResponsibleCourseDetailPlanificationResource;
@@ -27,6 +29,26 @@ use App\Models\Cecy\Planification;
 
 class DetailPlanificationController extends Controller
 {
+    public function catalogue(CatalogueDetailPlanificationRequest $request)
+    {
+        $sorts = explode(',', $request->sort);
+
+        $detailPlanifications =  DetailPlanification::customOrderBy($sorts)
+            ->observations($request->input('search'))
+            ->limit(1000)
+            ->get();
+
+        return (new DetailPlanificationCollection($detailPlanifications))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
+
     public function __construct()
     {
     }

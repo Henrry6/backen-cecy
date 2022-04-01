@@ -126,8 +126,6 @@ Route::prefix('courses')->group(function () {
     Route::get('kpi', [CourseController::class, 'getCoursesKPI']);
     Route::get('year-schedule', [CourseController::class, 'showYearSchedule']);
 
-    //Route::get('academicPeriod/{academicPeriod}', [CourseController::class, 'getCoursesByAcademicPeriod']);
-    //Route::get('schoolPeriod/{schoolPeriod}', [CourseController::class, 'getCoursesBySchoolPeriod']);
     // Route::put('{course}', [CourseController::class, 'updateStateCourse']);
 });
 
@@ -256,22 +254,26 @@ Route::prefix('classroom')->group(function () {
  * INSTRUCTORS
  **********************************************************************************************************************/
 
-Route::prefix('instructor/{instructor}')->group(function () {
-    Route::put('type-instructor', [InstructorController::class, 'updateTypeInstructor']);
-    Route::put('state-instructor', [InstructorController::class, 'updateStateInstructor']);
-});
+Route::controller(InstructorController::class)->group(function () {
+    Route::prefix('instructor/{instructor}')->group(function () {
+        Route::put('type-instructor', [InstructorController::class, 'updateTypeInstructor']);
+        Route::put('state-instructor', [InstructorController::class, 'updateStateInstructor']);
 
-Route::prefix('instructor')->group(function () {
-    Route::post('create', [InstructorController::class, 'storeInstructor']);
-    Route::post('instructors', [InstructorController::class, 'storeInstructors']);
-    Route::get('', [InstructorController::class, 'indexInstructor']);
-    // Route::get('courses', [InstructorController::class, 'getCourses']);
-    // Route::get('instructor-courses', [InstructorController::class, 'getInstructorByCourses']);
-    Route::get('instructor-information', [InstructorController::class, 'getInstructorsInformationByCourse']);
-    // Route::get('destroy/{instructor}', [InstructorController::class, 'destroyInstructors']);
-});
+    });
 
-Route::apiResource('instructors', InstructorController::class);
+    Route::prefix('instructor')->group(function () {
+        Route::get('catalogue', [InstructorController::class, 'catalogue']);
+        Route::get('', [InstructorController::class, 'index']);
+        Route::post('create', [InstructorController::class, 'storeInstructor']);
+        Route::post('instructors', [InstructorController::class, 'storeInstructors']);
+        // Route::get('courses', [InstructorController::class, 'getCourses']);
+        // Route::get('instructor-courses', [InstructorController::class, 'getInstructorByCourses']);
+        Route::get('instructor-information', [InstructorController::class, 'getInstructorsInformationByCourse']);
+        // Route::get('destroy/{instructor}', [InstructorController::class, 'destroyInstructors']);
+
+    });
+});
+Route::apiResource('school-periods', InstructorController::class);
 
 /***********************************************************************************************************************
  * REGISTRATIONS
@@ -296,10 +298,10 @@ Route::prefix('participant')->group(function () {
 });
 
 Route::prefix('participant/{participant}')->group(function () {
-    Route::patch('', [ParticipantController::class, 'acceptParticipant']);
-    Route::delete('', [ParticipantController::class, 'destroyParticipant']);
-    Route::get('', [ParticipantController::class, 'getParticipants']);
-    Route::put('', [ParticipantController::class, 'updateParticipant']);
+    Route::put('update-state/{participant}', [ParticipantController::class, 'acceptParticipant']);
+    Route::delete('destroy/{participant}', [ParticipantController::class, 'destroyParticipant']);
+    Route::get('information/{participant}', [ParticipantController::class, 'getParticipants']);
+    Route::put('update/{participant}', [ParticipantController::class, 'updateParticipant']);
 });
 
 /***********************************************************************************************************************

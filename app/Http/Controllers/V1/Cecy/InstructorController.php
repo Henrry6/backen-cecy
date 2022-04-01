@@ -53,7 +53,6 @@ class InstructorController extends Controller
         $sorts = explode(',', $request->input('sort'));
 
         $instructors = Instructor::customOrderBy($sorts)
-            ->schoolPeriodId($request->input('schoolPeriod.id'))
             ->paginate($request->input('per_page'));
 
         return (new InstructorCollection($instructors))
@@ -69,6 +68,7 @@ class InstructorController extends Controller
 
     public function storeInstructor(StoreInstructorRequest $request, Instructor $instructor )
     {
+
         $instructor = new Instructor();
 
         $instructor->state()
@@ -91,6 +91,8 @@ class InstructorController extends Controller
             ->response()->setStatusCode(201);
     }
 
+
+
     public function updateStateInstructor(Request $request, Instructor $instructor)
     {
         $instructor->state()->associate(Catalogue::find($request->input('state.id')));
@@ -107,7 +109,7 @@ class InstructorController extends Controller
             ->response()->setStatusCode(201);
     }
     
-    public function updateTypeInstructors(Request $request, Instructor $instructor)
+    public function updateTypeInstructor(Request $request, Instructor $instructor)
     {
         $instructor->type()->associate(Catalogue::find($request->input('type.id')));
         $instructor->save();
