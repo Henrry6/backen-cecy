@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\Cecy\Classrooms\CatalogueClassroomRequest;
 use App\Http\Requests\V1\Cecy\Classrooms\DestroysClassroomRequest;
 use App\Http\Requests\V1\Cecy\Classrooms\IndexClassroomRequest;
 use App\Http\Requests\V1\Cecy\Classrooms\StoreClassroomRequest;

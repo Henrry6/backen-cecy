@@ -43,6 +43,63 @@ class DetailSchoolPeriod extends Model implements Auditable
 
 
     // Scopes
+
+    public function scopeEspecialEndedAt($query, $especialEndedAt) 
+    {
+        if ($especialEndedAt) {
+            return $query->orWhere('especial-ended-at', 'iLike', "%$especialEndedAt%");
+        }
+    }
+
+    public function scopeEspecialStartedAt($query, $especialStartedAt) 
+    {
+        if ($especialStartedAt) {
+            return $query->orWhere('especial-started-at', 'iLike', "%$especialStartedAt%");
+        }
+    }
+
+    public function scopeExtraordinaryEndedAt($query, $extraordinaryEndedAt) 
+    {
+        if ($extraordinaryEndedAt) {
+            return $query->orWhere('extraordinary-ended-at', 'iLike', "%$extraordinaryEndedAt%");
+        }
+    }
+
+    public function scopeExtraordinaryStartedAt($query, $extraordinaryStartedAt) 
+    {
+        if ($extraordinaryStartedAt) {
+            return $query->orWhere('extraordinary-started-at', 'iLike', "%$extraordinaryStartedAt%");
+        }
+    }
+
+    public function scopeNullificationEndedAt($query, $nullificationEndedAt) 
+    {
+        if ($nullificationEndedAt) {
+            return $query->orWhere('nullification-ended-at', 'iLike', "%$nullificationEndedAt%");
+        }
+    }
+
+    public function scopeNullificationStartedAt($query, $nullificationStartedAt) 
+    {
+        if ($nullificationStartedAt) {
+            return $query->orWhere('nullification-started-at', 'iLike', "%$nullificationStartedAt%");
+        }
+    }
+
+    public function scopeOrdinaryEndedAt($query, $ordinaryEndedAt) 
+    {
+        if ($ordinaryEndedAt) {
+            return $query->orWhere('ordinary-ended-at', 'iLike', "%$ordinaryEndedAt%");
+        }
+    }
+
+    public function scopeOrdinaryStartedAt($query, $ordinaryStartedAt) 
+    {
+        if ($ordinaryStartedAt) {
+            return $query->orWhere('ordinary-started-at', 'iLike', "%$ordinaryStartedAt%");
+        }
+    }
+
     // Revisar
     public function scopeCustomOrderBy($query, $sorts)
     {

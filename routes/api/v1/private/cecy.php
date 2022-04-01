@@ -126,8 +126,6 @@ Route::prefix('courses')->group(function () {
     Route::get('kpi', [CourseController::class, 'getCoursesKPI']);
     Route::get('year-schedule', [CourseController::class, 'showYearSchedule']);
 
-    //Route::get('academicPeriod/{academicPeriod}', [CourseController::class, 'getCoursesByAcademicPeriod']);
-    //Route::get('schoolPeriod/{schoolPeriod}', [CourseController::class, 'getCoursesBySchoolPeriod']);
     // Route::put('{course}', [CourseController::class, 'updateStateCourse']);
 });
 
@@ -300,7 +298,7 @@ Route::prefix('participant')->group(function () {
 });
 
 Route::prefix('participant/{participant}')->group(function () {
-    Route::patch('', [ParticipantController::class, 'acceptParticipant']);
+    Route::put('update-state/{participant}', [ParticipantController::class, 'acceptParticipant']);
     Route::delete('destroy/{participant}', [ParticipantController::class, 'destroyParticipant']);
     Route::get('information/{participant}', [ParticipantController::class, 'getParticipants']);
     Route::put('update/{participant}', [ParticipantController::class, 'updateParticipant']);
