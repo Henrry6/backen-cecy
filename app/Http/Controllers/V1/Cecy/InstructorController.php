@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 // use App\Http\Requests\V1\Cecy\Courses\getCoursesByResponsibleRequest;
 use App\Http\Requests\V1\Cecy\Instructors\IndexInstructorRequest;
 use App\Http\Requests\V1\Cecy\Instructors\StoreInstructorRequest;
+use App\Http\Requests\V1\Cecy\Instructors\CatalogueInstructorRequest;
 // use App\Http\Requests\V1\Cecy\Instructor\DestroysInstructorRequest;
 // use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationByInstructorCollection;
 use App\Http\Resources\V1\Cecy\Courses\CourseCollection;
@@ -20,6 +21,26 @@ use App\Models\Authentication\User;
 
 class InstructorController extends Controller
 {
+
+    public function catalogue(CatalogueInstructorRequest $request)
+    {
+        $sorts = explode(',', $request->sort);
+
+        $instructors =  Instructor::customOrderBy($sorts)
+            ->limit(1000)
+            ->get();
+
+        return (new InstructorCollection($instructors))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
+
     public function __construct()
     {
        //$this->middleware('permission:store-catalogues')->only(['store']);
