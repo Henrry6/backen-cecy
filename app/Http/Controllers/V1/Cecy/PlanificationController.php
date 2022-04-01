@@ -343,14 +343,16 @@ class PlanificationController extends Controller
      */
     public function storePlanificationByCourse(StorePlanificationByCourseRequest $request, Course $course)
     {
+         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+
+        $toBeApproved = Catalogue::where('type',  $catalogue['planification_state']['type'])
+            ->where('code',  $catalogue['planification_state']['to_be_approved'])->first();
+        $instructor = Instructor::find($request->input('responsibleCourse.id'));//que estado y tipo debe ser el instructor
+
         $planification = new Planification();
 
-        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
-        //state
-        $toBeApproved = Catalogue::where('code',  $catalogue['planification_state']['to_be_approved'])->first();
-
         $planification->course()->associate($course);
-        $planification->responsibleCourse()->associate(Instructor::find($request->input('responsibleCourse.id')));
+        $planification->responsibleCourse()->associate($instructor);
         $planification->state()->associate($toBeApproved);
 
         $planification->ended_at = $request->input('endedAt');

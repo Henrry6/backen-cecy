@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications;
 
-use App\Rules\HoursRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use App\Rules\HoursRule;
 use App\Rules\WorkdayRule;
 
 class UpdateDetailPlanificationRequest extends FormRequest
@@ -28,11 +28,11 @@ class UpdateDetailPlanificationRequest extends FormRequest
             'workday.id' => ['required', 'integer', new WorkdayRule($this->endedTime)],
             'planification.id' => [
                 'required', 'integer',
-                // new HoursRule($this->day, $this->startedTime, $this->endedTime)
+                new HoursRule($this->day, $this->startedTime, $this->endedTime)
             ],
             'endedTime' => ['required', 'after:startedTime'],
             'startedTime' => ['required',],
-            'observations' => ['sometimes','required','array'],
+            'observations' => ['sometimes', 'required', 'array'],
         ];
     }
 

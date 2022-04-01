@@ -4,6 +4,7 @@ namespace App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use App\Rules\HoursRule;
 use App\Rules\WorkdayRule;
 
 class RegisterDetailPlanificationRequest extends FormRequest
@@ -17,8 +18,11 @@ class RegisterDetailPlanificationRequest extends FormRequest
         return [
             'classroom.id' => ['required', 'integer'],
             'day.id' => ['required', 'integer'],
-            'planification.id' => ['required', 'integer'],
             'workday.id' => ['required', 'integer', new WorkdayRule($this->endedTime)],
+            'planification.id' => [
+                'required', 'integer',
+                new HoursRule($this->day, $this->startedTime, $this->endedTime)
+            ],
             'parallel.id' => [ //1 retrieve softdelete models with withTrashed method
                 //2 apply rule not in with this field,
                 //other option: use a available validation rule such as exist, exclude if,etc,
@@ -31,7 +35,7 @@ class RegisterDetailPlanificationRequest extends FormRequest
             ],
             'endedTime' => ['required', 'after:startedTime'],
             'startedTime' => ['required',],
-            'observations' => ['sometimes', 'required', 'array'], //solo si las horas del curso no coinciden
+            'observations' => ['sometimes', 'required', 'array'],
         ];
     }
 
