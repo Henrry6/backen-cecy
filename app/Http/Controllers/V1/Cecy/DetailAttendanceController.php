@@ -4,6 +4,7 @@ namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Cecy\Attendances\SaveDetailAttendanceRequest;
+use App\Http\Requests\V1\Cecy\DetailAttendance\CatalogueDetailAttendanceRequest;
 use App\Http\Requests\V1\Cecy\DetailAttendance\GetDetailAttendancesByParticipantRequest;
 use App\Http\Resources\V1\Cecy\Attendances\AttendanceResource;
 use App\Http\Resources\V1\Cecy\Attendances\SaveDetailAttendanceResource;
@@ -16,6 +17,25 @@ use App\Models\Cecy\Registration;
 
 class DetailAttendanceController extends Controller
 {
+    public function catalogue(CatalogueDetailAttendanceRequest $request)
+    {
+        $sorts = explode(',', $request->sort);
+
+        $detailAttendances =  DetailAttendance::customOrderBy($sorts)
+            ->limit(1000)
+            ->get();
+
+        return (new DetailAttendanceCollection($detailAttendances))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
+
     //asistencias de los estudiantes de un curso
     // DetailAttendanceController
     public function showAttedanceParticipant(Registration $registration)
