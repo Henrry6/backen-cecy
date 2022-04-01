@@ -27,7 +27,6 @@ class InstructorController extends Controller
         $sorts = explode(',', $request->sort);
 
         $instructors =  Instructor::customOrderBy($sorts)
-            ->description($request->input('search'))
             ->limit(1000)
             ->get();
 
