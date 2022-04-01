@@ -5,7 +5,6 @@ namespace App\Http\Controllers\V1\Cecy;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\V1\Cecy\Participants\AcceptParticipantRequest;
-use App\Http\Requests\V1\Cecy\Participants\DestroyParticipantRequest;
 use App\Http\Requests\V1\Cecy\Participants\IndexParticipantRequest;
 use App\Http\Requests\V1\Cecy\Participants\UpdateParticipantRequest;
 use App\Http\Requests\V1\Cecy\Participants\StoreParticipantRequest;
@@ -210,16 +209,16 @@ class ParticipantController extends Controller
     $user->nationality()->associate(Location::find($request->input('nationality.id')));
     $user->ethnicOrigin()->associate(CoreCatalogue::find($request->input('ethnicOrigin.id')));
     $user->address()->associate($this->createUserAddress($request->input('address')));
-    // $user->bloodType()->associate(Catalogue::find($request->input('bloodType.id')));
-    // $user->civilStatus()->associate(Catalogue::find($request->input('civilStatus.id')));
-    // $user->sex()->associate(Catalogue::find($request->input('sex.id')));
+    $user->bloodType()->associate(Catalogue::find($request->input('bloodType.id')));
+    $user->civilStatus()->associate(Catalogue::find($request->input('civilStatus.id')));
+    $user->sex()->associate(Catalogue::find($request->input('sex.id')));
 
     $user->username = $request->input('username');
     $user->name = $request->input('name');
     $user->lastname =  $request->input('lastname');
     $user->birthdate = $request->input('birthdate');
     $user->email = $request->input('email');
-    $user->password =  '12345678';
+    $user->password =  '';
 
     DB::transaction(function () use ($request, $user) {
         $user->save();
@@ -291,7 +290,7 @@ class ParticipantController extends Controller
     //Metodo de Aceptación de Participante
     public function acceptParticipant(AcceptParticipantRequest $request, Participant $participant)
     {
-        $participant->state_id = $request->id;
+        $participant->state()->associate(Catalogue::find($request->input('state.id')));
         $participant->save();
 
         return (new ParticipantResource($participant))
