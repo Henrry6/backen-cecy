@@ -21,10 +21,9 @@ class UpdateDetailPlanificationRequest extends FormRequest
             'day.id' => ['required', 'integer'],
             'parallel.id' => [
                 'required', 'integer',
-                Rule::unique('pgsql-cecy.detail_planifications', 'parallel_id')
-                    // ->ignore(request('detailPlanification')->id)
-                    ->ignore($this->route('detailPlanification')->id)
-                    ->where(fn ($query) => $query->where('planification_id', $this->planification)),
+                // Rule::unique('pgsql-cecy.detail_planifications', 'parallel_id')
+                //     ->ignore($this->route('detailPlanification')->id)
+                //     ->where(fn ($query) => $query->where('planification_id', $this->planification)),
             ],
             'workday.id' => ['required', 'integer', new WorkdayRule($this->endedTime)],
             'planification.id' => [
@@ -33,7 +32,7 @@ class UpdateDetailPlanificationRequest extends FormRequest
             ],
             'endedTime' => ['required', 'after:startedTime'],
             'startedTime' => ['required',],
-            'observations' => ['required'],
+            'observations' => ['sometimes','required','array'],
         ];
     }
 

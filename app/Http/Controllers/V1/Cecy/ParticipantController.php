@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\V1\Cecy\Participants\AcceptParticipantRequest;
 use App\Http\Requests\V1\Cecy\Participants\DestroyParticipantRequest;
-use App\Http\Requests\V1\Cecy\Participants\GetParticipantsRequest;
+use App\Http\Requests\V1\Cecy\Participants\IndexParticipantRequest;
 use App\Http\Requests\V1\Cecy\Participants\UpdateParticipantRequest;
 use App\Http\Requests\V1\Cecy\Participants\StoreParticipantRequest;
 use App\Http\Requests\V1\Cecy\Planifications\IndexPlanificationRequest;
@@ -198,9 +198,52 @@ class ParticipantController extends Controller
         return 'por revisar';
     }
 
+    //Creación de Participante
+    public function createParticipantUser(StoreParticipantUserRequest $request){
+        $user = User::where('username', $request->input('username'))
+        ->orWhere('email', $request->input('email'))->first();
+
+    $user = new User();
+    $user->identificationType()->associate(CoreCatalogue::find($request->input('identificationType.id')));
+    $user->disability()->associate(CoreCatalogue::find($request->input('disability.id')));
+    $user->gender()->associate(CoreCatalogue::find($request->input('gender.id')));
+    $user->nationality()->associate(Location::find($request->input('nationality.id')));
+    $user->ethnicOrigin()->associate(CoreCatalogue::find($request->input('ethnicOrigin.id')));
+    $user->address()->associate($this->createUserAddress($request->input('address')));
+    // $user->bloodType()->associate(Catalogue::find($request->input('bloodType.id')));
+    // $user->civilStatus()->associate(Catalogue::find($request->input('civilStatus.id')));
+    // $user->sex()->associate(Catalogue::find($request->input('sex.id')));
+
+    $user->username = $request->input('username');
+    $user->name = $request->input('name');
+    $user->lastname =  $request->input('lastname');
+    $user->birthdate = $request->input('birthdate');
+    $user->email = $request->input('email');
+    $user->password =  '12345678';
+
+    DB::transaction(function () use ($request, $user) {
+        $user->save();
+        $user->addPhones($request->input('phones'));
+        $user->addEmails($request->input('emails'));
+        $participant = $this->createParticipant($request->input('participantType.id'), $user);
+        $participant->save();
+    });
+
+    return (new UserResource($user))
+        ->additional([
+            'msg' => [
+                'summary' => 'Participante Creado',
+                'detail' => '',
+                'code' => '200'
+            ]
+        ])
+        ->response()->setStatusCode(200);
+    }
+
     //Modificacion de Participante
     public function updateParticipant(UpdateParticipantRequest $request, Participant $participant)
     {
+        $user= $participant -> user();
         $participant->identificationType()->associate(Catalogue::find($request->input('identificationType.id')));
         $participant->sex()->associate(Catalogue::find($request->input('sex.id')));
         $participant->gender()->associate(Catalogue::find($request->input('gender.id')));
@@ -212,15 +255,13 @@ class ParticipantController extends Controller
         $participant->name = $request->input('name');
         $participant->lastname = $request->input('lastname');
         $participant->birthdate = $request->input('birthdate');
-        $participant->email = $request->input('email');
 
         $participant->save();
-        $participant->addEmails($request->input('emails'));
 
         return (new UserResource($participant))
             ->additional([
                 'msg' => [
-                    'summary' => 'Usuario Actualizado',
+                    'summary' => 'Datos Actualizados',
                     'detail' => '',
                     'code' => '200'
                 ]
@@ -229,7 +270,7 @@ class ParticipantController extends Controller
     }
 
     //Metodo para ver listado de los Participante
-    public function getParticipants(GetParticipantsRequest $request)
+    public function index (IndexParticipantRequest $request)
     {
         $sorts = explode(',', $request->input('sort'));
 
@@ -248,9 +289,10 @@ class ParticipantController extends Controller
     }
 
     //Metodo de Aceptación de Participante
-    public function acceptParticipant( AcceptParticipantRequest $request, Participant $participant)
+    public function acceptParticipant(AcceptParticipantRequest $request, Participant $participant)
     {
-        $participant = Participant::where('user_id', $request->user()->id)->first();
+        $participant->state_id = $request->id;
+        $participant->save();
 
         return (new ParticipantResource($participant))
             ->additional([
@@ -264,7 +306,7 @@ class ParticipantController extends Controller
     }
 
     //Metodo de Eliminación de Participante
-    public function destroyParticipant(DestroyParticipantRequest $request, Participant $participant)
+    public function destroyParticipant(Participant $participant)
     {
         $participant->delete();
 
