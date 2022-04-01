@@ -248,10 +248,15 @@ Route::prefix('classroom')->group(function () {
 /***********************************************************************************************************************
  * INSTRUCTORS
  **********************************************************************************************************************/
-Route::apiResource('instructors', InstructorController::class);
+
+Route::prefix('instructor/{instructor}')->group(function () {
+    Route::put('type-instructor', [InstructorController::class, 'updateTypeInstructor']);
+    Route::put('state-instructor', [InstructorController::class, 'updateStateInstructor']);
+});
 
 Route::prefix('instructor')->group(function () {
     Route::post('create', [InstructorController::class, 'storeInstructor']);
+    Route::post('instructors', [InstructorController::class, 'storeInstructors']);
     Route::get('', [InstructorController::class, 'indexInstructor']);
     // Route::get('courses', [InstructorController::class, 'getCourses']);
     // Route::get('instructor-courses', [InstructorController::class, 'getInstructorByCourses']);
@@ -259,10 +264,7 @@ Route::prefix('instructor')->group(function () {
     // Route::get('destroy/{instructor}', [InstructorController::class, 'destroyInstructors']);
 });
 
-Route::prefix('instructor/{instructor}')->group(function () {
-    Route::put('type-instructor', [InstructorController::class, 'updateStateInstructors']);
-    Route::put('state-instructor', [InstructorController::class, 'updateTypeInstructors']);
-});
+Route::apiResource('instructors', InstructorController::class);
 
 /***********************************************************************************************************************
  * REGISTRATIONS
