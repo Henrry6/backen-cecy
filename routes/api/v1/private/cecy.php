@@ -295,9 +295,9 @@ Route::prefix('participant')->group(function () {
 
 Route::prefix('participant/{participant}')->group(function () {
     Route::patch('', [ParticipantController::class, 'acceptParticipant']);
-    Route::delete('', [ParticipantController::class, 'destroyParticipant']);
-    Route::get('', [ParticipantController::class, 'getParticipants']);
-    Route::put('', [ParticipantController::class, 'updateParticipant']);
+    Route::delete('destroy/{participant}', [ParticipantController::class, 'destroyParticipant']);
+    Route::get('information/{participant}', [ParticipantController::class, 'getParticipants']);
+    Route::put('update/{participant}', [ParticipantController::class, 'updateParticipant']);
 });
 
 /***********************************************************************************************************************

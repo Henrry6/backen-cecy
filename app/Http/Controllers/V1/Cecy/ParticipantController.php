@@ -5,7 +5,6 @@ namespace App\Http\Controllers\V1\Cecy;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\V1\Cecy\Participants\AcceptParticipantRequest;
-use App\Http\Requests\V1\Cecy\Participants\DestroyParticipantRequest;
 use App\Http\Requests\V1\Cecy\Participants\IndexParticipantRequest;
 use App\Http\Requests\V1\Cecy\Participants\UpdateParticipantRequest;
 use App\Http\Requests\V1\Cecy\Participants\StoreParticipantRequest;
