@@ -33,9 +33,10 @@ class RegisterDetailPlanificationRequest extends FormRequest
                 //             ->where('planification_id', $this->planification)
                 //     )
             ],
-            'endedTime' => ['required', 'after:startedTime'],
-            'startedTime' => ['required',],
+            'endedTime' => ['required', 'after:startedTime', 'date_format:"H:i:s"'],
+            'startedTime' => ['required', 'date_format:"H:i:s"'],
             'observations' => ['sometimes', 'required', 'array'],
+            'observations.*' => ['string', 'min:10'],
         ];
     }
 

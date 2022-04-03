@@ -76,7 +76,7 @@ Route::prefix('planification')->group(function () {
 
 Route::prefix('planification/{planification}')->group(function () {
     Route::get('', [PlanificationController::class, 'getPlanitification']);
-    Route::put('dates-and-needs-planifications', [PlanificationController::class, 'updateDatesAndNeedsInPlanification']);
+    Route::put('dates-and-needs-planifications', [PlanificationController::class, 'addNeedsOfPlanification']);
     Route::post('create-planifications-course', [PlanificationController::class, 'storePlanificationByCourse']);
     Route::put('planifications-cecy', [PlanificationController::class, 'updatePlanificationByCecy']);
     Route::put('assign-code-planification', [PlanificationController::class, 'assignCodeToPlanification']);
@@ -235,7 +235,6 @@ Route::controller(SchoolPeriodController::class)->group(function () {
 
     Route::prefix('school-periods')->group(function () {
         Route::get('catalogue', 'catalogue');
-
     });
 });
 Route::apiResource('school-periods', SchoolPeriodController::class);
@@ -258,7 +257,6 @@ Route::controller(InstructorController::class)->group(function () {
     Route::prefix('instructor/{instructor}')->group(function () {
         Route::put('type-instructor', [InstructorController::class, 'updateTypeInstructor']);
         Route::put('state-instructor', [InstructorController::class, 'updateStateInstructor']);
-
     });
 
     Route::prefix('instructor')->group(function () {
@@ -316,20 +314,22 @@ Route::prefix('detail-school-period')->group(function () {
 ******************************************************************************************************************
  * REQUERIMENTS
  **********************************************************************************************************************/
+Route::controller(RequirementController::class)->group(function () {
+    Route::prefix('requirement')->group(function () {
+        Route::get('file', 'showFile');
+        Route::get('image', 'showImage');
+    });
 
-
-Route::prefix('requirement')->group(function () {
-    Route::get('', [RequirementController::class, 'getAllRequirement']);
-    Route::get('/{requirements}', [RequirementController::class, 'getRequirement']);
-    Route::post('/{requirements}', [RequirementController::class, 'storeRequirement']);
-    Route::put('/{requirements}', [RequirementController::class, 'updateRequirement']);
-    Route::delete('/{requirements}', [RequirementController::class, 'destroy']);
+    Route::prefix('requirement')->group(function () {
+        Route::get('catalogue', 'catalogue');
+        Route::get('', 'getAllRequirement');
+        Route::get('/{requirements}', 'getRequirement');
+        Route::post('/{requirements}', 'storeRequirement');
+        Route::put('/{requirements}', 'updateRequirement');
+        Route::delete('/{requirements}', 'destroy');
+    });
 });
-
-Route::prefix('requirement')->group(function () {
-    Route::get('file', [RequirementController::class, 'showFile']);
-    Route::get('image', [RequirementController::class, 'showImage']);
-});
+Route::apiResource('requirements', RequirementController::class);
 
 /***********************************************************************************************************************
  * AUTHORITIES

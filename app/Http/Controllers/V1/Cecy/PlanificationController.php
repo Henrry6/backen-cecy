@@ -8,7 +8,7 @@ use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\GetPlanifica
 use App\Http\Requests\V1\Cecy\Authorities\IndexAuthorityRequest;
 use App\Http\Requests\V1\Cecy\Planifications\StorePlanificationByCourseRequest;
 use App\Http\Requests\V1\Cecy\Planifications\UpdateAssignResponsibleCecyRequest;
-use App\Http\Requests\V1\Cecy\Planifications\UpdateDatesinPlanificationRequest;
+use App\Http\Requests\V1\Cecy\Planifications\AddNeedsOfPlanification;
 use App\Http\Requests\V1\Cecy\Planifications\UpdatePlanificationRequest;
 use App\Http\Requests\V1\Cecy\Planifications\UpdateStatePlanificationRequest;
 use App\Http\Resources\V1\Cecy\Courses\CourseCollection;
@@ -91,7 +91,7 @@ class PlanificationController extends Controller
             ->response()->setStatusCode(201);
     }
 
-    public function updateDatesAndNeedsInPlanification(UpdateDatesinPlanificationRequest $request, Planification $planification)
+    public function addNeedsOfPlanification(AddNeedsOfPlanification $request, Planification $planification)
     {
         $loggedInInstructor = Instructor::where('user_id', $request->user()->id)->first();
         if (!$loggedInInstructor) {
@@ -132,9 +132,8 @@ class PlanificationController extends Controller
             ], 400);
         }
 
-        $planification->started_at = $request->input('startedAt');
-        $planification->ended_at = $request->input('endedAt');
         $planification->needs = $request->input('needs');
+
         $planification->save();
 
         return (new PlanificationByCourseResource($planification))
@@ -142,10 +141,10 @@ class PlanificationController extends Controller
                 'msg' => [
                     'summary' => 'Registro actualizado',
                     'detail' => '',
-                    'code' => '200'
+                    'code' => '201'
                 ]
             ])
-            ->response()->setStatusCode(200);
+            ->response()->setStatusCode(201);
     }
 
     private function getApprovedPlanificationsId()
@@ -343,11 +342,11 @@ class PlanificationController extends Controller
      */
     public function storePlanificationByCourse(StorePlanificationByCourseRequest $request, Course $course)
     {
-         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
 
         $toBeApproved = Catalogue::where('type',  $catalogue['planification_state']['type'])
             ->where('code',  $catalogue['planification_state']['to_be_approved'])->first();
-        $instructor = Instructor::find($request->input('responsibleCourse.id'));//que estado y tipo debe ser el instructor
+        $instructor = Instructor::find($request->input('responsibleCourse.id')); //que estado y tipo debe ser el instructor
 
         $planification = new Planification();
 

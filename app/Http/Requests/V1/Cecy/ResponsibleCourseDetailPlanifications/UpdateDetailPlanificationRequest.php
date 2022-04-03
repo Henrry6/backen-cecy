@@ -30,9 +30,10 @@ class UpdateDetailPlanificationRequest extends FormRequest
                 'required', 'integer',
                 new HoursRule($this->day, $this->startedTime, $this->endedTime)
             ],
-            'endedTime' => ['required', 'after:startedTime'],
-            'startedTime' => ['required',],
+            'endedTime' => ['required', 'after:startedTime', 'date_format:"H:i:s"'],
+            'startedTime' => ['required', 'date_format:"H:i:s"'],
             'observations' => ['sometimes', 'required', 'array'],
+            'observations.*' => ['string', 'min:10'],
         ];
     }
 
@@ -46,6 +47,17 @@ class UpdateDetailPlanificationRequest extends FormRequest
             'parallel.id' => 'paralelo del aula',
             'endedTime' => 'hora de inicio',
             'startedTime' => 'hora de fin',
+            'observations' => 'observaciones',
         ];
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [];
     }
 }
