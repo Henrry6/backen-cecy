@@ -33,19 +33,19 @@ class DetailPlanificationsSeeder extends Seeder
                 'code' => $catalogue['workday']['evening'],
                 'name' => 'VESPERTINA',
                 'type' => $catalogue['workday']['type'],
-                'description' => 'Falta poner una descripción'
+                'description' => 'Jornada del paralelo'
             ],
             [
                 'code' => $catalogue['workday']['morning'],
                 'name' => 'MATUTINA',
                 'type' => $catalogue['workday']['type'],
-                'description' => 'Falta poner una descripción'
+                'description' => 'Jornada del paralelo'
             ],
             [
                 'code' => $catalogue['workday']['nocturnal'],
                 'name' => 'NOCTURNA',
                 'type' => $catalogue['workday']['type'],
-                'description' => 'Falta poner una descripción'
+                'description' => 'Jornada del paralelo'
             ],
             //parallels
             [
@@ -87,56 +87,56 @@ class DetailPlanificationsSeeder extends Seeder
                 'code' => $catalogue['day']['monday_friday'],
                 'name' => 'LUNES A VIERNES',
                 'type' => $catalogue['day']['type'],
-                'description' => 'Falta poner una descripción'
+                'description' => 'Días en que se lleva a cabo un paralelo'
             ],
             [
                 'code' => $catalogue['day']['monday_sunday'],
                 'name' => 'LUNES A DOMINGO',
                 'type' => $catalogue['day']['type'],
-                'description' => 'Falta poner una descripción'
+                'description' => 'Días en que se lleva a cabo un paralelo'
             ],
             [
                 'code' => $catalogue['day']['sundays'],
                 'name' => 'DOMINGOS',
                 'type' => $catalogue['day']['type'],
-                'description' => 'Falta poner una descripción'
+                'description' => 'Días en que se lleva a cabo un paralelo'
             ],
             [
                 'code' => $catalogue['day']['saturdays'],
                 'name' => 'SABADOS',
                 'type' => $catalogue['day']['type'],
-                'description' => 'Falta poner una descripción'
+                'description' => 'Días en que se lleva a cabo un paralelo'
             ],
             //detail_planification_states
             [
                 'code' => State::TO_BE_APPROVED,
                 'name' => 'POR APROBAR',
                 'type' => $catalogue['detail_planification_state']['type'],
-                'description' => 'Falta poner una descripción'
+                'description' => 'Estado de detalle de planificación'
             ],
             [
                 'code' => State::CULMINATED,
                 'name' => 'CULMINADO',
                 'type' => $catalogue['detail_planification_state']['type'],
-                'description' => 'Falta poner una descripción'
+                'description' => 'Estado de detalle de planificación'
             ],
             [
                 'code' => State::IN_PROCESS,
                 'name' => 'EN PROCESO',
                 'type' => $catalogue['detail_planification_state']['type'],
-                'description' => 'Falta poner una descripción'
+                'description' => 'Estado de detalle de planificación'
             ],
             [
                 'code' => State::NOT_APPROVED,
                 'name' => 'NO APROBADO',
                 'type' => $catalogue['detail_planification_state']['type'],
-                'description' => 'Falta poner una descripción'
+                'description' => 'Estado de detalle de planificación'
             ],
             [
                 'code' => State::APPROVED,
                 'name' => 'APROBADO',
                 'type' => $catalogue['detail_planification_state']['type'],
-                'description' => 'Falta poner una descripción'
+                'description' => 'Estado de detalle de planificación'
             ]
         )->create();
     }
@@ -162,7 +162,7 @@ class DetailPlanificationsSeeder extends Seeder
                         'workday_id' => $workdays[rand(0, sizeof($workdays) - 1)],
                         'state_id' => $faker->randomElement($states),
                         'ended_time' => $faker->time(),
-                        'observations' => $faker->sentences(3),
+                        'observation' => $faker->sentence(),
                         'plan_ended_at' => $faker->date('Y_m_d'),
                         'registrations_left' => $faker->randomDigit(),
                         'started_time' => $faker->time()

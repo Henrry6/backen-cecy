@@ -296,10 +296,10 @@ Route::prefix('participant')->group(function () {
 });
 
 Route::prefix('participant/{participant}')->group(function () {
-    Route::put('update-state/{participant}', [ParticipantController::class, 'acceptParticipant']);
-    Route::delete('destroy/{participant}', [ParticipantController::class, 'destroyParticipant']);
-    Route::get('information/{participant}', [ParticipantController::class, 'getParticipants']);
-    Route::put('update/{participant}', [ParticipantController::class, 'updateParticipant']);
+    // Route::put('update-state/{participant}', [ParticipantController::class, 'acceptParticipant']);
+    // Route::delete('destroy/{participant}', [ParticipantController::class, 'destroyParticipant']);
+    // Route::get('information/{participant}', [ParticipantController::class, 'getParticipants']);
+    // Route::put('update/{participant}', [ParticipantController::class, 'updateParticipant']);
 });
 
 /***********************************************************************************************************************

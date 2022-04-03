@@ -34,7 +34,7 @@ class DetailPlanificationController extends Controller
         $sorts = explode(',', $request->sort);
 
         $detailPlanifications =  DetailPlanification::customOrderBy($sorts)
-            ->observations($request->input('search'))
+            ->observation($request->input('search'))
             ->limit(1000)
             ->get();
 
@@ -158,8 +158,8 @@ class DetailPlanificationController extends Controller
         $detailPlanification->ended_time = $request->input('endedTime');
         $detailPlanification->started_time = $request->input('startedTime');
 
-        if ($request->has('observations')) {
-            $detailPlanification->observations = $request->input('observations');
+        if ($request->has('observation')) {
+            $detailPlanification->observation = $request->input('observation');
         }
 
         $detailPlanification->save();
@@ -251,8 +251,8 @@ class DetailPlanificationController extends Controller
         $detailPlanification->ended_time = $request->input('endedTime');
         $detailPlanification->started_time = $request->input('startedTime');
 
-        if ($request->has('observations')) {
-            $detailPlanification->observations = $request->input('observations');
+        if ($request->has('observation')) {
+            $detailPlanification->observation = $request->input('observation');
         }
 
         $detailPlanification->save();

@@ -35,8 +35,7 @@ class RegisterDetailPlanificationRequest extends FormRequest
             ],
             'endedTime' => ['required', 'after:startedTime', 'date_format:"H:i:s"'],
             'startedTime' => ['required', 'date_format:"H:i:s"'],
-            'observations' => ['sometimes', 'required', 'array'],
-            'observations.*' => ['string', 'min:10'],
+            'observation' => ['sometimes', 'required', 'string', 'min:10'],
         ];
     }
 
@@ -45,10 +44,11 @@ class RegisterDetailPlanificationRequest extends FormRequest
         return [
             'classroom.id' => 'aula',
             'day.id' => 'días de clase',
+            'parallel.id' => 'paralelo del aula',
             'planification.id' => 'planificación',
             'workday.id' => 'jornada',
-            'parallel.id' => 'paralelo del aula',
             'endedTime' => 'hora de inicio',
+            'observation' => 'observación',
             'startedTime' => 'hora de fin',
         ];
     }
