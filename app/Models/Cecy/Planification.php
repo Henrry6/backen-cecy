@@ -51,6 +51,7 @@ class Planification extends Model implements Auditable
     {
         return $this->belongsTo(DetailSchoolPeriod::class);
     }
+    
     public function responsibleCourse()
     {
         return $this->belongsTo(Instructor::class);

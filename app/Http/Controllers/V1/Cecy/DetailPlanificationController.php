@@ -209,7 +209,9 @@ class DetailPlanificationController extends Controller
             ], 400);
         }
 
-        $planification = Planification::find($request->input('planification.id'));
+        // $planification = $loggedInInstructor->planifications()->get();
+        // $planification = Planification::find($request->input('planification.id'));
+        $planification = $detailPlanification->planification()->first();
         $responsibleCourse = $planification->responsibleCourse()->first();
 
         if ($loggedInInstructor->id !== $responsibleCourse->id) {
@@ -238,7 +240,6 @@ class DetailPlanificationController extends Controller
 
         $classroom = Classroom::find($request->input('classroom.id'));
         $day = Catalogue::find($request->input('day.id'));
-        $planification = Planification::find($request->input('planification.id'));
         $workday = Catalogue::find($request->input('workday.id'));
         $parallel = Catalogue::find($request->input('parallel.id'));
 
@@ -262,10 +263,10 @@ class DetailPlanificationController extends Controller
                 'msg' => [
                     'summary' => 'Éxito',
                     'detail' => 'Registro actualizado',
-                    'code' => '200'
+                    'code' => '201'
                 ]
             ])
-            ->response()->setStatusCode(200);
+            ->response()->setStatusCode(201);
     }
     /**
      * Delete a detail planification record

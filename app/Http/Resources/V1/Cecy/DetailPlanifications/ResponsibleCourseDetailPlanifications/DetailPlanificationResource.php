@@ -22,7 +22,7 @@ class DetailPlanificationResource extends JsonResource
             'state' => CatalogueResource::make($this->state),
             'workday' => CatalogueResource::make($this->workday),
             'endedTime' => $this->ended_time,
-            'observations' => $this->observations,
+            'observation' => $this->observation,
             'startedTime' => $this->started_time,
             'schedule' => $this->getScheduleAttribute(),
         ];
