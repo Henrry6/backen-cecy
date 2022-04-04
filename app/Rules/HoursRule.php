@@ -18,7 +18,6 @@ class HoursRule implements Rule
      */
     protected $dayId;
     protected $endedTime;
-    // protected $customMessage
     protected $startedTime;
 
     /**
@@ -57,6 +56,7 @@ class HoursRule implements Rule
     public function message()
     {
         return 'Las horas seleccionadas no deben superar las horas de curso planificadas';
+        // return $this->checkHours(1);
     }
 
     public function checkHours($planificationId)
@@ -67,7 +67,7 @@ class HoursRule implements Rule
         $courseHours = $course->duration;
 
         $dayNames = $this->getDayNames($planification->started_at, $planification->ended_at);
-        $numberOfDays = $this->getNumberOfDays($day[0]->code, $dayNames);
+        $numberOfDays = $this->getNumberOfDays($day->code, $dayNames);
         $endedTime = new DateTime($this->endedTime);
         $startedTime = new DateTime($this->startedTime);
         $numberOfSelectedHours = $endedTime->getTimestamp() - $startedTime->getTimestamp();

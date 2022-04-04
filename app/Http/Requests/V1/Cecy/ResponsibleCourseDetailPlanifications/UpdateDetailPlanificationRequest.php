@@ -28,11 +28,10 @@ class UpdateDetailPlanificationRequest extends FormRequest
             'workday.id' => ['required', 'integer', new WorkdayRule($this->endedTime)],
             'planification.id' => [
                 'required', 'integer',
-                new HoursRule($this->day, $this->startedTime, $this->endedTime)
+                new HoursRule($this->day['id'], $this->startedTime, $this->endedTime)
             ],
-            'endedTime' => ['required', 'after:startedTime', 'date_format:"H:i:s"'],
-            'startedTime' => ['required', 'date_format:"H:i:s"'],
-            'observation' => ['sometimes', 'required', 'string', 'min:10'],
+            'endedTime' => ['required', 'after:startedTime', 'date_format:"H:i"'],
+            'startedTime' => ['required', 'date_format:"H:i"'],
         ];
     }
 
@@ -45,7 +44,6 @@ class UpdateDetailPlanificationRequest extends FormRequest
             'planification.id' => 'planificación',
             'workday.id' => 'jornada',
             'endedTime' => 'hora de fin',
-            'observation' => 'observación',
             'startedTime' => 'hora de inicio',
         ];
     }
