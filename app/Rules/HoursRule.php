@@ -18,7 +18,7 @@ class HoursRule implements Rule
      */
     protected $dayId;
     protected $endedTime;
-    // protected $customMessage;
+    // protected $customMessage
     protected $startedTime;
 
     /**
@@ -34,7 +34,6 @@ class HoursRule implements Rule
         $this->dayId = $dayId;
         $this->startedTime = $startedTime;
         $this->endedTime = $endedTime;
-        // $this->customMessage = '';
     }
 
     /**
@@ -48,7 +47,6 @@ class HoursRule implements Rule
     {
         return $this->checkHours($value);
         // return false;
-        // return true;
     }
 
     /**
@@ -59,8 +57,6 @@ class HoursRule implements Rule
     public function message()
     {
         return 'Las horas seleccionadas no deben superar las horas de curso planificadas';
-        // return $this->customMessage;
-        // return $this->checkHours(3);
     }
 
     public function checkHours($planificationId)
@@ -81,15 +77,6 @@ class HoursRule implements Rule
         $totalHoursSelected = $numberOfDays * $numberOfSelectedHours;
 
         return $totalHoursSelected <= $courseHours;
-        // if ($totalHoursSelected === $courseHours) {
-        //     return true;
-        // } elseif ($totalHoursSelected < $courseHours) {
-        //     $this->customMessage = 'Las horas seleccionadas son inferiores a las horas de curso planificadas. Añada una observación';
-        //     return false;
-        // } else {
-        //     $this->customMessage = 'Las horas seleccionadas no deben superar las horas de curso planificadas';
-        //     return false;
-        // }
     }
 
     private function getDayNames($begin, $end)

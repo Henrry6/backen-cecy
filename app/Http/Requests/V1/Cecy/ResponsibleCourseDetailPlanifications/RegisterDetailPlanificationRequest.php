@@ -13,6 +13,7 @@ class RegisterDetailPlanificationRequest extends FormRequest
     {
         return true;
     }
+
     public function rules()
     {
         return [
@@ -23,9 +24,7 @@ class RegisterDetailPlanificationRequest extends FormRequest
                 'required', 'integer',
                 new HoursRule($this->day, $this->startedTime, $this->endedTime)
             ],
-            'parallel.id' => [ //1 retrieve softdelete models with withTrashed method
-                //2 apply rule not in with this field,
-                //other option: use a available validation rule such as exist, exclude if,etc,
+            'parallel.id' => [
                 'required', 'integer',
                 // Rule::unique('pgsql-cecy.detail_planifications', 'parallel_id')
                 //     ->where(
@@ -47,9 +46,9 @@ class RegisterDetailPlanificationRequest extends FormRequest
             'parallel.id' => 'paralelo del aula',
             'planification.id' => 'planificación',
             'workday.id' => 'jornada',
-            'endedTime' => 'hora de inicio',
+            'endedTime' => 'hora de fin',
             'observation' => 'observación',
-            'startedTime' => 'hora de fin',
+            'startedTime' => 'hora de inicio',
         ];
     }
 }

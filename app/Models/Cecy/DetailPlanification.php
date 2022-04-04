@@ -89,26 +89,17 @@ class DetailPlanification extends Model implements Auditable
         return $this->belongsTo(Catalogue::class);
     }
 
-    // Scopes
-    //revisar
-    public function scopeEndedTime($query, $endedTime)
+    //Mutators
+    public function setObservationAttribute($value)
     {
-        if ($endedTime) {
-            return $query->orWhere('ended_time', 'iLike', "%$endedTime%");
-        }
+        $this->attributes['observation'] = strtoupper($value);
     }
 
+    // Scopes
     public function scopeObservation($query, $observation)
     {
         if ($observation) {
             return $query->orWhere('observation', 'iLike', "%$observation%");
-        }
-    }
-
-    public function scopePlanEndedAt($query, $planEndedAt)
-    {
-        if ($planEndedAt) {
-            return $query->orWhere('plan_ended_at', 'iLike', "%$planEndedAt%");
         }
     }
 

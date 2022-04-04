@@ -44,19 +44,9 @@ class UpdateDetailPlanificationRequest extends FormRequest
             'parallel.id' => 'paralelo del aula',
             'planification.id' => 'planificación',
             'workday.id' => 'jornada',
-            'endedTime' => 'hora de inicio',
+            'endedTime' => 'hora de fin',
             'observation' => 'observación',
-            'startedTime' => 'hora de fin',
+            'startedTime' => 'hora de inicio',
         ];
-    }
-
-    /**
-     * Get the error messages for the defined validation rules.
-     *
-     * @return array
-     */
-    public function messages()
-    {
-        return [];
     }
 }
