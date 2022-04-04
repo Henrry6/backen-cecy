@@ -192,8 +192,9 @@ class ParticipantController extends Controller
         //TODO: revisar sobre el envio de notificaciones
         return 'por revisar';
     }
-
-    //Files
+    
+    
+     //Files
     public function showFileInstructor(User $user, File $file)
     {
         return $user->showFile($file);
