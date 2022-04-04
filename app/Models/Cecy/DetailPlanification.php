@@ -25,22 +25,20 @@ class DetailPlanification extends Model implements Auditable
 
     protected $fillable = [
         'ended_time',
-        'observations',
+        'observation',
         'plan_ended_at',
         'registrations_left',
         'started_time',
     ];
 
-    protected $casts = [
-        'observations' => 'array',
-    ];
+    protected $casts = [];
 
     // Relationships
     public function attendances()
     {
         return $this->hasMany(Attendance::class);
     }
-    
+
     public function certificates()
     {
         return $this->morphMany(Certificate::class, 'certificateable');
@@ -96,25 +94,24 @@ class DetailPlanification extends Model implements Auditable
     public function scopeEndedTime($query, $endedTime)
     {
         if ($endedTime) {
-            return $query->orWhere('ended_time', $endedTime);
-        }
-    }
-    
-    public function scopeObservations($query, $observations)
-    {
-        if ($observations) {
-            return $query->orWhere('observations', 'iLike', "%$observations%");
+            return $query->orWhere('ended_time', 'iLike', "%$endedTime%");
         }
     }
 
-    //revisar
+    public function scopeObservation($query, $observation)
+    {
+        if ($observation) {
+            return $query->orWhere('observation', 'iLike', "%$observation%");
+        }
+    }
+
     public function scopePlanEndedAt($query, $planEndedAt)
     {
         if ($planEndedAt) {
-            return $query->orWhere('plan_ended_at', $planEndedAt);
+            return $query->orWhere('plan_ended_at', 'iLike', "%$planEndedAt%");
         }
     }
-    
+
     //revisar
     public function scopePlanification($query, $planification)
     {
@@ -122,7 +119,7 @@ class DetailPlanification extends Model implements Auditable
             return $query->orWhere('planification_id', $planification->id);
         }
     }
-    
+
     public function scopeCustomOrderBy($query, $sorts)
     {
         if (!empty($sorts[0])) {
@@ -152,12 +149,11 @@ class DetailPlanification extends Model implements Auditable
             array_unshift($fields, 'id');
             return $query->select($fields);
         }
-    }  
+    }
 
     // Accesors
     public function getScheduleAttribute()
     {
         return $this->attributes['started_time'] . '-' . $this->attributes['ended_time'];
     }
-    
 }

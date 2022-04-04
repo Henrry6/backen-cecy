@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\Cecy\Requirements\CatalogueRequirementRequest;
 use App\Http\Requests\V1\Cecy\Requirements\IndexRequirementRequest;
 use App\Http\Requests\V1\Cecy\Requirements\StoreRequirementRequest;
 use App\Http\Requests\V1\Cecy\Requirements\UpdateRequirementRequest;
@@ -17,6 +18,26 @@ class RequirementController extends Controller
 {
     function __construct()
     {
+    }
+
+    function catalogue(CatalogueRequirementRequest $request)
+    {
+        $sorts = explode(',', $request->input('sort'));
+
+        $requirements = Requirement::customOrderBy($sorts)
+            ->name($request->input('search'))
+            ->limit(1000)
+            ->get();
+
+        return (new RequirementCollection($requirements))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
     }
 
     public function getAllRequirement(IndexRequirementRequest $request)

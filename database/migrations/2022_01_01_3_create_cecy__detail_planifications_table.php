@@ -47,9 +47,9 @@ class CreateCecyDetailPlanificationsTable extends Migration
                 ->nullable()
                 ->comment('Hora de finalización de clases');
 
-            $table->text('observations')
+            $table->text('observation')
                 ->nullable()
-                ->comment('Observaciones necesaria si las horas de duración de curso no son alcanzadas por las horas de clase');
+                ->comment('Observación necesaria si las horas de duración de curso no coinciden con las horas seleccionadas');
 
             $table->date('plan_ended_at')
                 ->nullable()

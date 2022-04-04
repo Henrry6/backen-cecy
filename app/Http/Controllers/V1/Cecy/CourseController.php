@@ -3,9 +3,15 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
+
 use App\Http\Requests\V1\Core\Images\IndexImageRequest;
 use App\Http\Requests\V1\Core\Images\UploadImageRequest;
+use App\Http\Requests\V1\Cecy\Courses\ApproveCourseRequest;
+use App\Http\Requests\V1\Cecy\Courses\DeclineCourseRequest;
 use App\Http\Requests\V1\Cecy\Courses\CoordinatorCecy\GetCoursesByCoordinatorCecyRequest;
 use App\Http\Requests\V1\Cecy\Courses\GetCoursesByCategoryRequest;
 use App\Http\Requests\V1\Cecy\Courses\GetCoursesByNameRequest;
@@ -16,7 +22,8 @@ use App\Http\Requests\V1\Cecy\Courses\UpdateCourseGeneralDataRequest;
 use App\Http\Requests\V1\Cecy\Courses\UpdateCurricularDesign;
 use App\Http\Requests\V1\Cecy\Courses\UpdateStateCourseRequest;
 use App\Http\Requests\V1\Cecy\Courses\UploadCertificateOfApprovalRequest;
-use App\Http\Requests\V1\Cecy\Courses\StoreCourseNewRequest;
+use App\Http\Requests\V1\Cecy\Courses\CareerCoordinator\StoreCourseRequest;
+use App\Http\Requests\V1\Cecy\Courses\CatalogueCourseRequest;
 use App\Http\Requests\V1\Cecy\Planifications\GetPlanificationByResponsableCourseRequest;
 use App\Http\Requests\V1\Cecy\Planifications\IndexPlanificationRequest;
 use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationCollection;
@@ -28,18 +35,18 @@ use App\Http\Resources\V1\Cecy\Courses\CoordinatorCecy\CourseByCoordinatorCecyCo
 use App\Http\Resources\V1\Cecy\Courses\CourseResource;
 use App\Http\Resources\V1\Cecy\Courses\CourseCollection;
 use App\Models\Core\File;
-use App\Models\Core\State;
 use App\Models\Core\Career;
-use App\Models\Cecy\Course;
-use App\Models\Cecy\Catalogue;
+use App\Models\Core\State;
 use App\Models\Cecy\Authority;
+use App\Models\Cecy\Catalogue;
+use App\Models\Cecy\Course;
 use App\Models\Cecy\Instructor;
 use App\Models\Cecy\Participant;
 use App\Models\Cecy\Planification;
+use App\Models\Cecy\SchoolPeriod;
 use App\Models\Authentication\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
+//use App\Models\Cecy\Requirement;
 
 class CourseController extends Controller
 {
@@ -47,11 +54,59 @@ class CourseController extends Controller
     {
     }
 
+    public function index(IndexCourseRequest $request)
+    {
+        $sorts = explode(',', $request->input('sort'));
+
+        $courses = Course::customOrderBy($sorts)
+            ->schoolPeriodId($request->input('schoolPeriod.id'))
+            ->paginate($request->input('per_page'));
+
+        return (new CourseCollection($courses))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
+
+    public function catalogue(CatalogueCourseRequest $request)
+    {
+        $sorts = explode(',', $request->sort);
+
+        $courses =  Course::customOrderBy($sorts)
+            ->abbreviation($request->input('search'))
+            ->alignment($request->input('search'))
+            ->code($request->input('search'))
+            ->name($request->input('search'))
+            ->record_number($request->input('search'))
+            ->local_proposal($request->input('search'))
+            ->objective($request->input('search'))
+            ->project($request->input('search'))
+            ->setec_name($request->input('search'))
+            ->summary($request->input('search'))
+            ->limit(1000)
+            ->get();
+
+        return (new CourseCollection($courses))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
+
     // Función privada que permite obtener cursos aprobados
     private function getApprovedPlanifications()
     {
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
-        $planificationApproved = Catalogue::where('type',  $catalogue['planification_state']['type'])
+        $planificationApproved = Catalogue::where('type', $catalogue['planification_state']['type'])
             ->where('code', $catalogue['planification_state']['approved'])->first();
         return $planificationApproved;
     }
@@ -102,8 +157,6 @@ class CourseController extends Controller
     // Obtiene los cursos privados aprobados por tipo de participante (Done)
     public function getPrivateCoursesByParticipantType(IndexPlanificationRequest $request)
     {
-        $sorts = explode(',', $request->input('sort'));
-
         $participant = Participant::where('user_id', $request->user()->id)->first();
 
         $catalogue = Catalogue::find($participant->type_id);
@@ -217,7 +270,7 @@ class CourseController extends Controller
     //obtener los cursos asignados a un docente responsable logueado (Done)
     public function getCoursesByResponsibleCourse(getCoursesByResponsibleRequest $request)
     {
-        $instructor = Instructor::FirstWhere('user_id', $request->user()->id);
+        $instructor = Instructor::firstWhere('user_id', $request->user()->id);
         if (!isset($instructor)) {
             return response()->json([
                 'msg' => [
@@ -226,10 +279,16 @@ class CourseController extends Controller
                     'code' => '404'
                 ],
                 'data' => null
-            ], 404); //revisar ->response()->setStatusCode(404)
+            ], 404);
         }
 
-        $courses = Course::where('responsible_id', $instructor->id)->get();
+        // $courses = Course::where('responsible_id', $instructor->id)->get();
+        $courses = Course::where('responsible_id', $instructor->id)
+            ->orWhereHas('planifications', function (Builder $query) use ($instructor) {
+                $query->where('responsible_course_id', $instructor->id);
+            })
+            ->get();
+
         return (new CoursesByResponsibleCollection($courses))
             ->additional([
                 'msg' => [
@@ -370,7 +429,7 @@ class CourseController extends Controller
      $data= new InformCourseNeedsResource($planification);
         $pdf = PDF::loadView('reports/report-needs', ['planification' => $data]);
 
-        return $pdf->stream('informNeeds.pdf'); 
+        return $pdf->stream('informNeeds.pdf');
     } */
 
     // Mostrar las necesidades de un curso (Done)
@@ -399,7 +458,7 @@ class CourseController extends Controller
     }
 
     //Traer todos los cursos planificados de un año en especifico (Done)
-    // el que hizo esto debe enviar el año en especifico bien por el url 
+    // el que hizo esto debe enviar el año en especifico bien por el url
     // o por params
     public function showYearSchedule(Planification $planification)
     {
@@ -469,54 +528,7 @@ class CourseController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    // Filtrar cursos por carrera (Done)
-    public function getCoursesByCareer(GetCoursesByCareerRequest $request, Career $career)
-    {
-        return "getCoursesByCareer";
-        $sorts = explode(',', $request->sort);
-        $course = Course::where('career.id', $career->id);
-
-        $course = Course::customOrderBy($sorts)
-            ->academicPeriod(($request->input('academicPeriod.id')))
-            ->state(($request->input('state.id')))
-            ->paginate($request->input('per_page'));
-
-        return (new CourseResource($course))
-            ->additional([
-                'msg' => [
-                    'summary' => '',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ])->response()->setStatusCode(200);
-    }
-
-    // Crear curso nuevo completamente (Done)
-    public function storeNewCourse(StoreCourseNewRequest $request)
-    {
-        return "storeNewCourse";
-        $course = new Course();
-        $course->name = $request->input('search');
-        $course->participant_type = $request->input('search');
-        $course->state = $request->input('estado del curso');
-        $course->duration = $request->input('search');
-        // $courses->started_at()->associate(Planification::find($request->input('fecha inicio de planificacion')));
-        // $courses->ended_at()->associate(Planification::find($request->input('fecha fin de planificacion')));
-        $course->save();
-
-        return (new CourseResource($course))
-            ->additional([
-                'msg' => [
-                    'summary' => 'Curso creado',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ])->response()->setStatusCode(200);
-    }
-
-
-    //traer participante de un curso 
-
+    //traer participante de un curso
     public function certificateParticipants(Course $course)
     {
 
@@ -555,25 +567,138 @@ class CourseController extends Controller
     }
 
     /**
-     * getCoursesBySchoolPeriod
+     * getCoursesByCareer
      */
+    public function getCoursesByCareer(GetCoursesByCareerRequest $request, Career $career)
+    {
+        $sorts = explode(',', $request->sort);
+
+        $courses = $career->courses()
+            ->customOrderBy($sorts)
+            ->code(($request->input('search')))
+            ->name(($request->input('search')))
+            ->schoolPeriodId(($request->input('schoolPeriod.id')))
+            ->paginate($request->input('perPage'));
+
+        return (new CourseCollection($courses))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])->response()->setStatusCode(200);
+    }
 
     /**
-     * storePlanificationByCourse
+     * storeNewCourse
      */
+    public function storeCourse(StoreCourseRequest $request, Career $career)
+    {
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+
+        $currentState = Catalogue::where('type', $catalogue['school_period_state']['type'])
+            ->where('code', $catalogue['school_period_state']['current'])->first();
+        $toBeApprovedState = Catalogue::where('type', $catalogue['planification_state']['type'])
+            ->where('code', $catalogue['planification_state']['to_be_approved'])->first();
+        $currentSchoolPeriod = SchoolPeriod::where('state_id', $currentState->id)->first();
+        $responsible = Instructor::find($request->input('responsible.id'));
+
+        $course = new Course();
+
+        $course->career()->associate($career);
+        $course->responsible()->associate($responsible);
+        $course->schoolPeriod()->associate($currentSchoolPeriod);
+        $course->state()->associate($toBeApprovedState);
+
+        $course->duration = $request->input('duration');
+        $course->name = $request->input('name');
+        // $course->proposed_at = now();
+
+        $course->save();
+
+        return (new CourseResource($course))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Curso creado',
+                    'detail' => '',
+                    'code' => '201'
+                ]
+            ])->response()->setStatusCode(201);
+    }
 
     /**
-     * storePlanificationByNewCourse
+     * Samantha
+     * updateCourse
+     * Actualizar nombre y duracion de curso
      */
+    public function updateCourse(UpdateCourseRequest $request, Course $course)
+    {
+        $course->course = $request->input('course');
+
+        $course->save();
+
+        return (new CourseResource($course))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Curso Actualizado',
+                    'detail' => '',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
+    }
 
     /**
-     * updateCourseName
+     * deleteCourse
      */
 
-    /**
-     * updatePlanification
-     */
 
+    /*
+        * approveCourse
+    */
+    public function approveCourse(ApproveCourseRequest $request, Course $course)
+    {
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+        $state = Catalogue::where('type',$catalogue['course_state']['type'])
+        ->where('code',$catalogue['course_state']['approved'])->first();
+
+        $course->state()->associate($state);
+        $course->save();
+
+        return (new CourseResource($course))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Curso Aprobado',
+                    'detail' => '',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
+    }
+
+    /*
+        * declineCourse
+    */
+    public function declineCourse(DeclineCourseRequest $request, Course $course)
+    {
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+        $state = Catalogue::where('type',$catalogue['course_state']['type'])
+        ->where('code',$catalogue['course_state']['not_approved'])->first();
+
+        $course->state()->associate($state);
+        $course->save();
+
+        return (new CourseResource($course))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Curso Rechazado',
+                    'detail' => '',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
+    }
 
     // Files
     public function showFileCourse(Course $course, File $file)
@@ -595,3 +720,13 @@ class CourseController extends Controller
         return $course->indexPublicImages($request);
     }
 }
+
+
+
+/**
+ * get
+ * store
+ * update
+ * delete
+ * destroy
+ */

@@ -8,13 +8,13 @@ use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as Auditing;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ProfileInstructorCourse extends Model implements Auditable
+class CourseProfile extends Model implements Auditable
 {
     use HasFactory;
     use Auditing;
     use SoftDeletes;
 
-    protected $table = 'cecy.profile_instructor_courses';
+    protected $table = 'cecy.course_profiles';
 
     protected $fillable = [
         'required_experiences',
@@ -27,6 +27,7 @@ class ProfileInstructorCourse extends Model implements Auditable
         'required_knowledges' => 'array',
         'required_skills' => 'array'
     ];
+
     // Relationships
     public function course()
     {
@@ -35,24 +36,20 @@ class ProfileInstructorCourse extends Model implements Auditable
 
     public function instructors()
     {
-        return $this->belongsToManyy(Instructor::class, 'cecy.authorized_instructors', 'instructor_id', 'profile_instructor_course_id');
+        return $this->belongsToMany(Instructor::class, 'cecy.instructor_course_profile', 'instructor_id', 'course_profile_id');
     }
+
     // Mutators
 
-    //Mis campos son de tipo JSON
 
     // Scopes
-
-    // Mis campos son de  tipo JSON 
-
-
-    public function scopeCourse($query, $profile)
+    public function scopeCourse($query, $courseId)
     {
-        if ($profile) {
-            return $query->Where('course_id', $profile->course);
+        if ($courseId) {
+            return $query->orWhere('course_id', $courseId);
         }
     }
-    
+
     public function scopeCustomOrderBy($query, $sorts)
     {
         if (!empty($sorts[0])) {
@@ -82,5 +79,5 @@ class ProfileInstructorCourse extends Model implements Auditable
             array_unshift($fields, 'id');
             return $query->select($fields);
         }
-    }   
+    }
 }

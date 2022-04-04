@@ -13,32 +13,32 @@ class CreateCecyAuthoritiesTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreignId('intitution_id')
+            //Si una autoridad puede pertenecer a varias instituciones, debería haber una tabla pivote
+            $table->foreignId('institution_id')
                 ->nullable()
                 ->comment('Una autoridad puede pertenecer a varias instituciones')
                 ->constrained('cecy.institutions');
 
-            // No tiene relacion el campo con los ejemplos
             $table->foreignId('position_id')
-                ->comment('Cargo en el cecy. activo, inactivo, vacaciones, permiso médico')
+                ->comment('Cecy, Rector, Vicerrector, Coordinador de carrera, etc.')
                 ->constrained('cecy.catalogues');
 
             $table->foreignId('state_id')
-                ->comment('Estado de una autoridad, de vacaciones, activo , incativo, permiso médico')
+                ->comment('Estado de una autoridad, de vacaciones, activo , inactivo, permiso médico')
                 ->constrained('cecy.catalogues');
 
             $table->foreignId('user_id')
                 ->comment('Información del usuario')
                 ->constrained('authentication.users');
 
-            $table->date('position_started_at')
-                ->comment('Fecha de inicio de la gestión');
+            $table->string('electronic_signature')
+                ->comment('Código de la firma electrónica');
 
             $table->date('position_ended_at')
                 ->comment('Fecha final de la gestión');
 
-            $table->string('electronic_signature')
-                ->comment('Código de la firma electrónica');
+            $table->date('position_started_at')
+                ->comment('Fecha de inicio de la gestión');
         });
     }
 

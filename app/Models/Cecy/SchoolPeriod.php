@@ -61,7 +61,6 @@ class SchoolPeriod extends Model implements Auditable
         }
     }
 
-    //revisar
     public function scopeCustomOrderBy($query, $sorts)
     {
         if (!empty($sorts[0])) {

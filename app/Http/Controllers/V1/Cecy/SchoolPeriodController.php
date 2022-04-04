@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\Cecy\SchoolPeriods\CatalogueSchoolPeriodRequest;
 use App\Http\Requests\V1\Cecy\SchoolPeriods\DestroysSchoolPeriodRequest;
 use App\Http\Requests\V1\Cecy\SchoolPeriods\StoreSchoolPeriodRequest;
 use App\Http\Requests\V1\Cecy\SchoolPeriods\UpdateSchoolPeriodRequest;
@@ -41,6 +42,27 @@ class SchoolPeriodController extends Controller
     public function show(SchoolPeriod $schoolPeriod)
     {
         return (new SchoolPeriodResource($schoolPeriod))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
+
+    public function catalogue(CatalogueSchoolPeriodRequest $request)
+    {
+        $sorts = explode(',', $request->sort);
+
+        $schoolPeriods =  SchoolPeriod::customOrderBy($sorts)
+            ->code($request->input('search'))
+            ->name($request->input('search'))
+            ->limit(1000)
+            ->get();
+
+        return (new SchoolPeriodCollection($schoolPeriods))
             ->additional([
                 'msg' => [
                     'summary' => 'success',

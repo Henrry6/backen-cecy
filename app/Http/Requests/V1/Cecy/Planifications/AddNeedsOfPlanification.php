@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\V1\Cecy\ProfileInstructorCourses;
+namespace App\Http\Requests\V1\Cecy\Planifications;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class DestroysProfileInstructorCourseRequest extends FormRequest
+class AddNeedsOfPlanification extends FormRequest
 {
   public function authorize()
   {
@@ -13,14 +13,15 @@ class DestroysProfileInstructorCourseRequest extends FormRequest
   public function rules()
   {
     return [
-      'ids' => ['required'],
+      'needs' => ['required', 'array'],
+      'needs.*' => ['string', 'min:10'],
     ];
   }
 
   public function attributes()
   {
     return [
-      'ids' => 'ID`s de las aulas',
+      'needs' => 'necesidades',
     ];
   }
 }

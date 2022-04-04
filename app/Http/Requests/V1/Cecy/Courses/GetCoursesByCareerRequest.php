@@ -13,18 +13,14 @@ class GetCoursesByCareerRequest extends FormRequest
   public function rules()
   {
     return [
-      'career.id' => ['required'],
-      'academicPeriod.id' => ['required'],
-      'state.id' => ['required'],
+      // 'schoolPeriod.id' => ['required', 'integer'],
     ];
   }
 
   public function attributes()
   {
     return [
-      'career.id' => 'Id de la carrera ',
-      'academicPeriod.id' => 'Id de periodo académico ',
-      'state.id' => 'Id del estado ',
+      // 'schoolPeriod.id' => 'Id de periodo lectivo',
     ];
   }
 }

@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications;
 
-use App\Rules\HoursRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use App\Rules\HoursRule;
 use App\Rules\WorkdayRule;
 
 class UpdateDetailPlanificationRequest extends FormRequest
@@ -21,19 +21,18 @@ class UpdateDetailPlanificationRequest extends FormRequest
             'day.id' => ['required', 'integer'],
             'parallel.id' => [
                 'required', 'integer',
-                Rule::unique('pgsql-cecy.detail_planifications', 'parallel_id')
-                    // ->ignore(request('detailPlanification')->id)
-                    ->ignore($this->route('detailPlanification')->id)
-                    ->where(fn ($query) => $query->where('planification_id', $this->planification)),
+                // Rule::unique('pgsql-cecy.detail_planifications', 'parallel_id')
+                //     ->ignore($this->route('detailPlanification')->id)
+                //     ->where(fn ($query) => $query->where('planification_id', $this->planification)),
             ],
+            'workday.id' => ['required', 'integer', new WorkdayRule($this->endedTime)],
             'planification.id' => [
                 'required', 'integer',
                 new HoursRule($this->day, $this->startedTime, $this->endedTime)
             ],
-            'workday.id' => ['required', 'integer', new WorkdayRule($this->endedTime)],
-            'endedTime' => ['required', 'after:startedTime'],
-            'startedTime' => ['required',],
-            'observations' => ['required'],
+            'endedTime' => ['required', 'after:startedTime', 'date_format:"H:i:s"'],
+            'startedTime' => ['required', 'date_format:"H:i:s"'],
+            'observation' => ['sometimes', 'required', 'string', 'min:10'],
         ];
     }
 
@@ -42,11 +41,22 @@ class UpdateDetailPlanificationRequest extends FormRequest
         return [
             'classroom.id' => 'aula',
             'day.id' => 'días de clase',
+            'parallel.id' => 'paralelo del aula',
             'planification.id' => 'planificación',
             'workday.id' => 'jornada',
-            'parallel.id' => 'paralelo del aula',
             'endedTime' => 'hora de inicio',
+            'observation' => 'observación',
             'startedTime' => 'hora de fin',
         ];
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [];
     }
 }

@@ -99,7 +99,7 @@ class AuthoritiesSeeder extends Seeder
 
         Authority::factory(4)->sequence(
             [
-                'intitution_id' => $faker->randomElement($institutions),
+                'institution_id' => $faker->randomElement($institutions),
                 'position_id' => $positionRector,
                 'state_id' => $state,
                 'user_id' => 2,
@@ -108,7 +108,7 @@ class AuthoritiesSeeder extends Seeder
                 'electronic_signature' => $faker->text($maxNbChars = 50)
             ],
             [
-                'intitution_id' => $faker->randomElement($institutions),
+                'institution_id' => $faker->randomElement($institutions),
                 'position_id' => $positionVicerector,
                 'state_id' => $state,
                 'user_id' => 3,
@@ -117,7 +117,7 @@ class AuthoritiesSeeder extends Seeder
                 'electronic_signature' => $faker->text($maxNbChars = 50)
             ],
             [
-                'intitution_id' => $faker->randomElement($institutions),
+                'institution_id' => $faker->randomElement($institutions),
                 'position_id' => $positionRepresentativeOcs,
                 'state_id' => $state,
                 'user_id' => 4,
@@ -126,7 +126,7 @@ class AuthoritiesSeeder extends Seeder
                 'electronic_signature' => $faker->text($maxNbChars = 50)
             ],
             [
-                'intitution_id' => $faker->randomElement($institutions),
+                'institution_id' => $faker->randomElement($institutions),
                 'position_id' => $positionCecy,
                 'state_id' => $state,
                 'user_id' => 5,

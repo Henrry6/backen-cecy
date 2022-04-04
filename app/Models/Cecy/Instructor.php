@@ -2,12 +2,12 @@
 
 namespace App\Models\Cecy;
 
-use App\Models\Authentication\User;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as Auditing;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Authentication\User;
 
 class Instructor extends Model implements Auditable
 {
@@ -40,9 +40,9 @@ class Instructor extends Model implements Auditable
         return $this->hasMany(Planification::class);
     }
 
-    public function profileInstructorCourses()
+    public function courseProfiles()
     {
-        return $this->belongsToMany(ProfileInstructorCourse::class, 'cecy.authorized_instructors', 'profile_instructor_course_id', 'instructor_id');
+        return $this->belongsToMany(CourseProfile::class, 'cecy.instructor_course_profile', 'course_profile_id', 'instructor_id');
     }
 
     public function state()
