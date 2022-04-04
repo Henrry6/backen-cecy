@@ -75,10 +75,10 @@ class ParticipantController extends Controller
 
         $user->username = $request->input('username');
         $user->name = $request->input('name');
-        $user->lastname =  $request->input('lastname');
+        $user->lastname = $request->input('lastname');
         $user->birthdate = $request->input('birthdate');
         $user->email = $request->input('email');
-        $user->password =  '12345678';
+        $user->password = '12345678';
 
         DB::transaction(function () use ($request, $user) {
             $user->save();
@@ -101,23 +101,23 @@ class ParticipantController extends Controller
 
     private function createUserAddress($addressUser)
     {
-        $address =  new Address();
+        $address = new Address();
         $address->location()->associate(Location::find($addressUser['cantonLocation']['id']));
         $address->sector()->associate(CoreCatalogue::find(1));
-        $address->main_street =  $addressUser['mainStreet'];
-        $address->secondary_street =  $addressUser['secondaryStreet'];
+        $address->main_street = $addressUser['mainStreet'];
+        $address->secondary_street = $addressUser['secondaryStreet'];
         return $address;
     }
 
-    private function createParticipant($participantTipeId, User $user)
+    private function createParticipant($participantTypeId, $user)
     {
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
-        $state = Catalogue::where('type',  $catalogue['participant_state']['type'])
-            ->where('code', $catalogue['participant_state']['to_be_approved'])->first();
+        $state = Catalogue::where('type', $catalogue['participant_state']['type'])
+            ->where('code', $catalogue['participant_state']['approved'])->first();
 
         $participant = new Participant();
         $participant->user()->associate($user);
-        $participant->type()->associate(Catalogue::find($participantTipeId));
+        $participant->type()->associate(Catalogue::find($participantTypeId));
         $participant->state()->associate($state);
         return $participant;
     }
@@ -198,52 +198,51 @@ class ParticipantController extends Controller
     }
 
     //Creación de Participante
-    public function createParticipantUser(StoreParticipantUserRequest $request){
-        $user = User::where('username', $request->input('username'))
-        ->orWhere('email', $request->input('email'))->first();
+    public function createParticipantUser(StoreParticipantUserRequest $request)
+    {
+//        $user = User::where('username', $request->input('username'))
+//            ->orWhere('email', $request->input('email'))->first();
 
-    $user = new User();
-    $user->identificationType()->associate(CoreCatalogue::find($request->input('identificationType.id')));
-    $user->disability()->associate(CoreCatalogue::find($request->input('disability.id')));
-    $user->gender()->associate(CoreCatalogue::find($request->input('gender.id')));
-    $user->nationality()->associate(Location::find($request->input('nationality.id')));
-    $user->ethnicOrigin()->associate(CoreCatalogue::find($request->input('ethnicOrigin.id')));
-    $user->address()->associate($this->createUserAddress($request->input('address')));
-    $user->bloodType()->associate(Catalogue::find($request->input('bloodType.id')));
-    $user->civilStatus()->associate(Catalogue::find($request->input('civilStatus.id')));
-    $user->sex()->associate(Catalogue::find($request->input('sex.id')));
+        $user = new User();
+        $user->identificationType()->associate(CoreCatalogue::find($request->input('identificationType.id')));
+        $user->disability()->associate(CoreCatalogue::find($request->input('disability.id')));
+        $user->gender()->associate(CoreCatalogue::find($request->input('gender.id')));
+        $user->nationality()->associate(Location::find($request->input('nationality.id')));
+        $user->ethnicOrigin()->associate(CoreCatalogue::find($request->input('ethnicOrigin.id')));
+        $user->bloodType()->associate(Catalogue::find($request->input('bloodType.id')));
+        $user->civilStatus()->associate(Catalogue::find($request->input('civilStatus.id')));
+        $user->sex()->associate(Catalogue::find($request->input('sex.id')));
 
-    $user->username = $request->input('username');
-    $user->name = $request->input('name');
-    $user->lastname =  $request->input('lastname');
-    $user->birthdate = $request->input('birthdate');
-    $user->email = $request->input('email');
-    $user->password =  '';
+        $user->username = $request->input('username');
+        $user->name = $request->input('name');
+        $user->lastname = $request->input('lastname');
+        $user->birthdate = $request->input('birthdate');
+        $user->email = $request->input('email');
+        $user->password = $request->input('password');
 
-    DB::transaction(function () use ($request, $user) {
-        $user->save();
-        $user->addPhones($request->input('phones'));
-        $user->addEmails($request->input('emails'));
-        $participant = $this->createParticipant($request->input('participantType.id'), $user);
-        $participant->save();
-    });
+        $participant = null;
+        DB::transaction(function () use ($request, $user) {
+            $user->save();
+            $participant = $this->createParticipant($request->input('participantType.id'), $user);
+            $participant->save();
+        });
 
-    return (new UserResource($user))
-        ->additional([
-            'msg' => [
-                'summary' => 'Participante Creado',
-                'detail' => '',
-                'code' => '200'
-            ]
-        ])
-        ->response()->setStatusCode(200);
+        return (new ParticipantResource($participant))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Participante Creado',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
     }
 
     //Modificacion de Participante
-    public function updateParticipant(UpdateParticipantRequest $request, Participant $participant)
+    public function updateParticipantUser(UpdateParticipantRequest $request, Participant $participant)
     {
-        $user= $participant -> user();
-        $participant->identificationType()->associate(Catalogue::find($request->input('identificationType.id')));
+        $user = $participant->user();
+        $user->identificationType()->associate(Catalogue::find($request->input('identificationType.id')));
         $participant->sex()->associate(Catalogue::find($request->input('sex.id')));
         $participant->gender()->associate(Catalogue::find($request->input('gender.id')));
         $participant->bloodType()->associate(Catalogue::find($request->input('bloodType.id')));
@@ -262,19 +261,19 @@ class ParticipantController extends Controller
                 'msg' => [
                     'summary' => 'Datos Actualizados',
                     'detail' => '',
-                    'code' => '200'
+                    'code' => '201'
                 ]
             ])
             ->response()->setStatusCode(201);
     }
 
     //Metodo para ver listado de los Participante
-    public function index (IndexParticipantRequest $request)
+    public function index(IndexParticipantRequest $request)
     {
         $sorts = explode(',', $request->input('sort'));
 
         $participants = Participant::customOrderBy($sorts)
-            // ->username($request->input('search'))
+             ->user($request->input('userSearch'))
             ->paginate($request->input('perPage'));
 
         return (new ParticipantCollection($participants))
@@ -287,7 +286,7 @@ class ParticipantController extends Controller
             ])->response()->setStatusCode(200);
     }
 
-    //Metodo de Aceptación de Participante
+    //
     public function acceptParticipant(AcceptParticipantRequest $request, Participant $participant)
     {
         $participant->state()->associate(Catalogue::find($request->input('state.id')));
@@ -325,6 +324,7 @@ class ParticipantController extends Controller
     {
         return $user->showFile($file);
     }
+
     //Images
     public function showImageInstructor(User $user, Image $image)
     {

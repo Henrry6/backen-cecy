@@ -25,22 +25,22 @@ class Participant extends Model implements Auditable
     ];
 
     // Relationships
-    
+
     public function registrations()
     {
         return $this->hasMany(Registration::class);
     }
-    
+
     public function state()
     {
         return $this->belongsTo(Catalogue::class);
     }
-    
+
     public function type()
     {
         return $this->belongsTo(Catalogue::class);
     }
-    
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -53,13 +53,18 @@ class Participant extends Model implements Auditable
             return $query->orWhere('type_id', $type->id);
         }
     }
+
     //REVISAR
-    public function scopeUser($query, $user)
+    public function scopeUser($query, $userSearch)
     {
-        if ($user) {
-            return $query->orWhere('user_id', $user->id);
+        if ($userSearch) {
+            return $query->whereHas('user', function ($user) use ($userSearch) {
+                $user->where('username', 'iLike', "%$userSearch%")
+                    ->orWhere('name', 'iLike', "%$userSearch%");
+            });
         }
     }
+
     //revisar
 
     public function scopeCustomOrderBy($query, $sorts)
@@ -76,7 +81,7 @@ class Participant extends Model implements Auditable
             return $query;
         }
     }
-    
+
     public function scopeCustomSelect($query, $fields)
     {
         if (!empty($fields)) {
@@ -91,5 +96,5 @@ class Participant extends Model implements Auditable
             array_unshift($fields, 'id');
             return $query->select($fields);
         }
-    }    
+    }
 }
