@@ -375,12 +375,18 @@ Route::prefix('pdf')->group(function () {
 /***********************************************************************************************************************
  * RECORDS
  **********************************************************************************************************************/
+Route::controller(RecordController::class)->group(function () {
+    Route::prefix('records/{record}')->group(function () {
+        Route::patch('destroy', 'destroy');
+        Route::get('show','show');
 
-Route::apiResource('records', PhotographicRecordController::class);
+//Route::apiResource('records', PhotographicRecordController::class);
 
 Route::prefix('record')->group(function () {
-    Route::get('{photographicRecord}', [PhotographicRecordController::class, 'show']);
-    Route::get('detail/{detailPlanification}', [PhotographicRecordController::class, 'getDetails']);
+    //Route::get('{photographicRecord}', [PhotographicRecordController::class, 'show']);
+    //Route::get('detail/{detailPlanification}', [PhotographicRecordController::class, 'getDetails']);
+    Route::patch('destroys', 'destroys');
+    Route::post('store', 'store');
 });
 
 /*****************************************
