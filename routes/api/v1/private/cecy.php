@@ -94,20 +94,24 @@ Route::prefix('planification/{planification}')->group(function () {
 /***********************************************************************************************************************
  * DETAIL PLANIFICATIONS
  **********************************************************************************************************************/
-Route::prefix('detailPlanification')->group(function () {
-    Route::get('planification/{planification}', [DetailPlanificationController::class, 'getDetailPlanificationsByPlanification']);
-    Route::get('/detail-course/{course}', [DetailPlanificationController::class, 'getDetailPlanificationsByCourse']);
-    Route::post('', [DetailPlanificationController::class, 'registerDetailPlanification']);
-    Route::patch('', [DetailPlanificationController::class, 'destroysDetailPlanifications']);
-    Route::get('responsible', [DetailPlanificationController::class, 'getDetailPlanificationsByResponsibleCourse']);
-});
 
-Route::prefix('detailPlanification/{detailPlanification}')->group(function () {
-    Route::get('', [DetailPlanificationController::class, 'showDetailPlanification']);
-    Route::put('', [DetailPlanificationController::class, 'updateDetailPlanification']);
-    Route::put('/cecy', [DetailPlanificationController::class, 'updatedetailPlanificationByCecy']);
-    Route::delete('', [DetailPlanificationController::class, 'deleteDetailPlanification']);
+ Route::controller(DetailPlanificationController::class)->group(function () {
+    Route::prefix('detail-planifications/{detail_planification}')->group(function () {
+    });
+
+    Route::prefix('detail-planifications')->group(function () {
+        Route::patch('destroy', 'destroy');
+        Route::get('show','show');
+        Route::put('update', 'update');
+    });
+
+    Route::prefix('detail-planification')->group(function () {
+        Route::patch('destroys', 'destroys');
+        Route::post('store', 'store');
+        Route::get('catalogue', 'catalogue');
+    });
 });
+Route::apiResource('detail-planifications', DetailplanificationController::class);
 
 /***********************************************************************************************************************
  * COURSES
@@ -195,20 +199,23 @@ Route::get('/inform', function () {
  * DETAIL ATTENDANCES
  **********************************************************************************************************************/
 
-Route::prefix('detailAttendance')->group(function () {
-    Route::get('participant/{registration}', [DetailAttendanceController::class, 'showAttedanceParticipant']);
-    Route::patch('/{detailAttendance}', [DetailAttendanceController::class, 'updatDetailAttendanceTeacher']);
-    Route::get('/{detail_planification}', [DetailAttendanceController::class, 'getDetailAttendancesByParticipant']);
-    Route::get('no-paginate/{detail_planification}', [DetailAttendanceController::class, 'getDetailAttendancesByParticipantWithOutPaginate']);
-    Route::get('/current-date/{detail_planification}', [DetailAttendanceController::class, 'getCurrentDateDetailAttendance']);
-});
+Route::controller(DetailAttendanceController::class)->group(function () {
+    Route::prefix('detail-attendances/{detail_attendance}')->group(function () {
+    });
 
-Route::prefix('detailAttendance/{detailAttendance}')->group(function () {
-    Route::prefix('')->group(function () {
-        Route::patch('save-detail-attendance', [DetailAttendanceController::class, 'saveDetailAttendance']);
+    Route::prefix('detail-attendances')->group(function () {
+        Route::patch('destroy', 'destroy');
+        Route::get('show','show');
+        Route::put('update', 'update');
+    });
+
+    Route::prefix('detail-attendance')->group(function () {
+        Route::patch('destroys', 'destroys');
+        Route::post('store', 'store');
+        Route::get('catalogue', 'catalogue');
     });
 });
-
+Route::apiResource('detail-attendances', DetailAttendanceController::class);
 
 /***********************************************************************************************************************
  * CERTIFICATES
@@ -235,11 +242,15 @@ Route::controller(SchoolPeriodController::class)->group(function () {
     });
 
     Route::prefix('school-periods')->group(function () {
-        Route::get('catalogue', 'catalogue');
+        Route::patch('destroy', 'destroy');
+        Route::get('show','show');
+        Route::put('update', 'update');
     });
 
     Route::prefix('school-period')->group(function () {
-        Route::patch('', 'destroys');
+        Route::patch('destroys', 'destroys');
+        Route::post('store', 'store');
+        Route::get('catalogue', 'catalogue');
     });
 });
 Route::apiResource('school-periods', SchoolPeriodController::class);
@@ -248,11 +259,23 @@ Route::apiResource('school-periods', SchoolPeriodController::class);
  * CLASSROOMS
  **********************************************************************************************************************/
 
-Route::apiResource('classroom', ClassroomController::class);
+Route::controller(ClassroomController::class)->group(function () {
+    Route::prefix('classrooms/{classroom}')->group(function () {
+    });
 
-Route::prefix('classroom')->group(function () {
-    Route::patch('/{classroom}', [ClassroomController::class, 'destroys']);
+    Route::prefix('classrooms')->group(function () {
+        Route::patch('destroy', 'destroy');
+        Route::get('show','show');
+        Route::put('update', 'update');
+    });
+
+    Route::prefix('classroom')->group(function () {
+        Route::patch('destroys', 'destroys');
+        Route::post('store', 'store');
+        Route::get('catalogue', 'catalogue');
+    });
 });
+Route::apiResource('classroom', ClassroomController::class);
 
 /***********************************************************************************************************************
  * INSTRUCTORS
