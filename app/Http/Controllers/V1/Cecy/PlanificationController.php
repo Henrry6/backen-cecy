@@ -378,8 +378,7 @@ class PlanificationController extends Controller
 
     public function updatePlanificationByCourse(UpdatePlanificationByCourseRequest $request, Planification $planification)
     {
-        //$course->course = $request->input('course');
-        $instructor = Instructor::find($request->input('responsibleCourse.id')); //que estado y tipo debe ser el instructor
+        $instructor = Instructor::find($request->input('responsibleCourse.id'));
 
         $planification->responsibleCourse()->associate($instructor);
 

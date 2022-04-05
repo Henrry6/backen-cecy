@@ -613,7 +613,7 @@ class CourseController extends Controller
 
         $course->duration = $request->input('duration');
         $course->name = $request->input('name');
-        // $course->proposed_at = now();
+        $course->proposed_at = now();
 
         $course->save();
 
@@ -628,12 +628,11 @@ class CourseController extends Controller
     }
 
     /**
-     * Samantha
      * updateCourse
-     * Actualizar nombre y duracion de curso
      */
     public function updateCourse(UpdateCourseRequest $request, Course $course)
     {
+        $course->duration = $request->input('duration');
         $course->name = $request->input('name');
 
         $course->save();
@@ -642,23 +641,6 @@ class CourseController extends Controller
             ->additional([
                 'msg' => [
                     'summary' => 'Curso Actualizado',
-                    'detail' => '',
-                    'code' => '201'
-                ]
-            ])
-            ->response()->setStatusCode(201);
-    }
-
-    public function updateDuration(UpdateDurationRequest $request, Course $course)
-    {
-        $course->duration = $request->input('duration');
-
-        $course->save();
-
-        return (new CourseResource($course))
-            ->additional([
-                'msg' => [
-                    'summary' => 'Duración Actualizado',
                     'detail' => '',
                     'code' => '201'
                 ]
@@ -690,8 +672,8 @@ class CourseController extends Controller
     public function approveCourse(ApproveCourseRequest $request, Course $course)
     {
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
-        $state = Catalogue::where('type',$catalogue['course_state']['type'])
-        ->where('code',$catalogue['course_state']['approved'])->first();
+        $state = Catalogue::where('type', $catalogue['course_state']['type'])
+            ->where('code', $catalogue['course_state']['approved'])->first();
 
         $course->state()->associate($state);
         $course->save();
@@ -713,8 +695,8 @@ class CourseController extends Controller
     public function declineCourse(DeclineCourseRequest $request, Course $course)
     {
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
-        $state = Catalogue::where('type',$catalogue['course_state']['type'])
-        ->where('code',$catalogue['course_state']['not_approved'])->first();
+        $state = Catalogue::where('type', $catalogue['course_state']['type'])
+            ->where('code', $catalogue['course_state']['not_approved'])->first();
 
         $course->state()->associate($state);
         $course->save();
@@ -736,10 +718,7 @@ class CourseController extends Controller
         return $course->showFile($file);
     }
 
-
     //Images
-
-
     public function uploadPublicImage(UploadImageRequest $request, Course $course)
     {
         return $course->uploadPublicImage($request);

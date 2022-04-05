@@ -58,7 +58,6 @@ Route::controller(InstitutionController::class)->group(function () {
     Route::prefix('institutions')->group(function () {
         Route::get('catalogue', 'catalogue');
     });
-
 });
 
 Route::apiResource('institutions', InstitutionController::class);
@@ -81,7 +80,7 @@ Route::prefix('planification')->group(function () {
 Route::prefix('planification/{planification}')->group(function () {
     Route::get('', [PlanificationController::class, 'getPlanitification']);
     Route::put('dates-and-needs-planifications', [PlanificationController::class, 'addNeedsOfPlanification']);
-    Route::post('create-planifications-course', [PlanificationController::class, 'storePlanificationByCourse']);
+    // Route::post('create-planifications-course', [PlanificationController::class, 'storePlanificationByCourse']);
     Route::put('planifications-cecy', [PlanificationController::class, 'updatePlanificationByCecy']);
     Route::put('assign-code-planification', [PlanificationController::class, 'assignCodeToPlanification']);
     Route::put('approve-planification', [PlanificationController::class, 'approvePlanification']);
@@ -230,8 +229,6 @@ Route::prefix('certificate')->group(function () {
 
 Route::controller(SchoolPeriodController::class)->group(function () {
     Route::prefix('school-periods/{school_period}')->group(function () {
-        Route::patch('accept', 'accpetTicket'); //ejemplo
-
     });
 
     Route::prefix('school-periods')->group(function () {
@@ -302,7 +299,7 @@ Route::controller(ParticipantController::class)->group(function () {
     Route::prefix('participant')->group(function () {
         Route::put('update-registration/{registration}', 'participantRegistrationStateModification');
         Route::get('detail-planification/{detailPlanification}', 'getParticipantsByPlanification');
-        Route::get('information/{registration}','getParticipantInformation');
+        Route::get('information/{registration}', 'getParticipantInformation');
         Route::patch('participant-registration/{registration}', 'registerParticipant');
     });
 });
