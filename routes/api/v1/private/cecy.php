@@ -75,27 +75,29 @@ Route::apiResource('institutions', InstitutionController::class);
  * PLANIFICATIONS
  **********************************************************************************************************************/
 //Route::apiResource('planifications',[PlanificationController::class]);
+Route::controller(InstructorController::class)->group(function () {
+    Route::prefix('planifications/{planification}')->group(function () {
+        Route::get('', 'getPlanitification');
+        Route::put('dates-and-needs-planifications', 'addNeedsOfPlanification');
+        // Route::post('create-planifications-course', [PlanificationController::class, 'storePlanificationByCourse']);
+        Route::put('planifications-cecy', 'updatePlanificationByCecy');
+        Route::put('assign-code-planification',  'assignCodeToPlanification');
+        Route::put('approve-planification',  'approvePlanification');
+        Route::get('/curricular-design',  'curricularDesign');
+        Route::get('/informe-final',  'informeFinal');
+    
+});
 
-Route::prefix('planification')->group(function () {
-    Route::get('planifications-period-state', [PlanificationController::class, 'getPlanificationsByPeriodState']);
-    Route::get('by-detail-planification', [PlanificationController::class, 'getPlanificationsByDetailPlanification']);
-    Route::get('course_parallels-works', [PlanificationController::class, 'getCoursesParallelsWorkdays']);
-    Route::get('planfications-course/{course}', [PlanificationController::class, 'getPlanificationsByCourse']);
-    Route::get('kpis/{state}', [PlanificationController::class, 'getKpi']);
+Route::prefix('planificatio')->group(function () {
+    Route::get('planifications-period-state', 'getPlanificationsByPeriodState');
+    Route::get('by-detail-planification', 'getPlanificationsByDetailPlanification');
+    Route::get('course_parallels-works', 'getCoursesParallelsWorkdays');
+    Route::get('planfications-course/{course}', 'getPlanificationsByCourse');
+    Route::get('kpis/{state}', 'getKpi');
     // Route::put('{planification}', [PlanificationController::class, 'updateStatePlanification']);
-    Route::post('course/{course}', [PlanificationController::class, 'storePlanificationByCourse']);
+    Route::post('course/{course}', 'storePlanificationByCourse');
 });
 
-Route::prefix('planification/{planification}')->group(function () {
-    Route::get('', [PlanificationController::class, 'getPlanitification']);
-    Route::put('dates-and-needs-planifications', [PlanificationController::class, 'addNeedsOfPlanification']);
-    // Route::post('create-planifications-course', [PlanificationController::class, 'storePlanificationByCourse']);
-    Route::put('planifications-cecy', [PlanificationController::class, 'updatePlanificationByCecy']);
-    Route::put('assign-code-planification', [PlanificationController::class, 'assignCodeToPlanification']);
-    Route::put('approve-planification', [PlanificationController::class, 'approvePlanification']);
-    Route::get('/curricular-design', [PlanificationController::class, 'curricularDesign']);
-    Route::get('/informe-final', [PlanificationController::class, 'informeFinal']);
-});
 
 /***********************************************************************************************************************
  * DETAIL PLANIFICATIONS
