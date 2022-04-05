@@ -29,6 +29,10 @@ use App\Models\Cecy\Planification;
 
 class DetailPlanificationController extends Controller
 {
+    public function __construct()
+    {
+    }
+
     public function catalogue(CatalogueDetailPlanificationRequest $request)
     {
         $sorts = explode(',', $request->sort);
@@ -49,14 +53,10 @@ class DetailPlanificationController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    public function __construct()
-    {
-    }
     /*
         Obtener los horarios de cada paralelo dado un curso
     */
     // DetailController (done) =>conflicto en controlador
-
     public function getDetailPlanificationsByCourse(Course $course) //hecho
     {
 
