@@ -261,8 +261,8 @@ Route::prefix('classroom')->group(function () {
 
 Route::controller(InstructorController::class)->group(function () {
     Route::prefix('instructor/{instructor}')->group(function () {
-        Route::put('type-instructor', [InstructorController::class, 'updateTypeInstructor']);
-        Route::put('state-instructor', [InstructorController::class, 'updateStateInstructor']);
+        Route::put('type-instructor', 'updateTypeInstructor');
+        Route::put('state-instructor', 'updateStateInstructor');
     });
 
     Route::prefix('instructor')->group(function () {
