@@ -264,10 +264,10 @@ Route::controller(InstructorController::class)->group(function () {
         Route::put('state-instructor', 'updateStateInstructor');
     });
 
-    Route::prefix('instructor')->group(function () {
+    Route::prefix('instructors')->group(function () {
         Route::get('catalogue', 'catalogue');
         Route::post('create', 'storeInstructor');
-        Route::post('instructors', 'storeInstructors');
+        Route::post('create-instructors', 'storeInstructors');
         // Route::get('courses', [InstructorController::class, 'getCourses']);
         // Route::get('instructor-courses', [InstructorController::class, 'getInstructorByCourses']);
         //Route::get('instructor-information', [InstructorController::class, 'getInstructorsInformationByCourse']);
@@ -292,14 +292,14 @@ Route::prefix('registration')->group(function () {
  * PARTICIPANTS
  **********************************************************************************************************************/
 Route::controller(ParticipantController::class)->group(function () {
-    Route::prefix('participant/{participant}')->group(function () {
+    Route::prefix('participants/{participant}')->group(function () {
         // Route::put('update-state/{participant}', [ParticipantController::class, 'acceptParticipant']);
         // Route::delete('destroy/{participant}', [ParticipantController::class, 'destroyParticipant']);
         // Route::get('information/{participant}', [ParticipantController::class, 'getParticipants']);
         // Route::put('update/{participant}', [ParticipantController::class, 'updateParticipant']);
     });
 
-    Route::prefix('participant')->group(function () {
+    Route::prefix('participants')->group(function () {
         Route::put('update-registration/{registration}', 'participantRegistrationStateModification');
         Route::get('detail-planification/{detailPlanification}', 'getParticipantsByPlanification');
         Route::get('information/{registration}','getParticipantInformation');
