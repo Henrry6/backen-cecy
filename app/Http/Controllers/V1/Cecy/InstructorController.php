@@ -44,9 +44,9 @@ class InstructorController extends Controller
 
     public function __construct()
     {
-       //$this->middleware('permission:store-catalogues')->only(['store']);
-       //$this->middleware('permission:update-catalogues')->only(['update']);
-       //$this->middleware('permission:delete-catalogues')->only(['destroy', 'destroys']);
+        //$this->middleware('permission:store-catalogues')->only(['store']);
+        //$this->middleware('permission:update-catalogues')->only(['update']);
+        //$this->middleware('permission:delete-catalogues')->only(['destroy', 'destroys']);
     }
 
     public function index(IndexInstructorRequest $request)
@@ -67,7 +67,7 @@ class InstructorController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    public function storeInstructor(StoreInstructorRequest $request, Instructor $instructor )
+    public function storeInstructor(StoreInstructorRequest $request, Instructor $instructor)
     {
 
         $instructor = new Instructor();
@@ -92,23 +92,26 @@ class InstructorController extends Controller
             ->response()->setStatusCode(201);
     }
 
-    public function storeInstructors(StoreInstructorsRequest $request, Instructor $instructor )
+    public function storeInstructors(StoreInstructorsRequest $request, Instructor $instructor)
     {
-        $instructor = new Instructor();
+        $instructors = collect();
 
-        $instructor->state()
-            ->associate(Catalogue::find($request->input('state')));
-        $instructor->type()
-            ->associate(Catalogue::find($request->input('type')));
-        $instructor->user()
-            ->associate(User::find($request->input('user')));
+        foreach ($request->input('ids') as $userId) {
 
-        $instructor->save();
+            $instructor = new Instructor();
 
-        return (new InstructorResource($instructor))
+            $instructor->user()
+                ->associate(User::find($request->input($userId)));
+
+            $instructor->save();
+
+            $instructors->push($instructor);
+        }
+
+        return (new InstructorCollection($instructors))
             ->additional([
                 'msg' => [
-                    'summary' => 'Instructor creado',
+                    'summary' => 'Instructores creados',
                     'Institution' => '',
                     'code' => '201'
                 ]
@@ -131,7 +134,7 @@ class InstructorController extends Controller
             ])
             ->response()->setStatusCode(201);
     }
-    
+
     public function updateTypeInstructor(Request $request, Instructor $instructor)
     {
         $instructor->type()->associate(Catalogue::find($request->input('type.id')));
@@ -147,5 +150,4 @@ class InstructorController extends Controller
             ])
             ->response()->setStatusCode(201);
     }
-
 }
