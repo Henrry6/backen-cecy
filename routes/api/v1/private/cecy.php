@@ -89,6 +89,8 @@ Route::prefix('planification/{planification}')->group(function () {
     Route::put('approve-planification', [PlanificationController::class, 'approvePlanification']);
     Route::get('/curricular-design', [PlanificationController::class, 'curricularDesign']);
     Route::get('/informe-final', [PlanificationController::class, 'informeFinal']);
+    Route::put('', [PlanificationController::class, 'updatePlanificationByCourse']);
+    Route::delete('/planification/{planification}', [PlanificationController::class, 'destroyPlanification']);
 });
 
 /***********************************************************************************************************************
@@ -148,7 +150,7 @@ Route::prefix('courses/{course}')->group(function () {
     Route::put('', [CourseController::class, 'approveCourse']);
     Route::put('', [CourseController::class, 'declineCourse']);
     Route::put('', [CourseController::class, 'updateCourse']);
-    Route::put('', [CourseController::class, 'updatePlanificationByCourse']);
+    Route::put('', [CourseController::class, 'updateDuration']);
 
     Route::prefix('')->group(function () {
         Route::get('/topics', [TopicController::class, 'getTopics']);
@@ -158,7 +160,7 @@ Route::prefix('courses/{course}')->group(function () {
         Route::delete('/topics/{topic}', [TopicController::class, 'destroyTopic']);
         Route::get('/topics/{topic}', [TopicController::class, 'show']);
         Route::get('/instructors', [TopicController::class, 'getInstructors']);
-        Route::delete('/planification/{planification}', [PlanificationController::class, 'destroyPlanification']);
+        Route::delete('/course/{course}', [CourseController::class, 'destroyCourse']);
     });
     Route::prefix('')->group(function () {
         Route::get('/prerequisites/all', [PrerequisiteController::class, 'getPrerequisitesAll']);
