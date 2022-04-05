@@ -197,6 +197,10 @@ Route::get('/inform', function () {
 
 Route::controller(DetailAttendanceController::class)->group(function () {
     Route::prefix('detail-attendances/{detail_attendance}')->group(function () {
+        Route::get('', 'showAttendanceParticipant');
+        Route::get('', 'getDetailAttendancesByParticipantWithOutPaginate');
+        Route::get('', 'getDetailAttendancesByParticipant');
+        Route::get('', 'getCurrentDateDetailAttendance');
     });
 
     Route::prefix('detail-attendances')->group(function () {
@@ -303,6 +307,7 @@ Route::prefix('registration')->group(function () {
     Route::patch('nullify-registrations', [RegistrationController::class, 'nullifyRegistrations']);
     Route::patch('participant-grades/{registration}', [RegistrationController::class, 'updateGradesParticipant']);
 });
+
 /***********************************************************************************************************************
  * PARTICIPANTS
  **********************************************************************************************************************/

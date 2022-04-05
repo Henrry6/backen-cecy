@@ -38,7 +38,7 @@ class DetailAttendanceController extends Controller
 
     //asistencias de los estudiantes de un curso
     // DetailAttendanceController
-    public function showAttedanceParticipant(Registration $registration)
+    public function showAttendanceParticipant(Registration $registration)
     {
         $attendances =  $registration->attendances()->get;
         return (new AttendanceResource($attendances))
