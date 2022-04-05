@@ -79,6 +79,7 @@ Route::controller(PlanificationController::class)->group(function () {
         Route::put('dates-and-needs-planifications', 'addNeedsOfPlanification');
         // Route::post('create-planifications-course', [PlanificationController::class, 'storePlanificationByCourse']);
         Route::put('planifications-cecy', 'updatePlanificationByCecy');
+        Route::put('assign-responsible-cecy', 'updateAssignResponsibleCecy');
         Route::put('assign-code-planification',  'assignCodeToPlanification');
         Route::put('approve-planification',  'approvePlanification');
         Route::get('/curricular-design',  'curricularDesign');
@@ -103,12 +104,12 @@ Route::apiResource('planifications', PlanificationController::class);
  **********************************************************************************************************************/
 Route::controller(DetailPlanificationController::class)->group(function () {
     Route::prefix('detail-planifications/{detail_planification}')->group(function () {
+        Route::get('', 'getDetailPlanificationByCourse');
+        Route::get('', 'getDetailPlanificationByPlanification');
     });
 
     Route::prefix('detail-planifications')->group(function () {
-    });
-
-    Route::prefix('detail-planification')->group(function () {
+        Route::post('store', 'registerDetailPlanification');
         Route::patch('destroys', 'destroys');
         Route::get('catalogue', 'catalogue');
     });
@@ -201,13 +202,14 @@ Route::controller(DetailAttendanceController::class)->group(function () {
         Route::get('', 'getDetailAttendancesByParticipantWithOutPaginate');
         Route::get('', 'getDetailAttendancesByParticipant');
         Route::get('', 'getCurrentDateDetailAttendance');
+        Route::put('', 'updateDetailPlanification');
+        Route::put('', 'updatedetailPlanificationByCecy');
+        Route::patch('delete', 'deleteDetailPlanification');
+
     });
 
     Route::prefix('detail-attendances')->group(function () {
-    });
-
-    Route::prefix('detail-attendance')->group(function () {
-        Route::patch('destroys', 'destroys');
+        Route::patch('destroys', 'destroysDetailPlanifications');
         Route::get('catalogue', 'catalogue');
     });
 });
@@ -235,17 +237,13 @@ Route::prefix('certificate')->group(function () {
 
 Route::controller(SchoolPeriodController::class)->group(function () {
     Route::prefix('school-periods/{school_period}')->group(function () {
+        Route::put('update', 'update');
+        Route::patch('destroy', 'destroy');
     });
 
     Route::prefix('school-periods')->group(function () {
-        Route::patch('destroy', 'destroy');
-        Route::get('show', 'show');
-        Route::put('update', 'update');
-    });
-
-    Route::prefix('school-period')->group(function () {
-        Route::patch('destroys', 'destroys');
         Route::post('store', 'store');
+        Route::patch('destroys', 'destroys');
         Route::get('catalogue', 'catalogue');
     });
 });
@@ -257,15 +255,11 @@ Route::apiResource('school-periods', SchoolPeriodController::class);
 
 Route::controller(ClassroomController::class)->group(function () {
     Route::prefix('classrooms/{classroom}')->group(function () {
+        Route::put('update', 'update');
+        Route::patch('destroy', 'destroy');
     });
 
     Route::prefix('classrooms')->group(function () {
-        Route::patch('destroy', 'destroy');
-        Route::get('show', 'show');
-        Route::put('update', 'update');
-    });
-
-    Route::prefix('classroom')->group(function () {
         Route::patch('destroys', 'destroys');
         Route::post('store', 'store');
         Route::get('catalogue', 'catalogue');
