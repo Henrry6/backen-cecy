@@ -54,7 +54,6 @@ Route::controller(InstitutionController::class)->group(function () {
     Route::prefix('institutions/{institution}')->group(function () {
         Route::patch('accept', 'accpetTicket'); //ejemplo
         Route::patch('', 'destroys');
-
     });
 
     Route::prefix('institutions')->group(function () {
@@ -92,8 +91,6 @@ Route::prefix('planification/{planification}')->group(function () {
     Route::put('approve-planification', [PlanificationController::class, 'approvePlanification']);
     Route::get('/curricular-design', [PlanificationController::class, 'curricularDesign']);
     Route::get('/informe-final', [PlanificationController::class, 'informeFinal']);
-    Route::put('', [PlanificationController::class, 'updatePlanificationByCourse']);
-    Route::delete('/planification/{planification}', [PlanificationController::class, 'destroyPlanification']);
 });
 
 /***********************************************************************************************************************
@@ -150,7 +147,7 @@ Route::prefix('courses/{course}')->group(function () {
     Route::put('', [CourseController::class, 'approveCourse']);
     Route::put('', [CourseController::class, 'declineCourse']);
     Route::put('', [CourseController::class, 'updateCourse']);
-    Route::put('', [CourseController::class, 'updateDuration']);
+    Route::put('', [CourseController::class, 'updatePlanificationByCourse']);
 
     Route::prefix('')->group(function () {
         Route::get('/topics', [TopicController::class, 'getTopics']);
@@ -160,7 +157,7 @@ Route::prefix('courses/{course}')->group(function () {
         Route::delete('/topics/{topic}', [TopicController::class, 'destroyTopic']);
         Route::get('/topics/{topic}', [TopicController::class, 'show']);
         Route::get('/instructors', [TopicController::class, 'getInstructors']);
-        Route::delete('/course/{course}', [CourseController::class, 'destroyCourse']);
+        Route::delete('/planification/{planification}', [PlanificationController::class, 'destroyPlanification']);
     });
     Route::prefix('')->group(function () {
         Route::get('/prerequisites/all', [PrerequisiteController::class, 'getPrerequisitesAll']);
@@ -266,16 +263,15 @@ Route::prefix('classroom')->group(function () {
  **********************************************************************************************************************/
 
 Route::controller(InstructorController::class)->group(function () {
-    Route::prefix('instructor/{instructor}')->group(function () {
-        Route::put('type-instructor', [InstructorController::class, 'updateTypeInstructor']);
-        Route::put('state-instructor', [InstructorController::class, 'updateStateInstructor']);
+    Route::prefix('instructors/{instructor}')->group(function () {
+        Route::put('type-instructor', 'updateTypeInstructor');
+        Route::put('state-instructor', 'updateStateInstructor');
     });
 
-    Route::prefix('instructor')->group(function () {
+    Route::prefix('instructors')->group(function () {
         Route::get('catalogue', [InstructorController::class, 'catalogue']);
-        Route::get('', [InstructorController::class, 'index']);
         Route::post('create', [InstructorController::class, 'storeInstructor']);
-        Route::post('instructors', [InstructorController::class, 'storeInstructors']);
+        Route::post('create-instructors', [InstructorController::class, 'storeInstructors']);
         // Route::get('courses', [InstructorController::class, 'getCourses']);
         // Route::get('instructor-courses', [InstructorController::class, 'getInstructorByCourses']);
         //Route::get('instructor-information', [InstructorController::class, 'getInstructorsInformationByCourse']);
@@ -354,7 +350,7 @@ Route::apiResource('authorities', AuthorityController::class);
 
 
 Route::prefix('authority')->group(function () {
-    Route::patch('{authority}', [AuthorityController::class, 'destroys']);
+    Route::patch('destroys', [AuthorityController::class, 'destroys']);
 });
 
 /***********************************************************************************************************************
