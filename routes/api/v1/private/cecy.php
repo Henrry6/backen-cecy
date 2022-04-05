@@ -271,7 +271,7 @@ Route::controller(InstructorController::class)->group(function () {
         Route::get('catalogue', 'catalogue');
         Route::post('create', 'storeInstructor');
         Route::post('create-instructors', 'storeInstructors');
-        Route::get('instructor-information', [InstructorController::class, 'getInstructorsInformationByCourse']);
+        Route::get('instructor-information', 'getInstructorsInformationByCourse');
         // Route::get('courses', [InstructorController::class, 'getCourses']);
         // Route::get('instructor-courses', [InstructorController::class, 'getInstructorByCourses']);
         // Route::get('destroy/{instructor}', [InstructorController::class, 'destroyInstructors']);
