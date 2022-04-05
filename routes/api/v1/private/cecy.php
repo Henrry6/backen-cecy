@@ -58,7 +58,7 @@ Route::controller(InstitutionController::class)->group(function () {
 Route::controller(InstitutionController::class)->group(function () {
     Route::prefix('institutions/{institution}')->group(function () {
         Route::patch('destroy', 'destroy');
-        Route::get('show','show');
+        Route::get('show', 'show');
     });
 
     Route::prefix('institutions')->group(function () {
@@ -83,32 +83,32 @@ Route::controller(PlanificationController::class)->group(function () {
         Route::put('approve-planification',  'approvePlanification');
         Route::get('/curricular-design',  'curricularDesign');
         Route::get('/informe-final',  'informeFinal');
-    
-});
+    });
 
-Route::prefix('planifications')->group(function () {
-    Route::get('planifications-period-state', 'getPlanificationsByPeriodState');
-    Route::get('by-detail-planification', 'getPlanificationsByDetailPlanification');
-    Route::get('course_parallels-works', 'getCoursesParallelsWorkdays');
-    Route::get('planfications-course/{course}', 'getPlanificationsByCourse');
-    Route::get('kpis/{state}', 'getKpi');
-    // Route::put('{planification}', [PlanificationController::class, 'updateStatePlanification']);
-    Route::post('course/{course}', 'storePlanificationByCourse');
+    Route::prefix('planifications')->group(function () {
+        Route::get('planifications-period-state', 'getPlanificationsByPeriodState');
+        Route::get('by-detail-planification', 'getPlanificationsByDetailPlanification');
+        Route::get('course_parallels-works', 'getCoursesParallelsWorkdays');
+        Route::get('planfications-course/{course}', 'getPlanificationsByCourse');
+        Route::get('kpis/{state}', 'getKpi');
+        // Route::put('{planification}', [PlanificationController::class, 'updateStatePlanification']);
+        Route::post('course/{course}', 'storePlanificationByCourse');
+    });
 });
-Route::apiResource('planifications',PlanificationController::class);
+Route::apiResource('planifications', PlanificationController::class);
 
 
 /***********************************************************************************************************************
  * DETAIL PLANIFICATIONS
  **********************************************************************************************************************/
 
- Route::controller(DetailPlanificationController::class)->group(function () {
+Route::controller(DetailPlanificationController::class)->group(function () {
     Route::prefix('detail-planifications/{detail_planification}')->group(function () {
     });
 
     Route::prefix('detail-planifications')->group(function () {
         Route::patch('destroy', 'destroy');
-        Route::get('show','show');
+        Route::get('show', 'show');
         Route::put('update', 'update');
     });
 
@@ -212,7 +212,7 @@ Route::controller(DetailAttendanceController::class)->group(function () {
 
     Route::prefix('detail-attendances')->group(function () {
         Route::patch('destroy', 'destroy');
-        Route::get('show','show');
+        Route::get('show', 'show');
         Route::put('update', 'update');
     });
 
@@ -250,7 +250,7 @@ Route::controller(SchoolPeriodController::class)->group(function () {
 
     Route::prefix('school-periods')->group(function () {
         Route::patch('destroy', 'destroy');
-        Route::get('show','show');
+        Route::get('show', 'show');
         Route::put('update', 'update');
     });
 
@@ -272,7 +272,7 @@ Route::controller(ClassroomController::class)->group(function () {
 
     Route::prefix('classrooms')->group(function () {
         Route::patch('destroy', 'destroy');
-        Route::get('show','show');
+        Route::get('show', 'show');
         Route::put('update', 'update');
     });
 
@@ -408,17 +408,17 @@ Route::prefix('pdf')->group(function () {
 Route::controller(RecordController::class)->group(function () {
     Route::prefix('records/{record}')->group(function () {
         Route::patch('destroy', 'destroy');
-        Route::get('show','show');
+        Route::get('show', 'show');
     });
-        
-        Route::prefix('record')->group(function () {
-            //Route::get('{photographicRecord}', [PhotographicRecordController::class, 'show']);
-            //Route::get('detail/{detailPlanification}', [PhotographicRecordController::class, 'getDetails']);
-            Route::patch('destroys', 'destroys');
-            Route::post('store', 'store');
-        });
+
+    Route::prefix('record')->group(function () {
+        //Route::get('{photographicRecord}', [PhotographicRecordController::class, 'show']);
+        //Route::get('detail/{detailPlanification}', [PhotographicRecordController::class, 'getDetails']);
+        Route::patch('destroys', 'destroys');
+        Route::post('store', 'store');
     });
-    Route::apiResource('records', PhotographicRecordController::class);
+});
+Route::apiResource('records', PhotographicRecordController::class);
 /*****************************************
  * REGISTRATIONS 
  ****************************************/
