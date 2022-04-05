@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 // use App\Http\Requests\V1\Cecy\Courses\getCoursesByResponsibleRequest;
 use App\Http\Requests\V1\Cecy\Instructors\IndexInstructorRequest;
 use App\Http\Requests\V1\Cecy\Instructors\StoreInstructorRequest;
+use App\Http\Requests\V1\Cecy\Instructors\StoreInstructorsRequest;
 use App\Http\Requests\V1\Cecy\Instructors\CatalogueInstructorRequest;
 // use App\Http\Requests\V1\Cecy\Instructor\DestroysInstructorRequest;
 // use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationByInstructorCollection;
@@ -69,6 +70,30 @@ class InstructorController extends Controller
     public function storeInstructor(StoreInstructorRequest $request, Instructor $instructor )
     {
 
+        $instructor = new Instructor();
+
+        $instructor->state()
+            ->associate(Catalogue::find($request->input('state')));
+        $instructor->type()
+            ->associate(Catalogue::find($request->input('type')));
+        $instructor->user()
+            ->associate(User::find($request->input('user')));
+
+        $instructor->save();
+
+        return (new InstructorResource($instructor))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Instructor creado',
+                    'Institution' => '',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
+    }
+
+    public function storeInstructors(StoreInstructorsRequest $request, Instructor $instructor )
+    {
         $instructor = new Instructor();
 
         $instructor->state()

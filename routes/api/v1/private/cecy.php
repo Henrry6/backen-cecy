@@ -47,13 +47,14 @@ Route::prefix('catalogue/{catalogue}')->group(function () {
     });
 });
 
-
 /***********************************************************************************************************************
  * INSTITUTIONS
  **********************************************************************************************************************/
 Route::controller(InstitutionController::class)->group(function () {
     Route::prefix('institutions/{institution}')->group(function () {
         Route::patch('accept', 'accpetTicket'); //ejemplo
+        Route::patch('', 'destroys');
+
     });
 
     Route::prefix('institutions')->group(function () {
@@ -275,12 +276,12 @@ Route::controller(InstructorController::class)->group(function () {
         Route::post('instructors', [InstructorController::class, 'storeInstructors']);
         // Route::get('courses', [InstructorController::class, 'getCourses']);
         // Route::get('instructor-courses', [InstructorController::class, 'getInstructorByCourses']);
-        Route::get('instructor-information', [InstructorController::class, 'getInstructorsInformationByCourse']);
+        //Route::get('instructor-information', [InstructorController::class, 'getInstructorsInformationByCourse']);
         // Route::get('destroy/{instructor}', [InstructorController::class, 'destroyInstructors']);
 
     });
 });
-Route::apiResource('school-periods', InstructorController::class);
+Route::apiResource('instructors', InstructorController::class);
 
 /***********************************************************************************************************************
  * REGISTRATIONS
@@ -296,20 +297,23 @@ Route::prefix('registration')->group(function () {
 /***********************************************************************************************************************
  * PARTICIPANTS
  **********************************************************************************************************************/
+Route::controller(SchoolPeriodController::class)->group(function () {
+    Route::prefix('participant/{participant}')->group(function () {
+        // Route::put('update-state/{participant}', [ParticipantController::class, 'acceptParticipant']);
+        // Route::delete('destroy/{participant}', [ParticipantController::class, 'destroyParticipant']);
+        // Route::get('information/{participant}', [ParticipantController::class, 'getParticipants']);
+        // Route::put('update/{participant}', [ParticipantController::class, 'updateParticipant']);
+    });
 
-Route::prefix('participant')->group(function () {
-    Route::put('update-registration/{registration}', [ParticipantController::class, 'participantRegistrationStateModification']);
-    Route::get('detail-planification/{detailPlanification}', [ParticipantController::class, 'getParticipantsByPlanification']);
-    Route::get('information/{registration}', [ParticipantController::class, 'getParticipantInformation']);
-    Route::patch('participant-registration/{registration}', [ParticipantController::class, 'registerParticipant']);
+    Route::prefix('participant')->group(function () {
+        Route::put('update-registration/{registration}', [ParticipantController::class, 'participantRegistrationStateModification']);
+        Route::get('detail-planification/{detailPlanification}', [ParticipantController::class, 'getParticipantsByPlanification']);
+        Route::get('information/{registration}', [ParticipantController::class, 'getParticipantInformation']);
+        Route::patch('participant-registration/{registration}', [ParticipantController::class, 'registerParticipant']);
+    });
 });
 
-Route::prefix('participant/{participant}')->group(function () {
-    // Route::put('update-state/{participant}', [ParticipantController::class, 'acceptParticipant']);
-    // Route::delete('destroy/{participant}', [ParticipantController::class, 'destroyParticipant']);
-    // Route::get('information/{participant}', [ParticipantController::class, 'getParticipants']);
-    // Route::put('update/{participant}', [ParticipantController::class, 'updateParticipant']);
-});
+Route::apiResource('participants', SchoolPeriodController::class);
 
 /***********************************************************************************************************************
  * DETAIL SCHOOL PERIOD
