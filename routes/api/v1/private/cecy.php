@@ -52,10 +52,13 @@ Route::prefix('catalogue/{catalogue}')->group(function () {
  **********************************************************************************************************************/
 Route::controller(InstitutionController::class)->group(function () {
     Route::prefix('institutions/{institution}')->group(function () {
-        Route::patch('', 'destroys');
+        Route::patch('destroy', 'destroy');
+        Route::get('show','show');
     });
 
     Route::prefix('institutions')->group(function () {
+        Route::patch('destroys', 'destroys');
+        Route::post('store', 'store');
         Route::get('catalogue', 'catalogue');
     });
 });
@@ -261,13 +264,13 @@ Route::controller(InstructorController::class)->group(function () {
         Route::put('state-instructor', 'updateStateInstructor');
     });
 
-    Route::prefix('instructor')->group(function () {
+    Route::prefix('instructors')->group(function () {
         Route::get('catalogue', 'catalogue');
         Route::post('create', 'storeInstructor');
-        Route::post('instructors', 'storeInstructors');
+        Route::post('create-instructors', 'storeInstructors');
+        Route::get('instructor-information', 'getInstructorsInformationByCourse');
         // Route::get('courses', [InstructorController::class, 'getCourses']);
         // Route::get('instructor-courses', [InstructorController::class, 'getInstructorByCourses']);
-        //Route::get('instructor-information', [InstructorController::class, 'getInstructorsInformationByCourse']);
         // Route::get('destroy/{instructor}', [InstructorController::class, 'destroyInstructors']);
 
     });
@@ -289,15 +292,15 @@ Route::prefix('registration')->group(function () {
  * PARTICIPANTS
  **********************************************************************************************************************/
 Route::controller(ParticipantController::class)->group(function () {
-    Route::prefix('participant/{participant}')->group(function () {
-        // Route::put('update-state/{participant}', [ParticipantController::class, 'acceptParticipant']);
-        // Route::delete('destroy/{participant}', [ParticipantController::class, 'destroyParticipant']);
-        // Route::get('information/{participant}', [ParticipantController::class, 'getParticipants']);
-        // Route::put('update/{participant}', [ParticipantController::class, 'updateParticipant']);
+    Route::prefix('participants/{participant}')->group(function () {
+        Route::put('update-registration/{registration}', 'participantRegistrationStateModification');
+        Route::put('update-state/{participant}', [ParticipantController::class, 'acceptParticipant']);
+        Route::delete('destroy/{participant}', [ParticipantController::class, 'destroyParticipant']);
+        Route::get('information/{participant}', [ParticipantController::class, 'getParticipants']);
+        Route::put('update/{participant}', [ParticipantController::class, 'updateParticipant']);
     });
 
-    Route::prefix('participant')->group(function () {
-        Route::put('update-registration/{registration}', 'participantRegistrationStateModification');
+    Route::prefix('participants')->group(function () {
         Route::get('detail-planification/{detailPlanification}', 'getParticipantsByPlanification');
         Route::get('information/{registration}', 'getParticipantInformation');
         Route::patch('participant-registration/{registration}', 'registerParticipant');
@@ -416,10 +419,10 @@ Route::prefix('topic/{topic}')->group(function () {
 
 
 /**
- * get      index, , get    1
- * put      update          2
- * post     store           1
- * delete   delete/destroy  2
- * get      show            2
+ * get      index, , get    2
+ * put      update          1
+ * post     store           2
+ * delete   delete/destroy  1
+ * get      show            1
  * patch    
  */

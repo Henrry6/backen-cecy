@@ -200,8 +200,8 @@ class ParticipantController extends Controller
     //se crear un nuevo participante por manos de administrador
     public function createParticipantUser(StoreParticipantUserRequest $request)
     {
-//        $user = User::where('username', $request->input('username'))
-//            ->orWhere('email', $request->input('email'))->first();
+        //$user = User::where('username', $request->input('username'))
+        //->orWhere('email', $request->input('email'))->first();
 
         $user = new User();
         $user->identificationType()->associate(CoreCatalogue::find($request->input('identificationType.id')));
