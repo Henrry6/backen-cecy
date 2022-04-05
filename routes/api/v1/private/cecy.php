@@ -51,13 +51,21 @@ Route::prefix('catalogue/{catalogue}')->group(function () {
 /***********************************************************************************************************************
  * INSTITUTIONS
  **********************************************************************************************************************/
+Route::controller(InstitutionController::class)->group(function () {
+    Route::prefix('institutions/{institution}')->group(function () {
+        Route::patch('accept', 'accpetTicket'); //ejemplo
+    });
+
+    Route::prefix('institutions')->group(function () {
+        Route::get('catalogue', 'catalogue');
+    });
+
+    Route::prefix('institution')->group(function () {
+        Route::patch('', 'destroys');
+    });
+});
 
 Route::apiResource('institutions', InstitutionController::class);
-
-
-Route::prefix('institution')->group(function () {
-    Route::patch('{institution}', [InstitutionController::class, 'destroys']);
-});
 
 /***********************************************************************************************************************
  * PLANIFICATIONS
@@ -102,9 +110,6 @@ Route::prefix('detailPlanification/{detailPlanification}')->group(function () {
     Route::put('/cecy', [DetailPlanificationController::class, 'updatedetailPlanificationByCecy']);
     Route::delete('', [DetailPlanificationController::class, 'deleteDetailPlanification']);
 });
-
-
-
 
 /***********************************************************************************************************************
  * COURSES
@@ -235,6 +240,10 @@ Route::controller(SchoolPeriodController::class)->group(function () {
 
     Route::prefix('school-periods')->group(function () {
         Route::get('catalogue', 'catalogue');
+    });
+
+    Route::prefix('school-period')->group(function () {
+        Route::patch('', 'destroys');
     });
 });
 Route::apiResource('school-periods', SchoolPeriodController::class);
