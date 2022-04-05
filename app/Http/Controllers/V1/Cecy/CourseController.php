@@ -634,7 +634,7 @@ class CourseController extends Controller
      */
     public function updateCourse(UpdateCourseRequest $request, Course $course)
     {
-        $course->course = $request->input('course');
+        $course->name = $request->input('name');
 
         $course->save();
 
@@ -649,10 +649,40 @@ class CourseController extends Controller
             ->response()->setStatusCode(201);
     }
 
+    public function updateDuration(UpdateDurationRequest $request, Course $course)
+    {
+        $course->duration = $request->input('duration');
+
+        $course->save();
+
+        return (new CourseResource($course))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Duración Actualizado',
+                    'detail' => '',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
+    }
+
     /**
      * deleteCourse
      */
 
+    public function destroyCourse(DestroyCourseRequest $course)
+    {
+        $course->delete();
+        return (new CourseResource($course))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Curso Eliminado',
+                    'detail' => '',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
+    }
 
     /*
         * approveCourse

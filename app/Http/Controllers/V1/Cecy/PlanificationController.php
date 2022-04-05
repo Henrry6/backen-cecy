@@ -376,13 +376,19 @@ class PlanificationController extends Controller
      * updatePlanificationByCourse
      */
 
-    public function updatePlanificationByCourse(UpdatePlanificationByCourseRequest $request, Course $course)
+    public function updatePlanificationByCourse(UpdatePlanificationByCourseRequest $request, Planification $planification)
     {
-        $course->course = $request->input('course');
+        //$course->course = $request->input('course');
+        $instructor = Instructor::find($request->input('responsibleCourse.id')); //que estado y tipo debe ser el instructor
 
-        $course->save();
+        $planification->responsibleCourse()->associate($instructor);
 
-        return (new CourseResource($course))
+        $planification->ended_at = $request->input('endedAt');
+        $planification->started_at = $request->input('startedAt');
+
+        $planification->save();
+
+        return (new PlanificationResource($planification))
             ->additional([
                 'msg' => [
                     'summary' => 'Planificación Actualizado',
@@ -402,7 +408,7 @@ class PlanificationController extends Controller
         return (new PlanificationResource($planification))
             ->additional([
                 'msg' => [
-                    'summary' => 'Registro Eliminado',
+                    'summary' => 'Planificación Eliminado',
                     'detail' => '',
                     'code' => '201'
                 ]
