@@ -52,18 +52,13 @@ Route::prefix('catalogue/{catalogue}')->group(function () {
  **********************************************************************************************************************/
 Route::controller(InstitutionController::class)->group(function () {
     Route::prefix('institutions/{institution}')->group(function () {
-        Route::patch('accept', 'accpetTicket'); //ejemplo
         Route::patch('', 'destroys');
-
     });
 
     Route::prefix('institutions')->group(function () {
         Route::get('catalogue', 'catalogue');
     });
 
-    Route::prefix('institution')->group(function () {
-        Route::patch('', 'destroys');
-    });
 });
 
 Route::apiResource('institutions', InstitutionController::class);
@@ -272,10 +267,10 @@ Route::controller(InstructorController::class)->group(function () {
     });
 
     Route::prefix('instructor')->group(function () {
-        Route::get('catalogue', [InstructorController::class, 'catalogue']);
-        Route::get('', [InstructorController::class, 'index']);
-        Route::post('create', [InstructorController::class, 'storeInstructor']);
-        Route::post('instructors', [InstructorController::class, 'storeInstructors']);
+        Route::get('catalogue', 'catalogue');
+        Route::get('', 'index');
+        Route::post('create', 'storeInstructor');
+        Route::post('instructors', 'storeInstructors');
         // Route::get('courses', [InstructorController::class, 'getCourses']);
         // Route::get('instructor-courses', [InstructorController::class, 'getInstructorByCourses']);
         //Route::get('instructor-information', [InstructorController::class, 'getInstructorsInformationByCourse']);
@@ -299,7 +294,7 @@ Route::prefix('registration')->group(function () {
 /***********************************************************************************************************************
  * PARTICIPANTS
  **********************************************************************************************************************/
-Route::controller(SchoolPeriodController::class)->group(function () {
+Route::controller(ParticipantController::class)->group(function () {
     Route::prefix('participant/{participant}')->group(function () {
         // Route::put('update-state/{participant}', [ParticipantController::class, 'acceptParticipant']);
         // Route::delete('destroy/{participant}', [ParticipantController::class, 'destroyParticipant']);
@@ -308,14 +303,14 @@ Route::controller(SchoolPeriodController::class)->group(function () {
     });
 
     Route::prefix('participant')->group(function () {
-        Route::put('update-registration/{registration}', [ParticipantController::class, 'participantRegistrationStateModification']);
-        Route::get('detail-planification/{detailPlanification}', [ParticipantController::class, 'getParticipantsByPlanification']);
-        Route::get('information/{registration}', [ParticipantController::class, 'getParticipantInformation']);
-        Route::patch('participant-registration/{registration}', [ParticipantController::class, 'registerParticipant']);
+        Route::put('update-registration/{registration}', 'participantRegistrationStateModification');
+        Route::get('detail-planification/{detailPlanification}', 'getParticipantsByPlanification');
+        Route::get('information/{registration}','getParticipantInformation');
+        Route::patch('participant-registration/{registration}', 'registerParticipant');
     });
 });
 
-Route::apiResource('participants', SchoolPeriodController::class);
+Route::apiResource('participants', ParticipantController::class);
 
 /***********************************************************************************************************************
  * DETAIL SCHOOL PERIOD
