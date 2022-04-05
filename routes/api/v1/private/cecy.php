@@ -25,8 +25,6 @@ use App\Http\Controllers\V1\Cecy\ParticipantController;
 /***********************************************************************************************************************
  * CATALOGUES
  **********************************************************************************************************************/
-
-///catalogue/catalogue 
 Route::controller(InstitutionController::class)->group(function () {
     Route::prefix('catalogue/{catalogue}')->group(function () {
         Route::prefix('file')->group(function () {
@@ -53,6 +51,7 @@ Route::controller(InstitutionController::class)->group(function () {
         Route::get('catalogue', [CatalogueController::class, '']);
     });
 });
+
 /***********************************************************************************************************************
  * INSTITUTIONS
  **********************************************************************************************************************/
@@ -74,8 +73,7 @@ Route::apiResource('institutions', InstitutionController::class);
 /***********************************************************************************************************************
  * PLANIFICATIONS
  **********************************************************************************************************************/
-//Route::apiResource('planifications',[PlanificationController::class]);
-Route::controller(InstructorController::class)->group(function () {
+Route::controller(PlanificationController::class)->group(function () {
     Route::prefix('planifications/{planification}')->group(function () {
         Route::get('', 'getPlanitification');
         Route::put('dates-and-needs-planifications', 'addNeedsOfPlanification');
@@ -88,7 +86,7 @@ Route::controller(InstructorController::class)->group(function () {
     
 });
 
-Route::prefix('planificatio')->group(function () {
+Route::prefix('planifications')->group(function () {
     Route::get('planifications-period-state', 'getPlanificationsByPeriodState');
     Route::get('by-detail-planification', 'getPlanificationsByDetailPlanification');
     Route::get('course_parallels-works', 'getCoursesParallelsWorkdays');
@@ -97,6 +95,7 @@ Route::prefix('planificatio')->group(function () {
     // Route::put('{planification}', [PlanificationController::class, 'updateStatePlanification']);
     Route::post('course/{course}', 'storePlanificationByCourse');
 });
+Route::apiResource('planifications',PlanificationController::class);
 
 
 /***********************************************************************************************************************
@@ -410,16 +409,16 @@ Route::controller(RecordController::class)->group(function () {
     Route::prefix('records/{record}')->group(function () {
         Route::patch('destroy', 'destroy');
         Route::get('show','show');
-
-//Route::apiResource('records', PhotographicRecordController::class);
-
-Route::prefix('record')->group(function () {
-    //Route::get('{photographicRecord}', [PhotographicRecordController::class, 'show']);
-    //Route::get('detail/{detailPlanification}', [PhotographicRecordController::class, 'getDetails']);
-    Route::patch('destroys', 'destroys');
-    Route::post('store', 'store');
-});
-
+    });
+        
+        Route::prefix('record')->group(function () {
+            //Route::get('{photographicRecord}', [PhotographicRecordController::class, 'show']);
+            //Route::get('detail/{detailPlanification}', [PhotographicRecordController::class, 'getDetails']);
+            Route::patch('destroys', 'destroys');
+            Route::post('store', 'store');
+        });
+    });
+    Route::apiResource('records', PhotographicRecordController::class);
 /*****************************************
  * REGISTRATIONS 
  ****************************************/
@@ -453,13 +452,3 @@ Route::prefix('topic/{topic}')->group(function () {
         Route::patch('', [TopicController::class, 'destroyFiles']);
     });
 });
-
-
-/**
- * get      index, , get    2
- * put      update          1
- * post     store           2
- * delete   delete/destroy  1
- * get      show            1
- * patch    
- */
