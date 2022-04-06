@@ -364,11 +364,12 @@ Route::apiResource('requirements', RequirementController::class);
 
 Route::apiResource('authorities', AuthorityController::class);
 
-
-Route::prefix('authority')->group(function () {
+Route::prefix('authorities')->group(function () {
     Route::get('', [AuthorityController::class, 'getAuthoritys']);
     Route::post('', [AuthorityController::class, 'storeAuthority']);
     Route::put('', [AuthorityController::class, 'updateAuthority']);
+});
+Route::prefix('authority')->group(function () {
     Route::delete('destroys', [AuthorityController::class, 'deleteAuthoritys']);
 });
 
@@ -380,6 +381,7 @@ Route::apiResource('attendances', AttendanceController::class);
 
 Route::prefix('attendance')->group(function () {
     Route::get('detail/{detailPlanification}', [AttendanceController::class, 'getAttendancesByDetailPlanification']);
+    Route::delete('destroys', [AuthorityController::class, 'deleteAttendance']);
 });
 
 Route::prefix('pdf')->group(function () {
