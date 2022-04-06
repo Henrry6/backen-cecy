@@ -96,7 +96,7 @@ Route::controller(PlanificationController::class)->group(function () {
         Route::post('course/{course}', 'storePlanificationByCourse');
     });
 });
-Route::apiResource('planifications', PlanificationController::class);
+// Route::apiResource('planifications', PlanificationController::class);
 
 
 /***********************************************************************************************************************
@@ -104,17 +104,24 @@ Route::apiResource('planifications', PlanificationController::class);
  **********************************************************************************************************************/
 Route::controller(DetailPlanificationController::class)->group(function () {
     Route::prefix('detail-planifications/{detail_planification}')->group(function () {
-        Route::get('', 'getDetailPlanificationByCourse');
-        Route::get('', 'getDetailPlanificationByPlanification');
+        Route::get('courses/{course}', 'getDetailPlanificationByCourse');
+        Route::get('', 'showDetailPlanification');
+        Route::put('', 'updateDetailPlanification');
+        Route::delete('', 'deleteDetailPlanification');
     });
 
     Route::prefix('detail-planifications')->group(function () {
-        Route::post('store', 'registerDetailPlanification');
+        Route::get('planifications/{planification}', 'getDetailPlanificationsByPlanification');
+        Route::post('', 'storeDetailPlanification');
         Route::patch('destroys', 'destroys');
         Route::get('catalogue', 'catalogue');
     });
+
+    Route::prefix('detail-planification')->group(function () {
+        Route::patch('', 'destroysDetailPlanifications');
+    });
 });
-Route::apiResource('detail-planifications', DetailplanificationController::class);
+// Route::apiResource('detail-planifications', DetailplanificationController::class);
 
 /***********************************************************************************************************************
  * COURSES
@@ -205,7 +212,6 @@ Route::controller(DetailAttendanceController::class)->group(function () {
         Route::put('', 'updateDetailPlanification');
         Route::put('', 'updatedetailPlanificationByCecy');
         Route::patch('delete', 'deleteDetailPlanification');
-
     });
 
     Route::prefix('detail-attendances')->group(function () {
@@ -307,11 +313,11 @@ Route::prefix('registration')->group(function () {
  **********************************************************************************************************************/
 Route::controller(ParticipantController::class)->group(function () {
     Route::prefix('participants/{participant}')->group(function () {
-        Route::put('update-registration/{registration}', 'participantRegistrationStateModification');
-        Route::put('update-state/{participant}', [ParticipantController::class, 'acceptParticipant']);
-        Route::delete('destroy/{participant}', [ParticipantController::class, 'destroyParticipant']);
-        Route::get('information/{participant}', [ParticipantController::class, 'getParticipants']);
-        Route::put('update/{participant}', [ParticipantController::class, 'updateParticipant']);
+        // Route::put('update-registration/{registration}', 'participantRegistrationStateModification');
+        // Route::put('update-state/{participant}', [ParticipantController::class, 'acceptParticipant']);
+        // Route::delete('destroy/{participant}', [ParticipantController::class, 'destroyParticipant']);
+        // Route::get('information/{participant}', [ParticipantController::class, 'getParticipants']);
+        // Route::put('update/{participant}', [ParticipantController::class, 'updateParticipant']);
     });
 
     Route::prefix('participants')->group(function () {

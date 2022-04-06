@@ -76,12 +76,14 @@ class DetailPlanificationController extends Controller
     /**
      * Get all detail planifications filtered by planification
      */
-    // DetailPlanificationController
     public function getDetailPlanificationsByPlanification(GetDetailPlanificationsByPlanificationRequest $request, Planification $planification)
     {
+        $sorts = explode(',', $request->sort);
+
         $detailPlanifications = $planification
+            ->customOrderBy($sorts)
             ->detailPlanifications()
-            ->paginate($request->input('per_page'));
+            ->paginate($request->input('perPage'));
 
 
         return (new ResponsibleCourseDetailPlanificationCollection($detailPlanifications))
@@ -98,7 +100,7 @@ class DetailPlanificationController extends Controller
     /**
      * Store a detail planification record
      */
-    public function registerDetailPlanification(RegisterDetailPlanificationRequest $request)
+    public function storeDetailPlanification(RegisterDetailPlanificationRequest $request)
     {
         $loggedInInstructor = Instructor::where('user_id', $request->user()->id)->first();
         if (!$loggedInInstructor) {
@@ -178,7 +180,6 @@ class DetailPlanificationController extends Controller
     /**
      * Return a detailPlanification record
      */
-    // DetailPlanificationController
     public function showDetailPlanification(ShowDetailPlanificationRequest $request, DetailPlanification $detailPlanification)
     {
         return (new ResponsibleCourseDetailPlanificationResource($detailPlanification))
