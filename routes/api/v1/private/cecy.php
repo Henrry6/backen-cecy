@@ -112,9 +112,8 @@ Route::controller(DetailPlanificationController::class)->group(function () {
 
     Route::prefix('detail-planifications')->group(function () {
         Route::get('planifications/{planification}', 'getDetailPlanificationsByPlanification');
+        Route::get('catalogue/catalogue', 'catalogue');
         Route::post('', 'storeDetailPlanification');
-        Route::patch('destroys', 'destroys');
-        Route::get('catalogue', 'catalogue');
     });
 
     Route::prefix('detail-planification')->group(function () {

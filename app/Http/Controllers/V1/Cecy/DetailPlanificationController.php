@@ -35,7 +35,7 @@ class DetailPlanificationController extends Controller
 
     public function catalogue(CatalogueDetailPlanificationRequest $request)
     {
-        $sorts = explode(',', $request->sort);
+        $sorts = explode(',', $request->input('sort'));
 
         $detailPlanifications =  DetailPlanification::customOrderBy($sorts)
             ->observation($request->input('search'))
