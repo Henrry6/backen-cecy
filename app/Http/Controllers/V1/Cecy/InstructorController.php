@@ -73,11 +73,11 @@ class InstructorController extends Controller
         $instructor = new Instructor();
 
         $instructor->state()
-            ->associate(Catalogue::find($request->input('state')));
+            ->associate(Catalogue::find($request->input('state.id')));
         $instructor->type()
-            ->associate(Catalogue::find($request->input('type')));
+            ->associate(Catalogue::find($request->input('type.id')));
         $instructor->user()
-            ->associate(User::find($request->input('user')));
+            ->associate(User::find($request->input('user.id')));
 
         $instructor->save();
 
