@@ -4,6 +4,7 @@ namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+
 use App\Http\Requests\V1\Cecy\Participants\AcceptParticipantRequest;
 use App\Http\Requests\V1\Cecy\Participants\IndexParticipantRequest;
 use App\Http\Requests\V1\Cecy\Participants\UpdateParticipantRequest;
@@ -278,7 +279,7 @@ class ParticipantController extends Controller
         $sorts = explode(',', $request->input('sort'));
 
         $participants = Participant::customOrderBy($sorts)
-             ->user($request->input('userSearch'))
+            ->user($request->input('userSearch'))
             ->paginate($request->input('perPage'));
 
         return (new ParticipantCollection($participants))
@@ -308,7 +309,6 @@ class ParticipantController extends Controller
             ->response()->setStatusCode(201);
     }
 
-    //se elimina el participante seleccionado 
     public function destroyParticipant(Participant $participant)
     {
         $participant->delete();
