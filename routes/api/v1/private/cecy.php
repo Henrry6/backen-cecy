@@ -360,7 +360,10 @@ Route::apiResource('authorities', AuthorityController::class);
 
 
 Route::prefix('authority')->group(function () {
-    Route::patch('destroys', [AuthorityController::class, 'destroys']);
+    Route::get('', [AuthorityController::class, 'getAuthoritys']);
+    Route::post('', [AuthorityController::class, 'storeAuthority']);
+    Route::put('', [AuthorityController::class, 'updateAuthority']);
+    Route::delete('destroys', [AuthorityController::class, 'deleteAuthoritys']);
 });
 
 /***********************************************************************************************************************
