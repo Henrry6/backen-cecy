@@ -158,6 +158,7 @@ Route::controller(CourseController::class)->group(function () {
             Route::post('/topics', [TopicController::class, 'storesTopics']);
             Route::put('/topics', [TopicController::class, 'updateTopics']);
             Route::delete('/topics/{topic}', [TopicController::class, 'destroyTopic']);
+            Route::delete('/courses/{course}', [CourseController::class, 'destroyCourse']);
             Route::get('/topics/{topic}', [TopicController::class, 'show']);
             Route::get('/instructors', [TopicController::class, 'getInstructors']);
             Route::delete('/planification/{planification}', [PlanificationController::class, 'destroyPlanification']);
