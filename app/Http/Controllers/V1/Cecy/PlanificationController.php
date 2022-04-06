@@ -9,8 +9,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests\V1\Cecy\Authorities\IndexAuthorityRequest;
 use App\Http\Requests\V1\Cecy\Planifications\CataloguePlanificationRequest;
 use App\Http\Requests\V1\Cecy\Planifications\StorePlanificationByCourseRequest;
-use App\Http\Requests\V1\Cecy\Planifications\UpdateAssignResponsibleCecyRequest;
 use App\Http\Requests\V1\Cecy\Planifications\AddNeedsOfPlanification;
+use App\Http\Requests\V1\Cecy\Planifications\AssignResponsibleCecyRequest;
 use App\Http\Requests\V1\Cecy\Planifications\UpdatePlanificationRequest;
 use App\Http\Requests\V1\Cecy\Planifications\UpdateStatePlanificationRequest;
 use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\GetPlanificationsByCourseRequest;
@@ -97,7 +97,7 @@ class PlanificationController extends Controller
             ->response()->setStatusCode(201);
     }
 
-    public function assignResponsibleCecy(Request $request, Planification $planification)
+    public function assignResponsibleCecy(AssignResponsibleCecyRequest $request, Planification $planification)
     {
         $planification->responsibleCecy()->associate(Authority::find($request->input('responsibleCecy.id')));
         $planification->save();
