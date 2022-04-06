@@ -315,9 +315,9 @@ Route::controller(ParticipantController::class)->group(function () {
     Route::prefix('participants/{participant}')->group(function () {
         // Route::put('update-registration/{registration}', 'participantRegistrationStateModification');
         Route::put('update-state', [ParticipantController::class, 'acceptParticipant']);
-        Route::delete('destroy', [ParticipantController::class, 'destroyParticipant']);
-        Route::get('information', [ParticipantController::class, 'getParticipants']);
-        Route::put('update', [ParticipantController::class, 'updateParticipant']);
+        Route::delete(' destroy-participant', [ParticipantController::class, 'destroyParticipant']);
+        Route::get('information', [ParticipantController::class, 'indexParticipant']);
+        Route::put('update-participant-user', [ParticipantController::class, 'updateParticipantUser']);
     });
 
     Route::prefix('participants')->group(function () {
