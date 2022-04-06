@@ -97,7 +97,7 @@ class PlanificationController extends Controller
             ->response()->setStatusCode(201);
     }
 
-    public function updateAssignResponsibleCecy(UpdateAssignResponsibleCecyRequest $request, Planification $planification)
+    public function assignResponsibleCecy(Request $request, Planification $planification)
     {
         $planification->responsibleCecy()->associate(Authority::find($request->input('responsibleCecy.id')));
         $planification->save();
@@ -395,7 +395,6 @@ class PlanificationController extends Controller
     /**
      * updatePlanificationByCourse
      */
-
     public function updatePlanificationByCourse(UpdatePlanificationByCourseRequest $request, Planification $planification)
     {
         $instructor = Instructor::find($request->input('responsibleCourse.id'));

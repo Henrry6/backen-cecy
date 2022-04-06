@@ -79,11 +79,12 @@ Route::controller(PlanificationController::class)->group(function () {
         Route::put('dates-and-needs-planifications', 'addNeedsOfPlanification');
         // Route::post('create-planifications-course', [PlanificationController::class, 'storePlanificationByCourse']);
         Route::put('planifications-cecy', 'updatePlanificationByCecy');
-        Route::put('assign-responsible-cecy', 'updateAssignResponsibleCecy');
-        Route::put('assign-code-planification',  'assignCodeToPlanification');
-        Route::put('approve-planification',  'approvePlanification');
+        Route::patch('assign-responsible-cecy', 'assignResponsibleCecy');
+        Route::patch('assign-code-planification',  'assignCodeToPlanification');
+        Route::patch('approve-planification',  'approvePlanification');
         Route::get('/curricular-design',  'curricularDesign');
         Route::get('/informe-final',  'informeFinal');
+        Route::put('career-coordinator', 'updatePlanificationByCourse');
     });
 
     Route::prefix('planifications')->group(function () {
@@ -147,10 +148,9 @@ Route::controller(CourseController::class)->group(function () {
 
     Route::prefix('courses/{course}')->group(function () {
         Route::get('', 'show');
-        Route::put('', 'approveCourse');
-        Route::put('', 'declineCourse');
-        Route::put('', 'updateCourse');
-        Route::put('', 'updatePlanificationByCourse');
+        Route::put('cecy-responsible/approve', 'approveCourse');
+        Route::put('cecy-responsible/decline', 'declineCourse');
+        Route::put('career-coordinator', 'updateCourse');
 
         Route::prefix('')->group(function () {
             Route::get('/topics', [TopicController::class, 'getTopics']);
