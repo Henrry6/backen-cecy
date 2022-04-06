@@ -32,16 +32,16 @@ class Planification extends Model implements Auditable
     ];
     
     // Relationships
-    //revisar
     public function course()
     {
         return $this->belongsTo(Course::class);
     }
+
     public function courses()
     {
         return $this->hasMany(Course::class);
     }
-    //revisar
+
     public function detailPlanifications()
     {
         return $this->hasMany(DetailPlanification::class);
@@ -76,7 +76,6 @@ class Planification extends Model implements Auditable
     {
         return $this->belongsTo(Authority::class);
     }
-
 
     //Mutators
     public function setCodeAttribute($value)

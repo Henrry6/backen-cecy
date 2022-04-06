@@ -94,6 +94,7 @@ Route::controller(PlanificationController::class)->group(function () {
         Route::get('kpis/{state}', 'getKpi');
         // Route::put('{planification}', [PlanificationController::class, 'updateStatePlanification']);
         Route::post('course/{course}', 'storePlanificationByCourse');
+        Route::get('catalogue/catalogue', 'catalogue');
     });
 });
 // Route::apiResource('planifications', PlanificationController::class);
