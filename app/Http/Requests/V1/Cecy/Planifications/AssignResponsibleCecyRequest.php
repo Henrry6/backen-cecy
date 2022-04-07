@@ -10,6 +10,7 @@ class AssignResponsibleCecyRequest extends FormRequest
   {
     return true;
   }
+
   public function rules()
   {
     return [
@@ -19,14 +20,13 @@ class AssignResponsibleCecyRequest extends FormRequest
       'responsibleCourse.id' => ['required', 'integer'],
       'responsibleOcs.id' => ['required', 'integer'],
       'responsibleCecy.id' => ['required', 'integer'],
-      'state.id'=> ['required', 'integer'],
+      'state.id' => ['required', 'integer'],
       'aprovedAt' => ['required', 'date'],
       'code' => ['required', 'string', 'max:100'],
       'endedAt' => ['required', 'date'],
       'needs' => ['required', 'json'],
       'observations' => ['required', 'json'],
       'startedAt' => ['required', 'date']
-      
     ];
   }
 
@@ -46,7 +46,6 @@ class AssignResponsibleCecyRequest extends FormRequest
       'needs' => 'necesidades',
       'observations' => 'Observaciones',
       'startedAt' => 'Fecha inicio'
-      
     ];
   }
 }
