@@ -96,6 +96,7 @@ Route::controller(PlanificationController::class)->group(function () {
         // Route::put('{planification}', [PlanificationController::class, 'updateStatePlanification']);
         Route::post('course/{course}', 'storePlanificationByCourse');
         Route::get('catalogue/catalogue', 'catalogue');
+        Route::delete('/planification/{planification}','destroyPlanification');
     });
 });
 // Route::apiResource('planifications', PlanificationController::class);
@@ -151,6 +152,7 @@ Route::controller(CourseController::class)->group(function () {
         Route::put('cecy-responsible/approve', 'approveCourse');
         Route::put('cecy-responsible/decline', 'declineCourse');
         Route::put('career-coordinator', 'updateCourse');
+        Route::delete('/courses', 'destroyCourse');
 
         Route::prefix('')->group(function () {
             Route::get('/topics', [TopicController::class, 'getTopics']);
@@ -158,10 +160,8 @@ Route::controller(CourseController::class)->group(function () {
             Route::post('/topics', [TopicController::class, 'storesTopics']);
             Route::put('/topics', [TopicController::class, 'updateTopics']);
             Route::delete('/topics/{topic}', [TopicController::class, 'destroyTopic']);
-            Route::delete('/courses/{course}', [CourseController::class, 'destroyCourse']);
             Route::get('/topics/{topic}', [TopicController::class, 'show']);
             Route::get('/instructors', [TopicController::class, 'getInstructors']);
-            Route::delete('/planification/{planification}', [PlanificationController::class, 'destroyPlanification']);
         });
         Route::prefix('')->group(function () {
             Route::get('/prerequisites/all', [PrerequisiteController::class, 'getPrerequisitesAll']);
