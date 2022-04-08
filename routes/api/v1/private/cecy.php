@@ -203,7 +203,6 @@ Route::get('/inform', function () {
 /***********************************************************************************************************************
  * DETAIL ATTENDANCES
  **********************************************************************************************************************/
-
 Route::controller(DetailAttendanceController::class)->group(function () {
     Route::prefix('detail-attendances/{detail_attendance}')->group(function () {
         Route::get('', 'showAttendanceParticipant');
@@ -241,7 +240,6 @@ Route::prefix('certificate')->group(function () {
 /***********************************************************************************************************************
  * SCHOOL PERIODS
  **********************************************************************************************************************/
-
 Route::controller(SchoolPeriodController::class)->group(function () {
     Route::prefix('school-periods/{school_period}')->group(function () {
         Route::put('update', 'update');
@@ -259,7 +257,6 @@ Route::apiResource('school-periods', SchoolPeriodController::class);
 /***********************************************************************************************************************
  * CLASSROOMS
  **********************************************************************************************************************/
-
 Route::controller(ClassroomController::class)->group(function () {
     Route::prefix('classrooms/{classroom}')->group(function () {
         Route::put('update', 'update');
@@ -277,7 +274,6 @@ Route::apiResource('classroom', ClassroomController::class);
 /***********************************************************************************************************************
  * INSTRUCTORS
  **********************************************************************************************************************/
-
 Route::controller(InstructorController::class)->group(function () {
     Route::prefix('instructors/{instructor}')->group(function () {
         Route::put('type-instructor', 'updateTypeInstructor');
@@ -300,14 +296,21 @@ Route::apiResource('instructors', InstructorController::class);
 /***********************************************************************************************************************
  * REGISTRATIONS
  **********************************************************************************************************************/
-Route::prefix('registration')->group(function () {
-    Route::post('register-student/{detailPlanification}', [RegistrationController::class, 'registerStudent']);
-    Route::post('register-student', [RegistrationController::class, 'registerStudent']);
-    Route::get('participant/{detailPlanification}', [RegistrationController::class, 'getParticipant']);
-    Route::patch('nullify-registration', [RegistrationController::class, 'nullifyRegistration']);
-    Route::patch('nullify-registrations', [RegistrationController::class, 'nullifyRegistrations']);
-    Route::patch('participant-grades/{registration}', [RegistrationController::class, 'updateGradesParticipant']);
+Route::controller(RegistrationController::class)->group(function () {
+    Route::prefix('registrations/{registration}')->group(function () {
+    });
+
+    Route::prefix('registrations')->group(function () {
+        Route::post('register-student/{detailPlanification}', 'registerStudent');
+        Route::post('register-student', 'registerStudent');
+        Route::get('participant/{detailPlanification}', 'getParticipant');
+        Route::patch('nullify-registration', 'nullifyRegistration');
+        Route::patch('nullify-registrations', 'nullifyRegistrations');
+        Route::patch('participant-grades/{registration}', 'updateGradesParticipant');
+    });
 });
+Route::apiResource('registrations', RegistrationController::class);
+
 
 /***********************************************************************************************************************
  * PARTICIPANTS
@@ -315,10 +318,10 @@ Route::prefix('registration')->group(function () {
 Route::controller(ParticipantController::class)->group(function () {
     Route::prefix('participants/{participant}')->group(function () {
         // Route::put('update-registration/{registration}', 'participantRegistrationStateModification');
-        Route::put('update-state', [ParticipantController::class, 'acceptParticipant']);
-        Route::delete(' destroy-participant', [ParticipantController::class, 'destroyParticipant']);
-        Route::get('information', [ParticipantController::class, 'indexParticipant']);
-        Route::put('update-participant-user', [ParticipantController::class, 'updateParticipantUser']);
+        Route::put('update-state', 'updateParticipantState');
+        Route::delete(' destroy-participant', 'destroyParticipant');
+        Route::get('information', 'indexParticipant');
+        Route::put('update-participant-user', 'updateParticipantUser');
     });
 
     Route::prefix('participants')->group(function () {
@@ -327,11 +330,10 @@ Route::controller(ParticipantController::class)->group(function () {
         Route::patch('participant-registration/{registration}', 'registerParticipant');
     });
 });
-
 Route::apiResource('participants', ParticipantController::class);
 
 /***********************************************************************************************************************
- * DETAIL SCHOOL PERIOD
+ * DETAIL SCHOOL PERIODS
  **********************************************************************************************************************/
 Route::apiResource('detail-school-periods', DetailSchoolPeriodController::class);
 Route::prefix('detail-school-period')->group(function () {
@@ -362,7 +364,6 @@ Route::apiResource('requirements', RequirementController::class);
 /***********************************************************************************************************************
  * AUTHORITIES
  **********************************************************************************************************************/
-
 Route::apiResource('authorities', AuthorityController::class);
 
 Route::prefix('authorities')->group(function () {
@@ -397,7 +398,6 @@ Route::prefix('pdf')->group(function () {
 
 });
 
-
 /***********************************************************************************************************************
  * RECORDS
  **********************************************************************************************************************/
@@ -415,27 +415,36 @@ Route::controller(RecordController::class)->group(function () {
     });
 });
 Route::apiResource('records', PhotographicRecordController::class);
+
 /*****************************************
  * REGISTRATIONS 
  ****************************************/
+Route::controller(RegistrationController::class)->group(function () {
+    Route::prefix('registrations/{registration}')->group(function () {
+    });
 
-Route::prefix('registration')->group(function () {
-    Route::get('courses-by-participant', [RegistrationController::class, 'getCoursesByParticipant']);
-    Route::get('courses-by-participant/{registration}', [RegistrationController::class, 'getCoursesByParticipant']);
-    //ruta para consulta las notas de registration
-    //Route::get('courses-by-participant', [RegistrationController::class, 'getCoursesByParticipant']);
-    Route::get('records-returned-by-registration', [RegistrationController::class, 'recordsReturnedByRegistration']);
-    Route::get('show-participants', [RegistrationController::class, 'showParticipants']);
-    Route::get('download-file', [RegistrationController::class, 'downloadFile']);
-    Route::post('nullify-registrations', [RegistrationController::class, 'nullifyRegistrations']);
-    Route::patch('nullify-registration/{registration}', [RegistrationController::class, 'nullifyRegistration']);
-    Route::get('show-record-competitor/{detailPlanification}', [RegistrationController::class, 'showRecordCompetitor']);
-    Route::patch('show-participant-grades', [RegistrationController::class, 'ShowParticipantGrades']);
-    Route::put('upload-file', [RegistrationController::class, 'uploadFile']);
-    Route::get('download-file-grades', [RegistrationController::class, 'downloadFileGrades']);
-    Route::get('show-file', [RegistrationController::class, 'showFile']);
-    Route::patch('destroy-file', [RegistrationController::class, 'destroyFile']);
+    Route::prefix('registrations')->group(function () {
+        Route::get('courses-by-participant', 'getCoursesByParticipant');
+        Route::get('courses-by-participant/{registration}', 'getCoursesByParticipant');
+        //ruta para consulta las notas de registration
+        //Route::get('courses-by-participant', [RegistrationController::class, 'getCoursesByParticipant']);
+        Route::get('records-returned-by-registration', 'recordsReturnedByRegistration');
+        Route::get('show-participants', 'showParticipants');
+        Route::get('download-file', 'downloadFile');
+        Route::post('nullify-registrations', 'nullifyRegistrations');
+        Route::patch('nullify-registration/{registration}', 'nullifyRegistration');
+        Route::get('show-record-competitor/{detailPlanification}', 'showRecordCompetitor');
+        Route::patch('show-participant-grades', 'ShowParticipantGrades');
+        Route::put('upload-file', 'uploadFile');
+        Route::get('download-file-grades', 'downloadFileGrades');
+        Route::get('show-file', 'showFile');
+        Route::patch('destroy-file', 'destroyFile');
+    });
 });
+
+/*****************************************
+ * TOPICS 
+ ****************************************/
 Route::prefix('topic/{topic}')->group(function () {
     Route::prefix('file')->group(function () {
         Route::get('{file}/download', [TopicController::class, 'downloadFile']);
