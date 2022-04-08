@@ -324,7 +324,8 @@ Route::controller(ParticipantController::class)->group(function () {
     Route::prefix('participants/{participant}')->group(function () {
         // Route::put('update-registration/{registration}', 'participantRegistrationStateModification');
         Route::put('update-state', 'updateParticipantState');
-        Route::delete(' destroy-participant', 'destroyParticipant');
+        Route::post('participant-registration-user', 'createParticipantUser');
+        Route::delete('destroy-participant', 'destroyParticipant');
         Route::put('update-participant-user', 'updateParticipantUser');
     });
 

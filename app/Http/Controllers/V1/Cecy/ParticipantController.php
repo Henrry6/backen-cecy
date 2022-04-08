@@ -255,6 +255,7 @@ class ParticipantController extends Controller
         $user->lastname = $request->input('lastname');
         $user->birthdate = $request->input('birthdate');
 
+        $participant->save();
         $participant = null;
         DB::transaction(function () use ($request, $user) {
             $user->save();
@@ -272,6 +273,19 @@ class ParticipantController extends Controller
             ])
             ->response()->setStatusCode(201);
     }
+
+    /*public function updateParticipant($id , $user){
+
+        return (new UserResource($user))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Datos Actualizados',
+                    'detail' => '',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);   
+    }*/
 
 
     //se para ver el listado de los participante
