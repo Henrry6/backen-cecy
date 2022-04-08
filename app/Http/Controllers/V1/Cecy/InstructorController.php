@@ -56,7 +56,7 @@ class InstructorController extends Controller
         $sorts = explode(',', $request->input('sort'));
 
         $instructors = Instructor::customOrderBy($sorts)
-            ->paginate($request->input('per_page'));
+            ->paginate($request->input('perPage'));
 
         return (new InstructorCollection($instructors))
             ->additional([
@@ -153,6 +153,7 @@ class InstructorController extends Controller
             ->response()->setStatusCode(201);
     }
 
+
     public function getAuthorizedInstructorsOfCourse(IndexInstructorRequest $request, DetailPlanification $detailPlanification) //mejor seria que vieniera el detalle de planification como parametro en lugar del curso,
     {
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
@@ -196,4 +197,5 @@ class InstructorController extends Controller
             ])
             ->response()->setStatusCode(200);
     }
+
 }

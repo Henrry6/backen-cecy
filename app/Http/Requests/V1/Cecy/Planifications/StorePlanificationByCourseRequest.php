@@ -16,7 +16,6 @@ class StorePlanificationByCourseRequest extends FormRequest
       'responsible.id' => ['required', 'integer'],
       'endedAt' => ['required', 'date'],
       'startedAt' => ['required', 'date'],
-
     ];
   }
 
