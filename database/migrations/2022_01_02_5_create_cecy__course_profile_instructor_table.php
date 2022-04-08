@@ -4,12 +4,14 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCecyInstructorCourseProfileTable extends Migration
+class CreateCecyCourseProfileInstructorTable extends Migration
 {
     public function up()
     {
-        Schema::connection(env('DB_CONNECTION_CECY'))->create('instructor_course_profile', function (Blueprint $table) {
+        Schema::connection(env('DB_CONNECTION_CECY'))->create('course_profile_instructor', function (Blueprint $table) {
             $table->id();
+            $table->timestamps();
+            $table->softDeletes();
 
             $table->foreignId('instructor_id')
                 ->nullable()
@@ -23,6 +25,6 @@ class CreateCecyInstructorCourseProfileTable extends Migration
 
     public function down()
     {
-        Schema::connection(env('DB_CONNECTION_CECY'))->dropIfExists('instructor_course_profile');
+        Schema::connection(env('DB_CONNECTION_CECY'))->dropIfExists('course_profile_instructor');
     }
 }
