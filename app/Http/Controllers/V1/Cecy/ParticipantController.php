@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Requests\V1\Cecy\Participants\AcceptParticipantRequest;
 use App\Http\Requests\V1\Cecy\Participants\IndexParticipantRequest;
 use App\Http\Requests\V1\Cecy\Participants\UpdateParticipantRequest;
+use App\Http\Requests\V1\Cecy\Participants\UpdateParticipantUserRequest;
 //use App\Http\Requests\V1\Cecy\Participants\StoreParticipantRequest;
 use App\Http\Requests\V1\Cecy\Planifications\IndexPlanificationRequest;
 use App\Http\Requests\V1\Cecy\Participants\StoreParticipantUserRequest;
@@ -238,7 +239,7 @@ class ParticipantController extends Controller
     }
 
     //se modificarac los datos del participante
-    public function updateParticipantUser(UpdateParticipantRequest $request, Participant $participant)
+    public function updateParticipantUser(UpdateParticipantUserRequest $request, Participant $participant)
     {
         $user = $participant->user();
         $user->identificationType()->associate(Catalogue::find($request->input('identificationType.id')));
