@@ -59,6 +59,7 @@ Route::controller(InstitutionController::class)->group(function () {
     Route::prefix('institutions/{institution}')->group(function () {
         Route::patch('destroy', 'destroy');
         Route::get('show', 'show');
+        Route::put('update', 'update');
     });
 
     Route::prefix('institutions')->group(function () {
@@ -324,13 +325,13 @@ Route::controller(ParticipantController::class)->group(function () {
         // Route::put('update-registration/{registration}', 'participantRegistrationStateModification');
         Route::put('update-state', 'updateParticipantState');
         Route::delete(' destroy-participant', 'destroyParticipant');
-        Route::get('information', 'indexParticipant');
         Route::put('update-participant-user', 'updateParticipantUser');
     });
 
     Route::prefix('participants')->group(function () {
         Route::get('detail-planification/{detailPlanification}', 'getParticipantsByPlanification');
         Route::get('information/{registration}', 'getParticipantInformation');
+        Route::get('information', 'index');
         Route::patch('participant-registration/{registration}', 'registerParticipant');
     });
 });

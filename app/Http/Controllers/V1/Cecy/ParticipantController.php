@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Requests\V1\Cecy\Participants\AcceptParticipantRequest;
 use App\Http\Requests\V1\Cecy\Participants\IndexParticipantRequest;
 use App\Http\Requests\V1\Cecy\Participants\UpdateParticipantRequest;
+use App\Http\Requests\V1\Cecy\Participants\UpdateParticipantUserRequest;
 //use App\Http\Requests\V1\Cecy\Participants\StoreParticipantRequest;
 use App\Http\Requests\V1\Cecy\Planifications\IndexPlanificationRequest;
 use App\Http\Requests\V1\Cecy\Participants\StoreParticipantUserRequest;
