@@ -12,6 +12,7 @@ use App\Http\Requests\V1\Core\Images\IndexImageRequest;
 use App\Http\Requests\V1\Core\Images\UploadImageRequest;
 use App\Http\Requests\V1\Cecy\Courses\ApproveCourseRequest;
 use App\Http\Requests\V1\Cecy\Courses\DeclineCourseRequest;
+use App\Http\Requests\V1\Cecy\Courses\DestroyCourseRequest;
 use App\Http\Requests\V1\Cecy\Courses\CoordinatorCecy\GetCoursesByCoordinatorCecyRequest;
 use App\Http\Requests\V1\Cecy\Courses\GetCoursesByCategoryRequest;
 use App\Http\Requests\V1\Cecy\Courses\GetCoursesByNameRequest;

@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Requests\V1\Cecy\Participants\AcceptParticipantRequest;
 use App\Http\Requests\V1\Cecy\Participants\IndexParticipantRequest;
 use App\Http\Requests\V1\Cecy\Participants\UpdateParticipantRequest;
-use App\Http\Requests\V1\Cecy\Participants\StoreParticipantRequest;
+//use App\Http\Requests\V1\Cecy\Participants\StoreParticipantRequest;
 use App\Http\Requests\V1\Cecy\Planifications\IndexPlanificationRequest;
 use App\Http\Requests\V1\Cecy\Participants\StoreParticipantUserRequest;
 use App\Http\Resources\V1\Cecy\Participants\ParticipantCollection;
@@ -203,7 +203,6 @@ class ParticipantController extends Controller
     {
         //$user = User::where('username', $request->input('username'))
         //->orWhere('email', $request->input('email'))->first();
-
         $user = new User();
         $user->identificationType()->associate(CoreCatalogue::find($request->input('identificationType.id')));
         $user->gender()->associate(CoreCatalogue::find($request->input('gender.id')));
@@ -280,7 +279,7 @@ class ParticipantController extends Controller
 
         $participants = Participant::customOrderBy($sorts)
             ->user($request->input('userSearch'))
-            ->paginate($request->input('perPage'));
+            ->paginate($request->input('per_page'));
 
         return (new ParticipantCollection($participants))
             ->additional([
@@ -293,7 +292,7 @@ class ParticipantController extends Controller
     }
 
     //se cambia el estado de los participantes para su acceptación
-    public function acceptParticipant(AcceptParticipantRequest $request, Participant $participant)
+    public function updateParticipantState(UpdateParticipantRequest $request, Participant $participant)
     {
         $participant->state()->associate(Catalogue::find($request->input('state.id')));
         $participant->save();
