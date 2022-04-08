@@ -96,7 +96,7 @@ Route::controller(PlanificationController::class)->group(function () {
         // Route::put('{planification}', [PlanificationController::class, 'updateStatePlanification']);
         Route::post('course/{course}', 'storePlanificationByCourse');
         Route::get('catalogue/catalogue', 'catalogue');
-        Route::delete('/planification/{planification}','destroyPlanification');
+        Route::delete('/planification/{planification}', 'destroyPlanification');
     });
 });
 // Route::apiResource('planifications', PlanificationController::class);
