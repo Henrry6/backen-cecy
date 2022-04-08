@@ -59,6 +59,7 @@ Route::controller(InstitutionController::class)->group(function () {
     Route::prefix('institutions/{institution}')->group(function () {
         Route::patch('destroy', 'destroy');
         Route::get('show', 'show');
+        Route::put('update', 'update');
     });
 
     Route::prefix('institutions')->group(function () {
