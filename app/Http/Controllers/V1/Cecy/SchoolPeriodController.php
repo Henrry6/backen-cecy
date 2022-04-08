@@ -54,7 +54,7 @@ class SchoolPeriodController extends Controller
 
     public function catalogue(CatalogueSchoolPeriodRequest $request)
     {
-        $sorts = explode(',', $request->sort);
+        $sorts = explode(',', $request->input('sort'));
 
         $schoolPeriods =  SchoolPeriod::customOrderBy($sorts)
             ->code($request->input('search'))

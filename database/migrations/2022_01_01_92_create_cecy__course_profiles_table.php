@@ -13,7 +13,6 @@ class CreateCecyCourseProfilesTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            // Pendiente
             $table->foreignId('course_id')
                 ->comment('Fk de curso al que se le asigna el perfil del instructor')
                 ->constrained('cecy.courses');

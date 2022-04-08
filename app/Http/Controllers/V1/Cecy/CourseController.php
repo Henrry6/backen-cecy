@@ -77,7 +77,7 @@ class CourseController extends Controller
     {
         $sorts = explode(',', $request->sort);
 
-        $courses =  Course::customOrderBy($sorts)
+        $courses = Course::customOrderBy($sorts)
             ->abbreviation($request->input('search'))
             ->alignment($request->input('search'))
             ->code($request->input('search'))
@@ -577,7 +577,7 @@ class CourseController extends Controller
             ->customOrderBy($sorts)
             ->code(($request->input('search')))
             ->name(($request->input('search')))
-            ->schoolPeriodId(($request->input('schoolPeriod.id')))
+            ->schoolPeriodId($request->input('schoolPeriod.id'))
             ->paginate($request->input('perPage'));
 
         return (new CourseCollection($courses))
@@ -660,8 +660,8 @@ class CourseController extends Controller
     public function approveCourse(ApproveCourseRequest $request, Course $course)
     {
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
-        $state = Catalogue::where('type',$catalogue['course_state']['type'])
-        ->where('code',$catalogue['course_state']['approved'])->first();
+        $state = Catalogue::where('type', $catalogue['course_state']['type'])
+            ->where('code', $catalogue['course_state']['approved'])->first();
 
         $course->state()->associate($state);
         $course->save();
@@ -683,8 +683,8 @@ class CourseController extends Controller
     public function declineCourse(DeclineCourseRequest $request, Course $course)
     {
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
-        $state = Catalogue::where('type',$catalogue['course_state']['type'])
-        ->where('code',$catalogue['course_state']['not_approved'])->first();
+        $state = Catalogue::where('type', $catalogue['course_state']['type'])
+            ->where('code', $catalogue['course_state']['not_approved'])->first();
 
         $course->state()->associate($state);
         $course->save();

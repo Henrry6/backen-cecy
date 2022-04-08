@@ -27,6 +27,11 @@ class Career extends Model implements Auditable
     ];
 
     // Relationships
+    public function careerable()
+    {
+        return $this->morphTo();
+    }
+
     public function institution()
     {
         return $this->belongsTo(Institution::class);

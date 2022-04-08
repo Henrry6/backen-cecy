@@ -53,7 +53,7 @@ class InstructorController extends Controller
         $sorts = explode(',', $request->input('sort'));
 
         $instructors = Instructor::customOrderBy($sorts)
-            ->paginate($request->input('per_page'));
+            ->paginate($request->input('perPage'));
 
         return (new InstructorCollection($instructors))
             ->additional([
@@ -106,7 +106,7 @@ class InstructorController extends Controller
             ])
             ->response()->setStatusCode(201);
     }
-    
+
     public function updateTypeInstructor(Request $request, Instructor $instructor)
     {
         $instructor->type()->associate(Catalogue::find($request->input('type.id')));
@@ -122,5 +122,4 @@ class InstructorController extends Controller
             ])
             ->response()->setStatusCode(201);
     }
-
 }
