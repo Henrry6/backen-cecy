@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\Cecy\DetailPlanifications\AssignInstructorsToDetailPlanificationRequest;
 use App\Http\Requests\V1\Cecy\DetailPlanifications\CatalogueDetailPlanificationRequest;
 use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\DeleteDetailPlanificationRequest;
 use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\DestroysDetailPlanificationRequest;
@@ -78,10 +79,7 @@ class DetailPlanificationController extends Controller
      */
     public function getDetailPlanificationsByPlanification(GetDetailPlanificationsByPlanificationRequest $request, Planification $planification)
     {
-        $sorts = explode(',', $request->sort);
-
         $detailPlanifications = $planification
-            ->customOrderBy($sorts)
             ->detailPlanifications()
             ->paginate($request->input('perPage'));
 
@@ -420,5 +418,20 @@ class DetailPlanificationController extends Controller
                 ]
             ])
             ->response()->setStatusCode(200);
+    }
+
+    public function assignInstructorToDetailPlanification(AssignInstructorsToDetailPlanificationRequest $request, DetailPlanification $detailPlanification)
+    {
+        $detailPlanification->instructors()->sync([1, 2, 3]);
+
+        return (new ResponsibleCourseDetailPlanificationResource($detailPlanification))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Éxito',
+                    'detail' => 'Registro actualizado',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
     }
 }

@@ -3,7 +3,7 @@ namespace App\Http\Requests\V1\Cecy\Participants;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class DestroysParticipantRequest extends FormRequest
+class DestroyParticipantRequest extends FormRequest
 {
     public function authorize()
     {
@@ -12,21 +12,21 @@ class DestroysParticipantRequest extends FormRequest
     public function rules()
     {
         return [
-            'ids' => ['required', 'integer'],
+            'id' => ['required', 'integer'],
         ];
     }
 
     public function attributes()
     {
         return [
-            'ids' => 'ID`s de los participantes',
+            'id' => 'ID del participante',
         ];
     }
 
     public function messages()
     {
         return [
-            'ids' => 'Es obligatorio enviar un Id de tipo número entero',
+            'id' => 'Es obligatorio enviar un Id de tipo número entero',
         ];
     }
 }

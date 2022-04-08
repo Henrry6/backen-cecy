@@ -24,6 +24,7 @@ use App\Http\Requests\V1\Cecy\Courses\UpdateCurricularDesign;
 use App\Http\Requests\V1\Cecy\Courses\UpdateStateCourseRequest;
 use App\Http\Requests\V1\Cecy\Courses\UploadCertificateOfApprovalRequest;
 use App\Http\Requests\V1\Cecy\Courses\CareerCoordinator\StoreCourseRequest;
+use App\Http\Requests\V1\Cecy\Courses\CareerCoordinator\UpdateCourseNameAndDurationRequest;
 use App\Http\Requests\V1\Cecy\Courses\CatalogueCourseRequest;
 use App\Http\Requests\V1\Cecy\Courses\UpdateCourseRequest;
 use App\Http\Requests\V1\Cecy\Planifications\GetPlanificationByResponsableCourseRequest;
@@ -632,7 +633,7 @@ class CourseController extends Controller
     /**
      * updateCourse
      */
-    public function updateCourse(UpdateCourseRequest $request, Course $course)
+    public function updateCourseNameAndDuration(UpdateCourseNameAndDurationRequest $request, Course $course)
     {
         $course->duration = $request->input('duration');
         $course->name = $request->input('name');

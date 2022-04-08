@@ -97,7 +97,7 @@ Route::controller(PlanificationController::class)->group(function () {
         // Route::put('{planification}', [PlanificationController::class, 'updateStatePlanification']);
         Route::post('course/{course}', 'storePlanificationByCourse');
         Route::get('catalogue/catalogue', 'catalogue');
-        Route::delete('/planification/{planification}','destroyPlanification');
+        Route::delete('/planification/{planification}', 'destroyPlanification');
     });
 });
 // Route::apiResource('planifications', PlanificationController::class);
@@ -112,6 +112,7 @@ Route::controller(DetailPlanificationController::class)->group(function () {
         Route::get('', 'showDetailPlanification');
         Route::put('', 'updateDetailPlanification');
         Route::delete('', 'deleteDetailPlanification');
+        Route::post('instructors-assignment', 'assignInstructorToDetailPlanification');
     });
 
     Route::prefix('detail-planifications')->group(function () {
@@ -152,7 +153,7 @@ Route::controller(CourseController::class)->group(function () {
         Route::get('', 'show');
         Route::put('cecy-responsible/approve', 'approveCourse');
         Route::put('cecy-responsible/decline', 'declineCourse');
-        Route::put('career-coordinator', 'updateCourse');
+        Route::put('career-coordinator', 'updateCourseNameAndDuration');
         Route::delete('/courses', 'destroyCourse');
 
         Route::prefix('')->group(function () {
@@ -286,6 +287,9 @@ Route::controller(InstructorController::class)->group(function () {
         Route::post('create', 'storeInstructor');
         Route::post('create-instructors', 'storeInstructors');
         Route::get('instructor-information', 'getInstructorsInformationByCourse');
+        Route::get('authorized-instructors/detail-planifications/{detail_planification}', 'getAuthorizedInstructorsOfCourse');
+        Route::get('detail-planifications/{detail_planification}', 'getAssignedInstructors');
+
         // Route::get('courses', [InstructorController::class, 'getCourses']);
         // Route::get('instructor-courses', [InstructorController::class, 'getInstructorByCourses']);
         // Route::get('destroy/{instructor}', [InstructorController::class, 'destroyInstructors']);
