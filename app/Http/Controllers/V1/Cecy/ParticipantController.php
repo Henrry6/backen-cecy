@@ -292,7 +292,7 @@ class ParticipantController extends Controller
     }
 
     //se cambia el estado de los participantes para su acceptación
-    public function acceptParticipant(AcceptParticipantRequest $request, Participant $participant)
+    public function updateParticipantState(UpdateParticipantRequest $request, Participant $participant)
     {
         $participant->state()->associate(Catalogue::find($request->input('state.id')));
         $participant->save();
