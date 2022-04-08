@@ -10,21 +10,19 @@ class StoreInstructorsRequest extends FormRequest
     {
         return true;
     }
+    
     public function rules()
     {
         return [
-            'type.id' => ['required', 'integer'],
-            'state.id' => ['required', 'integer'],
-            'user.id' => ['required', 'integer']
+            'ids' => ['required', 'array'],
+            'ids.*' => ['required', 'integer']
         ];
     }
 
     public function attributes()
     {
         return [
-            'type.id' => 'Id del tipo de instructor',
-            'state.id' => 'Estado del instructor',
-            'user.id' => 'Id del usuario'
+            'ids' => 'usuarios',
         ];
     }
 }

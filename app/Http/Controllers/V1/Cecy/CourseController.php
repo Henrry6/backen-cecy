@@ -12,6 +12,7 @@ use App\Http\Requests\V1\Core\Images\IndexImageRequest;
 use App\Http\Requests\V1\Core\Images\UploadImageRequest;
 use App\Http\Requests\V1\Cecy\Courses\ApproveCourseRequest;
 use App\Http\Requests\V1\Cecy\Courses\DeclineCourseRequest;
+use App\Http\Requests\V1\Cecy\Courses\DestroyCourseRequest;
 use App\Http\Requests\V1\Cecy\Courses\CoordinatorCecy\GetCoursesByCoordinatorCecyRequest;
 use App\Http\Requests\V1\Cecy\Courses\GetCoursesByCategoryRequest;
 use App\Http\Requests\V1\Cecy\Courses\GetCoursesByNameRequest;
@@ -23,7 +24,9 @@ use App\Http\Requests\V1\Cecy\Courses\UpdateCurricularDesign;
 use App\Http\Requests\V1\Cecy\Courses\UpdateStateCourseRequest;
 use App\Http\Requests\V1\Cecy\Courses\UploadCertificateOfApprovalRequest;
 use App\Http\Requests\V1\Cecy\Courses\CareerCoordinator\StoreCourseRequest;
+use App\Http\Requests\V1\Cecy\Courses\CareerCoordinator\UpdateCourseNameAndDurationRequest;
 use App\Http\Requests\V1\Cecy\Courses\CatalogueCourseRequest;
+use App\Http\Requests\V1\Cecy\Courses\UpdateCourseRequest;
 use App\Http\Requests\V1\Cecy\Planifications\GetPlanificationByResponsableCourseRequest;
 use App\Http\Requests\V1\Cecy\Planifications\IndexPlanificationRequest;
 use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationCollection;
@@ -613,7 +616,7 @@ class CourseController extends Controller
 
         $course->duration = $request->input('duration');
         $course->name = $request->input('name');
-        // $course->proposed_at = now();
+        $course->proposed_at = now();
 
         $course->save();
 
@@ -628,13 +631,12 @@ class CourseController extends Controller
     }
 
     /**
-     * Samantha
      * updateCourse
-     * Actualizar nombre y duracion de curso
      */
-    public function updateCourse(UpdateCourseRequest $request, Course $course)
+    public function updateCourseNameAndDuration(UpdateCourseNameAndDurationRequest $request, Course $course)
     {
-        $course->course = $request->input('course');
+        $course->duration = $request->input('duration');
+        $course->name = $request->input('name');
 
         $course->save();
 
@@ -653,6 +655,19 @@ class CourseController extends Controller
      * deleteCourse
      */
 
+    public function destroyCourse(DestroyCourseRequest $course)
+    {
+        $course->delete();
+        return (new CourseResource($course))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Curso Eliminado',
+                    'detail' => '',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
+    }
 
     /*
         * approveCourse
@@ -706,10 +721,7 @@ class CourseController extends Controller
         return $course->showFile($file);
     }
 
-
     //Images
-
-
     public function uploadPublicImage(UploadImageRequest $request, Course $course)
     {
         return $course->uploadPublicImage($request);

@@ -4,7 +4,7 @@ namespace App\Http\Requests\V1\Cecy\Planifications;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class DestroyPlanificationRequest extends FormRequest
+class UpdatePlanificationByCourseRequest extends FormRequest
 {
   public function authorize()
   {
@@ -12,15 +12,11 @@ class DestroyPlanificationRequest extends FormRequest
   }
   public function rules()
   {
-    return [
-      'ids' => ['required'],
-    ];
+    return [];
   }
 
   public function attributes()
   {
-    return [
-      'ids' => 'ID`s de las planificaciones',
-    ];
+    return [];
   }
 }

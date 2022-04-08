@@ -1,9 +1,10 @@
 <?php
-namespace App\Http\Requests\V1\Cecy\Participants;
+
+namespace App\Http\Requests\V1\Cecy\DetailPlanifications;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AcceptParticipantRequest extends FormRequest
+class AssignInstructorsToDetailPlanificationRequest  extends FormRequest
 {
     public function authorize()
     {
@@ -12,21 +13,14 @@ class AcceptParticipantRequest extends FormRequest
     public function rules()
     {
         return [
-            
+            'ids' => ['required'],
         ];
     }
 
     public function attributes()
     {
         return [
-           
-        ];
-    }
-
-    public function messages()
-    {
-        return [
-            
+            'ids' => 'ID`s del detalle de planificación',
         ];
     }
 }

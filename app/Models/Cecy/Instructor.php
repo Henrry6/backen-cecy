@@ -42,7 +42,7 @@ class Instructor extends Model implements Auditable
 
     public function courseProfiles()
     {
-        return $this->belongsToMany(CourseProfile::class, 'cecy.instructor_course_profile', 'course_profile_id', 'instructor_id');
+        return $this->belongsToMany(CourseProfile::class, 'cecy.course_profile_instructor');
     }
 
     public function state()
@@ -115,6 +115,5 @@ class Instructor extends Model implements Auditable
             array_unshift($fields, 'id');
             return $query->select($fields);
         }
-    } 
-
+    }
 }

@@ -4,13 +4,18 @@ namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
 use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
-use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\GetPlanificationsByCourseRequest;
+use Illuminate\Http\Request;
+
 use App\Http\Requests\V1\Cecy\Authorities\IndexAuthorityRequest;
+use App\Http\Requests\V1\Cecy\Planifications\CataloguePlanificationRequest;
 use App\Http\Requests\V1\Cecy\Planifications\StorePlanificationByCourseRequest;
-use App\Http\Requests\V1\Cecy\Planifications\UpdateAssignResponsibleCecyRequest;
 use App\Http\Requests\V1\Cecy\Planifications\AddNeedsOfPlanification;
+use App\Http\Requests\V1\Cecy\Planifications\AssignResponsibleCecyRequest;
+use App\Http\Requests\V1\Cecy\Planifications\DestroyPlanificationRequest;
+use App\Http\Requests\V1\Cecy\Planifications\UpdatePlanificationByCourseRequest;
 use App\Http\Requests\V1\Cecy\Planifications\UpdatePlanificationRequest;
 use App\Http\Requests\V1\Cecy\Planifications\UpdateStatePlanificationRequest;
+use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\GetPlanificationsByCourseRequest;
 use App\Http\Resources\V1\Cecy\Courses\CourseCollection;
 use App\Http\Resources\V1\Cecy\Planifications\ResponsibleCoursePlanifications\PlanificationByCourseCollection;
 use App\Http\Resources\V1\Cecy\Planifications\ResponsibleCoursePlanifications\PlanificationByCourseResource;
@@ -26,13 +31,32 @@ use App\Models\Cecy\Instructor;
 use App\Models\Cecy\Planification;
 use App\Models\Cecy\SchoolPeriod;
 use App\Models\Core\State;
-use Illuminate\Http\Request;
 
 
 class PlanificationController extends Controller
 {
     public function __construct()
     {
+    }
+
+    public function catalogue(CataloguePlanificationRequest $request)
+    {
+        $sorts = explode(',', $request->input('sort'));
+
+        $planifications =  Planification::customOrderBy($sorts)
+            ->code($request->input('search'))
+            ->limit(1000)
+            ->get();
+
+        return (new PlanificationCollection($planifications))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
     }
 
     public function updatePlanificationByCecy(UpdatePlanificationRequest $request, Planification $planification)
@@ -75,7 +99,7 @@ class PlanificationController extends Controller
             ->response()->setStatusCode(201);
     }
 
-    public function updateAssignResponsibleCecy(UpdateAssignResponsibleCecyRequest $request, Planification $planification)
+    public function assignResponsibleCecy(AssignResponsibleCecyRequest $request, Planification $planification)
     {
         $planification->responsibleCecy()->associate(Authority::find($request->input('responsibleCecy.id')));
         $planification->save();
@@ -370,19 +394,21 @@ class PlanificationController extends Controller
             ->response()->setStatusCode(201);
     }
 
-
-
     /**
      * updatePlanificationByCourse
      */
-
-    public function updatePlanificationByCourse(UpdatePlanificationByCourseRequest $request, Course $course)
+    public function updatePlanificationByCourse(UpdatePlanificationByCourseRequest $request, Planification $planification)
     {
-        $course->course = $request->input('course');
+        $instructor = Instructor::find($request->input('responsibleCourse.id'));
 
-        $course->save();
+        $planification->responsibleCourse()->associate($instructor);
 
-        return (new CourseResource($course))
+        $planification->ended_at = $request->input('endedAt');
+        $planification->started_at = $request->input('startedAt');
+
+        $planification->save();
+
+        return (new PlanificationResource($planification))
             ->additional([
                 'msg' => [
                     'summary' => 'Planificación Actualizado',
@@ -402,7 +428,7 @@ class PlanificationController extends Controller
         return (new PlanificationResource($planification))
             ->additional([
                 'msg' => [
-                    'summary' => 'Registro Eliminado',
+                    'summary' => 'Planificación Eliminado',
                     'detail' => '',
                     'code' => '201'
                 ]
