@@ -317,7 +317,7 @@ Route::apiResource('registrations', RegistrationController::class);
 Route::controller(ParticipantController::class)->group(function () {
     Route::prefix('participants/{participant}')->group(function () {
         // Route::put('update-registration/{registration}', 'participantRegistrationStateModification');
-        Route::put('update-state', 'acceptParticipant');
+        Route::put('update-state', 'updateParticipantState');
         Route::delete(' destroy-participant', 'destroyParticipant');
         Route::get('information', 'indexParticipant');
         Route::put('update-participant-user', 'updateParticipantUser');
