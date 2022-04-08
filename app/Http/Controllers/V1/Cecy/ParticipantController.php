@@ -238,9 +238,10 @@ class ParticipantController extends Controller
     }
 
     //se modificarac los datos del participante
-    public function updateParticipantUser(UpdateParticipantRequest $request, Participant $participant)
+    public function updateParticipantUser(UpdateParticipantUserRequest $request, Participant $participant)
     {
-        $user = $participant->user();
+        $user = $participant->user()->first();
+        
         $user->identificationType()->associate(Catalogue::find($request->input('identificationType.id')));
         $user->sex()->associate(Catalogue::find($request->input('sex.id')));
         $user->gender()->associate(Catalogue::find($request->input('gender.id')));
