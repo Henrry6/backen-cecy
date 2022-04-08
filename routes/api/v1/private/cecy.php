@@ -152,7 +152,7 @@ Route::controller(CourseController::class)->group(function () {
         Route::get('', 'show');
         Route::put('cecy-responsible/approve', 'approveCourse');
         Route::put('cecy-responsible/decline', 'declineCourse');
-        Route::put('career-coordinator', 'updateCourse');
+        Route::put('career-coordinator', 'updateCourseNameAndDuration');
         Route::delete('/courses', 'destroyCourse');
 
         Route::prefix('')->group(function () {
