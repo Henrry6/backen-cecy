@@ -13,14 +13,15 @@ class AssignInstructorsToDetailPlanificationRequest  extends FormRequest
     public function rules()
     {
         return [
-            'ids' => ['required'],
+            'ids' => ['required', 'array'],
+            'ids.*' => ['integer'],
         ];
     }
 
     public function attributes()
     {
         return [
-            'ids' => 'ID`s del detalle de planificación',
+            'ids' => 'instructores',
         ];
     }
 }
