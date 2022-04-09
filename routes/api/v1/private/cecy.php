@@ -108,15 +108,18 @@ Route::controller(PlanificationController::class)->group(function () {
  **********************************************************************************************************************/
 Route::controller(DetailPlanificationController::class)->group(function () {
     Route::prefix('detail-planifications/{detail_planification}')->group(function () {
-        Route::get('courses/{course}', 'getDetailPlanificationByCourse');
+        Route::get('/detail-course/{course}', 'getDetailPlanificationsByCourse');
         Route::get('', 'showDetailPlanification');
         Route::put('', 'updateDetailPlanification');
+        Route::put('','updatedetailPlanificationByCecy');
         Route::delete('', 'deleteDetailPlanification');
+        Route::post('', 'registerDetailPlanification');
         Route::post('instructors-assignment', 'assignInstructorToDetailPlanification');
     });
 
     Route::prefix('detail-planifications')->group(function () {
         Route::get('planifications/{planification}', 'getDetailPlanificationsByPlanification');
+        Route::get('responsible', 'getDetailPlanificationsByResponsibleCourse');
         Route::get('catalogue/catalogue', 'catalogue');
         Route::post('', 'storeDetailPlanification');
     });
@@ -217,6 +220,7 @@ Route::controller(DetailAttendanceController::class)->group(function () {
     });
 
     Route::prefix('detail-attendances')->group(function () {
+        Route::patch('save-detail-attendance', 'saveDetailAttendance');
         Route::patch('destroys', 'destroysDetailPlanifications');
         Route::get('catalogue', 'catalogue');
     });
@@ -324,7 +328,8 @@ Route::controller(ParticipantController::class)->group(function () {
     Route::prefix('participants/{participant}')->group(function () {
         // Route::put('update-registration/{registration}', 'participantRegistrationStateModification');
         Route::put('update-state', 'updateParticipantState');
-        Route::delete(' destroy-participant', 'destroyParticipant');
+        Route::post('participant-registration-user', 'createParticipantUser');
+        Route::delete('destroy-participant', 'destroyParticipant');
         Route::put('update-participant-user', 'updateParticipantUser');
     });
 

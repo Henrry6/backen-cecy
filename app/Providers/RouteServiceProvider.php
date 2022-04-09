@@ -49,8 +49,8 @@ class RouteServiceProvider extends ServiceProvider
 
     protected function mapApiRoutesPrivates()
     {
-        $prefix = "api/v1";
-        $path = "routes/$prefix/private";
+        $prefix = "api/v1/private";
+        $path = "routes/$prefix";
 
         Route::prefix($prefix)
             ->middleware(['api', 'auth:sanctum'])
@@ -67,8 +67,8 @@ class RouteServiceProvider extends ServiceProvider
 
     protected function mapApiRoutesPublic()
     {
-        $prefix = "api/v1";
-        $path = "routes/$prefix/public";
+        $prefix = "api/v1/public";
+        $path = "routes/$prefix";
 
         Route::prefix($prefix)
             ->middleware('api')
