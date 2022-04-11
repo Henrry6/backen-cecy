@@ -17,11 +17,7 @@ class CreateCecyClassroomsTable extends Migration
                 ->nullable()
                 ->comment('Tipo de aula donde se va impartir el curso: Aula, Laboratorio, Oficina')
                 ->constrained('cecy.catalogues');
-
-            $table->text('description')
-                ->nullable()
-                ->comment('Descripción del aula');
-
+                
             $table->integer('capacity')
                 ->nullable()
                 ->comment('Capacidad del aula a recibir');
@@ -29,6 +25,10 @@ class CreateCecyClassroomsTable extends Migration
             $table->string('code')
                 ->nullable()
                 ->comment('Código del aula');
+
+            $table->text('description')
+                ->nullable()
+                ->comment('Descripción del aula');
 
             $table->string('name')
                 ->nullable()
