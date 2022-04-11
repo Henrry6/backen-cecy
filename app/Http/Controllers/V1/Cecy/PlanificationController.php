@@ -12,7 +12,7 @@ use App\Http\Requests\V1\Cecy\Planifications\StorePlanificationByCourseRequest;
 use App\Http\Requests\V1\Cecy\Planifications\AddNeedsOfPlanification;
 use App\Http\Requests\V1\Cecy\Planifications\AssignResponsibleCecyRequest;
 use App\Http\Requests\V1\Cecy\Planifications\DestroyPlanificationRequest;
-use App\Http\Requests\V1\Cecy\Courses\CareerCoordinator\UpdatePlanificationByCourseRequest;
+use App\Http\Requests\V1\Cecy\Planifications\UpdatePlanificationByCourseRequest;
 use App\Http\Requests\V1\Cecy\Planifications\UpdatePlanificationRequest;
 use App\Http\Requests\V1\Cecy\Planifications\UpdateStatePlanificationRequest;
 use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\GetPlanificationsByCourseRequest;
