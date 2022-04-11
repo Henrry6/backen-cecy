@@ -325,7 +325,6 @@ class DetailPlanificationController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    //actualizar informacion del detalle planificación
     public function updatedetailPlanificationByCecy(UpdateDetailPlanificationRequest $request) //hecho
     {
         $loggedAuthority = Authority::where('user_id', $request->user()->id)->get();

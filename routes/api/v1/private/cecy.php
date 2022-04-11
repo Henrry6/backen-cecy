@@ -111,7 +111,7 @@ Route::controller(DetailPlanificationController::class)->group(function () {
         Route::get('/detail-course/{course}', 'getDetailPlanificationsByCourse');
         Route::get('', 'showDetailPlanification');
         Route::put('', 'updateDetailPlanification');
-        Route::put('','updatedetailPlanificationByCecy');
+        // Route::put('','updatedetailPlanificationByCecy');
         Route::delete('', 'deleteDetailPlanification');
         Route::post('', 'registerDetailPlanification');
         Route::post('instructors-assignment', 'assignInstructorToDetailPlanification');
