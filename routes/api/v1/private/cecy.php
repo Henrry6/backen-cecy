@@ -329,7 +329,7 @@ Route::controller(ParticipantController::class)->group(function () {
         // Route::put('update-registration/{registration}', 'participantRegistrationStateModification');
         Route::put('update-state', 'updateParticipantState');
         Route::post('participant-registration-user', 'createParticipantUser');
-        Route::delete('destroy-participant', 'destroyParticipant');
+        Route::delete('delete-participant', 'destroyParticipant');
         Route::put('update-participant-user', 'updateParticipantUser');
     });
 
