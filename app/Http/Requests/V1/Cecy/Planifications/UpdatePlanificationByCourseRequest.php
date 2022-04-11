@@ -12,11 +12,19 @@ class UpdatePlanificationByCourseRequest extends FormRequest
   }
   public function rules()
   {
-    return [];
+    return [
+      'responsible.id' => ['required', 'integer'],
+      'endedAt' => ['required', 'date'],
+      'startedAt' => ['required', 'date'],
+    ];
   }
 
   public function attributes()
   {
-    return [];
+    return [
+      'responsible.id' => 'responsable de planificación',
+      'endedAt' => 'fecha de finalización',
+      'startedAt' => 'fecha de inicio',
+    ];
   }
 }

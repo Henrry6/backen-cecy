@@ -157,7 +157,7 @@ Route::controller(CourseController::class)->group(function () {
         Route::put('cecy-responsible/approve', 'approveCourse');
         Route::put('cecy-responsible/decline', 'declineCourse');
         Route::put('career-coordinator', 'updateCourseNameAndDuration');
-        Route::delete('/courses', 'destroyCourse');
+        Route::delete('career-coordinator', 'destroyCourse');
 
         Route::prefix('')->group(function () {
             Route::get('/topics', [TopicController::class, 'getTopics']);
@@ -329,7 +329,7 @@ Route::controller(ParticipantController::class)->group(function () {
         // Route::put('update-registration/{registration}', 'participantRegistrationStateModification');
         Route::put('update-state', 'updateParticipantState');
         Route::post('participant-registration-user', 'createParticipantUser');
-        Route::delete('destroy-participant', 'destroyParticipant');
+        Route::delete('delete-participant', 'destroyParticipant');
         Route::put('update-participant-user', 'updateParticipantUser');
     });
 
