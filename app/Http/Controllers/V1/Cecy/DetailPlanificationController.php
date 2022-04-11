@@ -422,13 +422,13 @@ class DetailPlanificationController extends Controller
 
     public function assignInstructorToDetailPlanification(AssignInstructorsToDetailPlanificationRequest $request, DetailPlanification $detailPlanification)
     {
-        $detailPlanification->instructors()->sync([1, 2, 3]);
+        $detailPlanification->instructors()->sync($request->input('ids'));
 
         return (new ResponsibleCourseDetailPlanificationResource($detailPlanification))
             ->additional([
                 'msg' => [
                     'summary' => 'Éxito',
-                    'detail' => 'Registro actualizado',
+                    'detail' => 'Instructores asignados',
                     'code' => '201'
                 ]
             ])

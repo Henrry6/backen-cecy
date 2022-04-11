@@ -80,7 +80,7 @@ class CourseController extends Controller
     {
         $sorts = explode(',', $request->sort);
 
-        $courses =  Course::customOrderBy($sorts)
+        $courses = Course::customOrderBy($sorts)
             ->abbreviation($request->input('search'))
             ->alignment($request->input('search'))
             ->code($request->input('search'))
@@ -580,7 +580,7 @@ class CourseController extends Controller
             ->customOrderBy($sorts)
             ->code(($request->input('search')))
             ->name(($request->input('search')))
-            ->schoolPeriodId(($request->input('schoolPeriod.id')))
+            ->schoolPeriodId($request->input('schoolPeriod.id'))
             ->paginate($request->input('perPage'));
 
         return (new CourseCollection($courses))
