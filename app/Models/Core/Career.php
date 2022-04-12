@@ -2,12 +2,12 @@
 
 namespace App\Models\Core;
 
-use App\Models\Cecy\Authority;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as Auditing;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Cecy\Authority;
 use App\Models\Cecy\Course;
 
 class Career extends Model implements Auditable
