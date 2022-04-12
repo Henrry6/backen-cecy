@@ -13,18 +13,14 @@ class UpdateParticipantUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'personType.id' => ['required', 'integer'],
-            'state.id' => ['required', 'integer'],
-            'user.id' => ['required', 'integer'],
+            
         ];
     }
 
     public function attributes()
     {
         return [
-            'personType.id' => 'Tipo de participante',
-            'state.id' => 'Estado del partipante',
-            'user.id' => 'Usuario',
+            
         ];
     }
 }
