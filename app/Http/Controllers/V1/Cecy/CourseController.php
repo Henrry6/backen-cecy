@@ -574,7 +574,9 @@ class CourseController extends Controller
      */
     public function getCoursesByCareer(GetCoursesByCareerRequest $request, Career $career)
     {
-        $sorts = explode(',', $request->sort);
+        $coordinator = Authority::find($request->user()->id);
+
+        $sorts = explode(',', $request->input('sort'));
 
         $courses = $career->courses()
             ->customOrderBy($sorts)

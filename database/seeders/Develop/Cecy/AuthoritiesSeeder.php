@@ -18,7 +18,8 @@ class AuthoritiesSeeder extends Seeder
     public function run()
     {
         $this->createAuthoritiesCatalogue();
-        $this->createAuthoritiess();
+        $this->createAuthorities();
+        $this->createCareerables();
     }
 
     public function createAuthoritiesCatalogue()
@@ -85,7 +86,7 @@ class AuthoritiesSeeder extends Seeder
         )->create();
     }
 
-    public function createAuthoritiess()
+    public function createAuthorities()
     {
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
         $faker = Factory::create();
@@ -135,5 +136,9 @@ class AuthoritiesSeeder extends Seeder
                 'electronic_signature' => $faker->text($maxNbChars = 50)
             ],
         )->create();
+    }
+    public function createCareerables()
+    {
+        
     }
 }

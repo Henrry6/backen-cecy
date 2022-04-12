@@ -2,6 +2,7 @@
 
 namespace App\Models\Core;
 
+use App\Models\Cecy\Authority;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -27,9 +28,14 @@ class Career extends Model implements Auditable
     ];
 
     // Relationships
-    public function careerable()
+    // public function careerable()
+    // {
+    //     return $this->morphTo();
+    // }
+
+    public function authorities()
     {
-        return $this->morphTo();
+        return $this->morphedByMany(Authority::class, 'careerable');
     }
 
     public function institution()

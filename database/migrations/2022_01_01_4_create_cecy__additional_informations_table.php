@@ -49,7 +49,7 @@ class CreateCecyAdditionalInformationsTable extends Migration
 
             $table->json('course_follows')
                 ->nullable()
-                ->comment('Cursos que te gustaria seguir? Array');
+                ->comment('Cursos que te gustaria seguir?');
 
             $table->json('course_knows')
                 ->comment('¿Cómo se enteró del curso? Array');
