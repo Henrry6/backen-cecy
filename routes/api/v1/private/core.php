@@ -64,6 +64,7 @@ Route::apiResource('careers', CareerController::class);
 
 Route::prefix('career')->group(function () {
     Route::get('catalogue', [CareerController::class, 'catalogue']);
+    Route::get('coordinator-career', [CareerController::class, 'getCareersByCoordinatorCareer']);
 });
 
 

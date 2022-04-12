@@ -135,10 +135,14 @@ Route::controller(DetailPlanificationController::class)->group(function () {
  **********************************************************************************************************************/
 Route::controller(CourseController::class)->group(function () {
     Route::prefix('courses')->group(function () {
+        Route::prefix('careers')->group(function () {
+        });
+
         Route::prefix('careers/{career}')->group(function () {
             Route::get('', 'getCoursesByCareer');
             Route::post('', 'storeCourse');
         });
+
         Route::get('', 'getCourses');
         Route::post('', 'storeNewCourse');
         Route::get('private-courses-participant', 'getPrivateCoursesByParticipantType');
@@ -153,7 +157,6 @@ Route::controller(CourseController::class)->group(function () {
     });
 
     Route::prefix('courses/{course}')->group(function () {
-        Route::get('', 'show');
         Route::put('cecy-responsible/approve', 'approveCourse');
         Route::put('cecy-responsible/decline', 'declineCourse');
         Route::put('career-coordinator', 'updateCourseNameAndDuration');
@@ -347,7 +350,7 @@ Route::apiResource('participants', ParticipantController::class);
  **********************************************************************************************************************/
 Route::apiResource('detail-school-periods', DetailSchoolPeriodController::class);
 Route::prefix('detail-school-period')->group(function () {
-    Route::patch('/{detail-school-period}', [DetailSchoolPeriodController::class, 'destroys']);
+    Route::patch('{detail-school-period}', [DetailSchoolPeriodController::class, 'destroys']);
 });
 
 /*
