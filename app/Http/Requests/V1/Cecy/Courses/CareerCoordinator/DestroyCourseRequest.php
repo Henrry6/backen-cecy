@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\V1\Cecy\Planifications;
+namespace App\Http\Requests\V1\Cecy\Courses;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class DestroyPlanificationRequest extends FormRequest
+class DestroyCourseRequest extends FormRequest
 {
   public function authorize()
   {
@@ -20,7 +20,7 @@ class DestroyPlanificationRequest extends FormRequest
   public function attributes()
   {
     return [
-      'ids' => 'ID`s de las planificaciones',
+      'ids' => 'ID`s de los cursos',
     ];
   }
 }

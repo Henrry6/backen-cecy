@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\Cecy\DetailPlanifications\AssignInstructorsToDetailPlanificationRequest;
 use App\Http\Requests\V1\Cecy\DetailPlanifications\CatalogueDetailPlanificationRequest;
 use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\DeleteDetailPlanificationRequest;
 use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\DestroysDetailPlanificationRequest;
@@ -29,9 +30,13 @@ use App\Models\Cecy\Planification;
 
 class DetailPlanificationController extends Controller
 {
+    public function __construct()
+    {
+    }
+
     public function catalogue(CatalogueDetailPlanificationRequest $request)
     {
-        $sorts = explode(',', $request->sort);
+        $sorts = explode(',', $request->input('sort'));
 
         $detailPlanifications =  DetailPlanification::customOrderBy($sorts)
             ->observation($request->input('search'))
@@ -49,14 +54,10 @@ class DetailPlanificationController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    public function __construct()
-    {
-    }
     /*
         Obtener los horarios de cada paralelo dado un curso
     */
     // DetailController (done) =>conflicto en controlador
-
     public function getDetailPlanificationsByCourse(Course $course) //hecho
     {
 
@@ -76,12 +77,11 @@ class DetailPlanificationController extends Controller
     /**
      * Get all detail planifications filtered by planification
      */
-    // DetailPlanificationController
     public function getDetailPlanificationsByPlanification(GetDetailPlanificationsByPlanificationRequest $request, Planification $planification)
     {
         $detailPlanifications = $planification
             ->detailPlanifications()
-            ->paginate($request->input('per_page'));
+            ->paginate($request->input('perPage'));
 
 
         return (new ResponsibleCourseDetailPlanificationCollection($detailPlanifications))
@@ -98,7 +98,7 @@ class DetailPlanificationController extends Controller
     /**
      * Store a detail planification record
      */
-    public function registerDetailPlanification(RegisterDetailPlanificationRequest $request)
+    public function storeDetailPlanification(RegisterDetailPlanificationRequest $request)
     {
         $loggedInInstructor = Instructor::where('user_id', $request->user()->id)->first();
         if (!$loggedInInstructor) {
@@ -178,7 +178,6 @@ class DetailPlanificationController extends Controller
     /**
      * Return a detailPlanification record
      */
-    // DetailPlanificationController
     public function showDetailPlanification(ShowDetailPlanificationRequest $request, DetailPlanification $detailPlanification)
     {
         return (new ResponsibleCourseDetailPlanificationResource($detailPlanification))
@@ -326,7 +325,6 @@ class DetailPlanificationController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    //actualizar informacion del detalle planificación
     public function updatedetailPlanificationByCecy(UpdateDetailPlanificationRequest $request) //hecho
     {
         $loggedAuthority = Authority::where('user_id', $request->user()->id)->get();
@@ -419,5 +417,20 @@ class DetailPlanificationController extends Controller
                 ]
             ])
             ->response()->setStatusCode(200);
+    }
+
+    public function assignInstructorToDetailPlanification(AssignInstructorsToDetailPlanificationRequest $request, DetailPlanification $detailPlanification)
+    {
+        $detailPlanification->instructors()->sync($request->input('ids'));
+
+        return (new ResponsibleCourseDetailPlanificationResource($detailPlanification))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Éxito',
+                    'detail' => 'Instructores asignados',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
     }
 }

@@ -4,10 +4,12 @@ namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+
 use App\Http\Requests\V1\Cecy\Participants\AcceptParticipantRequest;
 use App\Http\Requests\V1\Cecy\Participants\IndexParticipantRequest;
 use App\Http\Requests\V1\Cecy\Participants\UpdateParticipantRequest;
-use App\Http\Requests\V1\Cecy\Participants\StoreParticipantRequest;
+use App\Http\Requests\V1\Cecy\Participants\UpdateParticipantUserRequest;
+//use App\Http\Requests\V1\Cecy\Participants\StoreParticipantRequest;
 use App\Http\Requests\V1\Cecy\Planifications\IndexPlanificationRequest;
 use App\Http\Requests\V1\Cecy\Participants\StoreParticipantUserRequest;
 use App\Http\Resources\V1\Cecy\Participants\ParticipantCollection;
@@ -202,7 +204,6 @@ class ParticipantController extends Controller
     {
         //$user = User::where('username', $request->input('username'))
         //->orWhere('email', $request->input('email'))->first();
-
         $user = new User();
         $user->identificationType()->associate(CoreCatalogue::find($request->input('identificationType.id')));
         $user->gender()->associate(CoreCatalogue::find($request->input('gender.id')));
@@ -238,9 +239,10 @@ class ParticipantController extends Controller
     }
 
     //se modificarac los datos del participante
-    public function updateParticipantUser(UpdateParticipantRequest $request, Participant $participant)
+    public function updateParticipantUser(UpdateParticipantUserRequest $request, Participant $participant)
     {
-        $user = $participant->user();
+        $user = $participant->user()->first();
+        
         $user->identificationType()->associate(Catalogue::find($request->input('identificationType.id')));
         $user->sex()->associate(Catalogue::find($request->input('sex.id')));
         $user->gender()->associate(Catalogue::find($request->input('gender.id')));
@@ -253,6 +255,7 @@ class ParticipantController extends Controller
         $user->lastname = $request->input('lastname');
         $user->birthdate = $request->input('birthdate');
 
+        $participant->save();
         $participant = null;
         DB::transaction(function () use ($request, $user) {
             $user->save();
@@ -271,6 +274,19 @@ class ParticipantController extends Controller
             ->response()->setStatusCode(201);
     }
 
+    /*public function updateParticipant($id , $user){
+
+        return (new UserResource($user))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Datos Actualizados',
+                    'detail' => '',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);   
+    }*/
+
 
     //se para ver el listado de los participante
     public function index(IndexParticipantRequest $request)
@@ -278,8 +294,8 @@ class ParticipantController extends Controller
         $sorts = explode(',', $request->input('sort'));
 
         $participants = Participant::customOrderBy($sorts)
-             ->user($request->input('userSearch'))
-            ->paginate($request->input('perPage'));
+            ->user($request->input('userSearch'))
+            ->paginate($request->input('per_page'));
 
         return (new ParticipantCollection($participants))
             ->additional([
@@ -292,7 +308,7 @@ class ParticipantController extends Controller
     }
 
     //se cambia el estado de los participantes para su acceptación
-    public function acceptParticipant(AcceptParticipantRequest $request, Participant $participant)
+    public function updateParticipantState(UpdateParticipantRequest $request, Participant $participant)
     {
         $participant->state()->associate(Catalogue::find($request->input('state.id')));
         $participant->save();
@@ -308,7 +324,6 @@ class ParticipantController extends Controller
             ->response()->setStatusCode(201);
     }
 
-    //se elimina el participante seleccionado 
     public function destroyParticipant(Participant $participant)
     {
         $participant->delete();

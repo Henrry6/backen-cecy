@@ -1,26 +1,27 @@
 <?php
 
-namespace App\Http\Requests\V1\Cecy\Courses;
+namespace App\Http\Requests\V1\Cecy\Planifications;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class DestroysCourseRequest extends FormRequest
+class AssignResponsibleCecyRequest extends FormRequest
 {
   public function authorize()
   {
     return true;
   }
+
   public function rules()
   {
     return [
-      'ids' => ['required'],
+      'responsibleCecy.id' => ['required', 'integer']
     ];
   }
 
   public function attributes()
   {
     return [
-      'ids' => 'ID`s de los cursos',
+      'responsibleCecy.id' => 'responsable del cecy'
     ];
   }
 }

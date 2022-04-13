@@ -2,6 +2,7 @@
 
 namespace App\Models\Cecy;
 
+use App\Models\Core\Career;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as Auditing;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -26,7 +27,11 @@ class Authority extends Model implements Auditable
     ];
 
     // Relationships
-    //revisar
+    public function careers()
+    {
+        return $this->morphToMany(Career::class,'careerable');
+    }
+
     public function institution()
     {
         return $this->belongsTo(Institution::class, 'id','institution_id');
@@ -107,5 +112,5 @@ class Authority extends Model implements Auditable
             array_unshift($fields, 'id');
             return $query->select($fields);
         }
-    }    
+    }
 }

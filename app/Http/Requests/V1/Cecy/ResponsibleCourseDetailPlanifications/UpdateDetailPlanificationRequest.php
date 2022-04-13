@@ -30,8 +30,10 @@ class UpdateDetailPlanificationRequest extends FormRequest
                 'required', 'integer',
                 new HoursRule($this->day['id'], $this->startedTime, $this->endedTime)
             ],
-            'endedTime' => ['required', 'after:startedTime', 'date_format:"H:i"'],
-            'startedTime' => ['required', 'date_format:"H:i"'],
+            'endedTime' => ['required', 'after:startedTime'],
+            // 'endedTime' => ['required', 'after:startedTime', 'date_format:"H:i"'],
+            'startedTime' => ['required',],
+            // 'startedTime' => ['required', 'date_format:"H:i"'],
         ];
     }
 

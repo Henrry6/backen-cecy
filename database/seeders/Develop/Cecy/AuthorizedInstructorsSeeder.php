@@ -4,7 +4,6 @@ namespace Database\Seeders\Develop\Cecy;
 
 use App\Models\Cecy\CourseProfile;
 use App\Models\Cecy\Instructor;
-use App\Models\Cecy\ProfileInstructorCourse;
 use Illuminate\Database\Seeder;
 
 class AuthorizedInstructorsSeeder extends Seeder
@@ -16,17 +15,17 @@ class AuthorizedInstructorsSeeder extends Seeder
      */
     public function run()
     {
-        // AuthorizedInstructor::factory()->create();
+        // Instructor::factory()->create();
 
-        $courseProfiles = CourseProfile::get();
-        $instructors = Instructor::get();
+        // $courseProfiles = CourseProfile::get();
+        // $instructors = Instructor::get();
 
-        foreach ($instructors as $instructor) {
-            foreach ($courseProfiles as $courseProfile) {
-                $instructor->courseProfiles()->attach(
-                    $courseProfile->id
-                );
-            }
-        }
+        // foreach ($instructors as $instructor) {
+        //     foreach ($courseProfiles as $courseProfile) {
+        //         $instructor->courseProfiles()->attach(
+        //             $courseProfile->id
+        //         );
+        //     }
+        // }
     }
 }

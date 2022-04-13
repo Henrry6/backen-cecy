@@ -1,9 +1,10 @@
 <?php
+
 namespace App\Http\Requests\V1\Cecy\Participants;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AcceptParticipantRequest extends FormRequest
+class UpdateParticipantUserRequest extends FormRequest
 {
     public function authorize()
     {
@@ -17,13 +18,6 @@ class AcceptParticipantRequest extends FormRequest
     }
 
     public function attributes()
-    {
-        return [
-           
-        ];
-    }
-
-    public function messages()
     {
         return [
             

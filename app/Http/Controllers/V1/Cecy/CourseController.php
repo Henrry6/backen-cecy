@@ -12,6 +12,7 @@ use App\Http\Requests\V1\Core\Images\IndexImageRequest;
 use App\Http\Requests\V1\Core\Images\UploadImageRequest;
 use App\Http\Requests\V1\Cecy\Courses\ApproveCourseRequest;
 use App\Http\Requests\V1\Cecy\Courses\DeclineCourseRequest;
+use App\Http\Requests\V1\Cecy\Courses\CareerCoordinator\DestroyCourseRequest;
 use App\Http\Requests\V1\Cecy\Courses\CoordinatorCecy\GetCoursesByCoordinatorCecyRequest;
 use App\Http\Requests\V1\Cecy\Courses\GetCoursesByCategoryRequest;
 use App\Http\Requests\V1\Cecy\Courses\GetCoursesByNameRequest;
@@ -23,6 +24,7 @@ use App\Http\Requests\V1\Cecy\Courses\UpdateCurricularDesign;
 use App\Http\Requests\V1\Cecy\Courses\UpdateStateCourseRequest;
 use App\Http\Requests\V1\Cecy\Courses\UploadCertificateOfApprovalRequest;
 use App\Http\Requests\V1\Cecy\Courses\CareerCoordinator\StoreCourseRequest;
+use App\Http\Requests\V1\Cecy\Courses\CareerCoordinator\UpdateCourseNameAndDurationRequest;
 use App\Http\Requests\V1\Cecy\Courses\CatalogueCourseRequest;
 use App\Http\Requests\V1\Cecy\Courses\UpdateCourseRequest;
 use App\Http\Requests\V1\Cecy\Planifications\GetPlanificationByResponsableCourseRequest;
@@ -78,7 +80,7 @@ class CourseController extends Controller
     {
         $sorts = explode(',', $request->sort);
 
-        $courses =  Course::customOrderBy($sorts)
+        $courses = Course::customOrderBy($sorts)
             ->abbreviation($request->input('search'))
             ->alignment($request->input('search'))
             ->code($request->input('search'))
@@ -572,13 +574,15 @@ class CourseController extends Controller
      */
     public function getCoursesByCareer(GetCoursesByCareerRequest $request, Career $career)
     {
-        $sorts = explode(',', $request->sort);
+        $coordinator = Authority::find($request->user()->id);
+
+        $sorts = explode(',', $request->input('sort'));
 
         $courses = $career->courses()
             ->customOrderBy($sorts)
             ->code(($request->input('search')))
             ->name(($request->input('search')))
-            ->schoolPeriodId(($request->input('schoolPeriod.id')))
+            ->schoolPeriodId($request->input('schoolPeriod.id'))
             ->paginate($request->input('perPage'));
 
         return (new CourseCollection($courses))
@@ -631,7 +635,7 @@ class CourseController extends Controller
     /**
      * updateCourse
      */
-    public function updateCourse(UpdateCourseRequest $request, Course $course)
+    public function updateCourseNameAndDuration(UpdateCourseNameAndDurationRequest $request, Course $course)
     {
         $course->duration = $request->input('duration');
         $course->name = $request->input('name');

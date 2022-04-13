@@ -19,6 +19,8 @@ use App\Models\Cecy\Catalogue;
 // use App\Models\Cecy\Course;
 use App\Models\Cecy\Instructor;
 use App\Models\Authentication\User;
+use App\Models\Cecy\Course;
+use App\Models\Cecy\DetailPlanification;
 
 class InstructorController extends Controller
 {
@@ -54,7 +56,7 @@ class InstructorController extends Controller
         $sorts = explode(',', $request->input('sort'));
 
         $instructors = Instructor::customOrderBy($sorts)
-            ->paginate($request->input('per_page'));
+            ->paginate($request->input('perPage'));
 
         return (new InstructorCollection($instructors))
             ->additional([
@@ -73,11 +75,11 @@ class InstructorController extends Controller
         $instructor = new Instructor();
 
         $instructor->state()
-            ->associate(Catalogue::find($request->input('state')));
+            ->associate(Catalogue::find($request->input('state.id')));
         $instructor->type()
-            ->associate(Catalogue::find($request->input('type')));
+            ->associate(Catalogue::find($request->input('type.id')));
         $instructor->user()
-            ->associate(User::find($request->input('user')));
+            ->associate(User::find($request->input('user.id')));
 
         $instructor->save();
 
@@ -150,4 +152,50 @@ class InstructorController extends Controller
             ])
             ->response()->setStatusCode(201);
     }
+
+
+    public function getAuthorizedInstructorsOfCourse(IndexInstructorRequest $request, DetailPlanification $detailPlanification) //mejor seria que vieniera el detalle de planification como parametro en lugar del curso,
+    {
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+
+        $activeState = Catalogue::where('type', $catalogue['instructor_state']['type'])
+            ->where('code', $catalogue['instructor_state']['active'])->first();
+
+        $planification = $detailPlanification->planification()->with('course')->first();
+        $course = $planification->course;
+
+        // $instructors = Instructor::whereRelation('courseProfiles', 'state_id', $activeState->id)->get();
+        $instructors = Instructor::whereHas('courseProfiles', function ($courseProfiles) use ($course, $activeState) {
+            $courseProfiles->where('course_id', $course->id)
+                ->where('state_id', $activeState->id);
+        })->get();
+
+        // $instructors = $course->courseProfile()->first();
+        // return $instructors;
+        return (new InstructorCollection($instructors))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Éxito',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
+
+    public function getAssignedInstructors(IndexInstructorRequest $request, DetailPlanification $detailPlanification)
+    {
+        $instructors = $detailPlanification->instructors()->get();
+
+        return (new InstructorCollection($instructors))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Éxito',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
+
 }
