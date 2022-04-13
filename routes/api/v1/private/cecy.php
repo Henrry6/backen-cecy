@@ -140,7 +140,7 @@ Route::controller(CourseController::class)->group(function () {
 
         Route::prefix('careers/{career}')->group(function () {
             Route::get('', 'getCoursesByCareer');
-            Route::post('', 'storeCourse');
+            Route::post('', 'storeCourseByCareer');
         });
 
         Route::get('', 'getCourses');

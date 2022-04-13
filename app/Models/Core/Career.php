@@ -35,7 +35,7 @@ class Career extends Model implements Auditable
 
     public function authorities()
     {
-        return $this->morphedByMany(Authority::class, 'careerable');
+        return $this->morphedByMany(Authority::class, 'core.careerable');
     }
 
     public function institution()

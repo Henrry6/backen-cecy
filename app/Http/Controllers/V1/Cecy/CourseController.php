@@ -598,7 +598,7 @@ class CourseController extends Controller
     /**
      * storeNewCourse
      */
-    public function storeCourse(StoreCourseRequest $request, Career $career)
+    public function storeCourseByCareer(StoreCourseRequest $request, Career $career)
     {
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
 

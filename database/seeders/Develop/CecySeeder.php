@@ -36,34 +36,32 @@ class CecySeeder extends Seeder
 {
     public function run()
     {
-        // $this->call([
-        //     ClassroomsSeeder::class,
-        //     InstructorsSeeder::class,
-        //     CoursesSeeder::class,
-        //     InstitutionsSeeder::class,
-        //     RequirementsSeeder::class,
-        //     SchoolPeriodsSeeder::class,
-        //     AuthoritiesSeeder::class,
-        //     DetailSchoolPeriodsSeeder::class,
-        //     ParticipantsSeeder::class,
-        //     PlanificationsSeeder::class,
-        //     DetailPlanificationsSeeder::class,
-        //     RegistrationsSeeder::class,
-        //     AdditionalInformationsSeeder::class,
-        //     RegistrationRequerimentsSeeder::class,
-        //     PrerequisitesSeeder::class,
-        //     CourseProfilesSeeder::class,
-        //     TopicsSeeder::class,
-        //     AttendancesSeeder::class,
-        //     ParticipantCourseSeeder::class,
-        //     DetailAttendancesSeeder::class,
-        //     DetailPlanificationsInstructorSeeder::class,
-        //     // AuthorizedInstructorsSeeder::class,
-        //     //CertificatesSeeder::class,
-        //     //NotificationsSeeder::class,
-        //     PhotographicRecordsSeeder::class,
-        // ]);
-
-        $this->call([AuthoritiesSeeder::class]);
+        $this->call([
+            ClassroomsSeeder::class,
+            InstructorsSeeder::class,
+            CoursesSeeder::class,
+            InstitutionsSeeder::class,
+            RequirementsSeeder::class,
+            SchoolPeriodsSeeder::class,
+            AuthoritiesSeeder::class,
+            DetailSchoolPeriodsSeeder::class,
+            ParticipantsSeeder::class,
+            PlanificationsSeeder::class,
+            DetailPlanificationsSeeder::class,
+            RegistrationsSeeder::class,
+            AdditionalInformationsSeeder::class,
+            RegistrationRequerimentsSeeder::class,
+            PrerequisitesSeeder::class,
+            CourseProfilesSeeder::class,
+            TopicsSeeder::class,
+            AttendancesSeeder::class,
+            ParticipantCourseSeeder::class,
+            DetailAttendancesSeeder::class,
+            DetailPlanificationsInstructorSeeder::class,
+            // AuthorizedInstructorsSeeder::class,
+            //CertificatesSeeder::class,
+            //NotificationsSeeder::class,
+            PhotographicRecordsSeeder::class,
+        ]);
     }
 }
