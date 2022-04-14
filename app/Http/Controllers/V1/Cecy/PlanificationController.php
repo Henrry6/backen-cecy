@@ -368,13 +368,36 @@ class PlanificationController extends Controller
     {
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
 
+        $currentState = Catalogue::where('type', $catalogue['school_period_state']['type'])
+            ->where('code', $catalogue['school_period_state']['current'])
+            ->first();
         $toBeApproved = Catalogue::where('type',  $catalogue['planification_state']['type'])
-            ->where('code',  $catalogue['planification_state']['to_be_approved'])->first();
+            ->where('code',  $catalogue['planification_state']['to_be_approved'])
+            ->first();
         $instructor = Instructor::find($request->input('responsibleCourse.id')); //que estado y tipo debe ser el instructor
+        $detailSchoolPeriod = DetailSchoolPeriod::whereRelation('schoolPeriod', 'state_id', $currentState->id)
+            ->first();
+        // $lastPlanification = Planification::latest('ended_at')
+        //     ->first();
+       
+        // if (
+        //     $request->input('startedAt') <= $lastPlanification->ended_at ||
+        //     $request->input('endedAt') <= $lastPlanification->started_at
+        // ) {
+        //     return response()->json([
+        //         'msg' => [
+        //             'summary' => 'Ya existe otra planificación en ese rango de fechas',
+        //             'detail' => '',
+        //             'code' => '404'
+        //         ],
+        //         'data' => null
+        //     ], 404);
+        // }
 
         $planification = new Planification();
 
         $planification->course()->associate($course);
+        $planification->detailSchoolPeriod()->associate($detailSchoolPeriod);
         $planification->responsibleCourse()->associate($instructor);
         $planification->state()->associate($toBeApproved);
 
@@ -386,8 +409,8 @@ class PlanificationController extends Controller
         return (new PlanificationResource($planification))
             ->additional([
                 'msg' => [
-                    'summary' => 'Planificación creada',
-                    'detail' => '',
+                    'summary' => 'Éxito ',
+                    'detail' => 'Planificación creada',
                     'code' => '201'
                 ]
             ])

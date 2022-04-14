@@ -28,10 +28,12 @@ class CreateCecyPlanificationsTable extends Migration
                 ->constrained('cecy.instructors');
 
             $table->foreignId('responsible_cecy_id')
+                ->nullable()
                 ->comment('Id del responsable del cecy')
                 ->constrained('cecy.authorities');
 
             $table->foreignId('responsible_ocs_id')
+                ->nullable()
                 ->comment('Id de responsable del ocs')
                 ->constrained('cecy.authorities');
 
@@ -40,10 +42,12 @@ class CreateCecyPlanificationsTable extends Migration
                 ->constrained('cecy.catalogues');
 
             $table->foreignId('vicerector_id')
+                ->nullable()
                 ->comment('Id del periodo escolar')
                 ->constrained('cecy.authorities');
 
             $table->date('approved_at')
+                ->nullable()
                 ->comment('Fecha de aprobación de la planificación');
 
             $table->string('code')
@@ -54,9 +58,11 @@ class CreateCecyPlanificationsTable extends Migration
                 ->comment('Fecha en la que se espera terminar la planificación');
 
             $table->json('needs')
+                ->nullable()
                 ->comment('Se puede hacer una copia de las propias necesidades del curso de ser necesario');
 
             $table->json('observations')
+                ->nullable()
                 ->comment('En caso de que no se apruebe la planificación se pone una observacion del porque no se acepta');
 
             $table->date('started_at')

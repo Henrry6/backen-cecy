@@ -603,11 +603,25 @@ class CourseController extends Controller
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
 
         $currentState = Catalogue::where('type', $catalogue['school_period_state']['type'])
-            ->where('code', $catalogue['school_period_state']['current'])->first();
+            ->where('code', $catalogue['school_period_state']['current'])
+            ->first();
         $toBeApprovedState = Catalogue::where('type', $catalogue['planification_state']['type'])
-            ->where('code', $catalogue['planification_state']['to_be_approved'])->first();
-        $currentSchoolPeriod = SchoolPeriod::where('state_id', $currentState->id)->first();
+            ->where('code', $catalogue['planification_state']['to_be_approved'])
+            ->first();
+        $currentSchoolPeriod = SchoolPeriod::where('state_id', $currentState->id)
+            ->first();
         $responsible = Instructor::find($request->input('responsible.id'));
+
+        if ($request->input('duration') < Course::MINIMUM_HOURS) {
+            return response()->json([
+                'msg' => [
+                    'summary' => 'Error',
+                    'detail' => 'La duración no debe ser menor a 40 horas',
+                    'code' => '404'
+                ],
+                'data' => null
+            ], 404);
+        }
 
         $course = new Course();
 

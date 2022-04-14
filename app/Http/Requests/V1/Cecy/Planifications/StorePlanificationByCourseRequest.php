@@ -13,8 +13,8 @@ class StorePlanificationByCourseRequest extends FormRequest
   public function rules()
   {
     return [
-      'responsible.id' => ['required', 'integer'],
-      'endedAt' => ['required', 'date'],
+      'responsibleCourse.id' => ['required', 'integer'],
+      'endedAt' => ['required', 'date', 'after:startedAt'],
       'startedAt' => ['required', 'date'],
     ];
   }
@@ -22,7 +22,7 @@ class StorePlanificationByCourseRequest extends FormRequest
   public function attributes()
   {
     return [
-      'responsible.id' => 'responsable de planificación',
+      'responsibleCourse.id' => 'responsable de planificación',
       'endedAt' => 'fecha de finalización',
       'startedAt' => 'fecha de inicio',
     ];

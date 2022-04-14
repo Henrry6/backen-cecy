@@ -21,6 +21,9 @@ class Course extends Model implements Auditable
     use ImageTrait;
     use SoftDeletes;
 
+    //Constants
+    const MINIMUM_HOURS = 40;
+
     protected $table = 'cecy.courses';
 
     protected $fillable = [
