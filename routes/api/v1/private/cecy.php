@@ -74,31 +74,15 @@ Route::apiResource('institutions', InstitutionController::class);
 /***********************************************************************************************************************
  * PLANIFICATIONS
  **********************************************************************************************************************/
-//Route::apiResource('planifications',[PlanificationController::class]);
 Route::controller(PlanificationController::class)->group(function () {
     Route::prefix('planifications/{planification}')->group(function () {
         Route::get('', 'getPlanitification');
-        // Route::post('create-planifications-course', [PlanificationController::class, 'storePlanificationByCourse']);
-<<<<<<< HEAD
         Route::put('assign-code-planification',  'assignCodeToPlanification');
         Route::put('approve-planification',  'approvePlanification');
         Route::put('planifications-cecy', 'updatePlanificationByCecy');
         Route::patch('assign-responsible-cecy', 'assignResponsibleCecy');
-<<<<<<< HEAD
-        Route::put('planifications-cecy', 'updatePlanificationByCecy');
-    
-});
-
-Route::prefix('planificatio')->group(function () {
-    Route::get('by-detail-planification', 'getPlanificationsByDetailPlanification');
-    Route::post('course/{course}', 'storePlanificationByCourse');
-    Route::get('course_parallels-works', 'getCoursesParallelsWorkdays');
-    Route::get('kpis/{state}', 'getKpi');
-    Route::get('planifications-period-state', 'getPlanificationsByPeriodState');
-    Route::get('planfications-course/{course}', 'getPlanificationsByCourse');
-    // Route::put('{planification}', [PlanificationController::class, 'updateStatePlanification']);
-=======
         Route::put('career-coordinator', 'updatePlanificationByCourse');
+        Route::delete('', 'destroyPlanification');
     });
 
     Route::prefix('planifications')->group(function () {
@@ -107,12 +91,10 @@ Route::prefix('planificatio')->group(function () {
         Route::get('course_parallels-works', 'getCoursesParallelsWorkdays');
         Route::get('planfications-course/{course}', 'getPlanificationsByCourse');
         Route::get('kpis/{state}', 'getKpi');
-        // Route::put('{planification}', [PlanificationController::class, 'updateStatePlanification']);
+        // Route::put('{planification}', 'updateStatePlanification');
         Route::post('courses/{course}', 'storePlanificationByCourse');
         Route::get('catalogue/catalogue', 'catalogue');
-        Route::delete('/planification/{planification}', 'destroyPlanification');
     });
->>>>>>> efe5443024bdd2582ff7dce53eb087ff9326f77b
 });
 // Route::apiResource('planifications', PlanificationController::class);
 
