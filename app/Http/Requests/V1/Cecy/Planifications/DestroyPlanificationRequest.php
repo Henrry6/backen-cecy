@@ -12,15 +12,11 @@ class DestroyPlanificationRequest extends FormRequest
   }
   public function rules()
   {
-    return [
-      'ids' => ['required'],
-    ];
+    return [];
   }
 
   public function attributes()
   {
-    return [
-      'ids' => 'ID`s de las planificaciones',
-    ];
+    return [];
   }
 }

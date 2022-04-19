@@ -443,15 +443,16 @@ class PlanificationController extends Controller
     }
 
     /**
-     * deletePlanification
+     * destroyPlanification
      */
-    public function destroyPlanification(DestroyPlanificationRequest $planification)
+    public function destroyPlanification(DestroyPlanificationRequest $request, Planification $planification)
     {
         $planification->delete();
+
         return (new PlanificationResource($planification))
             ->additional([
                 'msg' => [
-                    'summary' => 'Planificación Eliminado',
+                    'summary' => 'Planificación Eliminada',
                     'detail' => '',
                     'code' => '201'
                 ]

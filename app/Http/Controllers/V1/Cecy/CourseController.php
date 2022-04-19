@@ -647,7 +647,7 @@ class CourseController extends Controller
     }
 
     /**
-     * updateCourse
+     * updateCourseNameAndDuration
      */
     public function updateCourseNameAndDuration(UpdateCourseNameAndDurationRequest $request, Course $course)
     {
@@ -668,12 +668,13 @@ class CourseController extends Controller
     }
 
     /**
-     * deleteCourse
+     * destroyCourse
      */
 
-    public function destroyCourse(DestroyCourseRequest $course)
+    public function destroyCourse(DestroyCourseRequest $request, Course $course)
     {
         $course->delete();
+
         return (new CourseResource($course))
             ->additional([
                 'msg' => [

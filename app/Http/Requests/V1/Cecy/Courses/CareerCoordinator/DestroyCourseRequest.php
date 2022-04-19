@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\V1\Cecy\Courses;
+namespace App\Http\Requests\V1\Cecy\Courses\CareerCoordinator;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -12,15 +12,11 @@ class DestroyCourseRequest extends FormRequest
   }
   public function rules()
   {
-    return [
-      'ids' => ['required'],
-    ];
+    return [];
   }
 
   public function attributes()
   {
-    return [
-      'ids' => 'ID`s de los cursos',
-    ];
+    return [];
   }
 }

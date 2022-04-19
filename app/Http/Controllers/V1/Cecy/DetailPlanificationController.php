@@ -24,9 +24,6 @@ use App\Models\Cecy\Course;
 use App\Models\Cecy\DetailPlanification;
 use App\Models\Cecy\Instructor;
 use App\Models\Cecy\Planification;
-//use Illuminate\Support\Facades\Validator;
-//use Illuminate\Validation\Rule;
-//use Symfony\Component\Translation\Exception\NotFoundResourceException;
 
 class DetailPlanificationController extends Controller
 {
