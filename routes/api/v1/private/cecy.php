@@ -25,7 +25,7 @@ use App\Http\Controllers\V1\Cecy\ParticipantController;
 /***********************************************************************************************************************
  * CATALOGUES
  **********************************************************************************************************************/
-Route::controller(InstitutionController::class)->group(function () {
+Route::controller(CatalogueController::class)->group(function () {
     Route::prefix('catalogue/{catalogue}')->group(function () {
         Route::prefix('file')->group(function () {
             Route::get('{file}/download', [CatalogueController::class, 'downloadFile']);
@@ -153,8 +153,32 @@ Route::controller(CourseController::class)->group(function () {
     });
 
     Route::prefix('courses/{course}')->group(function () {
-        Route::put('cecy-responsible/approve', 'approveCourse');
-        Route::put('cecy-responsible/decline', 'declineCourse');
+        Route::prefix('cecy-responsible')->group(function () {
+            Route::put('approve', 'approveCourse');
+            Route::put('decline', 'declineCourse');
+            
+            Route::prefix('files')->group(function () {
+                Route::get('{file}/download', [UserController::class, 'downloadFile']);
+                Route::get('', [UserController::class, 'indexFiles']);
+                Route::get('{file}', [UserController::class, 'showFile']);
+                Route::post('', [UserController::class, 'uploadFile']);
+                Route::put('{file}', [UserController::class, 'updateFile']);
+                Route::delete('{file}', [UserController::class, 'destroyFile']);
+                Route::patch('', [UserController::class, 'destroyFiles']);
+            });
+            
+            Route::prefix('images')->group(function () {
+                Route::get('{image}/download', [UserController::class, 'downloadImage']);
+                Route::get('', [UserController::class, 'indexImages']);
+                Route::get('public', [UserController::class, 'indexPublicImages']);
+                Route::get('{image}', [UserController::class, 'showImage']);
+                Route::post('public', [UserController::class, 'uploadPublicImage']);
+                Route::put('{image}', [UserController::class, 'updateImage']);
+                Route::delete('{image}', [UserController::class, 'destroyImage']);
+                Route::patch('', [UserController::class, 'destroyImages']);
+            });
+        });
+
         Route::put('career-coordinator', 'updateCourseNameAndDuration');
         Route::delete('career-coordinator', 'destroyCourse');
 
