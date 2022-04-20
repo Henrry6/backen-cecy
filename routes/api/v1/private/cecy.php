@@ -158,24 +158,24 @@ Route::controller(CourseController::class)->group(function () {
             Route::put('decline', 'declineCourse');
             
             Route::prefix('files')->group(function () {
-                Route::get('{file}/download', [UserController::class, 'downloadFile']);
-                Route::get('', [UserController::class, 'indexFiles']);
-                Route::get('{file}', [UserController::class, 'showFile']);
-                Route::post('', [UserController::class, 'uploadFile']);
-                Route::put('{file}', [UserController::class, 'updateFile']);
-                Route::delete('{file}', [UserController::class, 'destroyFile']);
-                Route::patch('', [UserController::class, 'destroyFiles']);
+                Route::get('{file}/download', 'downloadFile');
+                Route::get('', 'indexFiles');
+                Route::get('{file}', 'showFile');
+                Route::post('', 'uploadFile');
+                Route::put('{file}', 'updateFile');
+                Route::delete('{file}', 'destroyFile');
+                Route::patch('', 'destroyFiles');
             });
             
             Route::prefix('images')->group(function () {
-                Route::get('{image}/download', [UserController::class, 'downloadImage']);
-                Route::get('', [UserController::class, 'indexImages']);
-                Route::get('public', [UserController::class, 'indexPublicImages']);
-                Route::get('{image}', [UserController::class, 'showImage']);
-                Route::post('public', [UserController::class, 'uploadPublicImage']);
-                Route::put('{image}', [UserController::class, 'updateImage']);
-                Route::delete('{image}', [UserController::class, 'destroyImage']);
-                Route::patch('', [UserController::class, 'destroyImages']);
+                Route::get('{image}/download', 'downloadImage');
+                Route::get('', 'indexImages');
+                Route::get('public', 'indexPublicImages');
+                Route::get('{image}', 'showImage');
+                Route::post('public', 'uploadPublicImage');
+                Route::put('{image}', 'updateImage');
+                Route::delete('{image}', 'destroyImage');
+                Route::patch('', 'destroyImages');
             });
         });
 
@@ -207,10 +207,6 @@ Route::controller(CourseController::class)->group(function () {
             Route::get('/inform-course-needs', 'informCourseNeeds');
             Route::get('/final-report', 'showCourseFinalReport');
             // Route::get('inform-course-needs/{course}', 'App\Http\Controllers\V1\Cecy\CourseController@informCourseNeeds');
-        });
-        Route::prefix('images')->group(function () {
-            Route::get('{image}', 'indexPublicImages');
-            Route::post('', 'uploadPublicImage');
         });
     });
 });
