@@ -231,17 +231,29 @@ class UserController extends Controller
             ])
             ->response()->setStatusCode(200);
     }
- 
-    public function getUsersArentInstructors(GetUsersArentInstructorsRequest $request  ) 
-    {
-        // return 'w';
 
+    public function getUsersArentInstructors(GetUsersArentInstructorsRequest $request)
+    {
         $users = User::doesntHave('instructor')->get();
 
         return (new UserCollection($users))
             ->additional([
                 'msg' => [
                     'summary' => 'Trae los usuarios que no son instructores',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])->response()->setStatusCode(200);
+    }
+
+    public function getUsersAreInstructors(Request $request)
+    {
+        $users = User::has('instructor')->get();
+
+        return (new UserCollection($users))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Trae los usuarios que son instructores',
                     'detail' => '',
                     'code' => '200'
                 ]
@@ -264,7 +276,7 @@ class UserController extends Controller
         return (new ImageController())->index($request, User::find($request->input('id')));
     }
 
-    public function indexPublicImages(IndexImageRequest $request,User $user)
+    public function indexPublicImages(IndexImageRequest $request, User $user)
     {
         return $user->indexPublicImages($request);
     }
