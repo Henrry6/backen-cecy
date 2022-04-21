@@ -29,12 +29,12 @@ class Authority extends Model implements Auditable
     // Relationships
     public function careers()
     {
-        return $this->morphToMany(Career::class,'core.careerable');
+        return $this->morphToMany(Career::class, 'core.careerable');
     }
 
     public function institution()
     {
-        return $this->belongsTo(Institution::class, 'id','institution_id');
+        return $this->belongsTo(Institution::class, 'id', 'institution_id');
     }
 
     public function planifications()
@@ -62,6 +62,13 @@ class Authority extends Model implements Auditable
 
     // Scopes
     //revisar
+    public function scopeFirm($query, $electronicSignature)
+    {
+        if ($electronicSignature) {
+            return $query->orWhere('electronic_signature', $electronicSignature);
+        }
+    }
+
     public function scopePositionStartedAt($query, $positionStartedAt)
     {
         if ($positionStartedAt) {
@@ -75,12 +82,18 @@ class Authority extends Model implements Auditable
             return $query->orWhere('position_ended_at', $positionEndedAt);
         }
     }
-    public function scopeFirm($query, $electronicSignature)
+
+    public function scopeUser($query, $search)
     {
-        if ($electronicSignature) {
-            return $query->orWhere('electronic_signature', $electronicSignature);
+        if ($search) {
+            return $query->whereHas('user', function ($user) use ($search) {
+                $user->name($search)
+                    ->lastname($search)
+                    ->username($search);
+            });
         }
     }
+
     //revisar
 
     public function scopeCustomOrderBy($query, $sorts)

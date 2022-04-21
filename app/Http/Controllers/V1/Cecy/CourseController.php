@@ -569,20 +569,16 @@ class CourseController extends Controller
         return $file->uploadFile($request);
     }
 
-    /**
-     * getCoursesByCareer
-     */
     public function getCoursesByCareer(GetCoursesByCareerRequest $request, Career $career)
     {
-        $coordinator = Authority::find($request->user()->id);
-
         $sorts = explode(',', $request->input('sort'));
 
         $courses = $career->courses()
             ->customOrderBy($sorts)
             ->code(($request->input('search')))
             ->name(($request->input('search')))
-            ->schoolPeriodId($request->input('schoolPeriod.id'))
+            ->state($request->input('search'))
+            ->responsible($request->input('search'))
             ->paginate($request->input('perPage'));
 
         return (new CourseCollection($courses))

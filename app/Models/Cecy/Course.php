@@ -315,14 +315,14 @@ class Course extends Model implements Auditable
     public function scopeRecordNumber($query, $recordNumber)
     {
         if ($recordNumber) {
-            return $query->orWhere('recordNumber', $recordNumber);
+            return $query->orWhere('record_number', $recordNumber);
         }
     }
 
     public function scopeLocalProposal($query, $localProposal)
     {
         if ($localProposal) {
-            return $query->orWhere('localProposal', $localProposal);
+            return $query->orWhere('local_proposal', $localProposal);
         }
     }
 
@@ -354,6 +354,15 @@ class Course extends Model implements Auditable
         }
     }
 
+    public function scopeResponsible($query, $search)
+    {
+        if ($search) {
+            return $query->whereHas('responsible', function ($responsible) use ($search) {
+                $responsible->user($search);
+            });
+        }
+    }
+
     public function scopeSchoolPeriod($query, $search)
     {
         if ($search) {
@@ -377,10 +386,12 @@ class Course extends Model implements Auditable
         }
     }
 
-    public function scopeState($query, $state)
+    public function scopeState($query, $search)
     {
-        if ($state) {
-            return $query->orWhere('state_id', $state);
+        if ($search) {
+            return $query->whereHas('state', function ($state) use ($search) {
+                $state->where('name', 'iLike', "%$search%");
+            });
         }
     }
 

@@ -181,10 +181,12 @@ class PlanificationController extends Controller
 
     public function getPlanificationsByCourse(GetPlanificationsByCourseRequest $request, Course $course)
     {
-        $sorts = explode(',', $request->sort);
+        $sorts = explode(',', $request->input('sort'));
 
         $planifications = $course->planifications()
             ->customOrderBy($sorts)
+            ->code($request->input('search'))
+            ->state($request->input('search'))
             ->paginate($request->input('perPage'));
 
         return (new PlanificationByCourseCollection($planifications))
@@ -379,7 +381,7 @@ class PlanificationController extends Controller
             ->first();
         // $lastPlanification = Planification::latest('ended_at')
         //     ->first();
-       
+
         // if (
         //     $request->input('startedAt') <= $lastPlanification->ended_at ||
         //     $request->input('endedAt') <= $lastPlanification->started_at

@@ -76,9 +76,9 @@ class Instructor extends Model implements Auditable
     {
         if ($search) {
             return $query->whereHas('user', function ($user) use ($search) {
-                $user->where('name', 'iLike', "%$search%")
-                    ->orWhere('lastname', 'iLike', "%$search%")
-                    ->orWhere('username;', 'iLike', "%$search%");
+                $user->name($search)
+                    ->lastname($search)
+                    ->username($search);
             });
         }
     }

@@ -88,14 +88,16 @@ class Planification extends Model implements Auditable
     public function scopeCode($query, $code)
     {
         if ($code) {
-            return $query->orWhere('code', $code);
+            return $query->orWhere('code', 'iLike', "%$code%");
         }
     }
 
-    public function scopeState($query, $state)
+    public function scopeState($query, $search)
     {
-        if ($state) {
-            return $query->orWhere('state_id', $state);
+        if ($search) {
+            return $query->whereHas('state', function ($state) use ($search) {
+                $state->where('name', 'iLike', "%$search%");
+            });
         }
     }
 
