@@ -72,10 +72,14 @@ class Instructor extends Model implements Auditable
         }
     }
 
-    public function scopeUser($query, $user)
+    public function scopeUser($query, $search)
     {
-        if ($user) {
-            return $query->orWhere('user', $user->id);
+        if ($search) {
+            return $query->whereHas('user', function ($user) use ($search) {
+                $user->where('name', 'iLike', "%$search%")
+                    ->orWhere('lastname', 'iLike', "%$search%")
+                    ->orWhere('username;', 'iLike', "%$search%");
+            });
         }
     }
 

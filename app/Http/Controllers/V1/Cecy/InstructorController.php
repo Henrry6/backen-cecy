@@ -24,6 +24,12 @@ use App\Models\Cecy\DetailPlanification;
 
 class InstructorController extends Controller
 {
+    public function __construct()
+    {
+        //$this->middleware('permission:store-catalogues')->only(['store']);
+        //$this->middleware('permission:update-catalogues')->only(['update']);
+        //$this->middleware('permission:delete-catalogues')->only(['destroy', 'destroys']);
+    }
 
     public function catalogue(CatalogueInstructorRequest $request)
     {
@@ -44,18 +50,12 @@ class InstructorController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    public function __construct()
-    {
-        //$this->middleware('permission:store-catalogues')->only(['store']);
-        //$this->middleware('permission:update-catalogues')->only(['update']);
-        //$this->middleware('permission:delete-catalogues')->only(['destroy', 'destroys']);
-    }
-
     public function index(IndexInstructorRequest $request)
     {
         $sorts = explode(',', $request->input('sort'));
 
         $instructors = Instructor::customOrderBy($sorts)
+            ->user($request->input('search'))
             ->paginate($request->input('perPage'));
 
         return (new InstructorCollection($instructors))
@@ -94,20 +94,27 @@ class InstructorController extends Controller
             ->response()->setStatusCode(201);
     }
 
-    public function storeInstructors(StoreInstructorsRequest $request, Instructor $instructor)
+    public function storeInstructors(StoreInstructorsRequest $request)
     {
         $instructors = collect();
 
         foreach ($request->input('ids') as $userId) {
 
-            $instructor = new Instructor();
+            $user = User::find($userId);
 
-            $instructor->user()
-                ->associate(User::find($request->input($userId)));
+            $instructor = Instructor::firstWhere('user_id',$userId);
 
-            $instructor->save();
+            if (!isset($instructor)) {
 
-            $instructors->push($instructor);
+                $instructor = new Instructor();
+
+                $instructor->user()
+                    ->associate($user);
+
+                $instructor->save();
+
+                $instructors->push($instructor);
+            }
         }
 
         return (new InstructorCollection($instructors))
@@ -197,5 +204,4 @@ class InstructorController extends Controller
             ])
             ->response()->setStatusCode(200);
     }
-
 }

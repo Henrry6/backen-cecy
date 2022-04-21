@@ -19,6 +19,7 @@ Route::prefix('user')->group(function () {
     Route::patch('catalogue', [UserController::class, 'catalogue']);
     Route::patch('destroys', [UserController::class, 'destroys']);
     Route::get('users-arent-instructors', [UserController::class, 'getUsersArentInstructors']);
+    Route::get('users-are-instructors', [UserController::class, 'getUsersAreInstructors']);
 });
 
 Route::prefix('users/{user}')->group(function () {

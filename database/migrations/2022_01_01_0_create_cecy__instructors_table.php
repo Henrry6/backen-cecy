@@ -24,7 +24,6 @@ class CreateCecyInstructorsTable extends Migration
                 ->constrained('cecy.catalogues');
 
             $table->foreignId('user_id')
-                ->nullable()
                 ->comment('Usuario de autenticación')
                 ->constrained('authentication.users');
         });
