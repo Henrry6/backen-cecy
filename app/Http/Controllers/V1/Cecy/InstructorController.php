@@ -9,7 +9,7 @@ use App\Http\Requests\V1\Cecy\Instructors\IndexInstructorRequest;
 use App\Http\Requests\V1\Cecy\Instructors\StoreInstructorRequest;
 use App\Http\Requests\V1\Cecy\Instructors\StoreInstructorsRequest;
 use App\Http\Requests\V1\Cecy\Instructors\CatalogueInstructorRequest;
-// use App\Http\Requests\V1\Cecy\Instructor\DestroysInstructorRequest;
+use App\Http\Requests\V1\Cecy\Instructor\DestroysInstructorRequest;
 // use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationByInstructorCollection;
 use App\Http\Resources\V1\Cecy\Courses\CourseCollection;
 use App\Http\Resources\V1\Cecy\Instructors\InstructorCollection;
@@ -153,6 +153,36 @@ class InstructorController extends Controller
             ->additional([
                 'msg' => [
                     'summary' => 'Instructor actualizado',
+                    'detail' => '',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
+    }
+
+    public function destroy(Instructor $instructor)
+    {
+        $instructor->delete();
+
+        return (new InstructorResource($instructor))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Instructor Eliminado',
+                    'detail' => '',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
+    }
+
+    public function destroyInstructors(DestroysInstructorRequest $request)
+    {
+        $instructor = Instructor::whereIn('id', $request->input('ids'))->get();
+        Instructor::destroy($request->input('ids'));
+        return (new InstructorResource($instructor))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Instructor Eliminado',
                     'detail' => '',
                     'code' => '201'
                 ]

@@ -305,6 +305,7 @@ Route::controller(InstructorController::class)->group(function () {
     Route::prefix('instructors/{instructor}')->group(function () {
         Route::put('type-instructor', 'updateTypeInstructor');
         Route::put('state-instructor', 'updateStateInstructor');
+        Route::delete('destroy','destroy');
     });
 
     Route::prefix('instructors')->group(function () {
@@ -314,10 +315,11 @@ Route::controller(InstructorController::class)->group(function () {
         Route::get('instructor-information', 'getInstructorsInformationByCourse');
         Route::get('authorized-instructors/detail-planifications/{detail_planification}', 'getAuthorizedInstructorsOfCourse');
         Route::get('detail-planifications/{detail_planification}', 'getAssignedInstructors');
+        Route::delete('destroys','destroyInstructors');
 
         // Route::get('courses', [InstructorController::class, 'getCourses']);
         // Route::get('instructor-courses', [InstructorController::class, 'getInstructorByCourses']);
-        // Route::get('destroy/{instructor}', [InstructorController::class, 'destroyInstructors']);
+        
 
     });
 });
