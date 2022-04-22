@@ -61,7 +61,6 @@ class Authority extends Model implements Auditable
 
 
     // Scopes
-    //revisar
     public function scopeFirm($query, $electronicSignature)
     {
         if ($electronicSignature) {
@@ -93,8 +92,6 @@ class Authority extends Model implements Auditable
             });
         }
     }
-
-    //revisar
 
     public function scopeCustomOrderBy($query, $sorts)
     {

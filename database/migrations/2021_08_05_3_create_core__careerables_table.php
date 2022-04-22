@@ -16,6 +16,7 @@ class CreateCoreCareerablesTable extends Migration
             $table->morphs('careerable');
 
             $table->foreignId('career_id')
+                ->comment('Carrera')
                 ->constrained('core.careers');
         });
     }
