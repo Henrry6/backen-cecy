@@ -579,8 +579,8 @@ class CourseController extends Controller
 
         $courses = $career->courses()
             ->customOrderBy($sorts)
-            ->code(($request->input('search')))
-            ->name(($request->input('search')))
+            ->code($request->input('search'))
+            ->name($request->input('search'))
             ->state($request->input('search'))
             ->responsible($request->input('search'))
             ->paginate($request->input('perPage'));

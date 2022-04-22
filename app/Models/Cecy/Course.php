@@ -358,7 +358,10 @@ class Course extends Model implements Auditable
     {
         if ($search) {
             return $query->whereHas('responsible', function ($responsible) use ($search) {
-                $responsible->user($search);
+                $responsible->whereHas('user', function ($user) use ($search) {
+                    $user->orWhere('name', 'iLike', "%$search%")
+                        ->orWhere('lastname', 'iLike', "%$search%");
+                });
             });
         }
     }
@@ -390,7 +393,7 @@ class Course extends Model implements Auditable
     {
         if ($search) {
             return $query->whereHas('state', function ($state) use ($search) {
-                $state->where('name', 'iLike', "%$search%");
+                $state->orWhere('name', 'iLike', "%$search%");
             });
         }
     }
