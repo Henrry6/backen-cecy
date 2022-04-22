@@ -29,6 +29,10 @@ use App\Http\Requests\V1\Cecy\Courses\CatalogueCourseRequest;
 use App\Http\Requests\V1\Cecy\Courses\UpdateCourseRequest;
 use App\Http\Requests\V1\Cecy\Planifications\GetPlanificationByResponsableCourseRequest;
 use App\Http\Requests\V1\Cecy\Planifications\IndexPlanificationRequest;
+use App\Http\Requests\V1\Core\Files\DestroysFileRequest;
+use App\Http\Requests\V1\Core\Files\IndexFileRequest;
+use App\Http\Requests\V1\Core\Files\UpdateFileRequest;
+use App\Http\Requests\V1\Core\Files\UploadFileRequest;
 use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationCollection;
 use App\Http\Resources\V1\Cecy\Planifications\InformCourseNeedsResource;
 use App\Http\Resources\V1\Cecy\Courses\CoursesByResponsibleCollection;
@@ -729,9 +733,39 @@ class CourseController extends Controller
     }
 
     // Files
+    public function indexFiles(IndexFileRequest $request, Course $course)
+    {
+        return $course->indexFiles($request);
+    }
+
+    public function uploadFile(UploadFileRequest $request, Course $course)
+    {
+        return $course->uploadFile($request);
+    }
+
+    public function downloadFile(Course $course, File $file)
+    {
+        return $course->downloadFile($file);
+    }
+
     public function showFileCourse(Course $course, File $file)
     {
         return $course->showFile($file);
+    }
+
+    public function updateFile(UpdateFileRequest $request, Course $course, File $file)
+    {
+        return $course->updateFile($request, $file);
+    }
+
+    public function destroyFile(Course $course, File $file)
+    {
+        return $course->destroyFile($file);
+    }
+
+    public function destroyFiles(Course $course, DestroysFileRequest $request)
+    {
+        return $course->destroyFiles($request);
     }
 
     //Images

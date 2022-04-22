@@ -80,6 +80,7 @@ Route::controller(PlanificationController::class)->group(function () {
         Route::put('assign-code-planification',  'assignCodeToPlanification');
         Route::put('approve-planification',  'approvePlanification');
         Route::put('planifications-cecy', 'updatePlanificationByCecy');
+        Route::put('responsible-cecy', 'updateAssignResponsibleCecy');
         Route::patch('assign-responsible-cecy', 'assignResponsibleCecy');
         Route::put('career-coordinator', 'updatePlanificationByCourse');
         Route::delete('', 'destroyPlanification');
