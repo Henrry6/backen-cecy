@@ -51,7 +51,21 @@ class CareerController extends Controller
 
     public function getCareersByCoordinatorCareer(GetCareersByCoordinatorCareerRequest $request)
     {
-        $coordinator = Authority::find($request->user()->id);
+        $coordinator = $request->user()->authority()->first();
+
+        return $coordinator;
+
+        // if () {
+        //     return response()->json([
+        //         'data' => '',
+        //         'msg' => [
+        //             'summary' => 'Error',
+        //             'detail' => 'No eres coordinador de ninguna carrera',
+        //             'code' => '400'
+        //         ]
+        //     ], 400);
+        // }
+
         $careers = $coordinator->careers()->get();
 
         return (new InstitutionCollection($careers))
