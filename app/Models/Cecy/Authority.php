@@ -29,7 +29,7 @@ class Authority extends Model implements Auditable
     // Relationships
     public function careers()
     {
-        return $this->morphToMany(Career::class, 'core.careerable','core.careerables');
+        return $this->morphToMany(Career::class, 'careerable','core.careerables');
     }
 
     public function institution()
