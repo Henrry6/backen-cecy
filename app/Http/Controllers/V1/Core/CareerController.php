@@ -10,6 +10,7 @@ use App\Http\Resources\V1\Core\CareerResource;
 use App\Http\Resources\V1\Core\InstitutionCollection;
 use App\Http\Resources\V1\Core\Users\UserResource;
 use App\Models\Cecy\Authority;
+use App\Models\Cecy\Catalogue;
 use App\Models\Core\Career;
 
 class CareerController extends Controller
@@ -52,20 +53,23 @@ class CareerController extends Controller
 
     public function getCareersByCoordinatorCareer(GetCareersByCoordinatorCareerRequest $request)
     {
-        $coordinator = $request->user()->authority()->first();
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
 
-        // return $coordinator;
+        $coordinator = $request->user()
+            ->authority()
+            ->whereRelation('position', 'code', $catalogue['position']['career_coordinator'])
+            ->first();
 
-        // if () {
-        //     return response()->json([
-        //         'data' => '',
-        //         'msg' => [
-        //             'summary' => 'Error',
-        //             'detail' => 'No eres coordinador de ninguna carrera',
-        //             'code' => '400'
-        //         ]
-        //     ], 400);
-        // }
+        if (!isset($coordinator)) {
+            return response()->json([
+                'data' => '',
+                'msg' => [
+                    'summary' => 'Error',
+                    'detail' => 'No eres coordinador de ninguna carrera',
+                    'code' => '400'
+                ]
+            ], 400);
+        }
 
         $careers = $coordinator->careers()->get();
 

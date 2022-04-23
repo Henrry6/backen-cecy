@@ -44,12 +44,12 @@ class Authority extends Model implements Auditable
 
     public function position()
     {
-        return $this->belongsTo(State::class);
+        return $this->belongsTo(Catalogue::class);
     }
 
     public function state()
     {
-        return $this->belongsTo(State::class);
+        return $this->belongsTo(Catalogue::class);
     }
 
     public function user()

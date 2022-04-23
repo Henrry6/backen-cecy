@@ -5,7 +5,9 @@ namespace Database\Seeders\Develop\Cecy;
 use App\Models\Cecy\Authority;
 use App\Models\Cecy\Catalogue;
 use App\Models\Cecy\Institution;
+use App\Models\Core\Career;
 use Faker\Factory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Seeder;
 
 class AuthoritiesSeeder extends Seeder
@@ -28,7 +30,7 @@ class AuthoritiesSeeder extends Seeder
         //state_id
         //position_id
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
-        Catalogue::factory(9)->sequence(
+        Catalogue::factory(10)->sequence(
             [
                 'code' => $catalogue['authority_state']['on_vocation'],
                 'name' => 'Vacaciones',
@@ -82,6 +84,12 @@ class AuthoritiesSeeder extends Seeder
                 'name' => 'Cecy',
                 'type' => $catalogue['position']['type'],
                 'description' => 'Cuando la autoridad es el reponsable del CECY'
+            ],
+            [
+                'code' => $catalogue['position']['career_coordinator'],
+                'name' => 'Coordinador de carrera',
+                'type' => $catalogue['position']['type'],
+                'description' => 'Cuando la autoridad es el coordinador de carrera'
             ]
         )->create();
     }
@@ -96,9 +104,10 @@ class AuthoritiesSeeder extends Seeder
         $positionVicerector = Catalogue::firstWhere('code', $catalogue['position']['vicerector']);
         $positionRepresentativeOcs = Catalogue::firstWhere('code', $catalogue['position']['representative_ocs']);
         $positionCecy = Catalogue::firstWhere('code', $catalogue['position']['cecy']);
+        $positionCareerCoordinator = Catalogue::firstWhere('code', $catalogue['position']['career_coordinator']);
         $state = Catalogue::firstWhere('code', $catalogue['authority_state']['active']);
 
-        Authority::factory(4)->sequence(
+        Authority::factory(5)->sequence(
             [
                 'institution_id' => $faker->randomElement($institutions),
                 'position_id' => $positionRector,
@@ -135,10 +144,30 @@ class AuthoritiesSeeder extends Seeder
                 'position_ended_at' => $faker->dateTimeBetween('+2 months', '+3 months')->format('Y-m-d H:i:s'),
                 'electronic_signature' => $faker->text($maxNbChars = 50)
             ],
+            [
+                'institution_id' => $faker->randomElement($institutions),
+                'position_id' => $positionCareerCoordinator,
+                'state_id' => $state,
+                'user_id' => 6,
+                'position_started_at' => $faker->dateTimeBetween('-1 months', '+1 months')->format('Y-m-d H:i:s'),
+                'position_ended_at' => $faker->dateTimeBetween('+2 months', '+3 months')->format('Y-m-d H:i:s'),
+                'electronic_signature' => $faker->text($maxNbChars = 50)
+            ],
         )->create();
     }
+    
     public function createCareerables()
     {
-        
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+
+        $careerCoordinator = Authority::whereHas('position', function (Builder $query) use ($catalogue) {
+            $query->where('code', $catalogue['position']['career_coordinator']);
+        })->first();
+
+        $careers = Career::get();
+
+        for ($i = 0; $i <= 1; $i++) {
+            $careerCoordinator->careers()->attach(($careers[$i])->id);
+        }
     }
 }
