@@ -80,7 +80,8 @@ Route::controller(PlanificationController::class)->group(function () {
         Route::put('assign-code-planification',  'assignCodeToPlanification');
         Route::put('approve-planification',  'approvePlanification');
         Route::put('planifications-cecy', 'updatePlanificationByCecy');
-        Route::put('responsible-cecy', 'updateAssignResponsibleCecy');
+        //Route::put('responsible-cecy', 'updateAssignResponsibleCecy');
+        Route::put('assign-responsible-cecy', 'assignResponsibleCecy');
         Route::patch('assign-responsible-cecy', 'assignResponsibleCecy');
         Route::put('career-coordinator', 'updatePlanificationByCourse');
         Route::delete('', 'destroyPlanification');
@@ -304,6 +305,7 @@ Route::controller(InstructorController::class)->group(function () {
     Route::prefix('instructors/{instructor}')->group(function () {
         Route::put('type-instructor', 'updateTypeInstructor');
         Route::put('state-instructor', 'updateStateInstructor');
+        Route::delete('destroy','destroy');
     });
 
     Route::prefix('instructors')->group(function () {
@@ -313,10 +315,11 @@ Route::controller(InstructorController::class)->group(function () {
         Route::get('instructor-information', 'getInstructorsInformationByCourse');
         Route::get('authorized-instructors/detail-planifications/{detail_planification}', 'getAuthorizedInstructorsOfCourse');
         Route::get('detail-planifications/{detail_planification}', 'getAssignedInstructors');
+        Route::delete('destroys','destroyInstructors');
 
         // Route::get('courses', [InstructorController::class, 'getCourses']);
         // Route::get('instructor-courses', [InstructorController::class, 'getInstructorByCourses']);
-        // Route::get('destroy/{instructor}', [InstructorController::class, 'destroyInstructors']);
+        
 
     });
 });

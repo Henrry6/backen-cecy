@@ -424,12 +424,12 @@ class PlanificationController extends Controller
      */
     public function updatePlanificationByCourse(UpdatePlanificationByCourseRequest $request, Planification $planification)
     {
-        $instructor = Instructor::find($request->input('responsibleCourse.id'));
+        $instructor = Instructor::find($request->input('responsibleCecy.id'));
 
         $planification->responsibleCourse()->associate($instructor);
 
-        $planification->ended_at = $request->input('endedAt');
-        $planification->started_at = $request->input('startedAt');
+        //$planification->ended_at = $request->input('endedAt');
+        //$planification->started_at = $request->input('startedAt');
 
         $planification->save();
 
