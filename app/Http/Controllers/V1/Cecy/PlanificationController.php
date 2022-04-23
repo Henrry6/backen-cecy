@@ -422,7 +422,7 @@ class PlanificationController extends Controller
     /**
      * updatePlanificationByCourse
      * Actualiza ended_at started_at and responsibleCourse
-     * Usa coordinador de carrera
+     * Usa coordinador de carrera (no cambiar)
      */
     public function updatePlanificationByCourse(UpdatePlanificationByCourseRequest $request, Planification $planification)
     {
