@@ -303,8 +303,7 @@ Route::apiResource('classroom', ClassroomController::class);
  **********************************************************************************************************************/
 Route::controller(InstructorController::class)->group(function () {
     Route::prefix('instructors/{instructor}')->group(function () {
-        Route::put('type-instructor', 'updateTypeInstructor');
-        Route::put('state-instructor', 'updateStateInstructor');
+        Route::put('updateInstructor', 'updateInstructor');
         Route::delete('destroy','destroy');
     });
 

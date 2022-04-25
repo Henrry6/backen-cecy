@@ -128,24 +128,9 @@ class InstructorController extends Controller
             ->response()->setStatusCode(201);
     }
 
-    public function updateStateInstructor(Request $request, Instructor $instructor)
+    public function updateInstructor(Request $request, Instructor $instructor)
     {
         $instructor->state()->associate(Catalogue::find($request->input('state.id')));
-        $instructor->save();
-
-        return (new InstructorResource($instructor))
-            ->additional([
-                'msg' => [
-                    'summary' => 'Instructor actualizado',
-                    'detail' => 'El estado del instructor a se cambio',
-                    'code' => '201'
-                ]
-            ])
-            ->response()->setStatusCode(201);
-    }
-
-    public function updateTypeInstructor(Request $request, Instructor $instructor)
-    {
         $instructor->type()->associate(Catalogue::find($request->input('type.id')));
         $instructor->save();
 
@@ -153,7 +138,7 @@ class InstructorController extends Controller
             ->additional([
                 'msg' => [
                     'summary' => 'Instructor actualizado',
-                    'detail' => '',
+                    'detail' => 'Los datos del instructor se cambiaron',
                     'code' => '201'
                 ]
             ])
