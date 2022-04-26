@@ -9,11 +9,27 @@ use App\Http\Requests\V1\Cecy\Authorities\UpdateAuthorityRequest;
 use App\Http\Resources\V1\Cecy\Authorities\AuthorityCollection;
 use App\Http\Resources\V1\Cecy\Authorities\AuthorityResource;
 use App\Models\Cecy\Authority;
-
-
+use Illuminate\Http\Request;
 
 class AuthorityController extends Controller
 {
+    public function __construct()
+    {
+    }
+
+    public function catalogue(Request $request)
+    {
+        return (new AuthorityCollection(Authority::get()))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'Authority' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
+
     public function index()
     {
         //return Authority::paginate();

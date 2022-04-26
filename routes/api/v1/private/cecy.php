@@ -400,6 +400,7 @@ Route::apiResource('authorities', AuthorityController::class);
 
 Route::prefix('authorities')->group(function () {
     Route::get('', [AuthorityController::class, 'getAuthoritys']);
+    Route::get('catalogue', [AuthorityController::class, 'catalogue']);
     Route::post('', [AuthorityController::class, 'storeAuthority']);
     Route::put('', [AuthorityController::class, 'updateAuthority']);
 });
