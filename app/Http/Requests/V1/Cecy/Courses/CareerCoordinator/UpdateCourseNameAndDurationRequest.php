@@ -13,14 +13,16 @@ class UpdateCourseNameAndDurationRequest extends FormRequest
   public function rules()
   {
     return [
+      'responsible.id' => ['required', 'integer'],
       'duration' => ['required', 'integer'],
-      'name' => ['required','string'],
+      'name' => ['required', 'string'],
     ];
   }
 
   public function attributes()
   {
     return [
+      'responsible.id' => 'estado',
       'duration' => 'duración',
       'name' => 'nombre',
     ];

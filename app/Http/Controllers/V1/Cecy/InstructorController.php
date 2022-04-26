@@ -14,6 +14,7 @@ use App\Http\Requests\V1\Cecy\Instructor\DestroysInstructorRequest;
 use App\Http\Resources\V1\Cecy\Courses\CourseCollection;
 use App\Http\Resources\V1\Cecy\Instructors\InstructorCollection;
 use App\Http\Resources\V1\Cecy\Instructors\InstructorResource;
+use App\Http\Resources\V1\Core\Users\UserResource; 
 use App\Http\Resources\V1\Core\Users\UserCollection;
 use App\Models\Cecy\Catalogue;
 // use App\Models\Cecy\Course;
@@ -21,6 +22,7 @@ use App\Models\Cecy\Instructor;
 use App\Models\Authentication\User;
 use App\Models\Cecy\Course;
 use App\Models\Cecy\DetailPlanification;
+use App\Models\Core\Phone;
 
 class InstructorController extends Controller
 {
@@ -69,17 +71,25 @@ class InstructorController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    public function storeInstructor(StoreInstructorRequest $request, Instructor $instructor)
+    public function storeInstructor(StoreInstructorRequest $request)
     {
+        $user= new User();
+        $user -> username = $request->input('username');
+        $user -> name = $request->input('name');
+        $user -> lastname = $request->input('lastname');
+        $user -> email = $request->input('email');
+        $user -> phone = $request->input('phone');
+        $user -> password = $request->input('username');
+
+
+        $user->save();
+
 
         $instructor = new Instructor();
 
-        $instructor->state()
-            ->associate(Catalogue::find($request->input('state.id')));
-        $instructor->type()
-            ->associate(Catalogue::find($request->input('type.id')));
-        $instructor->user()
-            ->associate(User::find($request->input('user.id')));
+        $instructor->state()->associate(Catalogue::find($request->input('state.id')));
+        $instructor->type()->associate(Catalogue::find($request->input('type.id')));
+        $instructor->user()->associate($user);
 
         $instructor->save();
 
