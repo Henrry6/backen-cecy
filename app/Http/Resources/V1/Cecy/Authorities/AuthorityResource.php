@@ -2,8 +2,8 @@
 
 namespace App\Http\Resources\V1\Cecy\Authorities;
 
-use App\Http\Resources\V1\Core\Users\FullnameResource;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\V1\Core\Users\FullnameResource;
 
 class AuthorityResource extends JsonResource
 {

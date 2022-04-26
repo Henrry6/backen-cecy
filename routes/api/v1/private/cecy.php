@@ -396,17 +396,17 @@ Route::apiResource('requirements', RequirementController::class);
 /***********************************************************************************************************************
  * AUTHORITIES
  **********************************************************************************************************************/
-Route::apiResource('authorities', AuthorityController::class);
-
 Route::prefix('authorities')->group(function () {
-    Route::get('', [AuthorityController::class, 'getAuthoritys']);
     Route::get('catalogue', [AuthorityController::class, 'catalogue']);
     Route::post('', [AuthorityController::class, 'storeAuthority']);
     Route::put('', [AuthorityController::class, 'updateAuthority']);
 });
+
 Route::prefix('authority')->group(function () {
     Route::delete('destroys', [AuthorityController::class, 'deleteAuthoritys']);
 });
+
+// Route::apiResource('authorities', AuthorityController::class);
 
 /***********************************************************************************************************************
  * ATTENDANCES

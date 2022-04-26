@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\Cecy\Authorities\CatalogueAuthorityRequest;
 use App\Http\Requests\V1\Cecy\Authorities\DestroysAuthorityRequest;
 use App\Http\Requests\V1\Cecy\Authorities\StoreAuthorityRequest;
 use App\Http\Requests\V1\Cecy\Authorities\UpdateAuthorityRequest;
 use App\Http\Resources\V1\Cecy\Authorities\AuthorityCollection;
 use App\Http\Resources\V1\Cecy\Authorities\AuthorityResource;
 use App\Models\Cecy\Authority;
-use Illuminate\Http\Request;
 
 class AuthorityController extends Controller
 {
@@ -17,13 +17,16 @@ class AuthorityController extends Controller
     {
     }
 
-    public function catalogue(Request $request)
+    public function catalogue(CatalogueAuthorityRequest $request)
     {
-        return (new AuthorityCollection(Authority::get()))
+
+        $authorities = Authority::get();
+
+        return (new AuthorityCollection($authorities))
             ->additional([
                 'msg' => [
                     'summary' => 'success',
-                    'Authority' => '',
+                    'detail' => '',
                     'code' => '200'
                 ]
             ])
