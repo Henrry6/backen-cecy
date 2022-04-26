@@ -15,7 +15,6 @@ class StoreInstructorRequest extends FormRequest
         return [
             'type.id' => ['required', 'integer'],
             'state.id' => ['required', 'integer'],
-            'user.id' => ['required', 'integer']
         ];
     }
 
@@ -24,7 +23,6 @@ class StoreInstructorRequest extends FormRequest
         return [
             'type.id' => 'Id del tipo de instructor',
             'state.id' => 'Estado del instructor',
-            'user.id' => 'Id del usuario'
         ];
     }
 }

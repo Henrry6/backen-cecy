@@ -7,7 +7,16 @@ use App\Http\Controllers\V1\Core\LocationController;
 /***********************************************************************************************************************
  * LOCATIONS
  **********************************************************************************************************************/
-Route::apiResource('locations', LocationController::class);
+Route::controller(LocationController::class)->group(function () {
+    Route::prefix('locations/{location}')->group(function () {
+    });
+
+    Route::prefix('locations')->group(function () {
+        Route::get('catalogue', 'catalogue');
+        
+    });
+});
+ Route::apiResource('locations', LocationController::class);
 
 /***********************************************************************************************************************
  * CATALOGUES

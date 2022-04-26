@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Core\Locations\IndexLocationRequest;
 use App\Http\Resources\V1\Core\LocationCollection;
 use App\Models\Core\Location;
+use Illuminate\Http\Request;
 
 class LocationController extends Controller
 {
@@ -24,6 +25,25 @@ class LocationController extends Controller
             ->type($request->input('type'))
             ->parent($request->input('parent'))
             ->paginate(1000);
+
+        return (new LocationCollection($locations))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ]);
+    }
+
+    public function catalogue(Request $request)
+    {
+        $sorts = explode(',', $request->sort);
+
+        $locations = Location::customOrderBy($sorts)
+            ->type($request->input('type'))
+            ->parent($request->input('parent'))
+            ->get();
 
         return (new LocationCollection($locations))
             ->additional([
