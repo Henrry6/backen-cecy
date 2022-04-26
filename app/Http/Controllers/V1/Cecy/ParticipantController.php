@@ -324,6 +324,22 @@ class ParticipantController extends Controller
             ->response()->setStatusCode(201);
     }
 
+    public function updateParticipantStateR(UpdateParticipantRequest $request, Participant $participant)
+    {
+        $participant->state()->associate(Catalogue::find($request->input('state.id')));
+        $participant->save();
+
+        return (new ParticipantResource($participant))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Participante Rechazo',
+                    'detail' => '',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
+    }
+
     public function destroyParticipant(Participant $participant)
     {
         $participant->delete();
