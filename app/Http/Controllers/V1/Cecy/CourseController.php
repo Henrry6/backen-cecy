@@ -651,6 +651,21 @@ class CourseController extends Controller
      */
     public function updateCourseNameAndDuration(UpdateCourseNameAndDurationRequest $request, Course $course)
     {
+        if ($request->input('duration') < Course::MINIMUM_HOURS) {
+            return response()->json([
+                'msg' => [
+                    'summary' => 'Error',
+                    'detail' => 'La duración no debe ser menor a 40 horas',
+                    'code' => '404'
+                ],
+                'data' => null
+            ], 404);
+        }
+
+        $responsible = Instructor::find($request->input('responsible.id'));
+
+        $course->responsible()->associate($responsible);
+
         $course->duration = $request->input('duration');
         $course->name = $request->input('name');
 

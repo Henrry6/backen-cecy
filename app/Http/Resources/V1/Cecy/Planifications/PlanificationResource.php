@@ -9,6 +9,7 @@ use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationResource;
 use App\Http\Resources\V1\Cecy\DetailSchoolPeriods\DetailSchoolPeriodResource;
 use App\Http\Resources\V1\Cecy\Instructors\InstructorResource;
 use App\Models\Cecy\DetailPlanification;
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 // use Illuminate\Http\Re
 
@@ -31,7 +32,7 @@ class PlanificationResource extends JsonResource
             'endedAt' => $this->ended_at,
             'needs' => $this->needs,
             'observations' => $this->observations,
-            'startedAt' => $this->started_at,
+            'startedAt' => Carbon::createFromFormat('Y-m-d', $this->started_at),
         ];
     }
 }
