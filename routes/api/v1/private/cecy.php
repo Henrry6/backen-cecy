@@ -348,7 +348,7 @@ Route::apiResource('registrations', RegistrationController::class);
  **********************************************************************************************************************/
 Route::controller(ParticipantController::class)->group(function () {
     Route::prefix('participants/{participant}')->group(function () {
-        // Route::put('update-registration/{registration}', 'participantRegistrationStateModification');
+        Route::put('update-registration/{registration}', 'participantRegistrationStateModification');
         Route::put('update-state', 'updateParticipantState');
         Route::post('participant-registration-user', 'createParticipantUser');
         Route::delete('delete-participant', 'destroyParticipant');
