@@ -156,8 +156,8 @@ Route::controller(CourseController::class)->group(function () {
 
     Route::prefix('courses/{course}')->group(function () {
         Route::prefix('cecy-responsible')->group(function () {
-            Route::put('approve', 'approveCourse');
-            Route::put('decline', 'declineCourse');
+            Route::get('approve', 'approveCourse');
+            Route::get('decline', 'declineCourse');
             
             Route::prefix('files')->group(function () {
                 Route::get('{file}/download', 'downloadFile');
