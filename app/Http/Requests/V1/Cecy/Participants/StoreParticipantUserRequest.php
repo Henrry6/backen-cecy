@@ -13,27 +13,24 @@ class StoreParticipantUserRequest extends FormRequest
     public function rules()
     {
         return [
+            'type.id' => ['required', 'integer'],
             'username' => ['required', 'max:20'],
             'name' => ['required', 'max:100'],
             'lastname' => ['required', 'max:100'],
             'email' => ['required', 'max:100', 'email'],
-            'participantType.id' => ['required', 'integer'],
-            'address.mainStreet' => ['required'],
-            'address.secondaryStreet' => ['required'],
-            'address.cantonLocation.id' => ['required',  'integer']
+            'phone' => ['required'],
         ];
     }
 
     public function attributes()
     {
         return [
-            'identificationType' => 'tipo de documento',
+            'type.id' => 'tipo de participante',
             'username' => 'nombre de usuario',
             'name' => 'nombres',
             'lastname' => 'apellidos',
             'email' => 'correo electrónico',
-            'password' => 'contraseña',
-            'type.id' => 'Id del tipo de participante'
+            'phone' => 'teléfono',
         ];
     }
 }

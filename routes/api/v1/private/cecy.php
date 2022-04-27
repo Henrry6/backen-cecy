@@ -349,10 +349,12 @@ Route::apiResource('registrations', RegistrationController::class);
 Route::controller(ParticipantController::class)->group(function () {
     Route::prefix('participants/{participant}')->group(function () {
         Route::put('update-registration/{registration}', 'participantRegistrationStateModification');
-        Route::put('update-state', 'updateParticipantState');
+        Route::get('accept-participant', 'updateParticipantState');
+        Route::get('decline-participant', 'declineParticipant');
         Route::post('participant-registration-user', 'createParticipantUser');
         Route::delete('delete-participant', 'destroyParticipant');
         Route::put('update-participant-user', 'updateParticipantUser');
+        Route::delete('destroy-participant', 'destroyParticipant');
     });
 
     Route::prefix('participants')->group(function () {
@@ -360,6 +362,7 @@ Route::controller(ParticipantController::class)->group(function () {
         Route::get('information/{registration}', 'getParticipantInformation');
         Route::get('information', 'index');
         Route::patch('participant-registration/{registration}', 'registerParticipant');
+        Route::post('create-participant-user', 'createParticipantUser');
     });
 });
 Route::apiResource('participants', ParticipantController::class);
