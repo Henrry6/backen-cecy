@@ -19,19 +19,8 @@ class PlanificationsResponsibleCecyResource extends JsonResource
         return [
             'id' => $this->id,
             'course' => CourseResource::make($this->course),
-            // 'detailSchoolPeriod' => DetailSchoolPeriodResource::make($this->detailSchoolPeriod),
-            // 'responsibleCourse' => InstructorResource::make($this->responsibleCourse),
             'responsibleCecy' => AuthorityResource::make($this->responsibleCecy),
-            // 'responsibleOcs' => AuthorityResource::make($this->responsibleOcs),
-            // 'state' => CatalogueResource::make($this->state),
-            // 'vicerector' => AuthorityResource::make($this->vicerector),
             'detailPlanifications' => DetailPlanificationResource::collection($this->detailPlanifications),
-            // 'aprovedAt' => $this->aproved_at,
-            // 'code' => $this->code,
-            // 'endedAt' => $this->ended_at,
-            // 'needs' => $this->needs,
-            // 'observations' => $this->observations,
-            // 'startedAt' => $this->started_at,
         ];
     }
 }
