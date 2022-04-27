@@ -13,11 +13,19 @@ class ApproveCourseRequest extends FormRequest
 
     public function rules()
     {
-        return [];
+        return [
+            'approvedAt' => ['required', 'date'],
+            'code' => ['required', 'string', 'max:100'],
+            'expiredAt' => ['required', 'date'],
+        ];
     }
 
     public function attributes()
     {
-        return [];
+        return [
+            'approvedAt' => 'fecha de aprobación del curso',
+            'code' => 'código',
+            'expiredAt' => 'fecha de expiración del curso',
+        ];
     }
 }
