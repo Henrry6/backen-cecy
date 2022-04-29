@@ -710,6 +710,9 @@ class CourseController extends Controller
             ->where('code', $catalogue['course_state']['approved'])->first();
 
         $course->state()->associate($state);
+        $course->code = $request->input('code');
+        $course->approved_at = $request->input('approvedAt');
+        $course->expired_at = $request->input('expiredAt');
         $course->save();
 
         return (new CourseResource($course))
