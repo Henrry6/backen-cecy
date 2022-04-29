@@ -685,7 +685,6 @@ class CourseController extends Controller
     /**
      * destroyCourse
      */
-
     public function destroyCourse(DestroyCourseRequest $request, Course $course)
     {
         $course->delete();
@@ -794,13 +793,3 @@ class CourseController extends Controller
         return $course->indexPublicImages($request);
     }
 }
-
-
-
-/**
- * get
- * store
- * update
- * delete
- * destroy
- */

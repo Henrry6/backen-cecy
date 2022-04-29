@@ -32,7 +32,8 @@ class PlanificationResource extends JsonResource
             'endedAt' => $this->ended_at,
             'needs' => $this->needs,
             'observations' => $this->observations,
-            'startedAt' => Carbon::createFromFormat('Y-m-d', $this->started_at),
+            // 'startedAt' => Carbon::createFromFormat('Y-m-d', $this->started_at),
+            'startedAt' => $this->started_at,
         ];
     }
 }

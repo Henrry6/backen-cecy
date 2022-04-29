@@ -376,7 +376,7 @@ class PlanificationController extends Controller
         $toBeApproved = Catalogue::where('type',  $catalogue['planification_state']['type'])
             ->where('code',  $catalogue['planification_state']['to_be_approved'])
             ->first();
-        $instructor = Instructor::find($request->input('responsibleCourse.id')); //que estado y tipo debe ser el instructor
+        $instructor = Instructor::find($request->input('responsibleCourse.id'));
         $detailSchoolPeriod = DetailSchoolPeriod::whereRelation('schoolPeriod', 'state_id', $currentState->id)
             ->first();
         // $lastPlanification = Planification::latest('ended_at')
