@@ -53,7 +53,7 @@ class TopicController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    public function getTopics($request, Course $course)
+    public function getTopics(Request $request, Course $course)
     {
         $sorts = explode(',', $request->sort);
 

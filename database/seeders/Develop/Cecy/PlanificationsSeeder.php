@@ -71,9 +71,11 @@ class PlanificationsSeeder extends Seeder
     }
     public function createPlanifications()
     {
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
         $faker = Factory::create();
         $courses = Course::get();
-        $states = Catalogue::where('type', 'PLANIFICATION_STATE')->get();
+        $state_approved = Catalogue::where('type', $catalogue['planification_state']['type'])
+            ->where('code', $catalogue['planification_state']['approved'])->first();
 
         $cecy = Catalogue::where('code', 'CECY')->first();
         $ocs = Catalogue::where('code', 'REPRESENTATIVE_OCS')->first();
@@ -85,7 +87,7 @@ class PlanificationsSeeder extends Seeder
         $responsablesCourse = Instructor::get();
         $detailSchoolPeriods = DetailSchoolPeriod::get();
 
-        for ($i = 0; $i <= 14; $i++) {
+        for ($i = 0; $i <= 29; $i++) {
 
             Planification::factory()->create(
                 [
@@ -95,7 +97,7 @@ class PlanificationsSeeder extends Seeder
                     'responsible_course_id' => $responsablesCourse[rand(0, sizeof($responsablesCourse) - 1)],
                     'responsible_ocs_id' => $responsableOcs,
                     'responsible_cecy_id' => $responsableCecy,
-                    'state_id' => 77,
+                    'state_id' => $state_approved,
                     'approved_at' => $faker->date('Y-m-d'),
                     'code' => $faker->word(),
                     'ended_at' => $faker->dateTimeBetween('+2 months', '+3 months')->format('Y-m-d'),
