@@ -27,47 +27,15 @@ class CatalogueController extends Controller
         $this->middleware('permission:delete-catalogues')->only(['destroy', 'destroys']);
     }
 
-    public function createUser(IndexCatalogueRequest $request)
-    {
-        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
-        $state = Catalogue::where('code', 'INACTIVE');
-        $state = Catalogue::where('name', 'INACTIVO');
-        if ($request->input('gender.code') == $catalogue['gender']['male']) {
-            // PARA PONER UN AVATAR DE HOMBRE
-        }
-
-        $request->input('gender.id');
-    }
-
-    public function index(IndexCatalogueRequest $request)
-    {
-        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
-        // $catalogue['gender']['female']
-        $sorts = explode(',', $request->sort);
-
-        $catalogues = Catalogue::customOrderBy($sorts)
-            ->type($request->input('type'))
-            ->paginate($request->input('per_page'));
-
-        return (new CatalogueCollection($catalogues))
-            ->additional([
-                'msg' => [
-                    'summary' => 'success',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ]);
-    }
-
     public function catalogue(CatalogueCatalogueRequest $request)
     {
-        $sorts = explode(',', $request->sort);
-        $catalogues = Catalogue::customOrderBy($sorts)
-            ->description($request->input('description'))
+        $catalogues = Catalogue::
+            description($request->input('description'))
             ->name($request->input('name'))
             ->type($request->input('type'))
-            ->limit(5000)
-            ->paginate();
+            ->limit(1000)
+            ->orderBy('name')
+            ->get();
 
         return (new CatalogueCollection($catalogues))
             ->additional([
@@ -77,95 +45,5 @@ class CatalogueController extends Controller
                     'code' => '200'
                 ]
             ]);
-    }
-
-    public function getCatalogueCourseCategory()
-    {
-        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
-        $courseCategories = Catalogue::where('type',  $catalogue['category']['type']);
-
-        return (new CatalogueCollection($courseCategories))
-            ->additional([
-                'msg' => [
-                    'summary' => 'success',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ]);
-    }
-    /*******************************************************************************************************************
-     * FILES
-     ******************************************************************************************************************/
-    public function indexFiles(IndexFileRequest $request, Catalogue $catalogue)
-    {
-        return $catalogue->indexFiles($request);
-    }
-
-    public function uploadFile(UploadFileRequest $request, Catalogue $catalogue)
-    {
-        return $catalogue->uploadFile($request);
-    }
-
-    public function downloadFile(Catalogue $catalogue, File $file)
-    {
-        return $catalogue->downloadFile($file);
-    }
-
-    public function downloadFiles(Catalogue $catalogue)
-    {
-        return $catalogue->downloadFiles();
-    }
-
-    public function showFile(Catalogue $catalogue, File $file)
-    {
-        return $catalogue->showFile($file);
-    }
-
-    public function updateFile(UpdateFileRequest $request, Catalogue $catalogue, File $file)
-    {
-        return $catalogue->updateFile($request, $file);
-    }
-
-    public function destroyFile(Catalogue $catalogue, File $file)
-    {
-        return $catalogue->destroyFile($file);
-    }
-
-    public function destroyFiles(Catalogue $catalogue, DestroysFileRequest $request)
-    {
-        return $catalogue->destroyFiles($request);
-    }
-
-    /*******************************************************************************************************************
-     * IMAGES
-     ******************************************************************************************************************/
-    public function indexImages(IndexImageRequest $request, Catalogue $catalogue)
-    {
-        return $catalogue->indexImages($request);
-    }
-
-    public function uploadImage(UploadImageRequest $request, Catalogue $catalogue)
-    {
-        return $catalogue->uploadImage($request);
-    }
-
-    public function downloadImage(DownloadImageRequest $request, Catalogue $catalogue, Image $image)
-    {
-        return $catalogue->downloadImage($request, $image);
-    }
-
-    public function showImage(Catalogue $catalogue, Image $image)
-    {
-        return $catalogue->showImage($image);
-    }
-
-    public function updateImage(UpdateImageRequest $request, Catalogue $catalogue, Image $image)
-    {
-        return $catalogue->updateImage($request, $image);
-    }
-
-    public function destroyImage(Catalogue $catalogue, Image $image)
-    {
-        return $catalogue->destroyImage($image);
     }
 }

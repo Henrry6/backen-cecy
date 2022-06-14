@@ -4,6 +4,7 @@ namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
 use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 use App\Http\Requests\V1\Cecy\Authorities\IndexAuthorityRequest;
@@ -43,7 +44,7 @@ class PlanificationController extends Controller
     {
         $sorts = explode(',', $request->input('sort'));
 
-        $planifications =  Planification::customOrderBy($sorts)
+        $planifications = Planification::customOrderBy($sorts)
             ->code($request->input('search'))
             ->limit(1000)
             ->get();
@@ -59,6 +60,7 @@ class PlanificationController extends Controller
             ->response()->setStatusCode(200);
     }
 
+    // BORRAR
     public function updatePlanificationByCecy(UpdatePlanificationRequest $request, Planification $planification)
     {
         $loggedAuthority = Authority::where('user_id', $request->user()->id)->get();
@@ -174,7 +176,7 @@ class PlanificationController extends Controller
     private function getApprovedPlanificationsId()
     {
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
-        $planificationsTypes = Catalogue::where('type',  $catalogue['planification_state']['type'])->get();
+        $planificationsTypes = Catalogue::where('type', $catalogue['planification_state']['type'])->get();
         $planificationApproved = $planificationsTypes->where('code', $catalogue['planification_state']['approved'])->first();
         return $planificationApproved;
     }
@@ -218,23 +220,7 @@ class PlanificationController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    public function getPlanitification(Request $request, Planification $planification)
-    {
-        // GetPlanitificationRequest
-        // return "hola";
-
-        return (new PlanificationByCourseResource($planification))
-            ->additional([
-                'msg' => [
-                    'summary' => 'Consulta correcta',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ])
-            ->response()->setStatusCode(200);
-    }
-
-    public function getPlanificationsByPeriodState(IndexAuthorityRequest $request)
+    public function getCurrentPlanificationsByAuthority(IndexAuthorityRequest $request)
     {
 
         $sorts = explode(',', $request->input('sort'));
@@ -273,7 +259,7 @@ class PlanificationController extends Controller
             ])->response()->setStatusCode(200);
     }
 
-    public function assignCodeToPlanification(Planification $planification, $request)
+    public function assignCode(Planification $planification, $request)
     {
         $planification->code = $request->input('code');
         return (new PlanificationResource($planification))
@@ -363,8 +349,24 @@ class PlanificationController extends Controller
         return $pdf->stream('Informe final del curso.pdf');
     }
 
+    private function generateDetailSchoolPeriod($startedAt)
+    {
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+        $currentState = Catalogue::where('type', $catalogue['school_period_state']['type'])
+            ->where('code', $catalogue['school_period_state']['current'])
+            ->first();
+        $schoolPeriod = SchoolPeriod::firstWhere('state_id',$currentState->id);
+        $detailSchoolPeriod = new DetailSchoolPeriod();
+        $detailSchoolPeriod->schoolPeriod()->associate($schoolPeriod);
+        $startedAt = Carbon::create($startedAt);
+        $detailSchoolPeriod->ordinary_ended_at = $startedAt->addDays(10);
+        $detailSchoolPeriod->ordinary_ended_at = $startedAt->addDays(10);
+        $detailSchoolPeriod->ordinary_ended_at = $startedAt->addDays(10);
+        $detailSchoolPeriod->ordinary_ended_at = $startedAt->addDays(10);
+    }
+
     /**
-     * storePlanificationByCourse 
+     * storePlanificationByCourse
      */
     public function storePlanificationByCourse(StorePlanificationByCourseRequest $request, Course $course)
     {
@@ -373,14 +375,15 @@ class PlanificationController extends Controller
         $currentState = Catalogue::where('type', $catalogue['school_period_state']['type'])
             ->where('code', $catalogue['school_period_state']['current'])
             ->first();
-        $toBeApproved = Catalogue::where('type',  $catalogue['planification_state']['type'])
-            ->where('code',  $catalogue['planification_state']['to_be_approved'])
+        $toBeApproved = Catalogue::where('type', $catalogue['planification_state']['type'])
+            ->where('code', $catalogue['planification_state']['to_be_approved'])
             ->first();
         $instructor = Instructor::find($request->input('responsibleCourse.id'));
         $detailSchoolPeriod = DetailSchoolPeriod::whereRelation('schoolPeriod', 'state_id', $currentState->id)
             ->first();
         // $lastPlanification = Planification::latest('ended_at')
         //     ->first();
+
 
         // if (
         //     $request->input('startedAt') <= $lastPlanification->ended_at ||
@@ -424,7 +427,7 @@ class PlanificationController extends Controller
      * Actualiza ended_at started_at and responsibleCourse
      * Usa coordinador de carrera (no cambiar)
      */
-    public function updatePlanificationByCourse(UpdatePlanificationByCourseRequest $request, Planification $planification)
+    public function updateInitialPlanification(UpdatePlanificationByCourseRequest $request, Planification $planification)
     {
         $instructor = Instructor::find($request->input('responsibleCourse.id'));
 
@@ -449,7 +452,7 @@ class PlanificationController extends Controller
     /**
      * destroyPlanification
      */
-    public function destroyPlanification(DestroyPlanificationRequest $request, Planification $planification)
+    public function destroy(Planification $planification)
     {
         $planification->delete();
 

@@ -90,7 +90,7 @@ class Catalogue extends Model implements Auditable
     public function scopeType($query, $type)
     {
         if ($type) {
-            return $query->orWhere('type', $type);
+            return $query->where('type', $type);
         }
     }
 
@@ -123,6 +123,6 @@ class Catalogue extends Model implements Auditable
             array_unshift($fields, 'id');
             return $query->select($fields);
         }
-    } 
+    }
 
 }

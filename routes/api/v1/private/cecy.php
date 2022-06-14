@@ -1,54 +1,36 @@
 <?php
 
-use App\Http\Controllers\V1\Cecy\AuthorityController;
+use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\V1\Cecy\DetailSchoolPeriodController;
+use App\Http\Controllers\V1\Cecy\AttendanceController;
+use App\Http\Controllers\V1\Cecy\AuthorityController;
 use App\Http\Controllers\V1\Cecy\CatalogueController;
+use App\Http\Controllers\V1\Cecy\CertificateController;
 use App\Http\Controllers\V1\Cecy\ClassroomController;
 use App\Http\Controllers\V1\Cecy\CourseController;
 use App\Http\Controllers\V1\Cecy\DetailAttendanceController;
 use App\Http\Controllers\V1\Cecy\DetailPlanificationController;
 use App\Http\Controllers\V1\Cecy\InstitutionController;
-use App\Http\Controllers\V1\Cecy\TopicController;
-use App\Http\Controllers\V1\Cecy\PrerequisiteController;
+use App\Http\Controllers\V1\Cecy\InstructorController;
+use App\Http\Controllers\V1\Cecy\ParticipantController;
+use App\Http\Controllers\V1\Cecy\PhotographicRecordController;
 use App\Http\Controllers\V1\Cecy\PlanificationController;
+use App\Http\Controllers\V1\Cecy\PrerequisiteController;
+use App\Http\Controllers\V1\Cecy\RegistrationController;
 use App\Http\Controllers\V1\Cecy\RequirementController;
 use App\Http\Controllers\V1\Cecy\SchoolPeriodController;
-use App\Http\Controllers\V1\Cecy\InstructorController;
-use \App\Http\Controllers\V1\Cecy\DetailSchoolPeriodController;
-use App\Http\Controllers\V1\Cecy\PhotographicRecordController;
-use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
-use App\Http\Controllers\V1\Cecy\RegistrationController;
-use App\Http\Controllers\V1\Cecy\CertificateController;
-use App\Http\Controllers\V1\Cecy\AttendanceController;
-use App\Http\Controllers\V1\Cecy\ParticipantController;
+use App\Http\Controllers\V1\Cecy\TopicController;
+
 
 /***********************************************************************************************************************
  * CATALOGUES
  **********************************************************************************************************************/
 Route::controller(CatalogueController::class)->group(function () {
-    Route::prefix('catalogue/{catalogue}')->group(function () {
-        Route::prefix('file')->group(function () {
-            Route::get('{file}/download', [CatalogueController::class, 'downloadFile']);
-            Route::get('download', [CatalogueController::class, 'downloadFiles']);
-            Route::get('', [CatalogueController::class, 'indexFiles']);
-            Route::get('{file}', [CatalogueController::class, 'showFile']);
-            Route::post('', [CatalogueController::class, 'uploadFile']);
-            Route::post('{file}', [CatalogueController::class, 'updateFile']);
-            Route::delete('{file}', [CatalogueController::class, 'destroyFile']);
-            Route::patch('', [CatalogueController::class, 'destroyFiles']);
-        });
-        Route::prefix('image')->group(function () {
-            Route::get('{image}/download', [CatalogueController::class, 'downloadImage'])->withoutMiddleware('auth:sanctum');
-            Route::get('', [CatalogueController::class, 'indexImages']);
-            Route::get('{image}', [CatalogueController::class, 'showImage']);
-            Route::post('', [CatalogueController::class, 'uploadImage']);
-            Route::post('{image}', [CatalogueController::class, 'updateImage']);
-            Route::delete('{image}', [CatalogueController::class, 'destroyImage']);
-            Route::patch('', [CatalogueController::class, 'destroyImages']);
-        });
+    Route::prefix('cecy-catalogue/{catalogue}')->group(function () {
     });
-    Route::prefix('catalogue')->group(function () {
-        Route::get('catalogue', [CatalogueController::class, '']);
+    Route::prefix('cecy-catalogue')->group(function () {
+        Route::get('catalogue', [CatalogueController::class, 'catalogue']);
     });
 });
 
@@ -57,14 +39,10 @@ Route::controller(CatalogueController::class)->group(function () {
  **********************************************************************************************************************/
 Route::controller(InstitutionController::class)->group(function () {
     Route::prefix('institutions/{institution}')->group(function () {
-        Route::patch('destroy', 'destroy');
-        Route::get('show', 'show');
-        Route::put('update', 'update');
     });
 
     Route::prefix('institutions')->group(function () {
         Route::patch('destroys', 'destroys');
-        Route::post('store', 'store');
         Route::get('catalogue', 'catalogue');
     });
 });
@@ -76,31 +54,26 @@ Route::apiResource('institutions', InstitutionController::class);
  **********************************************************************************************************************/
 Route::controller(PlanificationController::class)->group(function () {
     Route::prefix('planifications/{planification}')->group(function () {
-        Route::get('', 'getPlanitification');
-        Route::put('assign-code-planification',  'assignCodeToPlanification');
-        Route::put('approve-planification',  'approvePlanification');
-        Route::put('planifications-cecy', 'updatePlanificationByCecy');
-        //Route::put('responsible-cecy', 'updateAssignResponsibleCecy');
-        Route::put('assign-responsible-cecy', 'assignResponsibleCecy');
+        Route::put('assign-code-planification', 'assignCode');
+        Route::put('approve-planification', 'approvePlanification');
+        Route::put('planifications-cecy', 'updatePlanificationByCecy'); // BORRAR
         Route::patch('assign-responsible-cecy', 'assignResponsibleCecy');
-        Route::put('career-coordinator', 'updatePlanificationByCourse');
-        Route::delete('', 'destroyPlanification');
+        Route::put('initial-planification', 'updateInitialPlanification');
     });
 
     Route::prefix('planifications')->group(function () {
-        Route::get('planifications-period-state', 'getPlanificationsByPeriodState');
-        Route::get('by-detail-planification', 'getPlanificationsByDetailPlanification');
-        Route::get('course_parallels-works', 'getCoursesParallelsWorkdays');
-        Route::get('planfications-course/{course}', 'getPlanificationsByCourse');
+        Route::get('period-states', 'getCurrentPlanificationsByAuthority');
+        Route::get('detail-planifications', 'getPlanificationsByDetailPlanification');// no existe el metodo
+        Route::get('course-parallels-works', 'getCoursesParallelsWorkdays');// no existe el metodo
+        Route::get('courses/{course}', 'getPlanificationsByCourse');
         Route::get('kpis/{state}', 'getKpi');
-        // Route::put('{planification}', 'updateStatePlanification');
         Route::post('courses/{course}', 'storePlanificationByCourse');
-        Route::get('catalogue/catalogue', 'catalogue');
+        Route::get('catalogue', 'catalogue');
     });
 });
-// Route::apiResource('planifications', PlanificationController::class);
+Route::apiResource('planifications', PlanificationController::class);
 
-
+// REVISAR DESDE AQUI
 /***********************************************************************************************************************
  * DETAIL PLANIFICATIONS
  **********************************************************************************************************************/
@@ -158,7 +131,7 @@ Route::controller(CourseController::class)->group(function () {
         Route::prefix('cecy-responsible')->group(function () {
             Route::put('approve', 'approveCourse');
             Route::get('decline', 'declineCourse');
-            
+
             Route::prefix('files')->group(function () {
                 Route::get('{file}/download', 'downloadFile');
                 Route::get('', 'indexFiles');
@@ -168,7 +141,7 @@ Route::controller(CourseController::class)->group(function () {
                 Route::delete('{file}', 'destroyFile');
                 Route::patch('', 'destroyFiles');
             });
-            
+
             Route::prefix('images')->group(function () {
                 Route::get('{image}/download', 'downloadImage');
                 Route::get('', 'indexImages');
@@ -215,7 +188,7 @@ Route::controller(CourseController::class)->group(function () {
 // Route::apiResource('courses', CourseController::class);
 
 /***********************************************************************************************************************
- * 
+ *
  **********************************************************************************************************************/
 Route::get('/inform', function () {
     $pdf = PDF::loadView('reports/informe-final');
@@ -304,7 +277,7 @@ Route::apiResource('classroom', ClassroomController::class);
 Route::controller(InstructorController::class)->group(function () {
     Route::prefix('instructors/{instructor}')->group(function () {
         Route::put('updateInstructor', 'updateInstructor');
-        Route::delete('destroy','destroy');
+        Route::delete('destroy', 'destroy');
     });
 
     Route::prefix('instructors')->group(function () {
@@ -314,11 +287,11 @@ Route::controller(InstructorController::class)->group(function () {
         Route::get('instructor-information', 'getInstructorsInformationByCourse');
         Route::get('authorized-instructors/detail-planifications/{detail_planification}', 'getAuthorizedInstructorsOfCourse');
         Route::get('detail-planifications/{detail_planification}', 'getAssignedInstructors');
-        Route::delete('destroys','destroyInstructors');
+        Route::delete('destroys', 'destroyInstructors');
 
         // Route::get('courses', [InstructorController::class, 'getCourses']);
         // Route::get('instructor-courses', [InstructorController::class, 'getInstructorByCourses']);
-        
+
 
     });
 });
@@ -453,7 +426,7 @@ Route::controller(RecordController::class)->group(function () {
 Route::apiResource('records', PhotographicRecordController::class);
 
 /*****************************************
- * REGISTRATIONS 
+ * REGISTRATIONS
  ****************************************/
 Route::controller(RegistrationController::class)->group(function () {
     Route::prefix('registrations/{registration}')->group(function () {
@@ -479,7 +452,7 @@ Route::controller(RegistrationController::class)->group(function () {
 });
 
 /*****************************************
- * TOPICS 
+ * TOPICS
  ****************************************/
 Route::prefix('topic/{topic}')->group(function () {
     Route::prefix('file')->group(function () {
