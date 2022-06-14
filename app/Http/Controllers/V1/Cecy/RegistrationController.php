@@ -39,7 +39,7 @@ class RegistrationController extends Controller
     public function additionalInformation(Registration $registration){
         $additionalInformation=$registration->additionalInformation()->get();
     }
-    
+
     //Ver todos los cursos del estudiante en el cual esta matriculado
     // RegistrationController
     public function getCoursesByParticipant(GetCoursesByParticipantRequest $request)
@@ -68,7 +68,7 @@ class RegistrationController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    //participantes de un curso por detalle de la planificacion 
+    //participantes de un curso por detalle de la planificacion
     public function getParticipant(DetailPlanification $detailPlanification)
     {
         $registration = $detailPlanification->registrations()->get();
@@ -121,7 +121,7 @@ class RegistrationController extends Controller
             ])
             ->response()->setStatusCode(200);
     }
-    
+
 
     //Descargar matriz
     // RegistrationController
@@ -230,8 +230,8 @@ class RegistrationController extends Controller
              //'additionalInformations' => $additionalInformations,
             //'participants' => $participants,
         ];
- 
-        
+
+
 /*        return $additionalInformations;
  */
         $pdf = PDF::loadView('reports/report-record-competitors', [
@@ -267,7 +267,7 @@ class RegistrationController extends Controller
             ])
             ->response()->setStatusCode(200);
     }
-    
+
     //subir notas de los estudiantes
     // RegistrationController
     public function uploadFile(UploadFileRequest $request, FIle $file)
