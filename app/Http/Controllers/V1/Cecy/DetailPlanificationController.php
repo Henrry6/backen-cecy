@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\V1\Cecy\DetailPlanifications\AssignInstructorsToDetailPlanificationRequest;
+use App\Http\Requests\V1\Cecy\DetailPlanifications\AssignInstructorsRequest;
 use App\Http\Requests\V1\Cecy\DetailPlanifications\CatalogueDetailPlanificationRequest;
+use App\Http\Requests\V1\Cecy\DetailPlanifications\IndexDetailPlanificationRequest;
 use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\DeleteDetailPlanificationRequest;
 use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\DestroysDetailPlanificationRequest;
 use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\GetDetailPlanificationsByPlanificationRequest;
@@ -31,6 +32,25 @@ class DetailPlanificationController extends Controller
     {
     }
 
+    public function index(IndexDetailPlanificationRequest $request)
+    {
+        $sorts = explode(',', $request->input('sort'));
+
+        $detailPlanifications =  DetailPlanification::customOrderBy($sorts)
+            ->observation($request->input('search'))
+            ->paginate($request->input('perPage'));
+
+        return (new DetailPlanificationCollection($detailPlanifications))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
+
     public function catalogue(CatalogueDetailPlanificationRequest $request)
     {
         $sorts = explode(',', $request->input('sort'));
@@ -51,51 +71,10 @@ class DetailPlanificationController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    /*
-        Obtener los horarios de cada paralelo dado un curso
-    */
-    // DetailController (done) =>conflicto en controlador
-    public function getDetailPlanificationsByCourse(Course $course) //hecho
-    {
-
-        $planification = $course->planifications()->get();
-        $detailPlanification = $planification
-            ->detailPlanifications();
-        return (new DetailPlanificationResource($detailPlanification))
-            ->additional([
-                'msg' => [
-                    'summary' => 'Éxito',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ])->response()->setStatusCode(200);
-    }
-
-    /**
-     * Get all detail planifications filtered by planification
-     */
-    public function getDetailPlanificationsByPlanification(GetDetailPlanificationsByPlanificationRequest $request, Planification $planification)
-    {
-        $detailPlanifications = $planification
-            ->detailPlanifications()
-            ->paginate($request->input('perPage'));
-
-
-        return (new ResponsibleCourseDetailPlanificationCollection($detailPlanifications))
-            ->additional([
-                'msg' => [
-                    'summary' => 'Éxito',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ])
-            ->response()->setStatusCode(200);
-    }
-
     /**
      * Store a detail planification record
      */
-    public function storeDetailPlanification(RegisterDetailPlanificationRequest $request)
+    public function store(RegisterDetailPlanificationRequest $request)
     {
         $loggedInInstructor = Instructor::where('user_id', $request->user()->id)->first();
         if (!$loggedInInstructor) {
@@ -175,7 +154,7 @@ class DetailPlanificationController extends Controller
     /**
      * Return a detailPlanification record
      */
-    public function showDetailPlanification(ShowDetailPlanificationRequest $request, DetailPlanification $detailPlanification)
+    public function show(ShowDetailPlanificationRequest $request, DetailPlanification $detailPlanification)
     {
         return (new ResponsibleCourseDetailPlanificationResource($detailPlanification))
             ->additional([
@@ -191,7 +170,7 @@ class DetailPlanificationController extends Controller
     /**
      * Update a detail planification record
      */
-    public function updateDetailPlanification(UpdateDetailPlanification $request, DetailPlanification $detailPlanification)
+    public function update(UpdateDetailPlanification $request, DetailPlanification $detailPlanification)
     {
         $loggedInInstructor = Instructor::where('user_id', $request->user()->id)->first();
         if (!$loggedInInstructor) {
@@ -267,7 +246,7 @@ class DetailPlanificationController extends Controller
     /**
      * Delete a detail planification record
      */
-    public function deleteDetailPlanification(DeleteDetailPlanificationRequest $request, DetailPlanification $detailPlanification)
+    public function destroy(DeleteDetailPlanificationRequest $request, DetailPlanification $detailPlanification)
     {
         $planification = $detailPlanification->planification()->first();
         $responsibleCourse = $planification->responsibleCourse()->first();
@@ -322,9 +301,125 @@ class DetailPlanificationController extends Controller
             ->response()->setStatusCode(200);
     }
 
+    /**
+     * Delete some detail planification records
+     */
+    public function destroys(DestroysDetailPlanificationRequest $request)
+    {
+        $detailPlanification = DetailPlanification::find($request->ids[0]);
+        $planification = $detailPlanification->planification()->first();
+        $responsibleCourse = $planification->responsibleCourse()->first();
+
+        $loggedInInstructor = Instructor::where('user_id', $request->user()->id)->first();
+        if (!$loggedInInstructor) {
+            return response()->json([
+                'data' => '',
+                'msg' => [
+                    'summary' => 'Error',
+                    'detail' => 'No es instructor o no se encuentra registrado',
+                    'code' => '400'
+                ]
+            ], 400);
+        }
+
+        if ($loggedInInstructor->id !== $responsibleCourse->id) {
+            return response()->json([
+                'data' => '',
+                'msg' => [
+                    'summary' => 'Error',
+                    'detail' => 'No le pertece esta planificación',
+                    'code' => '400'
+                ]
+            ], 400);
+        }
+
+        //validar que la planification ha culminado
+        if (
+            $planification->state()->first()->code === State::CULMINATED ||
+            $planification->state()->first()->code === State::APPROVED
+        ) {
+            return response()->json([
+                'msg' => [
+                    'summary' => 'Error',
+                    'detail' => 'La planificación ha culminado o ya fue aprobada.',
+                    'code' => '400'
+                ]
+            ], 400);
+        }
+        $detailPlanifications = DetailPlanification::whereIn('id', $request->input('ids'))->get();
+        DetailPlanification::destroy($request->input('ids'));
+
+        return (new ResponsibleCourseDetailPlanificationCollection($detailPlanifications))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Éxito',
+                    'detail' => 'Registros eliminados',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
+
+    public function assignInstructors(AssignInstructorsRequest $request, DetailPlanification $detailPlanification)
+    {
+        $detailPlanification->instructors()->sync($request->input('ids'));
+
+        return (new ResponsibleCourseDetailPlanificationResource($detailPlanification))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Éxito',
+                    'detail' => 'Instructores asignados',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
+    }
+
+    /*
+        Obtener los horarios de cada paralelo dado un curso
+    */
+    // DetailController (done) =>conflicto en controlador
+    public function getDetailPlanificationsByCourse(Course $course) //hecho
+    {
+
+        $planification = $course->planifications()->get();
+        $detailPlanification = $planification
+            ->detailPlanifications();
+        return (new DetailPlanificationResource($detailPlanification))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Éxito',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])->response()->setStatusCode(200);
+    }
+
+    /**
+     * Get all detail planifications filtered by planification
+     */
+    public function getDetailPlanificationsByPlanification(GetDetailPlanificationsByPlanificationRequest $request, Planification $planification)
+    {
+        $detailPlanifications = $planification
+            ->detailPlanifications()
+            ->paginate($request->input('perPage'));
+
+
+        return (new ResponsibleCourseDetailPlanificationCollection($detailPlanifications))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Éxito',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
+
     public function updatedetailPlanificationByCecy(UpdateDetailPlanificationRequest $request) //hecho
     {
         $loggedAuthority = Authority::where('user_id', $request->user()->id)->get();
+
         $classroom = Classroom::find($request->input('classroom.id'));
         $day = Catalogue::find($request->input('day.id'));
         $planification = Planification::find($request->input('planification.id'));
@@ -354,80 +449,5 @@ class DetailPlanificationController extends Controller
                     'code' => '200'
                 ]
             ])->response()->setStatusCode(200);
-    }
-
-    /**
-     * Delete some detail planification records
-     */
-    public function destroysDetailPlanifications(DestroysDetailPlanificationRequest $request)
-    {
-        $detailPlanification = DetailPlanification::find($request->ids[0]);
-        $planification = $detailPlanification->planification()->first();
-        // return $planification;
-        $responsibleCourse = $planification->responsibleCourse()->first();
-
-        $loggedInInstructor = Instructor::where('user_id', $request->user()->id)->first();
-        if (!$loggedInInstructor) {
-            return response()->json([
-                'data' => '',
-                'msg' => [
-                    'summary' => 'Error',
-                    'detail' => 'No es instructor o no se encuentra registrado',
-                    'code' => '400'
-                ]
-            ], 400); //revisar ->response()->setStatusCode(400)
-        }
-
-        if ($loggedInInstructor->id !== $responsibleCourse->id) {
-            return response()->json([
-                'data' => '',
-                'msg' => [
-                    'summary' => 'Error',
-                    'detail' => 'No le pertece esta planificación',
-                    'code' => '400'
-                ]
-            ], 400); //revisar ->response()->setStatusCode(400)
-        }
-
-        //validar que la planification ha culminado
-        if (
-            $planification->state()->first()->code === State::CULMINATED ||
-            $planification->state()->first()->code === State::APPROVED
-        ) {
-            return response()->json([
-                'msg' => [
-                    'summary' => 'Error',
-                    'detail' => 'La planificación ha culminado o ya fue aprobada.',
-                    'code' => '400'
-                ]
-            ], 400); //revisar ->response()->setStatusCode(400)
-        }
-        $detailPlanifications = DetailPlanification::whereIn('id', $request->input('ids'))->get();
-        DetailPlanification::destroy($request->input('ids'));
-
-        return (new ResponsibleCourseDetailPlanificationCollection($detailPlanifications))
-            ->additional([
-                'msg' => [
-                    'summary' => 'Éxito',
-                    'detail' => 'Registros eliminados',
-                    'code' => '200'
-                ]
-            ])
-            ->response()->setStatusCode(200);
-    }
-
-    public function assignInstructorToDetailPlanification(AssignInstructorsToDetailPlanificationRequest $request, DetailPlanification $detailPlanification)
-    {
-        $detailPlanification->instructors()->sync($request->input('ids'));
-
-        return (new ResponsibleCourseDetailPlanificationResource($detailPlanification))
-            ->additional([
-                'msg' => [
-                    'summary' => 'Éxito',
-                    'detail' => 'Instructores asignados',
-                    'code' => '201'
-                ]
-            ])
-            ->response()->setStatusCode(201);
     }
 }

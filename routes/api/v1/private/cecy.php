@@ -63,8 +63,8 @@ Route::controller(PlanificationController::class)->group(function () {
 
     Route::prefix('planifications')->group(function () {
         Route::get('period-states', 'getCurrentPlanificationsByAuthority');
-        Route::get('detail-planifications', 'getPlanificationsByDetailPlanification');// no existe el metodo
-        Route::get('course-parallels-works', 'getCoursesParallelsWorkdays');// no existe el metodo
+        Route::get('detail-planifications', 'getPlanificationsByDetailPlanification'); // no existe el metodo
+        Route::get('course-parallels-works', 'getCoursesParallelsWorkdays'); // no existe el metodo
         Route::get('courses/{course}', 'getPlanificationsByCourse');
         Route::get('kpis/{state}', 'getKpi');
         Route::post('courses/{course}', 'storePlanificationByCourse');
@@ -79,27 +79,18 @@ Route::apiResource('planifications', PlanificationController::class);
  **********************************************************************************************************************/
 Route::controller(DetailPlanificationController::class)->group(function () {
     Route::prefix('detail-planifications/{detail_planification}')->group(function () {
-        Route::get('/detail-course/{course}', 'getDetailPlanificationsByCourse');
-        Route::get('', 'showDetailPlanification');
-        Route::put('', 'updateDetailPlanification');
-        // Route::put('','updatedetailPlanificationByCecy');
-        Route::delete('', 'deleteDetailPlanification');
-        Route::post('', 'registerDetailPlanification');
-        Route::post('instructors-assignment', 'assignInstructorToDetailPlanification');
+        Route::get('detail-course/{course}', 'getDetailPlanificationsByCourse');
+        Route::post('instructors-assignment', 'assignInstructors');
+        Route::put('','updatedetailPlanificationByCecy');
     });
 
     Route::prefix('detail-planifications')->group(function () {
         Route::get('planifications/{planification}', 'getDetailPlanificationsByPlanification');
-        Route::get('responsible', 'getDetailPlanificationsByResponsibleCourse');
-        Route::get('catalogue/catalogue', 'catalogue');
-        Route::post('', 'storeDetailPlanification');
-    });
-
-    Route::prefix('detail-planification')->group(function () {
-        Route::patch('', 'destroysDetailPlanifications');
+        Route::get('catalogue', 'catalogue');
+        Route::patch('destroys', 'destroys');
     });
 });
-// Route::apiResource('detail-planifications', DetailplanificationController::class);
+Route::apiResource('detail-planifications', DetailplanificationController::class);
 
 /***********************************************************************************************************************
  * COURSES
