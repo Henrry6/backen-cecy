@@ -276,7 +276,7 @@ class PlanificationController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    public function approvePlanification($request, Planification $planification)
+    public function approve($request, Planification $planification)
     {
         $planification->state()->associate(Catalogue::FirstWhere('code', State::APPROVED));
         $planification->observation = $request->input('observation');
