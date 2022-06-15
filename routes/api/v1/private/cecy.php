@@ -194,22 +194,22 @@ Route::get('/inform', function () {
  **********************************************************************************************************************/
 Route::controller(DetailAttendanceController::class)->group(function () {
     Route::prefix('detail-attendances/{detail_attendance}')->group(function () {
-        Route::get('', 'showAttendanceParticipant');
-        Route::get('', 'getDetailAttendancesByParticipantWithOutPaginate');
-        Route::get('', 'getDetailAttendancesByParticipant');
-        Route::get('', 'getCurrentDateDetailAttendance');
-        Route::put('', 'updateDetailPlanification');
-        Route::put('', 'updatedetailPlanificationByCecy');
-        Route::patch('delete', 'deleteDetailPlanification');
+        Route::get('', 'showAttendanceParticipant'); // asistencia de un estudiante registrado .// Santillan-Molina
+        Route::get('', 'getDetailAttendancesByParticipantWithOutPaginate'); // assitencias de un participante ordenada y con paginacion .// Santillan-Molina
+        Route::get('', 'getDetailAttendancesByParticipant'); // revision con el anterior metodo por que parece que hace lo mismo.// Santillan-Molina
+        Route::get('', 'getCurrentDateDetailAttendance'); //  asistencias de acuerdo a la fecha del detallle de la planificacion.// Santillan-Molina
+        Route::put('', 'updateDetailPlanification'); // no existe el metodo en el controllador.// Santillan-Molina
+        Route::put('', 'updatedetailPlanificationByCecy'); // no existe el metodo en el controllador.// Santillan-Molina
+        Route::patch('delete', 'deleteDetailPlanification'); // no existe el metodo en el controllador.// Santillan-Molina
     });
 
     Route::prefix('detail-attendances')->group(function () {
-        Route::patch('save-detail-attendance', 'saveDetailAttendance');
-        Route::patch('destroys', 'destroysDetailPlanifications');
-        Route::get('catalogue', 'catalogue');
+        Route::patch('create', 'storeDetailAttendance');  // actualizacion de la asistencia.// Santillan-Molina
+        Route::patch('destroys', 'destroysDetailPlanifications'); // no existe el metodo.// Santillan-Molina
+        Route::get('catalogue', 'catalogue'); // catalogo del tipo de asistencia.// Santillan-Molina
     });
 });
-Route::apiResource('detail-attendances', DetailAttendanceController::class);
+Route::apiResource('detail-attendances', DetailAttendanceController::class); //metodo generales // Santillan-Molina
 
 /***********************************************************************************************************************
  * CERTIFICATES -- Quemag
@@ -280,8 +280,8 @@ Route::controller(InstructorController::class)->group(function () {
         Route::get('detail-planifications/{detail_planification}', 'getAssignedInstructors');
         Route::delete('destroys', 'destroyInstructors');
 
-        // Route::get('courses', [InstructorController::class, 'getCourses']);
-        // Route::get('instructor-courses', [InstructorController::class, 'getInstructorByCourses']);
+        // Route::get('courses', [InstructorController::class, 'getCourses']); cursos de un instructor desde la planificacion Santillan
+        // Route::get('instructor-courses', [InstructorController::class, 'getInstructorByCourses']); cursos de un instructor desde el detalle de planificacion Santillan
 
 
     });
@@ -376,14 +376,14 @@ Route::prefix('authority')->group(function () {
 // Route::apiResource('authorities', AuthorityController::class);
 
 /***********************************************************************************************************************
- * ATTENDANCES
+ * ATTENDANCES / Santillan-Molina
  **********************************************************************************************************************/
 
 Route::apiResource('attendances', AttendanceController::class);
 
 Route::prefix('attendance')->group(function () {
-    Route::get('detail/{detailPlanification}', [AttendanceController::class, 'getAttendancesByDetailPlanification']);
-    Route::delete('destroys', [AuthorityController::class, 'deleteAttendance']);
+    Route::get('detail/{detailPlanification}', [AttendanceController::class, 'getAttendancesByDetailPlanification']); //asistencias por el detalle de la planificacion santillan
+    Route::delete('destroys', [AuthorityController::class, 'deleteAttendance']); // eliminacion santillan
 });
 
 Route::prefix('pdf')->group(function () {
@@ -408,13 +408,13 @@ Route::controller(RecordController::class)->group(function () {
     });
 
     Route::prefix('record')->group(function () {
-        //Route::get('{photographicRecord}', [PhotographicRecordController::class, 'show']);
-        //Route::get('detail/{detailPlanification}', [PhotographicRecordController::class, 'getDetails']);
+        //Route::get('{photographicRecord}', [PhotographicRecordController::class, 'show']); // registro fotografico individual Santillan
+        //Route::get('detail/{detailPlanification}', [PhotographicRecordController::class, 'getDetails']); // registro fotografico de todo el curso desde el detalle de planificaion-Santillan
         Route::patch('destroys', 'destroys');
         Route::post('store', 'store');
     });
 });
-Route::apiResource('records', PhotographicRecordController::class);
+Route::apiResource('records', PhotographicRecordController::class); // crud del registro fotografico para pruebas Santillan
 
 /*****************************************
  * REGISTRATIONS

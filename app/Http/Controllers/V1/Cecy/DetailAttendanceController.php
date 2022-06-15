@@ -53,7 +53,7 @@ class DetailAttendanceController extends Controller
 
     // Guardar asistencia
     // AttendanceController
-    public function saveDetailAttendance(SaveDetailAttendanceRequest $request, DetailAttendance $detailAttendance)
+    public function  storeDetailAttendance(SaveDetailAttendanceRequest $request, DetailAttendance $detailAttendance)
     {
         $detailAttendance->type_id = $request->input('type.id');
         $detailAttendance->save();
