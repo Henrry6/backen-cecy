@@ -54,11 +54,12 @@ Route::apiResource('institutions', InstitutionController::class);
  **********************************************************************************************************************/
 Route::controller(PlanificationController::class)->group(function () {
     Route::prefix('planifications/{planification}')->group(function () {
-        Route::put('assign-code-planification', 'assignCode');
         Route::put('approve-planification', 'approvePlanification');
-        Route::put('planifications-cecy', 'updatePlanificationByCecy'); // BORRAR
+        Route::put('assign-code-planification', 'assignCode');
         Route::patch('assign-responsible-cecy', 'assignResponsibleCecy');
+        Route::get('detail-planifications', 'getDetailPlanificationsByPlanification');
         Route::put('initial-planification', 'updateInitialPlanification');
+        Route::put('planifications-cecy', 'updatePlanificationByCecy'); // BORRAR
     });
 
     Route::prefix('planifications')->group(function () {
@@ -81,11 +82,10 @@ Route::controller(DetailPlanificationController::class)->group(function () {
     Route::prefix('detail-planifications/{detail_planification}')->group(function () {
         Route::get('detail-course/{course}', 'getDetailPlanificationsByCourse');
         Route::post('instructors-assignment', 'assignInstructors');
-        Route::put('','updatedetailPlanificationByCecy');
+        Route::put('update-detail-planification-proposal','updateDetailPlanificationProposal');
     });
 
     Route::prefix('detail-planifications')->group(function () {
-        Route::get('planifications/{planification}', 'getDetailPlanificationsByPlanification');
         Route::get('catalogue', 'catalogue');
         Route::patch('destroys', 'destroys');
     });

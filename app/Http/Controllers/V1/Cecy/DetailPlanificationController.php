@@ -360,6 +360,9 @@ class DetailPlanificationController extends Controller
             ->response()->setStatusCode(200);
     }
 
+    /**
+     * Assign instructors to detail planifications.
+     */
     public function assignInstructors(AssignInstructorsRequest $request, DetailPlanification $detailPlanification)
     {
         $detailPlanification->instructors()->sync($request->input('ids'));
@@ -395,28 +398,7 @@ class DetailPlanificationController extends Controller
             ])->response()->setStatusCode(200);
     }
 
-    /**
-     * Get all detail planifications filtered by planification
-     */
-    public function getDetailPlanificationsByPlanification(GetDetailPlanificationsByPlanificationRequest $request, Planification $planification)
-    {
-        $detailPlanifications = $planification
-            ->detailPlanifications()
-            ->paginate($request->input('perPage'));
-
-
-        return (new ResponsibleCourseDetailPlanificationCollection($detailPlanifications))
-            ->additional([
-                'msg' => [
-                    'summary' => 'Éxito',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ])
-            ->response()->setStatusCode(200);
-    }
-
-    public function updatedetailPlanificationByCecy(UpdateDetailPlanificationRequest $request) //hecho
+    public function updateDetailPlanificationProposal(UpdateDetailPlanificationRequest $request)
     {
         $loggedAuthority = Authority::where('user_id', $request->user()->id)->get();
 
