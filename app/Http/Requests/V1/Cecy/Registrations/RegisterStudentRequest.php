@@ -54,7 +54,6 @@ class RegisterStudentRequest extends FormRequest
             'companyPhone' => 'teléfono de empresa',
             'companySponsored' => 'la empresa patrocina',
             'courseKnows' => 'entorno de aprendizaje',
-            'number' => 'numero de matricula',
             'registeredAt' => 'fecha de matricula',
             'worked' => 'participante que trabaja',
         ];

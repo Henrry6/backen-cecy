@@ -298,14 +298,20 @@ class RegistrationController extends Controller
     public function registerStudent(RegisterStudentRequest $request)
     {
         $participant = Participant::firstWhere('user_id', $request->user()->id);
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+        $state = Catalogue::firstWhere('code', $catalogue['registration_state']['in_review']);
+        $type = Catalogue::firstWhere('code', $catalogue['registration']['ordinary']);
 
         $registration = new Registration();
         $registration->participant()->associate($participant);
+        $registration->detailPlanification()->associate(DetailPlanification::find($request->input('detailPlanification.id')));
+        // TODO: Usar logica para asignar un tipo de participante segun la fecha, se crea un foncion extra?
         $registration->type()->associate(Catalogue::find($request->input('type.id')));
+        // Enviar por predetermiando el estado en revision (como lo envio)
         $registration->state()->associate(Catalogue::find($request->input('state.id')));
-        $registration->typeParticipant()->associate(Catalogue::find($request->input('type_participant.id')));
+        $registration->typeParticipant()->associate(Catalogue::find($request->input('typeParticipant.id')));
         $registration->number = $request->input('number');
-        $registration->registered_at = $request->input('registeredAt');
+        $registration->registered_at = now();
 
         DB::transaction(function ($registration, $request) {
             $registration->save();
