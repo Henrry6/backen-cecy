@@ -16,7 +16,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class CertificateController extends Controller
 {
-    //Descargar certificado del curso
+    //Borrar---Descargar certificado del curso
     // CertificateController
     //descargar certificado
     public function downloadCertificateByParticipant(IndexCertificateRequest $request, Registration $registration, Catalogue $catalogue, File $file)
@@ -28,7 +28,7 @@ class CertificateController extends Controller
         return $catalogue->downloadFileCertificates($file);
     }
 
-    //Subir certificado Firmado
+    //Borrar---Subir certificado Firmado
     // CerticateController
     public function uploadFileCertificateFirm(UploadFileRequest $request, Catalogue $catalogue)
     {
@@ -36,14 +36,14 @@ class CertificateController extends Controller
         return $catalogue->uploadFileCertificateFirm($request);
     }
 
-    //Carga de codigos certificado excel
+    //Borrar---Carga de codigos certificado excel
     // CerticateController
     public function uploadFileCertificate(UploadFileRequest $request, Catalogue $catalogue)
     {
         return $catalogue->uploadFileCertificate($request);
     }
 
-    //Descarga de certificados generados
+    //Borrar---Descarga de certificados generados
     // CerticateController
     public function downloadFileCertificates(Catalogue $catalogue, File $file)
     {

@@ -231,10 +231,11 @@ Route::prefix('certificate')->group(function () {
     Route::post('pdf-student', [CertificateController::class, 'generatePdfStudent']);
     Route::get('pdf-instructor', [CertificateController::class, 'generatePdfInstructor']);
 
-    Route::post('registration/{registration}/catalogue/{catalogue}/file/{file}', [CertificateController::class, 'downloadCertificateByParticipant']);
-    Route::get('catalogue/{catalogue}/file/{file}', [CertificateController::class, 'downloadFileCertificates']);
-    Route::post('catalogue/{catalogue}', [CertificateController::class, 'uploadFileCertificate']);
-    Route::post('firm/catalogue/{catalogue}', [CertificateController::class, 'uploadFileCertificateFirm']);
+    //Borrar--- Route::post('registration/{registration}/catalogue/{catalogue}/file/{file}', [CertificateController::class, 'downloadCertificateByParticipant']);
+    //Borrar--- Route::get('catalogue/{catalogue}/file/{file}', [CertificateController::class, 'downloadFileCertificates']);
+    //Borrar--- Route::post('catalogue/{catalogue}', [CertificateController::class, 'uploadFileCertificate']);
+    //Borrar--- Route::post('firm/catalogue/{catalogue}', [CertificateController::class, 'uploadFileCertificateFirm']);
+
 });
 
 /***********************************************************************************************************************
