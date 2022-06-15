@@ -4,7 +4,7 @@ namespace App\Http\Requests\V1\Cecy\DetailPlanifications;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AssignInstructorsToDetailPlanificationRequest  extends FormRequest
+class AssignInstructorsRequest  extends FormRequest
 {
     public function authorize()
     {
