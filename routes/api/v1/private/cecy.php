@@ -212,14 +212,14 @@ Route::controller(DetailAttendanceController::class)->group(function () {
 Route::apiResource('detail-attendances', DetailAttendanceController::class);
 
 /***********************************************************************************************************************
- * CERTIFICATES
+ * CERTIFICATES -- Quemag
  **********************************************************************************************************************/
 Route::prefix('certificate')->group(function () {
 
-    Route::get('excel-dates', [CertificateController::class, 'ExcelData']);
-    Route::post('excel-reading', [CertificateController::class, 'ExcelImport']);
-    Route::post('pdf-student', [CertificateController::class, 'generatePdfStudent']);
-    Route::get('pdf-instructor', [CertificateController::class, 'generatePdfInstructor']);
+    Route::get('excel-dates', [CertificateController::class, 'ExcelData']);   //Muestra Datos Guardados del Excell 
+    Route::post('excel-reading', [CertificateController::class, 'ExcelImport']);   //Importa-Lee Datos del Excell y los guarda en BD
+    Route::post('pdf-student', [CertificateController::class, 'generatePdfStudent']); //Genera el PDF del estudiante
+    Route::get('pdf-instructor', [CertificateController::class, 'generatePdfInstructor']); //Genera el PDF del Instructor
 
     //Borrar--- Route::post('registration/{registration}/catalogue/{catalogue}/file/{file}', [CertificateController::class, 'downloadCertificateByParticipant']);
     //Borrar--- Route::get('catalogue/{catalogue}/file/{file}', [CertificateController::class, 'downloadFileCertificates']);
