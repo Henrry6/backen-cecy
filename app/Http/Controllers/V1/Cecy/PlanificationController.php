@@ -8,6 +8,9 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 use App\Http\Requests\V1\Cecy\Authorities\IndexAuthorityRequest;
+use App\Http\Resources\V1\Cecy\Courses\CourseCollection;
+use App\Http\Resources\V1\Cecy\DetailPlanifications\ResponsibleCourseDetailPlanifications\DetailPlanificationCollection;
+use App\Http\Resources\V1\Cecy\DetailPlanifications\ResponsibleCourseDetailPlanifications\DetailPlanificationResource;
 use App\Http\Requests\V1\Cecy\Planifications\CataloguePlanificationRequest;
 use App\Http\Requests\V1\Cecy\Planifications\StorePlanificationByCourseRequest;
 use App\Http\Requests\V1\Cecy\Planifications\AddNeedsOfPlanification;
@@ -16,12 +19,12 @@ use App\Http\Requests\V1\Cecy\Planifications\DestroyPlanificationRequest;
 use App\Http\Requests\V1\Cecy\Planifications\UpdatePlanificationByCourseRequest;
 use App\Http\Requests\V1\Cecy\Planifications\UpdatePlanificationRequest;
 use App\Http\Requests\V1\Cecy\Planifications\UpdateStatePlanificationRequest;
-use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\GetPlanificationsByCourseRequest;
-use App\Http\Resources\V1\Cecy\Courses\CourseCollection;
 use App\Http\Resources\V1\Cecy\Planifications\ResponsibleCoursePlanifications\PlanificationByCourseCollection;
 use App\Http\Resources\V1\Cecy\Planifications\ResponsibleCoursePlanifications\PlanificationByCourseResource;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationResource;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationCollection;
+use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\GetPlanificationsByCourseRequest;
+use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\GetDetailPlanificationsByPlanificationRequest;
 use App\Models\Authentication\User;
 use App\Models\Cecy\Authority;
 use App\Models\Cecy\Catalogue;
@@ -355,7 +358,7 @@ class PlanificationController extends Controller
         $currentState = Catalogue::where('type', $catalogue['school_period_state']['type'])
             ->where('code', $catalogue['school_period_state']['current'])
             ->first();
-        $schoolPeriod = SchoolPeriod::firstWhere('state_id',$currentState->id);
+        $schoolPeriod = SchoolPeriod::firstWhere('state_id', $currentState->id);
         $detailSchoolPeriod = new DetailSchoolPeriod();
         $detailSchoolPeriod->schoolPeriod()->associate($schoolPeriod);
         $startedAt = Carbon::create($startedAt);
@@ -465,5 +468,26 @@ class PlanificationController extends Controller
                 ]
             ])
             ->response()->setStatusCode(201);
+    }
+
+    /**
+     * Get all detail planifications filtered by planification
+     */
+    public function getDetailPlanificationsByPlanification(GetDetailPlanificationsByPlanificationRequest $request, Planification $planification)
+    {
+        $detailPlanifications = $planification
+            ->detailPlanifications()
+            ->paginate($request->input('perPage'));
+
+
+        return (new DetailPlanificationCollection($detailPlanifications))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Éxito',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
     }
 }

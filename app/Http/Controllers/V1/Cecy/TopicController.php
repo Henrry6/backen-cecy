@@ -72,32 +72,13 @@ class TopicController extends Controller
             ])->response()->setStatusCode(200);
     }
 
-    public function getInstructors(Request $request, Course $course)
-    {
-        // $responsibleCourse = Instructor::where('user_id', $request->user()->id)->get();
-        // $detailPlanifications = $responsibleCourse
-        //     ->detailPlanifications()
-        //     ->paginate($request->input('per_page'));
-        // return $detailPlanifications;
-
-        return (new InstructorCollection(Instructor::paginate(100)))
-            ->additional([
-                'msg' => [
-                    'summary' => 'success',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ])->response()->setStatusCode(200);
-    }
-
-    public function getAllTopics($request, Course $course)
+    public function getAllTopics()
     {
         $sorts = explode(',', $request->sort);
 
         $topics = Topic::customOrderBy($sorts)
             ->description($request->input('search'))
             ->paginate($request->input('perPage'));
-
         return (new TopicCollection($topics))
             ->additional([
                 'msg' => [
@@ -143,8 +124,6 @@ class TopicController extends Controller
     {
         $topics = $request->input('topics');
         foreach ($topics as $topic) {
-            // $instructor = Instructor::find($topic['instructor']['id'])
-            // return $instructor;
             $newTopic = new Topic();
             $newTopic->course()->associate($course);
             $newTopic->level = 1;

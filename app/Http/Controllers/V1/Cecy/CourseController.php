@@ -426,20 +426,9 @@ class CourseController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    // Mostrar las necesidades de un curso (Done)
-    /*     public function informCourseNeeds(Course $course)
-    {
-        //trae un informe de nececidades de una planificacion, un curso en especifico por el docente que se logea
 
-        $planification = $course->planifications()->first();
 
-     $data= new InformCourseNeedsResource($planification);
-        $pdf = PDF::loadView('reports/report-needs', ['planification' => $data]);
-
-        return $pdf->stream('informNeeds.pdf');
-    } */
-
-    // Mostrar las necesidades de un curso (Done)
+    // descarga las necesidades de un curso (Done)
     public function informCourseNeeds(Course $course)
     {
         //trae un informe de nececidades de una planificacion, un curso en especifico por el docente que se logea
