@@ -58,7 +58,8 @@ Route::controller(PlanificationController::class)->group(function () {
         Route::put('assign-code', 'assignCode');
         Route::patch('assign-responsible-cecy', 'assignResponsibleCecy');
         Route::get('detail-planifications', 'getDetailPlanificationsByPlanification');
-        Route::put('initial-planification', 'updateInitialPlanification');
+        Route::put('initial-planification', 'updateInitialPlanification'); //Rivas
+        Route::put('needs', 'addNeeds'); // Pérez
         Route::put('planifications-cecy', 'updatePlanificationByCecy'); // BORRAR
     });
 
@@ -66,9 +67,9 @@ Route::controller(PlanificationController::class)->group(function () {
         Route::get('period-states', 'getCurrentPlanificationsByAuthority');
         Route::get('detail-planifications', 'getPlanificationsByDetailPlanification'); // no existe el metodo
         Route::get('course-parallels-works', 'getCoursesParallelsWorkdays'); // no existe el metodo
-        Route::get('courses/{course}', 'getPlanificationsByCourse');
+        Route::get('courses/{course}', 'getPlanificationsByCourse'); //Rivas, Pérez, 
         Route::get('kpis/{state}', 'getKpi');
-        Route::post('courses/{course}', 'storePlanificationByCourse');
+        Route::post('courses/{course}', 'storePlanificationByCourse'); //Rivas
         Route::get('catalogue', 'catalogue');
     });
 });
@@ -81,13 +82,13 @@ Route::apiResource('planifications', PlanificationController::class);
 Route::controller(DetailPlanificationController::class)->group(function () {
     Route::prefix('detail-planifications/{detail_planification}')->group(function () {
         Route::get('detail-course/{course}', 'getDetailPlanificationsByCourse');
-        Route::post('instructors-assignment', 'assignInstructors');
-        Route::put('detail-planification-proposal','updateDetailPlanificationProposal');
+        Route::post('instructors-assignment', 'assignInstructors'); // Pérez
+        Route::put('detail-planification-proposal', 'updateDetailPlanificationProposal'); // 
     });
 
     Route::prefix('detail-planifications')->group(function () {
         Route::get('catalogue', 'catalogue');
-        Route::patch('destroys', 'destroys');
+        Route::patch('destroys', 'destroys'); //Pérez
     });
 });
 Route::apiResource('detail-planifications', DetailplanificationController::class);
@@ -101,14 +102,14 @@ Route::controller(CourseController::class)->group(function () {
         });
 
         Route::prefix('careers/{career}')->group(function () {
-            Route::get('', 'getCoursesByCareer');
-            Route::post('', 'storeCourseByCareer');
+            Route::get('', 'getCoursesByCareer'); //Rivas
+            Route::post('', 'storeCourseByCareer'); //Rivas
         });
 
         Route::get('', 'getCourses');
         Route::post('', 'storeNewCourse');
-        Route::get('private-courses-participant', 'getPrivateCoursesByParticipantType');//Guachagmira
-        Route::get('private-courses-category/{category}', 'getPrivateCoursesByParticipantTypeAndCategory');//Guachagmira
+        Route::get('private-courses-participant', 'getPrivateCoursesByParticipantType'); //Guachagmira
+        Route::get('private-courses-category/{category}', 'getPrivateCoursesByParticipantTypeAndCategory'); //Guachagmira
         Route::get('by-responsible', 'getCoursesByResponsibleCourse');
         Route::get('by-instructor/{instructor}', 'getCoursesByInstructor');
         Route::get('by-coodinator', 'getCoursesByCoordinator');
@@ -119,37 +120,36 @@ Route::controller(CourseController::class)->group(function () {
     });
 
     Route::prefix('courses/{course}')->group(function () {
-        Route::prefix('cecy-responsible')->group(function () {
-            Route::put('approve', 'approveCourse');
-            Route::get('decline', 'declineCourse');
-
-            Route::prefix('files')->group(function () {
-                Route::get('{file}/download', 'downloadFile');
-                Route::get('', 'indexFiles');
-                Route::get('{file}', 'showFile');
-                Route::post('', 'uploadFile');
-                Route::put('{file}', 'updateFile');
-                Route::delete('{file}', 'destroyFile');
-                Route::patch('', 'destroyFiles');
-            });
-
-            Route::prefix('images')->group(function () {
-                Route::get('{image}/download', 'downloadImage');
-                Route::get('', 'indexImages');
-                Route::get('public', 'indexPublicImages');
-                Route::get('{image}', 'showImage');
-                Route::post('public', 'uploadPublicImage');
-                Route::put('{image}', 'updateImage');
-                Route::delete('{image}', 'destroyImage');
-                Route::patch('', 'destroyImages');
-            });
+        Route::put('approve', 'approveCourse'); //sin responsable
+        Route::put('decline', 'declineCourse'); //sin responsable
+        
+        //Para subir acta de curso aprobado
+        Route::prefix('files')->group(function () {
+            Route::get('{file}/download', 'downloadFile');
+            Route::get('', 'indexFiles');
+            Route::get('{file}', 'showFile');
+            Route::post('', 'uploadFile');
+            Route::put('{file}', 'updateFile');
+            Route::delete('{file}', 'destroyFile');
+            Route::patch('', 'destroyFiles');
         });
 
-        Route::put('career-coordinator', 'updateCourseNameAndDuration');
-        Route::delete('career-coordinator', 'destroyCourse');
+        Route::prefix('images')->group(function () {
+            Route::get('{image}/download', 'downloadImage');
+            Route::get('', 'indexImages');
+            Route::get('public', 'indexPublicImages');
+            Route::get('{image}', 'showImage');
+            Route::post('public', 'uploadPublicImage');
+            Route::put('{image}', 'updateImage');
+            Route::delete('{image}', 'destroyImage');
+            Route::patch('', 'destroyImages');
+        });
+
+        Route::put('initial-course', 'updateInitialCourse'); //Rivas
+        Route::delete('initial-course', 'destroyCourse'); //Rivas
 
         Route::prefix('')->group(function () {
-            Route::get('/topics', [TopicController::class, 'getTopics']);//Guachagmira
+            Route::get('/topics', [TopicController::class, 'getTopics']); //Guachagmira
             Route::get('/topics/all', [TopicController::class, 'getAllTopics']);
             Route::post('/topics', [TopicController::class, 'storesTopics']);
             Route::put('/topics', [TopicController::class, 'updateTopics']);
@@ -158,7 +158,7 @@ Route::controller(CourseController::class)->group(function () {
         });
         Route::prefix('')->group(function () {
             Route::get('/prerequisites/all', [PrerequisiteController::class, 'getPrerequisitesAll']);
-            Route::get('/prerequisites', [PrerequisiteController::class, 'getPrerequisites']);//Guachagmira
+            Route::get('/prerequisites', [PrerequisiteController::class, 'getPrerequisites']); //Guachagmira
             Route::post('/prerequisites', [PrerequisiteController::class, 'storePrerequisite']);
             Route::put('/prerequisites/{prerequisite}', [PrerequisiteController::class, 'updatePrerequisite']);
             Route::delete('/prerequisites/{prerequisite}', [PrerequisiteController::class, 'destroyPrerequisite']);
@@ -266,8 +266,7 @@ Route::apiResource('classroom', ClassroomController::class);
  **********************************************************************************************************************/
 Route::controller(InstructorController::class)->group(function () {
     Route::prefix('instructors/{instructor}')->group(function () {
-        Route::put('updateInstructor', 'updateInstructor');
-        Route::delete('destroy', 'destroy');
+        Route::put('state-type', 'updateInstructorStateAndType');
     });
 
     Route::prefix('instructors')->group(function () {
@@ -312,12 +311,10 @@ Route::apiResource('registrations', RegistrationController::class);
 Route::controller(ParticipantController::class)->group(function () {
     Route::prefix('participants/{participant}')->group(function () {
         Route::put('update-registration/{registration}', 'participantRegistrationStateModification');
-        Route::get('accept-participant', 'updateParticipantState');
-        Route::get('decline-participant', 'declineParticipant');
+        Route::patch('accept', 'acceptParticipant');//Salazar
+        Route::patch('decline', 'declineParticipant');//Salazar
         Route::post('participant-registration-user', 'createParticipantUser');
-        Route::delete('delete-participant', 'destroyParticipant');
-        Route::put('update-participant-user', 'updateParticipantUser');
-        Route::delete('destroy-participant', 'destroyParticipant');
+        Route::put('participant', 'updateParticipant');//Salazar
     });
 
     Route::prefix('participants')->group(function () {
@@ -325,7 +322,7 @@ Route::controller(ParticipantController::class)->group(function () {
         Route::get('information/{registration}', 'getParticipantInformation');
         Route::get('information', 'index');
         Route::patch('participant-registration/{registration}', 'registerParticipant');
-        Route::post('create-participant-user', 'createParticipantUser');
+        Route::post('participant', 'storeParticipant');//Salazar
     });
 });
 Route::apiResource('participants', ParticipantController::class);
@@ -390,8 +387,8 @@ Route::prefix('pdf')->group(function () {
     Route::get('year-schedule/{year}', [CourseController::class, 'showYearSchedule']);
     Route::get('attendance-evaluation/{course}', [AttendanceController::class, 'AttendanceEvaluation']);
     Route::get('year-schedule', [CourseController::class, 'showYearSchedule']);
-    Route::get('curricular-design/{course}',[PlanificationController::class, 'curricularDesign']);//Salazar
-    Route::get('informe-final/{course}',[PlanificationController::class, 'informeFinal']);//Salazar
+    Route::get('curricular-design/{course}', [PlanificationController::class, 'curricularDesign']); //Salazar
+    Route::get('informe-final/{course}', [PlanificationController::class, 'informeFinal']); //Salazar
 
 
     // Route::get('inform-course-needs/{course}', 'App\Http\Controllers\V1\Cecy\CourseController@informCourseNeeds');

@@ -120,7 +120,7 @@ class PlanificationController extends Controller
             ->response()->setStatusCode(201);
     }
 
-    public function addNeedsOfPlanification(AddNeedsOfPlanification $request, Planification $planification)
+    public function addNeeds(AddNeedsOfPlanification $request, Planification $planification)
     {
         $loggedInInstructor = Instructor::where('user_id', $request->user()->id)->first();
         if (!$loggedInInstructor) {
@@ -430,8 +430,7 @@ class PlanificationController extends Controller
 
     /**
      * updatePlanificationByCourse
-     * Actualiza ended_at started_at and responsibleCourse
-     * Usa coordinador de carrera (no cambiar)
+     * Actualiza ended_at, started_at and responsibleCourse
      */
     public function updateInitialPlanification(UpdatePlanificationByCourseRequest $request, Planification $planification)
     {

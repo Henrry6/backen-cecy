@@ -615,9 +615,9 @@ class CourseController extends Controller
     }
 
     /**
-     * updateCourseNameAndDuration
+     * updateInitialCourse
      */
-    public function updateCourseNameAndDuration(UpdateCourseNameAndDurationRequest $request, Course $course)
+    public function updateInitialCourse(UpdateCourseNameAndDurationRequest $request, Course $course)
     {
         if ($request->input('duration') < Course::MINIMUM_HOURS) {
             return response()->json([

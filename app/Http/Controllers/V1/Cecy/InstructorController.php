@@ -138,7 +138,7 @@ class InstructorController extends Controller
             ->response()->setStatusCode(201);
     }
 
-    public function updateInstructor(Request $request, Instructor $instructor)
+    public function updateInstructorStateAndType(Request $request, Instructor $instructor)
     {
         $instructor->state()->associate(Catalogue::find($request->input('state.id')));
         $instructor->type()->associate(Catalogue::find($request->input('type.id')));
