@@ -410,10 +410,12 @@ Route::controller(RegistrationController::class)->group(function () {
     });
 
     Route::prefix('registrations')->group(function () {
-        Route::get('courses-by-participant', 'getCoursesByParticipant');
-        Route::get('courses-by-participant/{registration}', 'getCoursesByParticipant');
+        Route::get('courses-by-participant', 'getCoursesByParticipant');// Molina
+        Route::get('courses-by-participant/{registration}', 'getCoursesByParticipant');// Molina
         //ruta para consulta las notas de registration
+        //Ver todos los cursos del estudiante en el cual esta matriculado
         //Route::get('courses-by-participant', [RegistrationController::class, 'getCoursesByParticipant']);
+        
         Route::get('records-returned-by-registration', 'recordsReturnedByRegistration');
         Route::get('show-participants', 'showParticipants');
         Route::get('download-file', 'downloadFile');
