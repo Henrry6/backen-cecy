@@ -63,28 +63,7 @@ class AttendanceController extends Controller
         return $pdf->stream('Registro fotográfico.pdf');
     }
 
-    public function showAttendenceEvaluationRecord(GetCoursesByNameRequest $request, Course $course)
-    {
-        // trae la informacion de registro asistencia-evaluacion
-        $course = Course::where('course_id', $request->course()->id)->get();
-
-        $detailPlanifications = $course
-            ->detailPlanifications()
-            ->planifications()
-            ->course()
-            ->registration()
-            ->attendence()
-            ->paginate($request->input('per_page'));
-
-        return (new RegistrationRecordCompetitorResource($detailPlanifications))
-            ->additional([
-                'msg' => [
-                    'summary' => 'success',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ]);
-    }
+    
     //ver todas las asistencias de un detalle planification
     // AttendanceController
     public function getAttendancesByDetailPlanification(DetailPlanification $detailPlanification)
@@ -186,7 +165,7 @@ class AttendanceController extends Controller
     }
 
     //trae informacion del informe de asistencia evaluacion
-    public function attendanceEvaluation(Course $course)
+    public function AttendanceEvaluation(Course $course)
     {
         $planification = $course->planifications()->first();
         $detailPlanification = $planification->detailPlanifications()->first();

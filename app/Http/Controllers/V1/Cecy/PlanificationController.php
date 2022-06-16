@@ -293,6 +293,8 @@ class PlanificationController extends Controller
             ->response()->setStatusCode(200);
     }
 
+    //trae la informacion correspondiente al diseño curricular
+
     public function curricularDesign(Planification $planification)
     {
         $planification = Planification::firstWhere('id', $planification->id);
@@ -321,6 +323,7 @@ class PlanificationController extends Controller
 
         return $pdf->stream('Diseño Curricular.pdf');
     }
+    //trae la informacion correspondiente  al informe final del curso 
 
     public function informeFinal(Planification $planification)
     {
