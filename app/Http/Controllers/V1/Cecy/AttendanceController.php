@@ -45,11 +45,10 @@ class AttendanceController extends Controller
     // AttendanceController
     public function showPhotographicRecord(Course $course, DetailPlanification $detailPlanification)
     {
-        //trae el registro fotografico de un curso en especifico por el docente que se loguea
+        //trae el registro fotografico de un curso en especifico
         $planification = $course->planifications()->first();
         $detailPlanification = $planification->detailPlanifications()->with(['day', 'workday'])->first();
         $photographicRecords = $detailPlanification->photographicRecords()->first();
-        //return $photographicRecords;
         $pdf = PDF::loadView('reports/photographic-record', [
             'course' => $course,
             'planification' => $planification,

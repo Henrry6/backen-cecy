@@ -168,7 +168,7 @@ Route::controller(CourseController::class)->group(function () {
             Route::patch('/general-information', 'updateGeneralInformationCourse');
             Route::patch('/assign-code', 'assignCodeToCourse');
             Route::patch('/not-approve-reason', 'notApproveCourseReason');
-            Route::get('/inform-course-needs', 'informCourseNeeds');
+            Route::get('/inform-course-needs', 'informCourseNeeds'); //Rivera
             Route::get('/informe-final', 'informeFinal');
             // Route::get('inform-course-needs/{course}', 'App\Http\Controllers\V1\Cecy\CourseController@informCourseNeeds');
         });
@@ -386,18 +386,12 @@ Route::prefix('attendance')->group(function () {
 });
 
 Route::prefix('pdf')->group(function () {
-    Route::get('photographic-record/{course}', [AttendanceController::class, 'showPhotographicRecord']);
-    Route::get('year-schedule/{year}', [CourseController::class, 'showYearSchedule']);
+    Route::get('photographic-record/{course}', [AttendanceController::class, 'showPhotographicRecord']);//Rivera
+    Route::get('year-schedule/{year}', [CourseController::class, 'showYearSchedule']);//Rivera
     Route::get('attendance-evaluation/{course}', [AttendanceController::class, 'AttendanceEvaluation']);
-    Route::get('year-schedule', [CourseController::class, 'showYearSchedule']);
+    Route::get('year-schedule', [CourseController::class, 'showYearSchedule']);//Rivera
     Route::get('curricular-design/{course}',[PlanificationController::class, 'curricularDesign']);//Salazar
     Route::get('informe-final/{course}',[PlanificationController::class, 'informeFinal']);//Salazar
-
-
-    // Route::get('inform-course-needs/{course}', 'App\Http\Controllers\V1\Cecy\CourseController@informCourseNeeds');
-
-    // Route::get('inform-course-needs/{course}', [CourseController::class, 'informCourseNeeds']);
-
 });
 
 /***********************************************************************************************************************
