@@ -11,7 +11,6 @@ class CoursePrerequisiteResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'category' => $this->category,
             'code' => $this->code
         ];
     }

@@ -157,9 +157,7 @@ Route::controller(CourseController::class)->group(function () {
         Route::prefix('')->group(function () {
             Route::get('/prerequisites', [PrerequisiteController::class, 'getPrerequisites']); //Guachagmira -Alvarado
             Route::post('/prerequisites', [PrerequisiteController::class, 'storePrerequisite']); // Alvarado
-            Route::put('/prerequisites/{prerequisite}', [PrerequisiteController::class, 'updatePrerequisite']); // Alvarado
             Route::delete('/prerequisites/{prerequisite}', [PrerequisiteController::class, 'destroyPrerequisite']); // Alvarado
-            Route::patch('/prerequisites/destroys', [PrerequisiteController::class, 'destroysPrerequisites']); // Alvarado
         });
         Route::prefix('')->group(function () {
             Route::put('/curricular-design', 'updateCurricularDesignCourse'); // Alvarado
