@@ -107,8 +107,8 @@ Route::controller(CourseController::class)->group(function () {
 
         Route::get('', 'getCourses');
         Route::post('', 'storeNewCourse');
-        Route::get('private-courses-participant', 'getPrivateCoursesByParticipantType');
-        Route::get('private-courses-category/{category}', 'getPrivateCoursesByParticipantTypeAndCategory');
+        Route::get('private-courses-participant', 'getPrivateCoursesByParticipantType');//Guachagmira
+        Route::get('private-courses-category/{category}', 'getPrivateCoursesByParticipantTypeAndCategory');//Guachagmira
         Route::get('by-responsible', 'getCoursesByResponsibleCourse');
         Route::get('by-instructor/{instructor}', 'getCoursesByInstructor');
         Route::get('by-coodinator', 'getCoursesByCoordinator');
@@ -149,7 +149,7 @@ Route::controller(CourseController::class)->group(function () {
         Route::delete('career-coordinator', 'destroyCourse');
 
         Route::prefix('')->group(function () {
-            Route::get('/topics', [TopicController::class, 'getTopics']);
+            Route::get('/topics', [TopicController::class, 'getTopics']);//Guachagmira
             Route::get('/topics/all', [TopicController::class, 'getAllTopics']);
             Route::post('/topics', [TopicController::class, 'storesTopics']);
             Route::put('/topics', [TopicController::class, 'updateTopics']);
@@ -158,7 +158,7 @@ Route::controller(CourseController::class)->group(function () {
         });
         Route::prefix('')->group(function () {
             Route::get('/prerequisites/all', [PrerequisiteController::class, 'getPrerequisitesAll']);
-            Route::get('/prerequisites', [PrerequisiteController::class, 'getPrerequisites']);
+            Route::get('/prerequisites', [PrerequisiteController::class, 'getPrerequisites']);//Guachagmira
             Route::post('/prerequisites', [PrerequisiteController::class, 'storePrerequisite']);
             Route::put('/prerequisites/{prerequisite}', [PrerequisiteController::class, 'updatePrerequisite']);
             Route::delete('/prerequisites/{prerequisite}', [PrerequisiteController::class, 'destroyPrerequisite']);
