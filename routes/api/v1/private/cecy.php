@@ -266,17 +266,16 @@ Route::apiResource('classroom', ClassroomController::class);
  **********************************************************************************************************************/
 Route::controller(InstructorController::class)->group(function () {
     Route::prefix('instructors/{instructor}')->group(function () {
-        Route::put('state-type', 'updateInstructorStateAndType');
+        Route::put('state-type', 'updateInstructorStateAndType');//Rivera
     });
 
     Route::prefix('instructors')->group(function () {
         Route::get('catalogue', 'catalogue');
-        Route::post('create', 'storeInstructor');
-        Route::post('create-instructors', 'storeInstructors');
+        Route::post('instructors', 'storeInstructors');//Rivera
         Route::get('instructor-information', 'getInstructorsInformationByCourse');
-        Route::get('authorized-instructors/detail-planifications/{detail_planification}', 'getAuthorizedInstructorsOfCourse');
-        Route::get('detail-planifications/{detail_planification}', 'getAssignedInstructors');
-        Route::delete('destroys', 'destroyInstructors');
+        Route::get('authorized-instructors/detail-planifications/{detail_planification}', 'getAuthorizedInstructorsOfCourse');//perez
+        Route::get('detail-planifications/{detail_planification}', 'getAssignedInstructors');//perez
+        Route::delete('destroys', 'destroys');
 
         // Route::get('courses', [InstructorController::class, 'getCourses']); cursos de un instructor desde la planificacion Santillan
         // Route::get('instructor-courses', [InstructorController::class, 'getInstructorByCourses']); cursos de un instructor desde el detalle de planificacion Santillan
@@ -314,7 +313,6 @@ Route::controller(ParticipantController::class)->group(function () {
         Route::patch('accept', 'acceptParticipant');//Salazar
         Route::patch('decline', 'declineParticipant');//Salazar
         Route::post('participant-registration-user', 'createParticipantUser');
-        Route::put('participant', 'updateParticipant');//Salazar
     });
 
     Route::prefix('participants')->group(function () {
@@ -322,7 +320,6 @@ Route::controller(ParticipantController::class)->group(function () {
         Route::get('information/{registration}', 'getParticipantInformation');
         Route::get('information', 'index');
         Route::patch('participant-registration/{registration}', 'registerParticipant');
-        Route::post('participant', 'storeParticipant');//Salazar
     });
 });
 Route::apiResource('participants', ParticipantController::class);

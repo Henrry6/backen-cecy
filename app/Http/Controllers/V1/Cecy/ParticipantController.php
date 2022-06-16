@@ -205,7 +205,7 @@ class ParticipantController extends Controller
     }
 
     //se crear un nuevo participante por manos de administrador
-    public function storeParticipant(StoreParticipantUserRequest $request)
+    public function store(StoreParticipantUserRequest $request)
     {
         $user = new User();
 
@@ -235,8 +235,7 @@ class ParticipantController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    //se modificarac los datos del participante
-    public function updateParticipant(UpdateParticipantUserRequest $request, Participant $participant)
+    public function update(UpdateParticipantUserRequest $request, Participant $participant)
     {
         $user = $participant->user()->first();
 
