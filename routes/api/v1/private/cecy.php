@@ -149,22 +149,20 @@ Route::controller(CourseController::class)->group(function () {
         Route::delete('initial-course', 'destroyCourse'); //Rivas
 
         Route::prefix('')->group(function () {
-            Route::get('/topics', [TopicController::class, 'getTopics']); //Guachagmira
-            Route::get('/topics/all', [TopicController::class, 'getAllTopics']);
-            Route::post('/topics', [TopicController::class, 'storesTopics']);
-            Route::put('/topics', [TopicController::class, 'updateTopics']);
-            Route::delete('/topics/{topic}', [TopicController::class, 'destroyTopic']);
-            Route::get('/topics/{topic}', [TopicController::class, 'show']);
+            Route::get('/topics', [TopicController::class, 'getTopics']); //Guachagmira - Alvarado
+            Route::post('/topics', [TopicController::class, 'storesTopics']); //Alvarado
+            Route::put('/topics', [TopicController::class, 'updateTopics']); // Alvarado
+            Route::delete('/topics/{topic}', [TopicController::class, 'destroyTopic']); //Alvarado
         });
         Route::prefix('')->group(function () {
-            Route::get('/prerequisites/all', [PrerequisiteController::class, 'getPrerequisitesAll']);
-            Route::get('/prerequisites', [PrerequisiteController::class, 'getPrerequisites']); //Guachagmira
-            Route::post('/prerequisites', [PrerequisiteController::class, 'storePrerequisite']);
-            Route::put('/prerequisites/{prerequisite}', [PrerequisiteController::class, 'updatePrerequisite']);
-            Route::delete('/prerequisites/{prerequisite}', [PrerequisiteController::class, 'destroyPrerequisite']);
-            Route::patch('/prerequisites/destroys', [PrerequisiteController::class, 'destroysPrerequisites']);
+            Route::get('/prerequisites', [PrerequisiteController::class, 'getPrerequisites']); //Guachagmira -Alvarado
+            Route::post('/prerequisites', [PrerequisiteController::class, 'storePrerequisite']); // Alvarado
+            Route::put('/prerequisites/{prerequisite}', [PrerequisiteController::class, 'updatePrerequisite']); // Alvarado
+            Route::delete('/prerequisites/{prerequisite}', [PrerequisiteController::class, 'destroyPrerequisite']); // Alvarado
+            Route::patch('/prerequisites/destroys', [PrerequisiteController::class, 'destroysPrerequisites']); // Alvarado
         });
         Route::prefix('')->group(function () {
+            Route::put('/curricular-design', 'updateCurricularDesignCourse'); // Alvarado
             Route::patch('/general-information', 'updateGeneralInformationCourse');
             Route::patch('/assign-code', 'assignCodeToCourse');
             Route::patch('/not-approve-reason', 'notApproveCourseReason');
