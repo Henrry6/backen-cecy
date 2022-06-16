@@ -110,7 +110,7 @@ Route::controller(CourseController::class)->group(function () {
         Route::post('', 'storeNewCourse');
         Route::get('private-courses-participant', 'getPrivateCoursesByParticipantType'); //Guachagmira
         Route::get('private-courses-category/{category}', 'getPrivateCoursesByParticipantTypeAndCategory'); //Guachagmira
-        Route::get('by-responsible', 'getCoursesByResponsibleCourse');
+        Route::get('by-responsible', 'getCoursesByResponsibleCourse'); //Matango
         Route::get('by-instructor/{instructor}', 'getCoursesByInstructor');
         Route::get('by-coodinator', 'getCoursesByCoordinator');
         Route::get('kpi', 'getCoursesKPI');
@@ -161,7 +161,7 @@ Route::controller(CourseController::class)->group(function () {
         });
         Route::prefix('')->group(function () {
             Route::put('/curricular-design', 'updateCurricularDesignCourse'); // Alvarado
-            Route::patch('/general-information', 'updateGeneralInformationCourse');
+            Route::patch('/general-information', 'updateGeneralInformationCourse'); //Matango
             Route::patch('/assign-code', 'assignCodeToCourse');
             Route::patch('/not-approve-reason', 'notApproveCourseReason');
             Route::get('/inform-course-needs', 'informCourseNeeds'); //Rivera
