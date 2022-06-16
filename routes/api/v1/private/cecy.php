@@ -292,8 +292,8 @@ Route::controller(RegistrationController::class)->group(function () {
         Route::post('register-student/{detailPlanification}', 'registerStudent');
         Route::post('register-student', 'registerStudent');
         Route::get('participant/{detailPlanification}', 'getParticipant');
-        Route::patch('nullify-registration', 'nullifyRegistration');
-        Route::patch('nullify-registrations', 'nullifyRegistrations');
+        Route::patch('nullify-registration', 'nullifyRegistration'); //Rivas
+        Route::patch('nullify-registrations', 'nullifyRegistrations'); //Rivas
         Route::patch('participant-grades/{registration}', 'updateGradesParticipant');
     });
 });
