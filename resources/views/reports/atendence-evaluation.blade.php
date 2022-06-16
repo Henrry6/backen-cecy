@@ -33,7 +33,7 @@
 
       <td>
         <div1>NOMBRE DEL CURSO:</div1>
-        <div6>{{$course->name}}</div6>
+        <div6>{{$course->name}}</div6>/
         <div11>LUGAR DONDE SE DICTA:</div11>
         <div15>{{$institution->name}}</div15>
 

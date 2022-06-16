@@ -53,6 +53,7 @@ use App\Models\Cecy\Planification;
 use App\Models\Cecy\SchoolPeriod;
 use App\Models\Authentication\User;
 
+
 //use App\Models\Cecy\Requirement;
 
 class CourseController extends Controller
@@ -480,6 +481,7 @@ class CourseController extends Controller
         ]);
         return $pdf->stream('informNeeds.pdf');
     }
+    
 
     
 

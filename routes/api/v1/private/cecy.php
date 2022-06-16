@@ -165,12 +165,11 @@ Route::controller(CourseController::class)->group(function () {
             Route::patch('/prerequisites/destroys', [PrerequisiteController::class, 'destroysPrerequisites']);
         });
         Route::prefix('')->group(function () {
-            Route::put('/curricular-design', 'updateCurricularDesignCourse');
             Route::patch('/general-information', 'updateGeneralInformationCourse');
             Route::patch('/assign-code', 'assignCodeToCourse');
             Route::patch('/not-approve-reason', 'notApproveCourseReason');
             Route::get('/inform-course-needs', 'informCourseNeeds');
-            Route::get('/final-report', 'showCourseFinalReport');
+            Route::get('/informe-final', 'informeFinal');
             // Route::get('inform-course-needs/{course}', 'App\Http\Controllers\V1\Cecy\CourseController@informCourseNeeds');
         });
     });
@@ -391,6 +390,9 @@ Route::prefix('pdf')->group(function () {
     Route::get('year-schedule/{year}', [CourseController::class, 'showYearSchedule']);
     Route::get('attendance-evaluation/{course}', [AttendanceController::class, 'AttendanceEvaluation']);
     Route::get('year-schedule', [CourseController::class, 'showYearSchedule']);
+    Route::get('curricular-design/{course}',[PlanificationController::class, 'curricularDesign']);//Salazar
+    Route::get('informe-final/{course}',[PlanificationController::class, 'informeFinal']);//Salazar
+
 
     // Route::get('inform-course-needs/{course}', 'App\Http\Controllers\V1\Cecy\CourseController@informCourseNeeds');
 
