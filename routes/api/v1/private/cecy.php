@@ -282,22 +282,22 @@ Route::controller(InstructorController::class)->group(function () {
 Route::apiResource('instructors', InstructorController::class);
 
 /***********************************************************************************************************************
- * REGISTRATIONS
+ * REGISTRATIONS - to remove
  **********************************************************************************************************************/
-Route::controller(RegistrationController::class)->group(function () {
-    Route::prefix('registrations/{registration}')->group(function () {
-    });
+// Route::controller(RegistrationController::class)->group(function () {
+//     Route::prefix('registrations/{registration}')->group(function () {
+//     });
 
-    Route::prefix('registrations')->group(function () {
-        Route::post('register-student/{detailPlanification}', 'registerStudent');
-        Route::post('register-student', 'registerStudent');
-        Route::get('participant/{detailPlanification}', 'getParticipant');
-        Route::patch('nullify-registration', 'nullifyRegistration'); //Rivas
-        Route::patch('nullify-registrations', 'nullifyRegistrations'); //Rivas
-        Route::patch('participant-grades/{registration}', 'updateGradesParticipant');
-    });
-});
-Route::apiResource('registrations', RegistrationController::class);
+//     Route::prefix('registrations')->group(function () {
+//         Route::post('register-student/{detailPlanification}', 'registerStudent');
+//         Route::post('register-student', 'registerStudent');
+//         Route::get('participant/{detailPlanification}', 'getParticipant');
+//         Route::patch('nullify-registration', 'nullifyRegistration'); //Rivas
+//         Route::patch('nullify-registrations', 'nullifyRegistrations'); //Rivas
+//         Route::patch('participant-grades/{registration}', 'updateGradesParticipant');
+//     });
+// });
+// Route::apiResource('registrations', RegistrationController::class);
 
 
 /***********************************************************************************************************************
@@ -415,12 +415,17 @@ Route::controller(RegistrationController::class)->group(function () {
         //ruta para consulta las notas de registration
         //Ver todos los cursos del estudiante en el cual esta matriculado
         //Route::get('courses-by-participant', [RegistrationController::class, 'getCoursesByParticipant']);
+
+        Route::post('register-student/{detailPlanification}', 'registerStudent');
+        Route::post('register-student', 'registerStudent');
+        Route::get('participant/{detailPlanification}', 'getParticipant');
+        Route::patch('nullify-registration', 'nullifyRegistration'); //Rivas
+        Route::patch('nullify-registrations', 'nullifyRegistrations'); //Rivas
+        Route::patch('participant-grades/{registration}', 'updateGradesParticipant');
         
         Route::get('records-returned-by-registration', 'recordsReturnedByRegistration');
         Route::get('show-participants', 'showParticipants');
         Route::get('download-file', 'downloadFile');
-        Route::post('nullify-registrations', 'nullifyRegistrations');
-        Route::patch('nullify-registration/{registration}', 'nullifyRegistration');
         Route::get('show-record-competitor/{detailPlanification}', 'showRecordCompetitor');
         Route::patch('show-participant-grades', 'ShowParticipantGrades');
         Route::put('upload-file', 'uploadFile');
@@ -429,6 +434,7 @@ Route::controller(RegistrationController::class)->group(function () {
         Route::patch('destroy-file', 'destroyFile');
     });
 });
+Route::apiResource('registrations', RegistrationController::class);
 
 /*****************************************
  * TOPICS
