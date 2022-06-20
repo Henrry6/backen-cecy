@@ -21,7 +21,7 @@ class DetailAttendanceController extends Controller
     {
         $sorts = explode(',', $request->sort);
 
-        $detailAttendances =  DetailAttendance::customOrderBy($sorts)
+        $detailAttendances = DetailAttendance::customOrderBy($sorts)
             ->limit(1000)
             ->get();
 
@@ -36,32 +36,15 @@ class DetailAttendanceController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    //asistencias de los estudiantes de un curso
-    // DetailAttendanceController
-    public function showAttendanceParticipant(Registration $registration)
+    public function updateType(SaveDetailAttendanceRequest $request, DetailAttendance $detailAttendance)
     {
-        $attendances =  $registration->attendances()->get;
-        return (new AttendanceResource($attendances))
-            ->additional([
-                'msg' => [
-                    'summary' => 'success',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ])->response()->setStatusCode(200);
-    }
-
-    // Guardar asistencia
-    // AttendanceController
-    public function  storeDetailAttendance(SaveDetailAttendanceRequest $request, DetailAttendance $detailAttendance)
-    {
-        $detailAttendance->type_id = $request->input('type.id');
+        $detailAttendance->type()->associate($request->input('type.id'));
         $detailAttendance->save();
 
         return (new SaveDetailAttendanceResource($detailAttendance))
             ->additional([
                 'msg' => [
-                    'sumary' => $detailAttendance,
+                    'summary' => $detailAttendance,
                     'detail' => 'Asistencia guardada correctamente',
                     'code' => '200'
                 ]
@@ -69,35 +52,21 @@ class DetailAttendanceController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    public function getDetailAttendancesByParticipantWithOutPaginate(GetDetailAttendancesByParticipantRequest $request, DetailPlanification $detailPlanification)
+    public function getByRegistration(Registration $registration)
     {
-
-        $sorts = explode(',', $request->input('sort'));
-
-        $participant = Participant::where('user_id', $request->user()->id)->first();
-
-        $registration = Registration::where(
-            [
-                'detail_planification_id' => $detailPlanification->id,
-                'participant_id' => $participant->id
-            ]
-        )->first();
-
-        $detailAttendances = DetailAttendance::customOrderBy($sorts)
-            ->registration($registration)
-            ->get();
-
+        $detailAttendances = $registration->detailAttendances()->get();
 
         return (new DetailAttendanceCollection($detailAttendances))
             ->additional([
                 'msg' => [
-                    'sumary' => 'consulta exitosa',
+                    'summary' => 'consulta exitosa',
                     'detail' => '',
                     'code' => '200'
                 ]
             ])
             ->response()->setStatusCode(200);
     }
+
     public function getDetailAttendancesByParticipant(GetDetailAttendancesByParticipantRequest $request, DetailPlanification $detailPlanification)
     {
 
@@ -118,29 +87,6 @@ class DetailAttendanceController extends Controller
 
 
         return (new DetailAttendanceCollection($detailAttendances))
-            ->additional([
-                'msg' => [
-                    'sumary' => 'consulta exitosa',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ])
-            ->response()->setStatusCode(200);
-    }
-
-    public function getCurrentDateDetailAttendance(GetDetailAttendancesByParticipantRequest $request, DetailPlanification $detailPlanification)
-    {
-
-        $dateToday = Date('Y-m-d');
-
-        $attendance = Attendance::where(
-            [
-                'detail_planification_id' => $detailPlanification->id,
-                'registered_at' => $dateToday
-            ]
-        )->first();
-
-        return (new AttendanceResource($attendance))
             ->additional([
                 'msg' => [
                     'sumary' => 'consulta exitosa',

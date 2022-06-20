@@ -24,7 +24,7 @@ class CreateCecyDetailPlanificationsTable extends Migration
                 ->nullable()
                 ->comment('Id día')
                 ->constrained('cecy.catalogues');
-                 
+
             $table->foreignId('parallel_id')
                 ->comment('A,B,C,D')
                 ->constrained('cecy.catalogues');
@@ -55,7 +55,7 @@ class CreateCecyDetailPlanificationsTable extends Migration
                 ->nullable()
                 ->comment('Fecha final real de la planificación (que puede variar a la planificación)');
 
-            $table->integer('registrations_left')
+            $table->integer('capacity')
                 ->nullable()
                 ->comment('Capacidad restante del paralelo');
 

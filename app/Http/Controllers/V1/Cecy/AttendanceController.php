@@ -62,10 +62,10 @@ class AttendanceController extends Controller
         return $pdf->stream('Registro fotográfico.pdf');
     }
 
-    
+
     //ver todas las asistencias de un detalle planification
     // AttendanceController
-    public function getAttendancesByDetailPlanification(DetailPlanification $detailPlanification)
+    public function getByDetailPlanification(DetailPlanification $detailPlanification)
     {
         $attendances = $detailPlanification->attendances()->get();
 
@@ -121,7 +121,7 @@ class AttendanceController extends Controller
     }
     //eliminar una asistencia
     // AttendanceController
-    public function destroysAttendanceTeacher(DestroysAttendanceRequest $request)
+    public function destroysByDetailPlanification(DestroysAttendanceRequest $request)
     {
         $attendance = Attendance::whereIn('id', $request->input('ids'))->get();
         Attendance::destroy($request->input('ids'));
