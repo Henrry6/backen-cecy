@@ -165,7 +165,7 @@ Route::controller(CourseController::class)->group(function () {
             Route::patch('/assign-code', 'assignCodeToCourse');
             Route::patch('/not-approve-reason', 'notApproveCourseReason');
             Route::get('/inform-course-needs', 'informCourseNeeds'); //Rivera
-            Route::get('/informe-final', 'informeFinal');
+            Route::get('/informe-final', 'informeFinal');//Salazar
             // Route::get('inform-course-needs/{course}', 'App\Http\Controllers\V1\Cecy\CourseController@informCourseNeeds');
         });
     });
@@ -376,7 +376,7 @@ Route::prefix('attendance')->group(function () {
 });
 
 Route::prefix('pdf')->group(function () {
-    Route::get('attendance-evaluation/{course}', [AttendanceController::class, 'AttendanceEvaluation']);
+    Route::get('attendance-evaluation/{course}', [AttendanceController::class, 'attendanceEvaluation']);//Salazar
     Route::get('curricular-design/{course}',[PlanificationController::class, 'curricularDesign']);//Salazar
     Route::get('informe-final/{course}',[PlanificationController::class, 'informeFinal']);//Salazar
     Route::get('photographic-record/{course}', [AttendanceController::class, 'showPhotographicRecord']);//Rivera

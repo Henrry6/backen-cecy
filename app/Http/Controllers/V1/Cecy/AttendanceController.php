@@ -164,7 +164,7 @@ class AttendanceController extends Controller
     }
 
     //trae informacion del informe de asistencia evaluacion
-    public function AttendanceEvaluation(Course $course)
+    public function attendanceEvaluation(Course $course)
     {
         $planification = $course->planifications()->first();
         $detailPlanification = $planification->detailPlanifications()->first();
