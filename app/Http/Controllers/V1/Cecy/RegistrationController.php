@@ -281,6 +281,7 @@ class RegistrationController extends Controller
         $registration->participant()->associate($participant);
         $registration->detailPlanification()->associate(DetailPlanification::find($request->input('detailPlanification.id')));
         // TODO: Usar logica para asignar un tipo de participante segun la fecha, se crea un foncion extra?
+        // TODO: Buscar en la tabla detail school period y asignar el valor segun la fecha
         $registration->type()->associate(Catalogue::find($request->input('type.id')));
         // Enviar por predetermiando el estado en revision (como lo envio)
         $registration->state()->associate(Catalogue::find($request->input('state.id')));
