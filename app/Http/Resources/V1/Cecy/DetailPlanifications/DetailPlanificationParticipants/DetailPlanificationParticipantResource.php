@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\V1\Cecy\Planifications\PlanificationParticipants;
+namespace App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationParticipants;
 
 use App\Http\Resources\V1\Cecy\AdditionalInformations\AdditionalInformationResource;
 use App\Http\Resources\V1\Cecy\Catalogues\CatalogueResource;
@@ -11,7 +11,7 @@ use App\Http\Resources\V1\Cecy\Requeriments\RequerimentResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 // use Illuminate\Http\Re
 
-class PlanificationParticipantResource extends JsonResource
+class DetailPlanificationParticipantResource extends JsonResource
 {
     public function toArray($request)
     {
