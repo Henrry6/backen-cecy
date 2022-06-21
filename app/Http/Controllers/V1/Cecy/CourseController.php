@@ -53,6 +53,7 @@ use App\Models\Cecy\Planification;
 use App\Models\Cecy\SchoolPeriod;
 use App\Models\Authentication\User;
 
+
 //use App\Models\Cecy\Requirement;
 
 class CourseController extends Controller
@@ -480,31 +481,9 @@ class CourseController extends Controller
         ]);
         return $pdf->stream('informNeeds.pdf');
     }
+    
 
-    // Traer la informacion del informe final del curso (Done)
-    public function showCourseFinalReport(getCoursesByNameRequest $request, Course $course)
-    {
-        return "showCourseFinalReport";
-        $course = Course::where('course_id', $request->course()->id)->get();
-
-        $detailPlanifications = $course
-            ->detailPlanifications()
-            ->planifications()
-            ->instructors()
-            ->course()
-            ->registration()
-            ->paginate($request->input('per_page'));
-
-
-        return (new InformCourseNeedsResource($course))
-            ->additional([
-                'msg' => [
-                    'summary' => 'success',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ])->response()->setStatusCode(200);
-    }
+    
 
     //Traer cursos de un docente instructor (Deberia estar en planificacion dice cursos pero trae planificaciones)(Done)
     public function getCoursesByInstructor(GetPlanificationByResponsableCourseRequest $request)
@@ -636,9 +615,9 @@ class CourseController extends Controller
     }
 
     /**
-     * updateCourseNameAndDuration
+     * updateInitialCourse
      */
-    public function updateCourseNameAndDuration(UpdateCourseNameAndDurationRequest $request, Course $course)
+    public function updateInitialCourse(UpdateCourseNameAndDurationRequest $request, Course $course)
     {
         if ($request->input('duration') < Course::MINIMUM_HOURS) {
             return response()->json([

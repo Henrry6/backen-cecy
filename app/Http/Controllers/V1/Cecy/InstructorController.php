@@ -71,7 +71,7 @@ class InstructorController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    public function storeInstructor(StoreInstructorRequest $request)
+    public function store(StoreInstructorRequest $request)
     {
         $user= new User();
         $user -> username = $request->input('username');
@@ -138,7 +138,7 @@ class InstructorController extends Controller
             ->response()->setStatusCode(201);
     }
 
-    public function updateInstructor(Request $request, Instructor $instructor)
+    public function updateInstructorStateAndType(Request $request, Instructor $instructor)
     {
         $instructor->state()->associate(Catalogue::find($request->input('state.id')));
         $instructor->type()->associate(Catalogue::find($request->input('type.id')));
@@ -170,7 +170,7 @@ class InstructorController extends Controller
             ->response()->setStatusCode(201);
     }
 
-    public function destroyInstructors(DestroysInstructorRequest $request)
+    public function destroys(DestroysInstructorRequest $request)
     {
         $instructor = Instructor::whereIn('id', $request->input('ids'))->get();
         Instructor::destroy($request->input('ids'));

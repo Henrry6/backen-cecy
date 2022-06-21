@@ -12,21 +12,18 @@ class DestroyParticipantRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => ['required', 'integer'],
         ];
     }
 
     public function attributes()
     {
         return [
-            'id' => 'ID del participante',
         ];
     }
 
     public function messages()
     {
         return [
-            'id' => 'Es obligatorio enviar un Id de tipo número entero',
         ];
     }
 }

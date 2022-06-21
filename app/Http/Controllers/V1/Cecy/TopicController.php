@@ -72,35 +72,6 @@ class TopicController extends Controller
             ])->response()->setStatusCode(200);
     }
 
-    public function getAllTopics()
-    {
-        $sorts = explode(',', $request->sort);
-
-        $topics = Topic::customOrderBy($sorts)
-            ->description($request->input('search'))
-            ->paginate($request->input('perPage'));
-        return (new TopicCollection($topics))
-            ->additional([
-                'msg' => [
-                    'summary' => 'success',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ])->response()->setStatusCode(200);
-    }
-
-    public function show(Course $course, Topic $topic)
-    {
-        return (new TopicResource($topic))
-            ->additional([
-                'msg' => [
-                    'summary' => 'Tema o subtema Actualizado',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ])->response()->setStatusCode(200);
-    }
-
     public function getTopicsByCourse($request, Course $course)
     {
         $sorts = explode(',', $request->sort);

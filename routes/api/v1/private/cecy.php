@@ -54,11 +54,12 @@ Route::apiResource('institutions', InstitutionController::class);
  **********************************************************************************************************************/
 Route::controller(PlanificationController::class)->group(function () {
     Route::prefix('planifications/{planification}')->group(function () {
-        Route::put('approve-planification', 'approvePlanification');
-        Route::put('assign-code-planification', 'assignCode');
+        Route::put('approve', 'approve');
+        Route::put('assign-code', 'assignCode');
         Route::patch('assign-responsible-cecy', 'assignResponsibleCecy');
         Route::get('detail-planifications', 'getDetailPlanificationsByPlanification');
-        Route::put('initial-planification', 'updateInitialPlanification');
+        Route::put('initial-planification', 'updateInitialPlanification'); //Rivas
+        Route::put('needs', 'addNeeds'); // Pérez
         Route::put('planifications-cecy', 'updatePlanificationByCecy'); // BORRAR
     });
 
@@ -66,9 +67,9 @@ Route::controller(PlanificationController::class)->group(function () {
         Route::get('period-states', 'getCurrentPlanificationsByAuthority');
         Route::get('detail-planifications', 'getPlanificationsByDetailPlanification'); // no existe el metodo
         Route::get('course-parallels-works', 'getCoursesParallelsWorkdays'); // no existe el metodo
-        Route::get('courses/{course}', 'getPlanificationsByCourse');
+        Route::get('courses/{course}', 'getPlanificationsByCourse'); //Rivas, Pérez, 
         Route::get('kpis/{state}', 'getKpi');
-        Route::post('courses/{course}', 'storePlanificationByCourse');
+        Route::post('courses/{course}', 'storePlanificationByCourse'); //Rivas
         Route::get('catalogue', 'catalogue');
     });
 });
@@ -81,13 +82,13 @@ Route::apiResource('planifications', PlanificationController::class);
 Route::controller(DetailPlanificationController::class)->group(function () {
     Route::prefix('detail-planifications/{detail_planification}')->group(function () {
         Route::get('detail-course/{course}', 'getDetailPlanificationsByCourse');
-        Route::post('instructors-assignment', 'assignInstructors');
-        Route::put('update-detail-planification-proposal','updateDetailPlanificationProposal');
+        Route::post('instructors-assignment', 'assignInstructors'); // Pérez
+        Route::put('detail-planification-proposal', 'updateDetailPlanificationProposal'); // 
     });
 
     Route::prefix('detail-planifications')->group(function () {
         Route::get('catalogue', 'catalogue');
-        Route::patch('destroys', 'destroys');
+        Route::patch('destroys', 'destroys'); //Pérez
     });
 });
 Route::apiResource('detail-planifications', DetailplanificationController::class);
@@ -101,15 +102,15 @@ Route::controller(CourseController::class)->group(function () {
         });
 
         Route::prefix('careers/{career}')->group(function () {
-            Route::get('', 'getCoursesByCareer');
-            Route::post('', 'storeCourseByCareer');
+            Route::get('', 'getCoursesByCareer'); //Rivas
+            Route::post('', 'storeCourseByCareer'); //Rivas
         });
 
         Route::get('', 'getCourses');
         Route::post('', 'storeNewCourse');
-        Route::get('private-courses-participant', 'getPrivateCoursesByParticipantType');
-        Route::get('private-courses-category/{category}', 'getPrivateCoursesByParticipantTypeAndCategory');
-        Route::get('by-responsible', 'getCoursesByResponsibleCourse');
+        Route::get('private-courses-participant', 'getPrivateCoursesByParticipantType'); //Guachagmira
+        Route::get('private-courses-category/{category}', 'getPrivateCoursesByParticipantTypeAndCategory'); //Guachagmira
+        Route::get('by-responsible', 'getCoursesByResponsibleCourse'); //Matango
         Route::get('by-instructor/{instructor}', 'getCoursesByInstructor');
         Route::get('by-coodinator', 'getCoursesByCoordinator');
         Route::get('kpi', 'getCoursesKPI');
@@ -119,58 +120,52 @@ Route::controller(CourseController::class)->group(function () {
     });
 
     Route::prefix('courses/{course}')->group(function () {
-        Route::prefix('cecy-responsible')->group(function () {
-            Route::put('approve', 'approveCourse');
-            Route::get('decline', 'declineCourse');
-
-            Route::prefix('files')->group(function () {
-                Route::get('{file}/download', 'downloadFile');
-                Route::get('', 'indexFiles');
-                Route::get('{file}', 'showFile');
-                Route::post('', 'uploadFile');
-                Route::put('{file}', 'updateFile');
-                Route::delete('{file}', 'destroyFile');
-                Route::patch('', 'destroyFiles');
-            });
-
-            Route::prefix('images')->group(function () {
-                Route::get('{image}/download', 'downloadImage');
-                Route::get('', 'indexImages');
-                Route::get('public', 'indexPublicImages');
-                Route::get('{image}', 'showImage');
-                Route::post('public', 'uploadPublicImage');
-                Route::put('{image}', 'updateImage');
-                Route::delete('{image}', 'destroyImage');
-                Route::patch('', 'destroyImages');
-            });
+        Route::put('approve', 'approveCourse'); //sin responsable
+        Route::put('decline', 'declineCourse'); //sin responsable
+        
+        //Para subir acta de curso aprobado
+        Route::prefix('files')->group(function () {
+            Route::get('{file}/download', 'downloadFile');
+            Route::get('', 'indexFiles');
+            Route::get('{file}', 'showFile');
+            Route::post('', 'uploadFile');
+            Route::put('{file}', 'updateFile');
+            Route::delete('{file}', 'destroyFile');
+            Route::patch('', 'destroyFiles');
         });
 
-        Route::put('career-coordinator', 'updateCourseNameAndDuration');
-        Route::delete('career-coordinator', 'destroyCourse');
+        Route::prefix('images')->group(function () {
+            Route::get('{image}/download', 'downloadImage');
+            Route::get('', 'indexImages');
+            Route::get('public', 'indexPublicImages');
+            Route::get('{image}', 'showImage');
+            Route::post('public', 'uploadPublicImage');
+            Route::put('{image}', 'updateImage');
+            Route::delete('{image}', 'destroyImage');
+            Route::patch('', 'destroyImages');
+        });
+
+        Route::put('initial-course', 'updateInitialCourse'); //Rivas
+        Route::delete('initial-course', 'destroyCourse'); //Rivas
 
         Route::prefix('')->group(function () {
-            Route::get('/topics', [TopicController::class, 'getTopics']);
-            Route::get('/topics/all', [TopicController::class, 'getAllTopics']);
-            Route::post('/topics', [TopicController::class, 'storesTopics']);
-            Route::put('/topics', [TopicController::class, 'updateTopics']);
-            Route::delete('/topics/{topic}', [TopicController::class, 'destroyTopic']);
-            Route::get('/topics/{topic}', [TopicController::class, 'show']);
+            Route::get('/topics', [TopicController::class, 'getTopics']); //Guachagmira - Alvarado
+            Route::post('/topics', [TopicController::class, 'storesTopics']); //Alvarado
+            Route::put('/topics', [TopicController::class, 'updateTopics']); // Alvarado
+            Route::delete('/topics/{topic}', [TopicController::class, 'destroyTopic']); //Alvarado
         });
         Route::prefix('')->group(function () {
-            Route::get('/prerequisites/all', [PrerequisiteController::class, 'getPrerequisitesAll']);
-            Route::get('/prerequisites', [PrerequisiteController::class, 'getPrerequisites']);
-            Route::post('/prerequisites', [PrerequisiteController::class, 'storePrerequisite']);
-            Route::put('/prerequisites/{prerequisite}', [PrerequisiteController::class, 'updatePrerequisite']);
-            Route::delete('/prerequisites/{prerequisite}', [PrerequisiteController::class, 'destroyPrerequisite']);
-            Route::patch('/prerequisites/destroys', [PrerequisiteController::class, 'destroysPrerequisites']);
+            Route::get('/prerequisites', [PrerequisiteController::class, 'getPrerequisites']); //Guachagmira -Alvarado
+            Route::post('/prerequisites', [PrerequisiteController::class, 'storePrerequisite']); // Alvarado
+            Route::delete('/prerequisites/{prerequisite}', [PrerequisiteController::class, 'destroyPrerequisite']); // Alvarado
         });
         Route::prefix('')->group(function () {
-            Route::put('/curricular-design', 'updateCurricularDesignCourse');
-            Route::patch('/general-information', 'updateGeneralInformationCourse');
+            Route::put('/curricular-design', 'updateCurricularDesignCourse'); // Alvarado
+            Route::patch('/general-information', 'updateGeneralInformationCourse'); //Matango
             Route::patch('/assign-code', 'assignCodeToCourse');
             Route::patch('/not-approve-reason', 'notApproveCourseReason');
-            Route::get('/inform-course-needs', 'informCourseNeeds');
-            Route::get('/final-report', 'showCourseFinalReport');
+            Route::get('/inform-course-needs', 'informCourseNeeds'); //Rivera
+            Route::get('/informe-final', 'informeFinal');//Salazar
             // Route::get('inform-course-needs/{course}', 'App\Http\Controllers\V1\Cecy\CourseController@informCourseNeeds');
         });
     });
@@ -194,32 +189,32 @@ Route::get('/inform', function () {
  **********************************************************************************************************************/
 Route::controller(DetailAttendanceController::class)->group(function () {
     Route::prefix('detail-attendances/{detail_attendance}')->group(function () {
-        Route::get('', 'showAttendanceParticipant');
-        Route::get('', 'getDetailAttendancesByParticipantWithOutPaginate');
-        Route::get('', 'getDetailAttendancesByParticipant');
-        Route::get('', 'getCurrentDateDetailAttendance');
-        Route::put('', 'updateDetailPlanification');
-        Route::put('', 'updatedetailPlanificationByCecy');
-        Route::patch('delete', 'deleteDetailPlanification');
+        Route::get('', 'showAttendanceParticipant'); // asistencia de un estudiante registrado .// Santillan-Molina
+        Route::get('', 'getDetailAttendancesByParticipantWithOutPaginate'); // assitencias de un participante ordenada y con paginacion .// Santillan-Molina
+        Route::get('', 'getDetailAttendancesByParticipant'); // revision con el anterior metodo por que parece que hace lo mismo.// Santillan-Molina
+        Route::get('', 'getCurrentDateDetailAttendance'); //  asistencias de acuerdo a la fecha del detallle de la planificacion.// Santillan-Molina
+        Route::put('', 'updateDetailPlanification'); // no existe el metodo en el controllador.// Santillan-Molina
+        Route::put('', 'updatedetailPlanificationByCecy'); // no existe el metodo en el controllador.// Santillan-Molina
+        Route::patch('delete', 'deleteDetailPlanification'); // no existe el metodo en el controllador.// Santillan-Molina
     });
 
     Route::prefix('detail-attendances')->group(function () {
-        Route::patch('save-detail-attendance', 'saveDetailAttendance');
-        Route::patch('destroys', 'destroysDetailPlanifications');
-        Route::get('catalogue', 'catalogue');
+        Route::patch('create', 'storeDetailAttendance');  // actualizacion de la asistencia.// Santillan-Molina
+        Route::patch('destroys', 'destroysDetailPlanifications'); // no existe el metodo.// Santillan-Molina
+        Route::get('catalogue', 'catalogue'); // catalogo del tipo de asistencia.// Santillan-Molina
     });
 });
-Route::apiResource('detail-attendances', DetailAttendanceController::class);
+Route::apiResource('detail-attendances', DetailAttendanceController::class); //metodo generales // Santillan-Molina
 
 /***********************************************************************************************************************
- * CERTIFICATES
+ * CERTIFICATES -- Quemag
  **********************************************************************************************************************/
 Route::prefix('certificate')->group(function () {
 
-    Route::get('excel-dates', [CertificateController::class, 'ExcelData']);
-    Route::post('excel-reading', [CertificateController::class, 'ExcelImport']);
-    Route::post('pdf-student', [CertificateController::class, 'generatePdfStudent']);
-    Route::get('pdf-instructor', [CertificateController::class, 'generatePdfInstructor']);
+    Route::get('excel-dates', [CertificateController::class, 'ExcelData']);   //Muestra Datos Guardados del Excell 
+    Route::post('excel-reading', [CertificateController::class, 'ExcelImport']);   //Importa-Lee Datos del Excell y los guarda en BD
+    Route::post('pdf-student', [CertificateController::class, 'generatePdfStudent']); //Genera el PDF del estudiante
+    Route::get('pdf-instructor', [CertificateController::class, 'generatePdfInstructor']); //Genera el PDF del Instructor
 
     //Borrar--- Route::post('registration/{registration}/catalogue/{catalogue}/file/{file}', [CertificateController::class, 'downloadCertificateByParticipant']);
     //Borrar--- Route::get('catalogue/{catalogue}/file/{file}', [CertificateController::class, 'downloadFileCertificates']);
@@ -267,21 +262,19 @@ Route::apiResource('classroom', ClassroomController::class);
  **********************************************************************************************************************/
 Route::controller(InstructorController::class)->group(function () {
     Route::prefix('instructors/{instructor}')->group(function () {
-        Route::put('updateInstructor', 'updateInstructor');
-        Route::delete('destroy', 'destroy');
+        Route::put('state-type', 'updateInstructorStateAndType');//Rivera
     });
 
     Route::prefix('instructors')->group(function () {
         Route::get('catalogue', 'catalogue');
-        Route::post('create', 'storeInstructor');
-        Route::post('create-instructors', 'storeInstructors');
+        Route::post('instructors', 'storeInstructors');//Rivera
         Route::get('instructor-information', 'getInstructorsInformationByCourse');
-        Route::get('authorized-instructors/detail-planifications/{detail_planification}', 'getAuthorizedInstructorsOfCourse');
-        Route::get('detail-planifications/{detail_planification}', 'getAssignedInstructors');
-        Route::delete('destroys', 'destroyInstructors');
+        Route::get('authorized-instructors/detail-planifications/{detail_planification}', 'getAuthorizedInstructorsOfCourse');//perez
+        Route::get('detail-planifications/{detail_planification}', 'getAssignedInstructors');//perez
+        Route::delete('destroys', 'destroys');
 
-        // Route::get('courses', [InstructorController::class, 'getCourses']);
-        // Route::get('instructor-courses', [InstructorController::class, 'getInstructorByCourses']);
+        // Route::get('courses', [InstructorController::class, 'getCourses']); cursos de un instructor desde la planificacion Santillan
+        // Route::get('instructor-courses', [InstructorController::class, 'getInstructorByCourses']); cursos de un instructor desde el detalle de planificacion Santillan
 
 
     });
@@ -289,22 +282,22 @@ Route::controller(InstructorController::class)->group(function () {
 Route::apiResource('instructors', InstructorController::class);
 
 /***********************************************************************************************************************
- * REGISTRATIONS
+ * REGISTRATIONS - to remove
  **********************************************************************************************************************/
-Route::controller(RegistrationController::class)->group(function () {
-    Route::prefix('registrations/{registration}')->group(function () {
-    });
+// Route::controller(RegistrationController::class)->group(function () {
+//     Route::prefix('registrations/{registration}')->group(function () {
+//     });
 
-    Route::prefix('registrations')->group(function () {
-        Route::post('register-student/{detailPlanification}', 'registerStudent');
-        Route::post('register-student', 'registerStudent');
-        Route::get('participant/{detailPlanification}', 'getParticipant');
-        Route::patch('nullify-registration', 'nullifyRegistration');
-        Route::patch('nullify-registrations', 'nullifyRegistrations');
-        Route::patch('participant-grades/{registration}', 'updateGradesParticipant');
-    });
-});
-Route::apiResource('registrations', RegistrationController::class);
+//     Route::prefix('registrations')->group(function () {
+//         Route::post('register-student/{detailPlanification}', 'registerStudent');
+//         Route::post('register-student', 'registerStudent');
+//         Route::get('participant/{detailPlanification}', 'getParticipant');
+//         Route::patch('nullify-registration', 'nullifyRegistration'); //Rivas
+//         Route::patch('nullify-registrations', 'nullifyRegistrations'); //Rivas
+//         Route::patch('participant-grades/{registration}', 'updateGradesParticipant');
+//     });
+// });
+// Route::apiResource('registrations', RegistrationController::class);
 
 
 /***********************************************************************************************************************
@@ -313,12 +306,9 @@ Route::apiResource('registrations', RegistrationController::class);
 Route::controller(ParticipantController::class)->group(function () {
     Route::prefix('participants/{participant}')->group(function () {
         Route::put('update-registration/{registration}', 'participantRegistrationStateModification');
-        Route::get('accept-participant', 'updateParticipantState');
-        Route::get('decline-participant', 'declineParticipant');
+        Route::patch('accept', 'acceptParticipant');//Salazar
+        Route::patch('decline', 'declineParticipant');//Salazar
         Route::post('participant-registration-user', 'createParticipantUser');
-        Route::delete('delete-participant', 'destroyParticipant');
-        Route::put('update-participant-user', 'updateParticipantUser');
-        Route::delete('destroy-participant', 'destroyParticipant');
     });
 
     Route::prefix('participants')->group(function () {
@@ -326,7 +316,6 @@ Route::controller(ParticipantController::class)->group(function () {
         Route::get('information/{registration}', 'getParticipantInformation');
         Route::get('information', 'index');
         Route::patch('participant-registration/{registration}', 'registerParticipant');
-        Route::post('create-participant-user', 'createParticipantUser');
     });
 });
 Route::apiResource('participants', ParticipantController::class);
@@ -376,26 +365,23 @@ Route::prefix('authority')->group(function () {
 // Route::apiResource('authorities', AuthorityController::class);
 
 /***********************************************************************************************************************
- * ATTENDANCES
+ * ATTENDANCES / Santillan-Molina
  **********************************************************************************************************************/
 
 Route::apiResource('attendances', AttendanceController::class);
 
 Route::prefix('attendance')->group(function () {
-    Route::get('detail/{detailPlanification}', [AttendanceController::class, 'getAttendancesByDetailPlanification']);
-    Route::delete('destroys', [AuthorityController::class, 'deleteAttendance']);
+    Route::get('detail/{detailPlanification}', [AttendanceController::class, 'getAttendancesByDetailPlanification']); //asistencias por el detalle de la planificacion santillan
+    Route::delete('destroys', [AuthorityController::class, 'deleteAttendance']); // eliminacion santillan
 });
 
 Route::prefix('pdf')->group(function () {
-    Route::get('photographic-record/{course}', [AttendanceController::class, 'showPhotographicRecord']);
-    Route::get('year-schedule/{year}', [CourseController::class, 'showYearSchedule']);
-    Route::get('attendance-evaluation/{course}', [AttendanceController::class, 'attendanceEvaluation']);
-    Route::get('year-schedule', [CourseController::class, 'showYearSchedule']);
-
-    // Route::get('inform-course-needs/{course}', 'App\Http\Controllers\V1\Cecy\CourseController@informCourseNeeds');
-
-    // Route::get('inform-course-needs/{course}', [CourseController::class, 'informCourseNeeds']);
-
+    Route::get('attendance-evaluation/{course}', [AttendanceController::class, 'attendanceEvaluation']);//Salazar
+    Route::get('curricular-design/{course}',[PlanificationController::class, 'curricularDesign']);//Salazar
+    Route::get('informe-final/{course}',[PlanificationController::class, 'informeFinal']);//Salazar
+    Route::get('photographic-record/{course}', [AttendanceController::class, 'showPhotographicRecord']);//Rivera
+    Route::get('year-schedule/{year}', [CourseController::class, 'showYearSchedule']);//Rivera
+    Route::get('year-schedule', [CourseController::class, 'showYearSchedule']);//Rivera
 });
 
 /***********************************************************************************************************************
@@ -408,13 +394,13 @@ Route::controller(RecordController::class)->group(function () {
     });
 
     Route::prefix('record')->group(function () {
-        //Route::get('{photographicRecord}', [PhotographicRecordController::class, 'show']);
-        //Route::get('detail/{detailPlanification}', [PhotographicRecordController::class, 'getDetails']);
+        //Route::get('{photographicRecord}', [PhotographicRecordController::class, 'show']); // registro fotografico individual Santillan
+        //Route::get('detail/{detailPlanification}', [PhotographicRecordController::class, 'getDetails']); // registro fotografico de todo el curso desde el detalle de planificaion-Santillan
         Route::patch('destroys', 'destroys');
         Route::post('store', 'store');
     });
 });
-Route::apiResource('records', PhotographicRecordController::class);
+Route::apiResource('records', PhotographicRecordController::class); // crud del registro fotografico para pruebas Santillan
 
 /*****************************************
  * REGISTRATIONS
@@ -424,15 +410,22 @@ Route::controller(RegistrationController::class)->group(function () {
     });
 
     Route::prefix('registrations')->group(function () {
-        Route::get('courses-by-participant', 'getCoursesByParticipant');
-        Route::get('courses-by-participant/{registration}', 'getCoursesByParticipant');
+        Route::get('courses-by-participant', 'getCoursesByParticipant');// Molina
+        Route::get('courses-by-participant/{registration}', 'getCoursesByParticipant');// Molina
         //ruta para consulta las notas de registration
+        //Ver todos los cursos del estudiante en el cual esta matriculado
         //Route::get('courses-by-participant', [RegistrationController::class, 'getCoursesByParticipant']);
+
+        Route::post('register-student/{detailPlanification}', 'registerStudent');
+        Route::post('register-student', 'registerStudent');
+        Route::get('participant/{detailPlanification}', 'getParticipant');
+        Route::patch('nullify-registration', 'nullifyRegistration'); //Rivas
+        Route::patch('nullify-registrations', 'nullifyRegistrations'); //Rivas
+        Route::patch('participant-grades/{registration}', 'updateGradesParticipant');
+        
         Route::get('records-returned-by-registration', 'recordsReturnedByRegistration');
         Route::get('show-participants', 'showParticipants');
         Route::get('download-file', 'downloadFile');
-        Route::post('nullify-registrations', 'nullifyRegistrations');
-        Route::patch('nullify-registration/{registration}', 'nullifyRegistration');
         Route::get('show-record-competitor/{detailPlanification}', 'showRecordCompetitor');
         Route::patch('show-participant-grades', 'ShowParticipantGrades');
         Route::put('upload-file', 'uploadFile');
@@ -441,6 +434,7 @@ Route::controller(RegistrationController::class)->group(function () {
         Route::patch('destroy-file', 'destroyFile');
     });
 });
+Route::apiResource('registrations', RegistrationController::class);
 
 /*****************************************
  * TOPICS

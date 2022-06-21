@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 
 use App\Http\Requests\V1\Cecy\Participants\AcceptParticipantRequest;
+use App\Http\Requests\V1\Cecy\Participants\DestroyParticipantRequest;
 use App\Http\Requests\V1\Cecy\Participants\IndexParticipantRequest;
 use App\Http\Requests\V1\Cecy\Participants\UpdateParticipantRequest;
 use App\Http\Requests\V1\Cecy\Participants\UpdateParticipantUserRequest;
@@ -204,7 +205,7 @@ class ParticipantController extends Controller
     }
 
     //se crear un nuevo participante por manos de administrador
-    public function createParticipantUser(StoreParticipantUserRequest $request)
+    public function store(StoreParticipantUserRequest $request)
     {
         $user = new User();
 
@@ -234,8 +235,7 @@ class ParticipantController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    //se modificarac los datos del participante
-    public function updateParticipantUser(UpdateParticipantUserRequest $request, Participant $participant)
+    public function update(UpdateParticipantUserRequest $request, Participant $participant)
     {
         $user = $participant->user()->first();
 
@@ -247,7 +247,7 @@ class ParticipantController extends Controller
         $user->phone = $request->input('phone');
 
         $user->save();
-       
+
         return (new ParticipantResource($participant))
             ->additional([
                 'msg' => [
@@ -293,7 +293,7 @@ class ParticipantController extends Controller
     }
 
     //se cambia el estado de los participantes para su acceptación
-    public function updateParticipantState(Request $request, Participant $participant)
+    public function acceptParticipant(Request $request, Participant $participant)
     {
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
         $state = Catalogue::where('type', $catalogue['participant_state']['type'])
@@ -333,7 +333,7 @@ class ParticipantController extends Controller
             ->response()->setStatusCode(201);
     }
 
-    public function destroyParticipant(Participant $participant)
+    public function destroy(DestroyParticipantRequest $request, Participant $participant)
     {
         $participant->delete();
 

@@ -18,8 +18,8 @@ use Intervention\Image\Facades\Image as InterventionImage;
 Route::prefix('user')->group(function () {
     Route::patch('catalogue', [UserController::class, 'catalogue']);
     Route::patch('destroys', [UserController::class, 'destroys']);
-    Route::get('users-arent-instructors', [UserController::class, 'getUsersArentInstructors']);
-    Route::get('users-are-instructors', [UserController::class, 'getUsersAreInstructors']);
+    Route::get('users-arent-instructors', [UserController::class, 'getUsersArentInstructors']);//Rivera
+    Route::get('users-are-instructors', [UserController::class, 'getUsersAreInstructors']);//Rivera
 });
 
 Route::prefix('users/{user}')->group(function () {
