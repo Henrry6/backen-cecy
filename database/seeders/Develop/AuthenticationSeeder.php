@@ -202,6 +202,9 @@ class AuthenticationSeeder extends Seeder
     {
         $user = User::find(1);
         $user->assignRole('admin');
+
+        $responsibleCourse = User::find(7);
+        $responsibleCourse->assignRole('responsible_course');
     }
 
     private function createLocationCatalogues()
