@@ -80,6 +80,7 @@ Route::apiResource('planifications', PlanificationController::class);
 Route::controller(DetailPlanificationController::class)->group(function () {
     Route::prefix('detail-planifications/{detail_planification}')->group(function () {
         Route::get('detail-course/{course}', 'getDetailPlanificationsByCourse');
+        Route::get('participants', 'getParticipantsByDetailPlanification'); // Rivas
         Route::post('instructors-assignment', 'assignInstructors'); // Pérez
         Route::put('detail-planification-proposal', 'updateDetailPlanificationProposal'); //
     });
@@ -336,6 +337,9 @@ Route::apiResource('attendances', AttendanceController::class);
  ****************************************/
 Route::controller(RegistrationController::class)->group(function () {
     Route::prefix('registrations/{registration}')->group(function () {
+        Route::patch('nullify-registration', 'nullifyRegistration'); //Rivas
+        Route::patch('registrate', 'register'); //Rivas
+        Route::patch('review', 'setRegistrationinReview'); //Rivas
     });
 
     Route::prefix('registrations')->group(function () {

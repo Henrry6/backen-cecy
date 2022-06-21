@@ -134,6 +134,41 @@ class RegistrationController extends Controller
 
         return $catalogue->downloadFile($file);
     }
+
+    
+// DDRC-C: matricular a un participante 
+public function register(RegistrationRequest $request, Registration $registration){
+    $currentState = Catalogue::firstWhere('code', $catalogue['registration_state']['registered']);
+            $registration->observations = $request->input('observations');
+            $registration->state()->associate(Catalogue::find($currentState->id));
+            $registration->save();
+            return (new RegistrationResource($registration))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => 'Matriculación exitosa',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
+}
+
+// DDRC-C: cambia el estado a 'en revición' de una incripción  
+public function setRegistrationinReview(ReviewRequest $request, Registration $registration){
+    $currentState = Catalogue::firstWhere('code', $catalogue['registration_state']['in_review']);
+            $registration->observations = $request->input('observations');
+            $registration->state()->associate(Catalogue::find($currentState->id));
+            $registration->save();
+            return (new RegistrationResource($registration))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => 'Matriculación exitosa',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
+}
     /*DDRC-C: Anular varias Matriculas */
     // RegistrationController
     public function nullifyRegistrations(NullifyRegistrationRequest $request)
