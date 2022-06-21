@@ -62,7 +62,7 @@ Route::controller(PlanificationController::class)->group(function () {
     });
 
     Route::prefix('planifications')->group(function () {
-        Route::get('period-states', 'getCurrentPlanificationsByAuthority');
+        Route::get('period-states', 'getCurrentPlanificationsByAuthority'); //Rivas
         Route::get('detail-planifications', 'getPlanificationsByDetailPlanification'); // no existe el metodo
         Route::get('course-parallels-works', 'getCoursesParallelsWorkdays'); // no existe el metodo
         Route::get('courses/{course}', 'getPlanificationsByCourse'); //Rivas, Pérez,
@@ -338,14 +338,14 @@ Route::apiResource('attendances', AttendanceController::class);
 Route::controller(RegistrationController::class)->group(function () {
     Route::prefix('registrations/{registration}')->group(function () {
         Route::patch('nullify-registration', 'nullifyRegistration'); //Rivas
-        Route::patch('registrate', 'register'); //Rivas
-        Route::patch('review', 'setRegistrationinReview'); //Rivas
+        Route::put('register', 'register'); //Rivas
+        Route::put('review', 'setRegistrationinReview'); //Rivas
+        Route::get('participant', 'getParticipant');// Rivas
     });
 
     Route::prefix('registrations')->group(function () {
         Route::get('courses/participant', 'getCoursesByParticipant');// Molina
         Route::post('register-student', 'registerStudent');
-        Route::get('participant/{detailPlanification}', 'getParticipant');// revisar
         Route::patch('nullify-registration', 'nullifyRegistration'); //Rivas
         Route::patch('nullify-registrations', 'nullifyRegistrations'); //Rivas
     });

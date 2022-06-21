@@ -24,6 +24,7 @@ use App\Models\Cecy\Course;
 use App\Models\Cecy\DetailPlanification;
 use App\Models\Cecy\Instructor;
 use App\Models\Cecy\Planification;
+use App\Models\Cecy\Registration;
 
 class DetailPlanificationController extends Controller
 {
@@ -432,8 +433,8 @@ class DetailPlanificationController extends Controller
             ])->response()->setStatusCode(200);
     }
     
-    // DDRC-C: obtiene una lista de participantes de una planificación dado el detalle de la planificación
-    public function getParticipantsByPlanification(IndexPlanificationRequest $request, DetailPlanification $detailPlanification)
+    // DDRC-C: obtiene una lista de participantes inscritos a una planificación dado el detalle de la planificación
+    public function getParticipantsByDetailPlanification(IndexDetailPlanificationRequest $request, DetailPlanification $detailPlanification)
     {
         
         $participants = Registration::where('detail_planification_id', $detailPlanification->id)
