@@ -184,7 +184,22 @@ class PlanificationController extends Controller
     {
         $sorts = explode(',', $request->input('sort'));
 
+        $loggedInInstructor = Instructor::where('user_id', $request->user()->id)->first();
+        // return $loggedInInstructor;
+        
+        // if (!isset($loggedInInstructor)) {
+        //     return response()->json([
+        //         'msg' => [
+        //             'summary' => 'El usuario no es un instructor',
+        //             'detail' => '',
+        //             'code' => '404'
+        //         ],
+        //         'data' => null
+        //     ], 404);
+        // }
+
         $planifications = $course->planifications()
+            ->where('responsible_course_id', $loggedInInstructor->id)
             ->customOrderBy($sorts)
             ->code($request->input('search'))
             ->state($request->input('search'))
@@ -299,7 +314,7 @@ class PlanificationController extends Controller
         $course_tec = $course->techniques_requisites['technical'];
         $course_gen = $course->techniques_requisites['general'];
         $instructor = Instructor::where('id', $planification->responsible_course_id)->first();
-        //$user =  $instructor->user();
+        $user =  $instructor->user();
         $user = User::firstWhere('id', $instructor->user_id);
 
         //return $course->evaluation_mechanisms->diagnostic['tecnique'];

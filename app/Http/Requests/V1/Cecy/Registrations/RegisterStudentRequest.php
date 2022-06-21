@@ -24,6 +24,7 @@ class RegisterStudentRequest extends FormRequest
     public function rules()
     {
         return [
+            'detailPlanification' => ['required'],
             'additionalInformation.companyActivity' => ['required'],
             'additionalInformation.companyAddress' => ['required'],
             'additionalInformation.companyEmail' => ['required'],
@@ -35,7 +36,6 @@ class RegisterStudentRequest extends FormRequest
             'additionalInformation.courseKnows' => ['required'],
             'additionalInformation.levelInstruction.id' => ['required'],
             'additionalInformation.worked' => ['required'],
-            'number' => ['required'],
         ];
     }
 
