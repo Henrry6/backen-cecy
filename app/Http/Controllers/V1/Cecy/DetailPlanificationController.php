@@ -9,10 +9,6 @@ use App\Http\Requests\V1\Cecy\DetailPlanifications\CatalogueDetailPlanificationR
 use App\Http\Requests\V1\Cecy\DetailPlanifications\IndexDetailPlanificationRequest;
 use App\Http\Requests\V1\Cecy\DetailPlanifications\UpdateDetailPlanificationRequest;
 use App\Http\Requests\V1\Cecy\Planifications\IndexPlanificationRequest;
-use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationCollection;
-use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationResource;
-use App\Http\Resources\V1\Cecy\DetailPlanifications\ResponsibleCourseDetailPlanifications\DetailPlanificationCollection as ResponsibleCourseDetailPlanificationCollection;
-use App\Http\Resources\V1\Cecy\DetailPlanifications\ResponsibleCourseDetailPlanifications\DetailPlanificationResource as ResponsibleCourseDetailPlanificationResource;
 use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\DeleteDetailPlanificationRequest;
 use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\DestroysDetailPlanificationRequest;
 use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\RegisterDetailPlanificationRequest;
@@ -20,6 +16,10 @@ use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\ShowDetailPl
 use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\UpdateDetailPlanificationRequest as UpdateDetailPlanification;
 use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\GetDetailPlanificationsByPlanificationRequest;
 use App\Http\Resources\V1\Cecy\DetailPlanifications\ResponsibleCourseDetailPlanifications\DetailPlanificationCollection as ResponsibleCourseDetailPlanificationsCollection;
+use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationCollection;
+use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationResource;
+use App\Http\Resources\V1\Cecy\DetailPlanifications\ResponsibleCourseDetailPlanifications\DetailPlanificationCollection as ResponsibleCourseDetailPlanificationCollection;
+use App\Http\Resources\V1\Cecy\DetailPlanifications\ResponsibleCourseDetailPlanifications\DetailPlanificationResource as ResponsibleCourseDetailPlanificationResource;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationParticipants\PlanificationParticipantCollection;
 use App\Models\Core\State;
 use App\Models\Cecy\Authority;
@@ -453,7 +453,7 @@ class DetailPlanificationController extends Controller
     {
         $detailPlanifications = $planification
             ->detailPlanifications()
-            ->paginate($request->input('per_page'));
+            ->paginate($request->input('perPage'));
 
         return (new ResponsibleCourseDetailPlanificationsCollection($detailPlanifications))
             ->additional([

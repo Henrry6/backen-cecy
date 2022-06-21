@@ -18,7 +18,7 @@ class DetailPlanificationResource extends JsonResource
             'classroom' => ClassroomResource::make($this->classroom),
             'day' => CatalogueResource::make($this->day),
             'instructors' => InstructorFullnameResource::collection($this->instructors),
-            'planification' => PlanificationResource::make($this->planification),
+            'planification' => PlanificationShortResource::make($this->planification),
             'parallel' => CatalogueResource::make($this->parallel),
             'state' => CatalogueResource::make($this->state),
             'workday' => CatalogueResource::make($this->workday),
