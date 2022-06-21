@@ -9,6 +9,7 @@ use App\Models\Core\Location;
 use App\Models\Authentication\Menu;
 use App\Models\Core\Phone;
 use App\Models\Authentication\User;
+use App\Models\Core\PrimeIcons;
 use App\Models\Core\State;
 
 use Illuminate\Database\Seeder;
@@ -50,6 +51,7 @@ class AuthenticationSeeder extends Seeder
 
         $this->createStates();
     }
+
     private function createSystem()
     {
         $catalogues = json_decode(file_get_contents(storage_path() . "/catalogues.json"), true);
@@ -64,12 +66,41 @@ class AuthenticationSeeder extends Seeder
             'state' => true
         ]);
     }
+
     private function createMenus()
     {
-        $menus = Menu::factory(4)->create(['router_link' => null]);
-        foreach ($menus as $menu) {
-            $menuTests = Menu::factory(5)->create(['parent_id' => $menu->id]);
-        }
+        Menu::factory(3)->sequence(
+            [
+                'icon' => PrimeIcons::$CHECK_SQUARE,
+                'label' => 'Admin Users 1',
+                'router_link' => '/user-administration',
+            ],
+            [
+                'icon' => PrimeIcons::$CHECK_SQUARE,
+                'label' => 'Admin Users 2',
+                'router_link' => '/user-administration',
+            ],
+            [
+                'icon' => PrimeIcons::$CHECK_SQUARE,
+                'label' => 'Admin Users 3',
+            ],
+        )->create();
+
+        Menu::factory(2)->sequence(
+            [
+
+                'parent_id' => 1,
+                'icon' => PrimeIcons::$CHECK_SQUARE,
+                'label' => 'Admin Users 1.1',
+                'router_link' => '/user-administration/asd',
+            ],
+            [
+                'parent_id' => 2,
+                'icon' => PrimeIcons::$CHECK_SQUARE,
+                'label' => 'Admin Users 2.1',
+                'router_link' => '/user-administration/',
+            ],
+        )->create();
     }
 
     private function createUsers()
@@ -969,6 +1000,7 @@ class AuthenticationSeeder extends Seeder
             ],
         )->create();
     }
+
     private function createStates()
     {
         $catalogues = json_decode(file_get_contents(storage_path() . "/catalogues.json"), true);
