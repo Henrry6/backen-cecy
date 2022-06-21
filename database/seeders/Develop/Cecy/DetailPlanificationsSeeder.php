@@ -164,7 +164,7 @@ class DetailPlanificationsSeeder extends Seeder
                         'ended_time' => $faker->time(),
                         'observation' => $faker->sentence(),
                         'plan_ended_at' => $faker->date('Y_m_d'),
-                        'registrations_left' => $faker->randomDigit(),
+                        'capacity' => $faker->randomDigit(),
                         'started_time' => $faker->time()
                     ]
                 );

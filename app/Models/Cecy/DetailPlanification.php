@@ -27,7 +27,7 @@ class DetailPlanification extends Model implements Auditable
         'ended_time',
         'observation',
         'plan_ended_at',
-        'registrations_left',
+        'capacity',
         'started_time',
     ];
 

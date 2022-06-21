@@ -185,8 +185,8 @@ public function setRegistrationinReview(ReviewRequest $request, Registration $re
             $registration->observations = $request->input('observations');
             $registration->state()->associate($currentState);
 
-            $remainingRegistrations = $registration->detailPlanification->registrations_left;
-            $detailPlanification->registrations_left = $remainingRegistrations + 1;
+            $remainingRegistrations = $registration->detailPlanification->capacity;
+            $detailPlanification->capacity = $remainingRegistrations + 1;
 
             DB::transaction(function () use ($registration, $detailPlanification) {
 
@@ -220,8 +220,8 @@ public function setRegistrationinReview(ReviewRequest $request, Registration $re
         $registration->observations = $request->input('observations');
         $registration->state()->associate(Catalogue::find($currentState->id));
 
-        $remainingRegistrations = $registration->detailPlanification->registrations_left;
-        $detailPlanification->registrations_left = $remainingRegistrations + 1;
+        $remainingRegistrations = $registration->detailPlanification->capacity;
+        $detailPlanification->capacity = $remainingRegistrations + 1;
 
         DB::transaction(function () use ($registration, $detailPlanification) {
 

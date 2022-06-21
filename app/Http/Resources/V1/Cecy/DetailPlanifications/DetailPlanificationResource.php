@@ -29,7 +29,7 @@ class DetailPlanificationResource extends JsonResource
             'endedTime' => $this->ended_time,
             'observations' => $this->observations,
             'planEndedAt' => $this->plan_ended_at,
-            'registrationsLeft' => $this->registrations_left,
+            'capacity' => $this->capacity,
             'startedTime' => $this->started_time,
         ];
     }
