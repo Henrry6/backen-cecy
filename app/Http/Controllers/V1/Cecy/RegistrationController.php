@@ -21,6 +21,7 @@ use App\Http\Resources\V1\Cecy\Registrations\RegistrationResource;
 use App\Http\Resources\V1\Cecy\Users\UserResource;
 use App\Models\Authentication\User;
 use App\Models\Cecy\AdditionalInformation;
+use App\Models\Cecy\DetailSchoolPeriod;
 use App\Models\Core\Catalogue as CoreCatalogue;
 use App\Models\Core\File;
 use App\Models\Cecy\Course;
@@ -28,6 +29,8 @@ use App\Models\Cecy\Catalogue;
 use App\Models\Cecy\DetailPlanification;
 use App\Models\Cecy\Participant;
 use App\Models\Cecy\Registration;
+use Carbon\Carbon;
+use Carbon\Traits\Date;
 use http\Env\Request;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\DB;
@@ -36,8 +39,9 @@ use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 
 class RegistrationController extends Controller
 {
-    public function additionalInformation(Registration $registration){
-        $additionalInformation=$registration->additionalInformation()->get();
+    public function additionalInformation(Registration $registration)
+    {
+        $additionalInformation = $registration->additionalInformation()->get();
     }
 
     //Metodo Molina
@@ -70,7 +74,7 @@ class RegistrationController extends Controller
     }
 
     //participantes de un curso por detalle de la planificacion
-    public function getParticipant(DetailPlanification $detailPlanification)
+    public function getParticipantByDetailPlanification(DetailPlanification $detailPlanification)
     {
         $registration = $detailPlanification->registrations()->get();
         return (new RegistrationCollection($registration))
@@ -105,7 +109,7 @@ class RegistrationController extends Controller
 
     //trae participantes matriculados
     // RegistrationController
-    public function showParticipants(ShowParticipantsRequest $request, DetailPlanification $detailPlanification)
+    public function getParticipantsByDetailPlanification(ShowParticipantsRequest $request, DetailPlanification $detailPlanification)
     {
         $responsibleCourse = course::where('course_id', $request->course()->id)->get();
 
@@ -123,7 +127,6 @@ class RegistrationController extends Controller
             ->response()->setStatusCode(200);
     }
 
-
     //Descargar matriz
     // RegistrationController
     public function downloadFile(Catalogue $catalogue, File $file)
@@ -132,6 +135,41 @@ class RegistrationController extends Controller
 
         return $catalogue->downloadFile($file);
     }
+
+    
+// DDRC-C: matricular a un participante 
+public function register(RegistrationRequest $request, Registration $registration){
+    $currentState = Catalogue::firstWhere('code', $catalogue['registration_state']['registered']);
+            $registration->observations = $request->input('observations');
+            $registration->state()->associate(Catalogue::find($currentState->id));
+            $registration->save();
+            return (new RegistrationResource($registration))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => 'Matriculación exitosa',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
+}
+
+// DDRC-C: cambia el estado a 'en revición' de una incripción  
+public function setRegistrationinReview(ReviewRequest $request, Registration $registration){
+    $currentState = Catalogue::firstWhere('code', $catalogue['registration_state']['in_review']);
+            $registration->observations = $request->input('observations');
+            $registration->state()->associate(Catalogue::find($currentState->id));
+            $registration->save();
+            return (new RegistrationResource($registration))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => 'Matriculación exitosa',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
+}
     /*DDRC-C: Anular varias Matriculas */
     // RegistrationController
     public function nullifyRegistrations(NullifyRegistrationRequest $request)
@@ -145,7 +183,7 @@ class RegistrationController extends Controller
             $detailPlanification = $registration->detailPlanification;
 
             $registration->observations = $request->input('observations');
-            $registration->state()->associate(Catalogue::find($currentState->id));
+            $registration->state()->associate($currentState);
 
             $remainingRegistrations = $registration->detailPlanification->registrations_left;
             $detailPlanification->registrations_left = $remainingRegistrations + 1;
@@ -202,48 +240,6 @@ class RegistrationController extends Controller
             ->response()->setStatusCode(201);
     }
 
-    // RegistrationController
-    public function showRecordCompetitor(GetCoursesByNameRequest $request, DetailPlanification $detailPlanification, AdditionalInformation $additionalInformation)
-    {
-        //trae todos los participantes registrados de un curso en especifico
-
-        $planification=$detailPlanification->planification()->first();
-        $course=$planification->course()->first();
-        $regitrations=$detailPlanification->registrations()->with(['participant.user.sex','state','additionalInformation.levelInstruction'])->get();
-        $classroom = $detailPlanification->classroom()->first();
-
-        $pdf = PDF::loadView('reports/report-record-competitors', [
-            'planification' => $planification,
-            'detailPlanification' => $detailPlanification,
-            'registrations' => $regitrations,
-            'course'=>$course,
-            'clasrroom'=>$classroom,
-
-
-        ]);
-        $pdf->setOptions([
-            'orientation' => 'landscape',
-        ]);
-        return $pdf->stream('reporte registro participantes.pdf', []);
-    }
-
-    //estudiantes de un curso y sus notas
-    // RegistrationController
-    public function ShowParticipantGrades(ShowParticipantsRequest $request, DetailPlanification $detailPlanification)
-    {
-        $registrations = $detailPlanification->registrations()->paginate();
-
-        return (new RegisterStudentCollection($registrations))
-            ->additional([
-                'msg' => [
-                    'summary' => 'success',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ])
-            ->response()->setStatusCode(200);
-    }
-
     //subir notas de los estudiantes
     // RegistrationController
     public function uploadFile(UploadFileRequest $request, FIle $file)
@@ -269,7 +265,20 @@ class RegistrationController extends Controller
     {
         return $catalogue->destroyFile($file);
     }
+
     // registrar estudiante al curso con la informacion adicional
+
+    private function check(DetailSchoolPeriod $detailSchoolPeriod)
+    {
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+        $currentDate = Date::now();
+        if(Carbon::after($currentDate, $detailSchoolPeriod->ordinary_started_at)){
+            return $catalogue['registration']['ordinary'];
+        }
+        if(Carbon::after($currentDate, $detailSchoolPeriod->extraordinary_started_at)){
+            return $catalogue['registration']['extraordinary'];
+        }
+    }
 
     public function registerStudent(RegisterStudentRequest $request)
     {
@@ -277,11 +286,16 @@ class RegistrationController extends Controller
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
         $state = Catalogue::firstWhere('code', $catalogue['registration_state']['in_review']);
         $type = Catalogue::firstWhere('code', $catalogue['registration']['ordinary']);
+        $detailPlanification = DetailPlanification::find($request->input('detailPlanification.id'));
+        $planification = $detailPlanification->planification()->first();
+        $detailSchoolPeriod = $planification->detailSchoolPeriod()->first();
 
+        $typeXYZ = Catalogue::firstWhere('code', $this->check($detailSchoolPeriod));
         $registration = new Registration();
         $registration->participant()->associate($participant);
-        $registration->detailPlanification()->associate(DetailPlanification::find($request->input('detailPlanification.id')));
+        $registration->detailPlanification()->associate(DetailPlanification::find($detailPlanification);
         // TODO: Usar logica para asignar un tipo de participante segun la fecha, se crea un foncion extra?
+        // TODO: Buscar en la tabla detail school period y asignar el valor segun la fecha
         $registration->type()->associate(Catalogue::find($request->input('type.id')));
         // Enviar por predetermiando el estado en revision (como lo envio)
         $registration->state()->associate(Catalogue::find($request->input('state.id')));
@@ -331,7 +345,7 @@ class RegistrationController extends Controller
     {
         $registration->grade1 = $request->input('grade1');
         $registration->grade2 = $request->input('grade2');
-        $registration->final_grade = $request->input('final_grade');
+        $registration->final_grade = $request->input('finalGrade');//calculado
         $registration->save();
         return (new RegistrationResource($registration))
             ->additional([

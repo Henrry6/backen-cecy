@@ -269,7 +269,7 @@ class ParticipantController extends Controller
                     'code' => '201'
                 ]
             ])
-            ->response()->setStatusCode(201);   
+            ->response()->setStatusCode(201);
     }*/
 
 
@@ -293,7 +293,7 @@ class ParticipantController extends Controller
     }
 
     //se cambia el estado de los participantes para su acceptación
-    public function acceptParticipant(Request $request, Participant $participant)
+    public function approveParticipant(Request $request, Participant $participant)
     {
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
         $state = Catalogue::where('type', $catalogue['participant_state']['type'])

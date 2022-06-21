@@ -21,7 +21,7 @@ class  DetailAttendanceController extends Controller
     {
         $sorts = explode(',', $request->sort);
 
-        $detailAttendances =  DetailAttendance::customOrderBy($sorts)
+        $detailAttendances = DetailAttendance::customOrderBy($sorts)
             ->limit(1000)
             ->get();
 
@@ -36,6 +36,7 @@ class  DetailAttendanceController extends Controller
             ->response()->setStatusCode(200);
     }
 
+<<<<<<< HEAD
     //asistencias de los estudiantes de un curso
     // DetailAttendanceController
     public function showAttendanceParticipant(Registration $registration)
@@ -54,8 +55,11 @@ class  DetailAttendanceController extends Controller
     // Guardar asistencia
     // AttendanceController
     public function  storeDetailAttendance(SaveDetailAttendanceRequest $request, DetailAttendance $detailAttendance)
+=======
+    public function updateType(SaveDetailAttendanceRequest $request, DetailAttendance $detailAttendance)
+>>>>>>> cbbe6b5253db98dea0850ac88a2a9bfc3f045cb0
     {
-        $detailAttendance->type_id = $request->input('type.id');
+        $detailAttendance->type()->associate($request->input('type.id'));
         $detailAttendance->save();
 
         return (new SaveDetailAttendanceResource($detailAttendance))
@@ -69,24 +73,9 @@ class  DetailAttendanceController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    public function getDetailAttendancesByParticipantWithOutPaginate(GetDetailAttendancesByParticipantRequest $request, DetailPlanification $detailPlanification)
+    public function getByRegistration(Registration $registration)
     {
-
-        $sorts = explode(',', $request->input('sort'));
-
-        $participant = Participant::where('user_id', $request->user()->id)->first();
-
-        $registration = Registration::where(
-            [
-                'detail_planification_id' => $detailPlanification->id,
-                'participant_id' => $participant->id
-            ]
-        )->first();
-
-        $detailAttendances = DetailAttendance::customOrderBy($sorts)
-            ->registration($registration)
-            ->get();
-
+        $detailAttendances = $registration->detailAttendances()->get();
 
         return (new DetailAttendanceCollection($detailAttendances))
             ->additional([
@@ -98,6 +87,7 @@ class  DetailAttendanceController extends Controller
             ])
             ->response()->setStatusCode(200);
     }
+
     public function getDetailAttendancesByParticipant(GetDetailAttendancesByParticipantRequest $request, DetailPlanification $detailPlanification)
     {
 
@@ -127,6 +117,7 @@ class  DetailAttendanceController extends Controller
             ])
             ->response()->setStatusCode(200);
     }
+<<<<<<< HEAD
 
     public function getCurrentDateDetailAttendance(GetDetailAttendancesByParticipantRequest $request, DetailPlanification $detailPlanification)
     {
@@ -150,4 +141,6 @@ class  DetailAttendanceController extends Controller
             ])
             ->response()->setStatusCode(200);
     }
+=======
+>>>>>>> cbbe6b5253db98dea0850ac88a2a9bfc3f045cb0
 }

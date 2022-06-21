@@ -4,19 +4,22 @@ namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+
 // use App\Http\Requests\V1\Cecy\Courses\getCoursesByResponsibleRequest;
 use App\Http\Requests\V1\Cecy\Instructors\IndexInstructorRequest;
 use App\Http\Requests\V1\Cecy\Instructors\StoreInstructorRequest;
 use App\Http\Requests\V1\Cecy\Instructors\StoreInstructorsRequest;
 use App\Http\Requests\V1\Cecy\Instructors\CatalogueInstructorRequest;
 use App\Http\Requests\V1\Cecy\Instructor\DestroysInstructorRequest;
+
 // use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationByInstructorCollection;
 use App\Http\Resources\V1\Cecy\Courses\CourseCollection;
 use App\Http\Resources\V1\Cecy\Instructors\InstructorCollection;
 use App\Http\Resources\V1\Cecy\Instructors\InstructorResource;
-use App\Http\Resources\V1\Core\Users\UserResource; 
+use App\Http\Resources\V1\Core\Users\UserResource;
 use App\Http\Resources\V1\Core\Users\UserCollection;
 use App\Models\Cecy\Catalogue;
+
 // use App\Models\Cecy\Course;
 use App\Models\Cecy\Instructor;
 use App\Models\Authentication\User;
@@ -37,7 +40,7 @@ class InstructorController extends Controller
     {
         $sorts = explode(',', $request->sort);
 
-        $instructors =  Instructor::customOrderBy($sorts)
+        $instructors = Instructor::customOrderBy($sorts)
             ->limit(1000)
             ->get();
 
@@ -73,13 +76,13 @@ class InstructorController extends Controller
 
     public function store(StoreInstructorRequest $request)
     {
-        $user= new User();
-        $user -> username = $request->input('username');
-        $user -> name = $request->input('name');
-        $user -> lastname = $request->input('lastname');
-        $user -> email = $request->input('email');
-        $user -> phone = $request->input('phone');
-        $user -> password = $request->input('username');
+        $user = new User();
+        $user->username = $request->input('username');
+        $user->name = $request->input('name');
+        $user->lastname = $request->input('lastname');
+        $user->email = $request->input('email');
+        $user->phone = $request->input('phone');
+        $user->password = $request->input('username');
 
 
         $user->save();
@@ -112,7 +115,7 @@ class InstructorController extends Controller
 
             $user = User::find($userId);
 
-            $instructor = Instructor::firstWhere('user_id',$userId);
+            $instructor = Instructor::firstWhere('user_id', $userId);
 
             if (!isset($instructor)) {
 
@@ -138,7 +141,7 @@ class InstructorController extends Controller
             ->response()->setStatusCode(201);
     }
 
-    public function updateInstructorStateAndType(Request $request, Instructor $instructor)
+    public function updateStateType(Request $request, Instructor $instructor)
     {
         $instructor->state()->associate(Catalogue::find($request->input('state.id')));
         $instructor->type()->associate(Catalogue::find($request->input('type.id')));
@@ -186,24 +189,18 @@ class InstructorController extends Controller
     }
 
 
-    public function getAuthorizedInstructorsOfCourse(IndexInstructorRequest $request, DetailPlanification $detailPlanification) //mejor seria que vieniera el detalle de planification como parametro en lugar del curso,
+    public function getInstructorsByCourseProfile(Course $course)
     {
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
 
         $activeState = Catalogue::where('type', $catalogue['instructor_state']['type'])
             ->where('code', $catalogue['instructor_state']['active'])->first();
 
-        $planification = $detailPlanification->planification()->with('course')->first();
-        $course = $planification->course;
+        $instructors = Instructor::whereHas('courseProfiles', function ($courseProfiles) use ($course) {
+            $courseProfiles->where('course_id', $course->id);
+        })->where('state_id', $activeState->id)
+            ->get();
 
-        // $instructors = Instructor::whereRelation('courseProfiles', 'state_id', $activeState->id)->get();
-        $instructors = Instructor::whereHas('courseProfiles', function ($courseProfiles) use ($course, $activeState) {
-            $courseProfiles->where('course_id', $course->id)
-                ->where('state_id', $activeState->id);
-        })->get();
-
-        // $instructors = $course->courseProfile()->first();
-        // return $instructors;
         return (new InstructorCollection($instructors))
             ->additional([
                 'msg' => [
@@ -215,7 +212,7 @@ class InstructorController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    public function getAssignedInstructors(IndexInstructorRequest $request, DetailPlanification $detailPlanification)
+    public function getAssignedInstructorsByDetailPlanification(IndexInstructorRequest $request, DetailPlanification $detailPlanification)
     {
         $instructors = $detailPlanification->instructors()->get();
 
