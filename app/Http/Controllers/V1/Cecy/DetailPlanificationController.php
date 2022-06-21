@@ -437,15 +437,9 @@ class DetailPlanificationController extends Controller
                 ]
             ])->response()->setStatusCode(200);
     }
-<<<<<<< HEAD
-    
-    // DDRC-C: obtiene una lista de participantes inscritos a una planificación dado el detalle de la planificación
-    public function getParticipantsByDetailPlanification(IndexDetailPlanificationRequest $request, DetailPlanification $detailPlanification)
-=======
 
     // DDRC-C: obtiene una lista de participantes de una planificación dado el detalle de la planificación
     public function getParticipantsByPlanification(IndexPlanificationRequest $request, DetailPlanification $detailPlanification)
->>>>>>> 6253730c1197361b41a9c37655865c248259f4af
     {
 
         $participants = Registration::where('detail_planification_id', $detailPlanification->id)

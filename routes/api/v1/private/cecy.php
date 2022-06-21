@@ -61,16 +61,7 @@ Route::controller(PlanificationController::class)->group(function () {
     });
 
     Route::prefix('planifications')->group(function () {
-<<<<<<< HEAD
         Route::get('period-states', 'getCurrentPlanificationsByAuthority'); //Rivas
-=======
-        Route::prefix('courses/{course}')->group(function () {
-            Route::get('', 'getPlanificationsByCourse'); //Rivas, Pérez,
-            Route::post('', 'storePlanificationByCourse'); //Rivas
-        });
-
-        Route::get('period-states', 'getCurrentPlanificationsByAuthority');
->>>>>>> 6253730c1197361b41a9c37655865c248259f4af
         Route::get('detail-planifications', 'getPlanificationsByDetailPlanification'); // no existe el metodo
         Route::get('course-parallels-works', 'getCoursesParallelsWorkdays'); // no existe el metodo
         Route::get('kpis/{state}', 'getKpi');
@@ -373,10 +364,6 @@ Route::controller(RegistrationController::class)->group(function () {
     Route::prefix('registrations')->group(function () {
         Route::get('courses/participant', 'getCoursesByParticipant'); // Molina
         Route::post('register-student', 'registerStudent');
-<<<<<<< HEAD
-=======
-        Route::get('participant/{detailPlanification}', 'getParticipant'); // revisar
->>>>>>> 6253730c1197361b41a9c37655865c248259f4af
         Route::patch('nullify-registration', 'nullifyRegistration'); //Rivas
         Route::patch('nullify-registrations', 'nullifyRegistrations'); //Rivas
     });
