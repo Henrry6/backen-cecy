@@ -284,7 +284,7 @@ Route::apiResource('instructors', InstructorController::class);
 /***********************************************************************************************************************
  * REGISTRATIONS - to remove
  **********************************************************************************************************************/
-// Route::controller(RegistrationController::class)->group(function () {
+ //Route::controller(RegistrationController::class)->group(function () {
 //     Route::prefix('registrations/{registration}')->group(function () {
 //     });
 

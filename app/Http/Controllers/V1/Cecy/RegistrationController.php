@@ -40,6 +40,7 @@ class RegistrationController extends Controller
         $additionalInformation=$registration->additionalInformation()->get();
     }
 
+    //Metodo Molina
     //Ver todos los cursos del estudiante en el cual esta matriculado
     // RegistrationController
     public function getCoursesByParticipant(GetCoursesByParticipantRequest $request)

@@ -24,6 +24,7 @@ use App\Models\Cecy\Instructor;
 
 class AttendanceController extends Controller
 {
+    //Metodo Molina
     // Guardar asistencia
     // AttendanceController
     public function saveDetailAttendances(SaveDetailAttendanceRequest $request, Attendance $attendance)

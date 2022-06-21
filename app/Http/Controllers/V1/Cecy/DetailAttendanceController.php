@@ -15,7 +15,7 @@ use App\Models\Cecy\DetailPlanification;
 use App\Models\Cecy\Participant;
 use App\Models\Cecy\Registration;
 
-class DetailAttendanceController extends Controller
+class  DetailAttendanceController extends Controller
 {
     public function catalogue(CatalogueDetailAttendanceRequest $request)
     {
@@ -50,7 +50,7 @@ class DetailAttendanceController extends Controller
                 ]
             ])->response()->setStatusCode(200);
     }
-
+    // Metodo Molina
     // Guardar asistencia
     // AttendanceController
     public function  storeDetailAttendance(SaveDetailAttendanceRequest $request, DetailAttendance $detailAttendance)
@@ -61,7 +61,7 @@ class DetailAttendanceController extends Controller
         return (new SaveDetailAttendanceResource($detailAttendance))
             ->additional([
                 'msg' => [
-                    'sumary' => $detailAttendance,
+                    'summary' => $detailAttendance,
                     'detail' => 'Asistencia guardada correctamente',
                     'code' => '200'
                 ]
@@ -91,7 +91,7 @@ class DetailAttendanceController extends Controller
         return (new DetailAttendanceCollection($detailAttendances))
             ->additional([
                 'msg' => [
-                    'sumary' => 'consulta exitosa',
+                    'summary' => 'consulta exitosa',
                     'detail' => '',
                     'code' => '200'
                 ]
@@ -120,7 +120,7 @@ class DetailAttendanceController extends Controller
         return (new DetailAttendanceCollection($detailAttendances))
             ->additional([
                 'msg' => [
-                    'sumary' => 'consulta exitosa',
+                    'summary' => 'consulta exitosa',
                     'detail' => '',
                     'code' => '200'
                 ]
@@ -143,7 +143,7 @@ class DetailAttendanceController extends Controller
         return (new AttendanceResource($attendance))
             ->additional([
                 'msg' => [
-                    'sumary' => 'consulta exitosa',
+                    'summary' => 'consulta exitosa',
                     'detail' => '',
                     'code' => '200'
                 ]
