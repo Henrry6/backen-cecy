@@ -184,7 +184,22 @@ class PlanificationController extends Controller
     {
         $sorts = explode(',', $request->input('sort'));
 
+        $loggedInInstructor = Instructor::where('user_id', $request->user()->id)->first();
+        // return $loggedInInstructor;
+        
+        // if (!isset($loggedInInstructor)) {
+        //     return response()->json([
+        //         'msg' => [
+        //             'summary' => 'El usuario no es un instructor',
+        //             'detail' => '',
+        //             'code' => '404'
+        //         ],
+        //         'data' => null
+        //     ], 404);
+        // }
+
         $planifications = $course->planifications()
+            ->where('responsible_course_id', $loggedInInstructor->id)
             ->customOrderBy($sorts)
             ->code($request->input('search'))
             ->state($request->input('search'))

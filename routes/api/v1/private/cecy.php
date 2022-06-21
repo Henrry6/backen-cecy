@@ -95,7 +95,7 @@ Route::controller(DetailPlanificationController::class)->group(function () {
         Route::patch('destroys', 'destroys'); //Pérez
     });
 });
-// Route::apiResource('detail-planifications', DetailplanificationController::class);
+Route::apiResource('detail-planifications', DetailplanificationController::class);
 
 /***********************************************************************************************************************
  * COURSES
