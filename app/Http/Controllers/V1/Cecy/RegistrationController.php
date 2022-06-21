@@ -44,6 +44,7 @@ class RegistrationController extends Controller
         $additionalInformation = $registration->additionalInformation()->get();
     }
 
+    //Metodo Molina
     //Ver todos los cursos del estudiante en el cual esta matriculado
     // RegistrationController
     public function getCoursesByParticipant(GetCoursesByParticipantRequest $request)
@@ -184,8 +185,8 @@ public function setRegistrationinReview(ReviewRequest $request, Registration $re
             $registration->observations = $request->input('observations');
             $registration->state()->associate($currentState);
 
-            $remainingRegistrations = $registration->detailPlanification->registrations_left;
-            $detailPlanification->registrations_left = $remainingRegistrations + 1;
+            $remainingRegistrations = $registration->detailPlanification->capacity;
+            $detailPlanification->capacity = $remainingRegistrations + 1;
 
             DB::transaction(function () use ($registration, $detailPlanification) {
 
@@ -219,8 +220,8 @@ public function setRegistrationinReview(ReviewRequest $request, Registration $re
         $registration->observations = $request->input('observations');
         $registration->state()->associate(Catalogue::find($currentState->id));
 
-        $remainingRegistrations = $registration->detailPlanification->registrations_left;
-        $detailPlanification->registrations_left = $remainingRegistrations + 1;
+        $remainingRegistrations = $registration->detailPlanification->capacity;
+        $detailPlanification->capacity = $remainingRegistrations + 1;
 
         DB::transaction(function () use ($registration, $detailPlanification) {
 
@@ -265,41 +266,41 @@ public function setRegistrationinReview(ReviewRequest $request, Registration $re
         return $catalogue->destroyFile($file);
     }
 
-    // registrar estudiante al curso con la informacion adicional
-
+    // identificar el tipo de matricula
     private function check(DetailSchoolPeriod $detailSchoolPeriod)
     {
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
         $currentDate = Date::now();
-        if(Carbon::after($currentDate, $detailSchoolPeriod->ordinary_started_at)){
+        if(Carbon::after($currentDate->greaterThanOrEqualTo($detailSchoolPeriod->ordinary_started_at))){
             return $catalogue['registration']['ordinary'];
         }
-        if(Carbon::after($currentDate, $detailSchoolPeriod->extraordinary_started_at)){
+        if(Carbon::after($currentDate->greaterThanOrEqualTo($detailSchoolPeriod->extraordinary_started_at))){
             return $catalogue['registration']['extraordinary'];
+        }
+        if(Carbon::after($currentDate->greaterThanOrEqualTo($detailSchoolPeriod->extraordinary_started_at))){
+            return $catalogue['registration']['special'];
         }
     }
 
+    // registrar estudiante al curso con la informacion adicional
     public function registerStudent(RegisterStudentRequest $request)
     {
         $participant = Participant::firstWhere('user_id', $request->user()->id);
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
         $state = Catalogue::firstWhere('code', $catalogue['registration_state']['in_review']);
-        $type = Catalogue::firstWhere('code', $catalogue['registration']['ordinary']);
         $detailPlanification = DetailPlanification::find($request->input('detailPlanification.id'));
         $planification = $detailPlanification->planification()->first();
         $detailSchoolPeriod = $planification->detailSchoolPeriod()->first();
+        // Funcion para saber el tipo de matricula
+        $registrationType = Catalogue::firstWhere('code', $this->check($detailSchoolPeriod));
 
-        $typeXYZ = Catalogue::firstWhere('code', $this->check($detailSchoolPeriod));
         $registration = new Registration();
         $registration->participant()->associate($participant);
-        $registration->detailPlanification()->associate(DetailPlanification::find($detailPlanification);
-        // TODO: Usar logica para asignar un tipo de participante segun la fecha, se crea un foncion extra?
-        // TODO: Buscar en la tabla detail school period y asignar el valor segun la fecha
-        $registration->type()->associate(Catalogue::find($request->input('type.id')));
-        // Enviar por predetermiando el estado en revision (como lo envio)
-        $registration->state()->associate(Catalogue::find($request->input('state.id')));
-        $registration->typeParticipant()->associate(Catalogue::find($request->input('typeParticipant.id')));
-        $registration->number = $request->input('number');
+        $registration->detailPlanification()->associate(DetailPlanification::find($detailPlanification));//
+        $registration->type()->associate(Catalogue::find($registrationType));//
+        // Enviar por predetermiando el estado en revision
+        $registration->state()->associate(Catalogue::find($state));//
+        $registration->typeParticipant()->associate(Catalogue::find($participant->type));//
         $registration->registered_at = now();
 
         DB::transaction(function ($registration, $request) {

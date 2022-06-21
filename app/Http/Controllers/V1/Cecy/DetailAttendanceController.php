@@ -15,7 +15,7 @@ use App\Models\Cecy\DetailPlanification;
 use App\Models\Cecy\Participant;
 use App\Models\Cecy\Registration;
 
-class DetailAttendanceController extends Controller
+class  DetailAttendanceController extends Controller
 {
     public function catalogue(CatalogueDetailAttendanceRequest $request)
     {
@@ -89,7 +89,7 @@ class DetailAttendanceController extends Controller
         return (new DetailAttendanceCollection($detailAttendances))
             ->additional([
                 'msg' => [
-                    'sumary' => 'consulta exitosa',
+                    'summary' => 'consulta exitosa',
                     'detail' => '',
                     'code' => '200'
                 ]

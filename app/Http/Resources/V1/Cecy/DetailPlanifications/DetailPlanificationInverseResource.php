@@ -22,7 +22,7 @@ class DetailPlanificationInverseResource extends JsonResource
             'day' => CatalogueResource::make($this->day),
             'planification' => PlanificationInverseResource::make($this->planification),
             'parallel' => CatalogueResource::make($this->parallel),
-            'registrationsLeft' => $this->registrations_left,
+            'capacity' => $this->capacity,
             'state' => CatalogueResource::make($this->state),
             'workday' => CatalogueResource::make($this->workday),
             'endedTime' => $this->ended_time,

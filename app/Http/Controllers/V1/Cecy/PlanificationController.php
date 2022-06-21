@@ -314,7 +314,7 @@ class PlanificationController extends Controller
         $course_tec = $course->techniques_requisites['technical'];
         $course_gen = $course->techniques_requisites['general'];
         $instructor = Instructor::where('id', $planification->responsible_course_id)->first();
-        //$user =  $instructor->user();
+        $user =  $instructor->user();
         $user = User::firstWhere('id', $instructor->user_id);
 
         //return $course->evaluation_mechanisms->diagnostic['tecnique'];

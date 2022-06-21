@@ -24,6 +24,7 @@ use App\Models\Cecy\Instructor;
 
 class AttendanceController extends Controller
 {
+    //Metodo Molina
     // Guardar asistencia
     // AttendanceController
     public function saveDetailAttendances(SaveDetailAttendanceRequest $request, Attendance $attendance)
@@ -172,7 +173,7 @@ class AttendanceController extends Controller
         $responsiblececy = $planification->responsibleCecy()->first();
         $institution = Institution::firstWhere('id', $responsiblececy->intitution_id);
         $instructor = Instructor::where('id', $planification->responsible_course_id)->first();
-        //$user =  $instructor->user();
+        $user =  $instructor->user();
         $user = User::firstWhere('id', $instructor->user_id);
         $grade1 = $registrations[0]['grade1'];
         $grade2 = $registrations[0]['grade2'];
