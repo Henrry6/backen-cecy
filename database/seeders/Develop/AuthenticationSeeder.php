@@ -158,10 +158,10 @@ class AuthenticationSeeder extends Seeder
         Role::create(['name' => 'student']);
         Role::create(['name' => 'instructor']);
         Role::create(['name' => 'professional']);
-        Role::create(['name' => 'coordinator-career']);
-        Role::create(['name' => 'coordinator-cecy']);
-        Role::create(['name' => 'responsible-cecy']);
-        Role::create(['name' => 'responsible-course']);
+        Role::create(['name' => 'coordinator_career']);
+        Role::create(['name' => 'coordinator_cecy']);
+        Role::create(['name' => 'responsible_cecy']);
+        Role::create(['name' => 'responsible_course']);
         Role::create(['name' => 'public_company']);
         Role::create(['name' => 'private_company']);
         Role::create(['name' => 'training_company']);
