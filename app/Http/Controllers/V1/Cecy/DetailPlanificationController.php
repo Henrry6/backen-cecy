@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\V1\Cecy;
 
+
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Cecy\DetailPlanifications\AssignInstructorsRequest;
 use App\Http\Requests\V1\Cecy\DetailPlanifications\CatalogueDetailPlanificationRequest;
 use App\Http\Requests\V1\Cecy\DetailPlanifications\IndexDetailPlanificationRequest;
 use App\Http\Requests\V1\Cecy\DetailPlanifications\UpdateDetailPlanificationRequest;
+use App\Http\Requests\V1\Cecy\Planifications\IndexPlanificationRequest;
 use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationCollection;
 use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationResource;
 use App\Http\Resources\V1\Cecy\DetailPlanifications\ResponsibleCourseDetailPlanifications\DetailPlanificationCollection as ResponsibleCourseDetailPlanificationCollection;
@@ -16,6 +18,9 @@ use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\DestroysDeta
 use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\RegisterDetailPlanificationRequest;
 use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\ShowDetailPlanificationRequest;
 use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\UpdateDetailPlanificationRequest as UpdateDetailPlanification;
+use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\GetDetailPlanificationsByPlanificationRequest;
+use App\Http\Resources\V1\Cecy\DetailPlanifications\ResponsibleCourseDetailPlanifications\DetailPlanificationCollection as ResponsibleCourseDetailPlanificationsCollection;
+use App\Http\Resources\V1\Cecy\Planifications\PlanificationParticipants\PlanificationParticipantCollection;
 use App\Models\Core\State;
 use App\Models\Cecy\Authority;
 use App\Models\Cecy\Catalogue;
@@ -24,6 +29,7 @@ use App\Models\Cecy\Course;
 use App\Models\Cecy\DetailPlanification;
 use App\Models\Cecy\Instructor;
 use App\Models\Cecy\Planification;
+use App\Models\Cecy\Registration;
 
 class DetailPlanificationController extends Controller
 {
@@ -370,7 +376,7 @@ class DetailPlanificationController extends Controller
             ->additional([
                 'msg' => [
                     'summary' => 'Éxito',
-                    'detail' => 'Instructores asignados',
+                    'detail' => 'Asignación actualizada',
                     'code' => '201'
                 ]
             ])
@@ -431,11 +437,11 @@ class DetailPlanificationController extends Controller
                 ]
             ])->response()->setStatusCode(200);
     }
-    
+
     // DDRC-C: obtiene una lista de participantes de una planificación dado el detalle de la planificación
     public function getParticipantsByPlanification(IndexPlanificationRequest $request, DetailPlanification $detailPlanification)
     {
-        
+
         $participants = Registration::where('detail_planification_id', $detailPlanification->id)
             ->paginate($request->input('per_page'));
 
@@ -443,6 +449,26 @@ class DetailPlanificationController extends Controller
             ->additional([
                 'msg' => [
                     'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
+
+    /**
+     * Get all detail planifications filtered by planification
+     */
+    public function getDetailPlanificationsByPlanification(GetDetailPlanificationsByPlanificationRequest $request, Planification $planification)
+    {
+        $detailPlanifications = $planification
+            ->detailPlanifications()
+            ->paginate($request->input('per_page'));
+
+        return (new ResponsibleCourseDetailPlanificationsCollection($detailPlanifications))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Éxito',
                     'detail' => '',
                     'code' => '200'
                 ]

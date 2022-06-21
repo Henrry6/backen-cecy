@@ -6,6 +6,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\V1\Cecy\Catalogues\CatalogueResource;
 use App\Http\Resources\V1\Cecy\Classrooms\ClassroomResource;
 use App\Http\Resources\V1\Cecy\Instructors\InstructorFullnameResource;
+use App\Http\Resources\V1\Cecy\Planifications\PlanificationResource;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationShortResource;
 
 class DetailPlanificationResource extends JsonResource
@@ -17,7 +18,7 @@ class DetailPlanificationResource extends JsonResource
             'classroom' => ClassroomResource::make($this->classroom),
             'day' => CatalogueResource::make($this->day),
             'instructors' => InstructorFullnameResource::collection($this->instructors),
-            'planification' => PlanificationShortResource::make($this->planification),
+            'planification' => PlanificationResource::make($this->planification),
             'parallel' => CatalogueResource::make($this->parallel),
             'state' => CatalogueResource::make($this->state),
             'workday' => CatalogueResource::make($this->workday),

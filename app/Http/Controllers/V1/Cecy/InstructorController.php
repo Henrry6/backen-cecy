@@ -189,7 +189,7 @@ class InstructorController extends Controller
     }
 
 
-    public function getInstructorsByCourseProfile(Course $course) //mejor seria que vieniera el detalle de planification como parametro en lugar del curso,
+    public function getInstructorsByCourseProfile(Course $course)
     {
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
 
