@@ -84,6 +84,11 @@ class AuthenticationSeeder extends Seeder
                 'icon' => PrimeIcons::$CHECK_SQUARE,
                 'label' => 'Admin Users 3',
             ],
+            [
+                'icon' => PrimeIcons::$CHECK_SQUARE,
+                'label' => 'Mis cursos',
+                'router_link' => '/cecy/responsible-course',
+            ],
         )->create();
 
         Menu::factory(2)->sequence(
@@ -98,7 +103,7 @@ class AuthenticationSeeder extends Seeder
                 'parent_id' => 2,
                 'icon' => PrimeIcons::$CHECK_SQUARE,
                 'label' => 'Admin Users 2.1',
-                'router_link' => '/user-administration/',
+                'router_link' => '/user-administration',
             ],
         )->create();
     }
@@ -158,10 +163,10 @@ class AuthenticationSeeder extends Seeder
         Role::create(['name' => 'student']);
         Role::create(['name' => 'instructor']);
         Role::create(['name' => 'professional']);
-        Role::create(['name' => 'coordinator-career']);
-        Role::create(['name' => 'coordinator-cecy']);
-        Role::create(['name' => 'responsible-cecy']);
-        Role::create(['name' => 'responsible-course']);
+        Role::create(['name' => 'coordinator_career']);
+        Role::create(['name' => 'coordinator_cecy']);
+        Role::create(['name' => 'responsible_cecy']);
+        Role::create(['name' => 'responsible_course']);
         Role::create(['name' => 'public_company']);
         Role::create(['name' => 'private_company']);
         Role::create(['name' => 'training_company']);
@@ -202,6 +207,9 @@ class AuthenticationSeeder extends Seeder
     {
         $user = User::find(1);
         $user->assignRole('admin');
+
+        $responsibleCourse = User::find(7);
+        $responsibleCourse->assignRole('responsible_course');
     }
 
     private function createLocationCatalogues()

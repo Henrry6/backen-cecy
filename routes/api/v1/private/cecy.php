@@ -62,6 +62,10 @@ Route::controller(PlanificationController::class)->group(function () {
 
     Route::prefix('planifications')->group(function () {
         Route::get('period-states', 'getCurrentPlanificationsByAuthority'); //Rivas
+        Route::prefix('courses/{course}')->group(function () {
+            Route::get('', 'getPlanificationsByCourse'); //Rivas, Pérez,
+            Route::post('', 'storePlanificationByCourse'); //Rivas
+        });
         Route::get('detail-planifications', 'getPlanificationsByDetailPlanification'); // no existe el metodo
         Route::get('course-parallels-works', 'getCoursesParallelsWorkdays'); // no existe el metodo
         Route::get('kpis/{state}', 'getKpi');
@@ -90,7 +94,7 @@ Route::controller(DetailPlanificationController::class)->group(function () {
         Route::patch('destroys', 'destroys'); //Pérez
     });
 });
-// Route::apiResource('detail-planifications', DetailplanificationController::class);
+Route::apiResource('detail-planifications', DetailplanificationController::class);
 
 /***********************************************************************************************************************
  * COURSES
@@ -270,7 +274,7 @@ Route::apiResource('instructors', InstructorController::class);
 /***********************************************************************************************************************
  * REGISTRATIONS - to remove
  **********************************************************************************************************************/
- //Route::controller(RegistrationController::class)->group(function () {
+//Route::controller(RegistrationController::class)->group(function () {
 //     Route::prefix('registrations/{registration}')->group(function () {
 //     });
 
@@ -358,7 +362,7 @@ Route::controller(RegistrationController::class)->group(function () {
         Route::patch('nullify-registration', 'nullifyRegistration'); //Rivas
         Route::put('register', 'register'); //Rivas
         Route::put('review', 'setRegistrationinReview'); //Rivas
-        Route::get('participant', 'getParticipant');// Rivas
+        Route::get('participant', 'getParticipant'); // Rivas
     });
 
     Route::prefix('registrations')->group(function () {

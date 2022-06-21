@@ -66,7 +66,7 @@ class InstructorsSeeder extends Seeder
 
         $states = Catalogue::where('type', 'INSTRUCTOR_STATE')->get();
         $types = Catalogue::where('type', 'INSTRUCTOR')->get();
-        $users = User::where('id', '>=', 6)->where('id', '<=', 35)->get();
+        $users = User::where('id', '>=', 7)->where('id', '<=', 35)->get();
 
         foreach ( $users as $user) {
             Instructor::factory()->create(
