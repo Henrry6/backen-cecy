@@ -273,7 +273,6 @@ Route::controller(InstructorController::class)->group(function () {
 Route::apiResource('instructors', InstructorController::class);
 
 /***********************************************************************************************************************
-<<<<<<< HEAD
  * REGISTRATIONS - to remove
  **********************************************************************************************************************/
  //Route::controller(RegistrationController::class)->group(function () {
@@ -293,8 +292,6 @@ Route::apiResource('instructors', InstructorController::class);
 
 
 /***********************************************************************************************************************
-=======
->>>>>>> cbbe6b5253db98dea0850ac88a2a9bfc3f045cb0
  * PARTICIPANTS
  **********************************************************************************************************************/
 Route::controller(ParticipantController::class)->group(function () {

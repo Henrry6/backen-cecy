@@ -36,28 +36,7 @@ class  DetailAttendanceController extends Controller
             ->response()->setStatusCode(200);
     }
 
-<<<<<<< HEAD
-    //asistencias de los estudiantes de un curso
-    // DetailAttendanceController
-    public function showAttendanceParticipant(Registration $registration)
-    {
-        $attendances =  $registration->attendances()->get;
-        return (new AttendanceResource($attendances))
-            ->additional([
-                'msg' => [
-                    'summary' => 'success',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ])->response()->setStatusCode(200);
-    }
-    // Metodo Molina
-    // Guardar asistencia
-    // AttendanceController
-    public function  storeDetailAttendance(SaveDetailAttendanceRequest $request, DetailAttendance $detailAttendance)
-=======
     public function updateType(SaveDetailAttendanceRequest $request, DetailAttendance $detailAttendance)
->>>>>>> cbbe6b5253db98dea0850ac88a2a9bfc3f045cb0
     {
         $detailAttendance->type()->associate($request->input('type.id'));
         $detailAttendance->save();
@@ -117,30 +96,4 @@ class  DetailAttendanceController extends Controller
             ])
             ->response()->setStatusCode(200);
     }
-<<<<<<< HEAD
-
-    public function getCurrentDateDetailAttendance(GetDetailAttendancesByParticipantRequest $request, DetailPlanification $detailPlanification)
-    {
-
-        $dateToday = Date('Y-m-d');
-
-        $attendance = Attendance::where(
-            [
-                'detail_planification_id' => $detailPlanification->id,
-                'registered_at' => $dateToday
-            ]
-        )->first();
-
-        return (new AttendanceResource($attendance))
-            ->additional([
-                'msg' => [
-                    'summary' => 'consulta exitosa',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ])
-            ->response()->setStatusCode(200);
-    }
-=======
->>>>>>> cbbe6b5253db98dea0850ac88a2a9bfc3f045cb0
 }
