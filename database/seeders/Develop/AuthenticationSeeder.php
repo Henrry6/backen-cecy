@@ -93,6 +93,11 @@ class AuthenticationSeeder extends Seeder
                 'icon' => PrimeIcons::$CHECK_SQUARE,
                 'label' => 'Certificados',
                 'router_link' => '/cecy/student',
+            ],
+            [
+                'icon' => PrimeIcons::$CHECK_SQUARE,
+                'label' => 'Cursos Intructor',
+                'router_link' => '/cecy/instructor',
             ]
         )->create();
 
@@ -128,6 +133,12 @@ class AuthenticationSeeder extends Seeder
                 'label' => 'Mis certificados',
                 'router_link' => '/cecy/student/certificates-student',
             ],
+            [
+                'parent_id' => 6,
+                'icon' => PrimeIcons::$CHECK_SQUARE,
+                'label' => 'Mis cursos',
+                'router_link' => '/cecy/instructor/courses',
+            ]
             //Preguntar como se hace cuando el router link tiene adjunto un id
         )->create();
     }
@@ -152,7 +163,7 @@ class AuthenticationSeeder extends Seeder
                 'blood_type_id' => $bloodType[rand(0, $bloodType->count() - 1)],
                 'civil_status_id' => $civilStatus[rand(0, $civilStatus->count() - 1)],
             ],
-            
+
         );
         Phone::factory(2)->for($userFactory, 'phoneable')
             ->create(
@@ -248,8 +259,8 @@ class AuthenticationSeeder extends Seeder
     {
         $user = User::find(1);
         $user->assignRole('admin');
-        
-        
+
+
         $rector = User::find(2);
         $rector->assignRole('rector');
 
@@ -266,7 +277,7 @@ class AuthenticationSeeder extends Seeder
         $coordinator_career->assignRole('coordinator_career');
 
         $instructors = User::where('id', '>=', 7)->where('id', '<=', 35)->get();
-        
+
         foreach ( $instructors as $instructor) {
             $instructor->assignRole('instructor');
         }
