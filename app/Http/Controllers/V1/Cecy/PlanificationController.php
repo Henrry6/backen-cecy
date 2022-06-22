@@ -186,7 +186,7 @@ class PlanificationController extends Controller
 
         $loggedInInstructor = Instructor::where('user_id', $request->user()->id)->first();
         // return $loggedInInstructor;
-        
+
         // if (!isset($loggedInInstructor)) {
         //     return response()->json([
         //         'msg' => [
@@ -314,7 +314,7 @@ class PlanificationController extends Controller
         $course_tec = $course->techniques_requisites['technical'];
         $course_gen = $course->techniques_requisites['general'];
         $instructor = Instructor::where('id', $planification->responsible_course_id)->first();
-        $user =  $instructor->user();
+        $user = $instructor->user();
         $user = User::firstWhere('id', $instructor->user_id);
 
         //return $course->evaluation_mechanisms->diagnostic['tecnique'];
@@ -334,7 +334,8 @@ class PlanificationController extends Controller
 
         return $pdf->stream('Diseño Curricular.pdf');
     }
-    //trae la informacion correspondiente  al informe final del curso 
+
+    //trae la informacion correspondiente  al informe final del curso
 
     public function informeFinal(Planification $planification)
     {
