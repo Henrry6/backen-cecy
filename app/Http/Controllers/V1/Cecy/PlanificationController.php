@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\GetDetailPlanificationsByPlanificationRequest;
+use App\Http\Resources\V1\Cecy\DetailPlanifications\ResponsibleCourseDetailPlanifications\DetailPlanificationCollection as ResponsibleCourseDetailPlanificationsCollection;
 use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -482,5 +484,25 @@ class PlanificationController extends Controller
                 ]
             ])
             ->response()->setStatusCode(201);
+    }
+
+    /**
+     * Get all detail planifications filtered by planification
+     */
+    public function getDetailPlanifications(GetDetailPlanificationsByPlanificationRequest $request, Planification $planification)
+    {
+        $detailPlanifications = $planification
+            ->detailPlanifications()
+            ->paginate($request->input('perPage'));
+
+        return (new ResponsibleCourseDetailPlanificationsCollection($detailPlanifications))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Éxito',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
     }
 }

@@ -58,6 +58,7 @@ Route::controller(PlanificationController::class)->group(function () {
         Route::patch('assign-responsible-cecy', 'assignResponsibleCecy');
         Route::put('initial-planification', 'updateInitialPlanification'); //Rivas
         Route::put('needs', 'addNeeds'); // Pérez
+        Route::get('detail-planifications', 'getDetailPlanifications');
     });
 
     Route::prefix('planifications')->group(function () {
@@ -86,10 +87,6 @@ Route::controller(DetailPlanificationController::class)->group(function () {
     });
 
     Route::prefix('detail-planifications')->group(function () {
-        Route::prefix('planifications/{planification}')->group(function () {
-            Route::get('', 'getDetailPlanificationsByPlanification');
-        });
-
         Route::get('catalogue', 'catalogue');
         Route::patch('destroys', 'destroys'); //Pérez
     });
