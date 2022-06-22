@@ -287,6 +287,9 @@ class AuthenticationSeeder extends Seeder
         foreach ( $students as $student) {
             $student->assignRole('student');
         }
+
+        $responsible_course = User::find(7);
+        $responsible_course->assignRole('responsible_course');
     }
 
     private function createLocationCatalogues()
