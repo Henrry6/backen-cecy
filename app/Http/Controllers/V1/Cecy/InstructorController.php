@@ -226,4 +226,5 @@ class InstructorController extends Controller
             ])
             ->response()->setStatusCode(200);
     }
+
 }
