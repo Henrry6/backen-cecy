@@ -16,11 +16,7 @@ use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\ShowDetailPl
 use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\UpdateDetailPlanificationRequest as UpdateDetailPlanification;
 use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\GetDetailPlanificationsByPlanificationRequest;
 use App\Http\Resources\V1\Cecy\DetailPlanifications\ResponsibleCourseDetailPlanifications\DetailPlanificationCollection as ResponsibleCourseDetailPlanificationsCollection;
-use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationCollection;
-use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationResource;
-use App\Http\Resources\V1\Cecy\DetailPlanifications\ResponsibleCourseDetailPlanifications\DetailPlanificationCollection as ResponsibleCourseDetailPlanificationCollection;
-use App\Http\Resources\V1\Cecy\DetailPlanifications\ResponsibleCourseDetailPlanifications\DetailPlanificationResource as ResponsibleCourseDetailPlanificationResource;
-use App\Http\Resources\V1\Cecy\Planifications\PlanificationParticipants\PlanificationParticipantCollection;
+use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationParticipants\DetailPlanificationParticipantCollection;
 use App\Models\Core\State;
 use App\Models\Cecy\Authority;
 use App\Models\Cecy\Catalogue;
@@ -429,13 +425,13 @@ class DetailPlanificationController extends Controller
     }
 
     // DDRC-C: obtiene una lista de participantes de una planificación dado el detalle de la planificación
-    public function getParticipantsByPlanification(IndexPlanificationRequest $request, DetailPlanification $detailPlanification)
+    public function getParticipantsByDetailPlanification(IndexDetailPlanificationRequest $request, DetailPlanification $detailPlanification)
     {
 
         $participants = Registration::where('detail_planification_id', $detailPlanification->id)
             ->paginate($request->input('per_page'));
 
-        return (new PlanificationParticipantCollection($participants))
+        return (new DetailPlanificationParticipantCollection($participants))
             ->additional([
                 'msg' => [
                     'summary' => 'success',

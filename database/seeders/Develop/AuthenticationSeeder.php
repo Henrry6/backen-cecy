@@ -84,6 +84,11 @@ class AuthenticationSeeder extends Seeder
                 'icon' => PrimeIcons::$CHECK_SQUARE,
                 'label' => 'Admin Users 3',
             ],
+            [
+                'icon' => PrimeIcons::$CHECK_SQUARE,
+                'label' => 'Mis cursos',
+                'router_link' => '/cecy/responsible-course',
+            ],
         )->create();
 
         Menu::factory(2)->sequence(
@@ -98,7 +103,11 @@ class AuthenticationSeeder extends Seeder
                 'parent_id' => 2,
                 'icon' => PrimeIcons::$CHECK_SQUARE,
                 'label' => 'Admin Users 2.1',
+<<<<<<< HEAD
                 'router_link' => '/user-administration/sas',
+=======
+                'router_link' => '/user-administration',
+>>>>>>> a6cea812aa5cefb0b691314d739938abc6e4f9a0
             ],
         )->create();
     }
@@ -122,7 +131,8 @@ class AuthenticationSeeder extends Seeder
                 'ethnic_origin_id' => $ethnicOrigin[rand(0, $ethnicOrigin->count() - 1)],
                 'blood_type_id' => $bloodType[rand(0, $bloodType->count() - 1)],
                 'civil_status_id' => $civilStatus[rand(0, $civilStatus->count() - 1)],
-            ]
+            ],
+            
         );
         Phone::factory(2)->for($userFactory, 'phoneable')
             ->create(
@@ -133,6 +143,19 @@ class AuthenticationSeeder extends Seeder
             );
 
         Email::factory(2)->for($userFactory, 'emailable')->create();
+        User::factory()->create(
+            [
+                'username' => '1234500000',
+                'identification_type_id' => $identificationTypes[rand(0, $identificationTypes->count() - 1)],
+                'sex_id' => $sexes[rand(0, $sexes->count() - 1)],
+                'gender_id' => $genders[rand(0, $genders->count() - 1)],
+                'ethnic_origin_id' => $ethnicOrigin[rand(0, $ethnicOrigin->count() - 1)],
+                'blood_type_id' => $bloodType[rand(0, $bloodType->count() - 1)],
+                'civil_status_id' => $civilStatus[rand(0, $civilStatus->count() - 1)],
+                'phone' => '0929129123',
+                'email' => 'user.cecy@yavirac.com',
+            ]
+            );
 
         for ($i = 1; $i <= 85; $i++) {
             $userFactory = User::factory()
@@ -178,6 +201,11 @@ class AuthenticationSeeder extends Seeder
         Permission::create(['name' => 'update-users']);
         Permission::create(['name' => 'delete-users']);
 
+        Permission::create(['name' => 'view-courses']);
+        Permission::create(['name' => 'store-courses']);
+        Permission::create(['name' => 'update-courses']);
+        Permission::create(['name' => 'delete-courses']);
+
         Permission::create(['name' => 'download-files']);
         Permission::create(['name' => 'upload-files']);
         Permission::create(['name' => 'read-files']);
@@ -194,7 +222,9 @@ class AuthenticationSeeder extends Seeder
     {
         $role = Role::firstWhere('name', 'admin');
         $roleProfessional = Role::firstWhere('name', 'professional');
+        // $roleResponsibleCourse = Role::firstWhere('name', 'responsible_course');
         $role->syncPermissions(Permission::get());
+        // $roleResponsibleCourse->syncPermissions(Permission::get());
         $roleProfessional->syncPermissions(Permission::where('name', 'like', '%professionals%')->get());
     }
 
@@ -202,8 +232,8 @@ class AuthenticationSeeder extends Seeder
     {
         $user = User::find(1);
         $user->assignRole('admin');
-
-        $responsibleCourse = User::find(7);
+        
+        $responsibleCourse = User::find(2);
         $responsibleCourse->assignRole('responsible_course');
 
         $student = User::find(36);
