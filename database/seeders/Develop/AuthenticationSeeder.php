@@ -103,11 +103,7 @@ class AuthenticationSeeder extends Seeder
                 'parent_id' => 2,
                 'icon' => PrimeIcons::$CHECK_SQUARE,
                 'label' => 'Admin Users 2.1',
-<<<<<<< HEAD
-                'router_link' => '/user-administration/sas',
-=======
                 'router_link' => '/user-administration',
->>>>>>> a6cea812aa5cefb0b691314d739938abc6e4f9a0
             ],
         )->create();
     }
