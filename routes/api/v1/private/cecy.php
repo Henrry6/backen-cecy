@@ -119,6 +119,7 @@ Route::controller(CourseController::class)->group(function () {
     });
 
     Route::prefix('courses/{course}')->group(function () {
+        Route::get('', 'show');
         Route::put('approve', 'approveCourse'); //sin responsable
         Route::put('decline', 'declineCourse'); //sin responsable
 

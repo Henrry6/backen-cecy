@@ -55,7 +55,7 @@ class PrerequisiteController extends Controller
         return (new PrerequisiteCollection([]))
             ->additional([
                 'msg' => [
-                    'summary' => 'success',
+                    'summary' => 'Prerequisitos actualizados',
                     'detail' => '',
                     'code' => '200'
                 ]
