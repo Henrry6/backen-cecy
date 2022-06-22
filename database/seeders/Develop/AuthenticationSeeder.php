@@ -98,7 +98,7 @@ class AuthenticationSeeder extends Seeder
                 'parent_id' => 2,
                 'icon' => PrimeIcons::$CHECK_SQUARE,
                 'label' => 'Admin Users 2.1',
-                'router_link' => '/user-administration/',
+                'router_link' => '/user-administration/sas',
             ],
         )->create();
     }
@@ -205,6 +205,9 @@ class AuthenticationSeeder extends Seeder
 
         $responsibleCourse = User::find(7);
         $responsibleCourse->assignRole('responsible_course');
+
+        $student = User::find(36);
+        $student->assignRole('student');
     }
 
     private function createLocationCatalogues()
