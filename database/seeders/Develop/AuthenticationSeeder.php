@@ -84,6 +84,11 @@ class AuthenticationSeeder extends Seeder
                 'icon' => PrimeIcons::$CHECK_SQUARE,
                 'label' => 'Admin Users 3',
             ],
+            [
+                'icon' => PrimeIcons::$CHECK_SQUARE,
+                'label' => 'Mis cursos',
+                'router_link' => '/cecy/responsible-course',
+            ],
         )->create();
 
         Menu::factory(2)->sequence(
@@ -98,7 +103,7 @@ class AuthenticationSeeder extends Seeder
                 'parent_id' => 2,
                 'icon' => PrimeIcons::$CHECK_SQUARE,
                 'label' => 'Admin Users 2.1',
-                'router_link' => '/user-administration/',
+                'router_link' => '/user-administration',
             ],
         )->create();
     }
@@ -224,8 +229,8 @@ class AuthenticationSeeder extends Seeder
         $user = User::find(1);
         $user->assignRole('admin');
         
-        $user = User::find(2);
-        $user->assignRole('admin');
+        $responsibleCourse = User::find(2);
+        $responsibleCourse->assignRole('responsible_course');
     }
 
     private function createLocationCatalogues()

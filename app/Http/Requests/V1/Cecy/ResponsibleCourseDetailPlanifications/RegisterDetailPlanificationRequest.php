@@ -20,10 +20,10 @@ class RegisterDetailPlanificationRequest extends FormRequest
             'classroom.id' => ['required', 'integer'],
             'day.id' => ['required', 'integer'],
             'workday.id' => ['required', 'integer', new WorkdayRule($this->endedTime)],
-            'planification.id' => [
-                'required', 'integer',
-                new HoursRule($this->day['id'], $this->startedTime, $this->endedTime)
-            ],
+            // 'planification.id' => [
+            //     'required', 'integer',
+            //     new HoursRule($this->day['id'], $this->startedTime, $this->endedTime)
+            // ],
             'parallel.id' => [
                 'required', 'integer',
                 // Rule::unique('pgsql-cecy.detail_planifications', 'parallel_id')
