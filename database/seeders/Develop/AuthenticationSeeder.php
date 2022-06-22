@@ -69,7 +69,7 @@ class AuthenticationSeeder extends Seeder
 
     private function createMenus()
     {
-        Menu::factory(3)->sequence(
+        Menu::factory(5)->sequence(
             [
                 'icon' => PrimeIcons::$CHECK_SQUARE,
                 'label' => 'Admin Users 1',
@@ -86,12 +86,17 @@ class AuthenticationSeeder extends Seeder
             ],
             [
                 'icon' => PrimeIcons::$CHECK_SQUARE,
-                'label' => 'Mis cursos',
+                'label' => 'Cursos',
                 'router_link' => '/cecy/responsible-course',
             ],
+            [
+                'icon' => PrimeIcons::$CHECK_SQUARE,
+                'label' => 'Certificados',
+                'router_link' => '/cecy/student',
+            ]
         )->create();
 
-        Menu::factory(2)->sequence(
+        Menu::factory(5)->sequence(
             [
 
                 'parent_id' => 1,
@@ -105,6 +110,25 @@ class AuthenticationSeeder extends Seeder
                 'label' => 'Admin Users 2.1',
                 'router_link' => '/user-administration',
             ],
+            [
+                'parent_id' => 4,
+                'icon' => PrimeIcons::$CHECK_SQUARE,
+                'label' => 'Mis cursos',
+                'router_link' => '/cecy/student/view-courses-participant',
+            ],
+            [
+                'parent_id' => 4,
+                'icon' => PrimeIcons::$CHECK_SQUARE,
+                'label' => 'Cursos disponibles',
+                'router_link' => '/cecy/student/courses',
+            ],
+            [
+                'parent_id' => 5,
+                'icon' => PrimeIcons::$CHECK_SQUARE,
+                'label' => 'Mis certificados',
+                'router_link' => '/cecy/student/certificates-student',
+            ],
+            //Preguntar como se hace cuando el router link tiene adjunto un id
         )->create();
     }
 
@@ -181,13 +205,9 @@ class AuthenticationSeeder extends Seeder
         Role::create(['name' => 'coordinator_cecy']);
         Role::create(['name' => 'responsible_cecy']);
         Role::create(['name' => 'responsible_course']);
-        Role::create(['name' => 'public_company']);
-        Role::create(['name' => 'private_company']);
-        Role::create(['name' => 'training_company']);
-        Role::create(['name' => 'external_student']);
-        Role::create(['name' => 'internal_student']);
-        Role::create(['name' => 'senecyt_staff']);
-        Role::create(['name' => 'gad']);
+        Role::create(['name' => 'rector']);
+        Role::create(['name' => 'vicerector']);
+        Role::create(['name' => 'ocs']);
     }
 
     private function createPermissions()
@@ -229,8 +249,33 @@ class AuthenticationSeeder extends Seeder
         $user = User::find(1);
         $user->assignRole('admin');
         
-        $responsibleCourse = User::find(2);
-        $responsibleCourse->assignRole('responsible_course');
+        
+        $rector = User::find(2);
+        $rector->assignRole('rector');
+
+        $vicerector = User::find(3);
+        $vicerector->assignRole('vicerector');
+
+        $ocs = User::find(4);
+        $ocs->assignRole('ocs');
+
+        $responsible_cecy = User::find(5);
+        $responsible_cecy->assignRole('responsible_cecy');
+
+        $coordinator_career = User::find(6);
+        $coordinator_career->assignRole('coordinator_career');
+
+        $instructors = User::where('id', '>=', 7)->where('id', '<=', 35)->get();
+        
+        foreach ( $instructors as $instructor) {
+            $instructor->assignRole('instructor');
+        }
+
+        $students = User::where('id', '>=', 36)->where('id', '<=', 85)->get();
+
+        foreach ( $students as $student) {
+            $student->assignRole('student');
+        }
     }
 
     private function createLocationCatalogues()
