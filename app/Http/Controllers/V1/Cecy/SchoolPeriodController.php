@@ -11,7 +11,7 @@ use App\Http\Resources\V1\Cecy\SchoolPeriods\SchoolPeriodResource;
 use App\Http\Resources\V1\Cecy\SchoolPeriods\SchoolPeriodCollection;
 use App\Models\Cecy\Catalogue;
 use App\Models\Cecy\SchoolPeriod;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 
 class SchoolPeriodController extends Controller
 {
@@ -21,7 +21,7 @@ class SchoolPeriodController extends Controller
 
     public function index(Request $request)
     {
-        $sorts = explode(',', $request->sort);
+        $sorts = explode(',', $request->input('sort'));
 
         $schoolPeriods =  SchoolPeriod::customOrderBy($sorts)
             ->code($request->input('search'))
