@@ -15,7 +15,12 @@ use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\RegisterDeta
 use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\ShowDetailPlanificationRequest;
 use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\UpdateDetailPlanificationRequest as UpdateDetailPlanification;
 use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\GetDetailPlanificationsByPlanificationRequest;
+use App\Http\Resources\V1\Cecy\DetailPlanifications\ResponsibleCourseDetailPlanifications\DetailPlanificationCollection as ResponsibleCourseDetailPlanificationCollection;
+use App\Http\Resources\V1\Cecy\DetailPlanifications\ResponsibleCourseDetailPlanifications\DetailPlanificationResource as ResponsibleCourseDetailPlanificationResource;
+use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationResource;
+use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationCollection;
 use App\Http\Resources\V1\Cecy\DetailPlanifications\ResponsibleCourseDetailPlanifications\DetailPlanificationCollection as ResponsibleCourseDetailPlanificationsCollection;
+
 use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationParticipants\DetailPlanificationParticipantCollection;
 use App\Models\Core\State;
 use App\Models\Cecy\Authority;
@@ -37,7 +42,7 @@ class DetailPlanificationController extends Controller
     {
         $sorts = explode(',', $request->input('sort'));
 
-        $detailPlanifications =  DetailPlanification::customOrderBy($sorts)
+        $detailPlanifications = DetailPlanification::customOrderBy($sorts)
             ->observation($request->input('search'))
             ->paginate($request->input('perPage'));
 
@@ -56,7 +61,7 @@ class DetailPlanificationController extends Controller
     {
         $sorts = explode(',', $request->input('sort'));
 
-        $detailPlanifications =  DetailPlanification::customOrderBy($sorts)
+        $detailPlanifications = DetailPlanification::customOrderBy($sorts)
             ->observation($request->input('search'))
             ->limit(1000)
             ->get();
@@ -239,48 +244,8 @@ class DetailPlanificationController extends Controller
     }
 
 
-    public function destroy(DeleteDetailPlanificationRequest $request, DetailPlanification $detailPlanification)
+    public function destroy(DetailPlanification $detailPlanification)
     {
-        $planification = $detailPlanification->planification()->first();
-        // $responsibleCourse = $planification->responsibleCourse()->first();
-
-        // $loggedInInstructor = Instructor::where('user_id', $request->user()->id)->first();
-        // if (!$loggedInInstructor) {
-        //     return response()->json([
-        //         'data' => '',
-        //         'msg' => [
-        //             'summary' => 'Error',
-        //             'detail' => 'No es instructor o no se encuentra registrado',
-        //             'code' => '400'
-        //         ]
-        //     ], 400); //revisar ->response()->setStatusCode(400)
-        // }
-
-        // if ($loggedInInstructor->id !== $responsibleCourse->id) {
-        //     return response()->json([
-        //         'data' => '',
-        //         'msg' => [
-        //             'summary' => 'Error',
-        //             'detail' => 'No le pertece esta planificación',
-        //             'code' => '400'
-        //         ]
-        //     ], 400); //revisar ->response()->setStatusCode(400)
-        // }
-
-        // //validar que la planification ha culminado
-        // if (
-        //     $planification->state()->first()->code === State::CULMINATED ||
-        //     $planification->state()->first()->code === State::NOT_APPROVED
-        // ) {
-        //     return response()->json([
-        //         'msg' => [
-        //             'summary' => 'Error',
-        //             'detail' => 'La planificación ha culminado o no fue aprobada.',
-        //             'code' => '400'
-        //         ]
-        //     ], 400); //revisar ->response()->setStatusCode(400)
-        // }
-
         $detailPlanification->delete();
 
         return (new ResponsibleCourseDetailPlanificationResource($detailPlanification))
@@ -294,7 +259,7 @@ class DetailPlanificationController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    
+
     public function destroys(DestroysDetailPlanificationRequest $request)
     {
         // $detailPlanification = DetailPlanification::find($request->ids[0]);
@@ -435,26 +400,6 @@ class DetailPlanificationController extends Controller
             ->additional([
                 'msg' => [
                     'summary' => 'success',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ])
-            ->response()->setStatusCode(200);
-    }
-
-    /**
-     * Get all detail planifications filtered by planification
-     */
-    public function getDetailPlanificationsByPlanification(GetDetailPlanificationsByPlanificationRequest $request, Planification $planification)
-    {
-        $detailPlanifications = $planification
-            ->detailPlanifications()
-            ->paginate($request->input('perPage'));
-
-        return (new ResponsibleCourseDetailPlanificationsCollection($detailPlanifications))
-            ->additional([
-                'msg' => [
-                    'summary' => 'Éxito',
                     'detail' => '',
                     'code' => '200'
                 ]

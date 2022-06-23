@@ -11,7 +11,7 @@ class CourseProfileResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'course' => CourseCollection::make($this->course),
+//            'course' => CourseCollection::make($this->course),
             'requiredExperiences' => $this->require_experience,
             'requiredKnowledges' => $this->require_knowledge,
             'requiredSkills' => $this->require_skills
