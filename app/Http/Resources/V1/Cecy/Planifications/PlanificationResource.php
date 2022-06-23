@@ -5,7 +5,7 @@ namespace App\Http\Resources\V1\Cecy\Planifications;
 use App\Http\Resources\V1\Cecy\Authorities\AuthorityResource;
 use App\Http\Resources\V1\Cecy\Catalogues\CatalogueResource;
 use App\Http\Resources\V1\Cecy\Courses\CourseResource;
-use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationCollection;
+use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationResource;
 use App\Http\Resources\V1\Cecy\DetailSchoolPeriods\DetailSchoolPeriodResource;
 use App\Http\Resources\V1\Cecy\Instructors\InstructorResource;
 use App\Models\Cecy\DetailPlanification;
@@ -26,7 +26,7 @@ class PlanificationResource extends JsonResource
             'responsibleOcs' => AuthorityResource::make($this->responsibleOcs),
             'state' => CatalogueResource::make($this->state),
             'vicerector' => AuthorityResource::make($this->vicerector),
-            'detailPlanifications' => DetailPlanificationCollection::collection($this->detailPlanifications),
+            'detailPlanifications' => DetailPlanificationResource::collection($this->detailPlanifications),
             'aprovedAt' => $this->aproved_at,
             'code' => $this->code,
             'endedAt' => $this->ended_at,

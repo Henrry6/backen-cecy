@@ -196,9 +196,9 @@ class InstructorController extends Controller
         $activeState = Catalogue::where('type', $catalogue['instructor_state']['type'])
             ->where('code', $catalogue['instructor_state']['active'])->first();
 
-        $instructors = Instructor::whereHas('courseProfiles', function ($courseProfiles) use ($course) {
+        $instructors = Instructor::with(['courseProfiles' => function ($courseProfiles) use ($course) {
             $courseProfiles->where('course_id', $course->id);
-        })->where('state_id', $activeState->id)
+        }])->where('state_id', $activeState->id)
             ->get();
 
         return (new InstructorCollection($instructors))
@@ -226,4 +226,5 @@ class InstructorController extends Controller
             ])
             ->response()->setStatusCode(200);
     }
+
 }

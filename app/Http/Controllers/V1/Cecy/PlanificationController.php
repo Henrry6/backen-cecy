@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\GetDetailPlanificationsByPlanificationRequest;
+use App\Http\Resources\V1\Cecy\DetailPlanifications\ResponsibleCourseDetailPlanifications\DetailPlanificationCollection as ResponsibleCourseDetailPlanificationsCollection;
 use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -184,7 +186,22 @@ class PlanificationController extends Controller
     {
         $sorts = explode(',', $request->input('sort'));
 
+        $loggedInInstructor = Instructor::where('user_id', $request->user()->id)->first();
+        // return $loggedInInstructor;
+
+        // if (!isset($loggedInInstructor)) {
+        //     return response()->json([
+        //         'msg' => [
+        //             'summary' => 'El usuario no es un instructor',
+        //             'detail' => '',
+        //             'code' => '404'
+        //         ],
+        //         'data' => null
+        //     ], 404);
+        // }
+
         $planifications = $course->planifications()
+            ->where('responsible_course_id', $loggedInInstructor->id)
             ->customOrderBy($sorts)
             ->code($request->input('search'))
             ->state($request->input('search'))
@@ -299,7 +316,7 @@ class PlanificationController extends Controller
         $course_tec = $course->techniques_requisites['technical'];
         $course_gen = $course->techniques_requisites['general'];
         $instructor = Instructor::where('id', $planification->responsible_course_id)->first();
-        $user =  $instructor->user();
+        $user = $instructor->user();
         $user = User::firstWhere('id', $instructor->user_id);
 
         //return $course->evaluation_mechanisms->diagnostic['tecnique'];
@@ -319,7 +336,8 @@ class PlanificationController extends Controller
 
         return $pdf->stream('Diseño Curricular.pdf');
     }
-    //trae la informacion correspondiente  al informe final del curso 
+
+    //trae la informacion correspondiente  al informe final del curso
 
     public function informeFinal(Planification $planification)
     {
@@ -466,5 +484,25 @@ class PlanificationController extends Controller
                 ]
             ])
             ->response()->setStatusCode(201);
+    }
+
+    /**
+     * Get all detail planifications filtered by planification
+     */
+    public function getDetailPlanifications(GetDetailPlanificationsByPlanificationRequest $request, Planification $planification)
+    {
+        $detailPlanifications = $planification
+            ->detailPlanifications()
+            ->paginate($request->input('perPage'));
+
+        return (new ResponsibleCourseDetailPlanificationsCollection($detailPlanifications))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Éxito',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
     }
 }

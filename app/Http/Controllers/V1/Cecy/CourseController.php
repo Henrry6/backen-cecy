@@ -60,6 +60,12 @@ class CourseController extends Controller
 {
     public function __construct()
     {
+        // $this->middleware('role:admin');
+        // // $this->middleware('role:responsible_course');
+        // $this->middleware('permission:view-courses')->only(['index', 'show']);
+        // $this->middleware('permission:store-courses')->only(['store']);
+        // $this->middleware('permission:update-courses')->only(['update']);
+        // $this->middleware('permission:delete-courses')->only(['destroy', 'destroys']);
     }
 
     public function index(IndexCourseRequest $request)
@@ -238,7 +244,6 @@ class CourseController extends Controller
     // Actualiza la informacion del diseño curricular (Done)
     public function updateCurricularDesignCourse(UpdateCurricularDesign $request, Course $course)
     {
-        // return "updateCurricularDesignCourse";
         $course->area()->associate(Catalogue::find($request->input('area.id')));
         $course->speciality()->associate(Catalogue::find($request->input('speciality.id')));
         $course->alignment = $request->input('alignment');
@@ -255,7 +260,7 @@ class CourseController extends Controller
         return (new CourseResource($course))
             ->additional([
                 'msg' => [
-                    'summary' => 'success',
+                    'summary' => 'Información del diseño curricular, actualizada',
                     'detail' => '',
                     'code' => '200'
                 ]
@@ -481,14 +486,14 @@ class CourseController extends Controller
         ]);
         return $pdf->stream('informNeeds.pdf');
     }
-    
 
-    
+
+
 
     //Traer cursos de un docente instructor (Deberia estar en planificacion dice cursos pero trae planificaciones)(Done)
     public function getCoursesByInstructor(GetPlanificationByResponsableCourseRequest $request)
     {
-        return "getCoursesByInstructor";
+        //return "getCoursesByInstructor";
         $instructor = Instructor::FirstWhere('user_id', $request->user()->id);
         $planifications = $instructor->planifications()->get();
 
@@ -715,6 +720,23 @@ class CourseController extends Controller
                 ]
             ])
             ->response()->setStatusCode(201);
+    }
+
+    //obtener los cursos asignados a un isntructor logueado (Done)
+    public function getInstructorByCourses(getCoursesByResponsibleRequest $request)
+    {
+
+        $instructor = Instructor::FirstWhere('user_id', $request->user()->id)->first();
+        $detailPlanification = $instructor->detailPlanifications()->get();
+
+        return (new DetailPlanificationCollection($detailPlanification))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Consulta exitosa',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ]);
     }
 
     // Files

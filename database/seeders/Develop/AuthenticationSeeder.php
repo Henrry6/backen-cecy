@@ -9,6 +9,7 @@ use App\Models\Core\Location;
 use App\Models\Authentication\Menu;
 use App\Models\Core\Phone;
 use App\Models\Authentication\User;
+use App\Models\Core\PrimeIcons;
 use App\Models\Core\State;
 
 use Illuminate\Database\Seeder;
@@ -50,6 +51,7 @@ class AuthenticationSeeder extends Seeder
 
         $this->createStates();
     }
+
     private function createSystem()
     {
         $catalogues = json_decode(file_get_contents(storage_path() . "/catalogues.json"), true);
@@ -64,12 +66,81 @@ class AuthenticationSeeder extends Seeder
             'state' => true
         ]);
     }
+
     private function createMenus()
     {
-        $menus = Menu::factory(4)->create(['router_link' => null]);
-        foreach ($menus as $menu) {
-            $menuTests = Menu::factory(5)->create(['parent_id' => $menu->id]);
-        }
+        Menu::factory(5)->sequence(
+            [
+                'icon' => PrimeIcons::$CHECK_SQUARE,
+                'label' => 'Admin Users 1',
+                'router_link' => '/user-administration',
+            ],
+            [
+                'icon' => PrimeIcons::$CHECK_SQUARE,
+                'label' => 'Admin Users 2',
+                'router_link' => '/user-administration',
+            ],
+            [
+                'icon' => PrimeIcons::$CHECK_SQUARE,
+                'label' => 'Admin Users 3',
+            ],
+            [
+                'icon' => PrimeIcons::$CHECK_SQUARE,
+                'label' => 'Cursos',
+                'router_link' => '/cecy/responsible-course',
+            ],
+            [
+                'icon' => PrimeIcons::$CHECK_SQUARE,
+                'label' => 'Certificados',
+                'router_link' => '/cecy/student',
+            ],
+            [
+                'icon' => PrimeIcons::$CHECK_SQUARE,
+                'label' => 'Cursos Intructor',
+                'router_link' => '/cecy/instructor',
+            ]
+        )->create();
+
+        Menu::factory(5)->sequence(
+            [
+
+                'parent_id' => 1,
+                'icon' => PrimeIcons::$CHECK_SQUARE,
+                'label' => 'Admin Users 1.1',
+                'router_link' => '/user-administration/asd',
+            ],
+            [
+                'parent_id' => 2,
+                'icon' => PrimeIcons::$CHECK_SQUARE,
+                'label' => 'Admin Users 2.1',
+                'router_link' => '/user-administration',
+            ],
+            [
+                'parent_id' => 4,
+                'icon' => PrimeIcons::$CHECK_SQUARE,
+                'label' => 'Mis cursos',
+                'router_link' => '/cecy/student/view-courses-participant',
+            ],
+            [
+                'parent_id' => 4,
+                'icon' => PrimeIcons::$CHECK_SQUARE,
+                'label' => 'Cursos disponibles',
+                'router_link' => '/cecy/student/courses',
+            ],
+            [
+                'parent_id' => 5,
+                'icon' => PrimeIcons::$CHECK_SQUARE,
+                'label' => 'Mis certificados',
+                'router_link' => '/cecy/student/certificates-student',
+            ],
+            [
+                'parent_id' => 6,
+                'icon' => PrimeIcons::$CHECK_SQUARE,
+                'label' => 'Mis cursos',
+                'router_link' => '/cecy/instructor/courses',
+            ]
+            //Preguntar como se hace cuando el router link tiene adjunto un id
+        )->create();
     }
 
     private function createUsers()
@@ -91,7 +162,8 @@ class AuthenticationSeeder extends Seeder
                 'ethnic_origin_id' => $ethnicOrigin[rand(0, $ethnicOrigin->count() - 1)],
                 'blood_type_id' => $bloodType[rand(0, $bloodType->count() - 1)],
                 'civil_status_id' => $civilStatus[rand(0, $civilStatus->count() - 1)],
-            ]
+            ],
+
         );
         Phone::factory(2)->for($userFactory, 'phoneable')
             ->create(
@@ -102,6 +174,19 @@ class AuthenticationSeeder extends Seeder
             );
 
         Email::factory(2)->for($userFactory, 'emailable')->create();
+        User::factory()->create(
+            [
+                'username' => '1234500000',
+                'identification_type_id' => $identificationTypes[rand(0, $identificationTypes->count() - 1)],
+                'sex_id' => $sexes[rand(0, $sexes->count() - 1)],
+                'gender_id' => $genders[rand(0, $genders->count() - 1)],
+                'ethnic_origin_id' => $ethnicOrigin[rand(0, $ethnicOrigin->count() - 1)],
+                'blood_type_id' => $bloodType[rand(0, $bloodType->count() - 1)],
+                'civil_status_id' => $civilStatus[rand(0, $civilStatus->count() - 1)],
+                'phone' => '0929129123',
+                'email' => 'user.cecy@yavirac.com',
+            ]
+            );
 
         for ($i = 1; $i <= 85; $i++) {
             $userFactory = User::factory()
@@ -123,15 +208,17 @@ class AuthenticationSeeder extends Seeder
     {
         Role::create(['name' => 'admin']);
         Role::create(['name' => 'guest']);
-        Role::create(['name' => 'professional']);
         Role::create(['name' => 'teacher']);
-        Role::create(['name' => 'public_company']);
-        Role::create(['name' => 'private_company']);
-        Role::create(['name' => 'training_company']);
-        Role::create(['name' => 'external_student']);
-        Role::create(['name' => 'internal_student']);
-        Role::create(['name' => 'senecyt_staff']);
-        Role::create(['name' => 'gad']);
+        Role::create(['name' => 'student']);
+        Role::create(['name' => 'instructor']);
+        Role::create(['name' => 'professional']);
+        Role::create(['name' => 'coordinator_career']);
+        Role::create(['name' => 'coordinator_cecy']);
+        Role::create(['name' => 'responsible_cecy']);
+        Role::create(['name' => 'responsible_course']);
+        Role::create(['name' => 'rector']);
+        Role::create(['name' => 'vicerector']);
+        Role::create(['name' => 'ocs']);
     }
 
     private function createPermissions()
@@ -140,6 +227,11 @@ class AuthenticationSeeder extends Seeder
         Permission::create(['name' => 'store-users']);
         Permission::create(['name' => 'update-users']);
         Permission::create(['name' => 'delete-users']);
+
+        Permission::create(['name' => 'view-courses']);
+        Permission::create(['name' => 'store-courses']);
+        Permission::create(['name' => 'update-courses']);
+        Permission::create(['name' => 'delete-courses']);
 
         Permission::create(['name' => 'download-files']);
         Permission::create(['name' => 'upload-files']);
@@ -157,7 +249,9 @@ class AuthenticationSeeder extends Seeder
     {
         $role = Role::firstWhere('name', 'admin');
         $roleProfessional = Role::firstWhere('name', 'professional');
+        // $roleResponsibleCourse = Role::firstWhere('name', 'responsible_course');
         $role->syncPermissions(Permission::get());
+        // $roleResponsibleCourse->syncPermissions(Permission::get());
         $roleProfessional->syncPermissions(Permission::where('name', 'like', '%professionals%')->get());
     }
 
@@ -165,6 +259,37 @@ class AuthenticationSeeder extends Seeder
     {
         $user = User::find(1);
         $user->assignRole('admin');
+
+
+        $rector = User::find(2);
+        $rector->assignRole('rector');
+
+        $vicerector = User::find(3);
+        $vicerector->assignRole('vicerector');
+
+        $ocs = User::find(4);
+        $ocs->assignRole('ocs');
+
+        $responsible_cecy = User::find(5);
+        $responsible_cecy->assignRole('responsible_cecy');
+
+        $coordinator_career = User::find(6);
+        $coordinator_career->assignRole('coordinator_career');
+
+        $instructors = User::where('id', '>=', 7)->where('id', '<=', 35)->get();
+
+        foreach ( $instructors as $instructor) {
+            $instructor->assignRole('instructor');
+        }
+
+        $students = User::where('id', '>=', 36)->where('id', '<=', 85)->get();
+
+        foreach ( $students as $student) {
+            $student->assignRole('student');
+        }
+
+        $responsible_course = User::find(7);
+        $responsible_course->assignRole('responsible_course');
     }
 
     private function createLocationCatalogues()
@@ -969,6 +1094,7 @@ class AuthenticationSeeder extends Seeder
             ],
         )->create();
     }
+
     private function createStates()
     {
         $catalogues = json_decode(file_get_contents(storage_path() . "/catalogues.json"), true);

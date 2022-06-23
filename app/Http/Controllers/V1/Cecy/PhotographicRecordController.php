@@ -116,7 +116,7 @@ class PhotographicRecordController extends Controller
             ->response()->setStatusCode(201);
     }
     //revisar
-    public function getDetails(DetailPlanification $detailPlanification){
+    public function getPhotograficRecord(DetailPlanification $detailPlanification){
         $photographicRecords = $detailPlanification->photographicRecords()->get();
         return(new PhotographicRecordCollection($photographicRecords))
             ->additional([
