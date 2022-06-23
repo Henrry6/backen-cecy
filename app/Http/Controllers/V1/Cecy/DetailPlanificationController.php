@@ -4,6 +4,7 @@ namespace App\Http\Controllers\V1\Cecy;
 
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\Cecy\Courses\getCoursesByResponsibleRequest;
 use App\Http\Requests\V1\Cecy\DetailPlanifications\AssignInstructorsRequest;
 use App\Http\Requests\V1\Cecy\DetailPlanifications\CatalogueDetailPlanificationRequest;
 use App\Http\Requests\V1\Cecy\DetailPlanifications\IndexDetailPlanificationRequest;
@@ -405,5 +406,21 @@ class DetailPlanificationController extends Controller
                 ]
             ])
             ->response()->setStatusCode(200);
+    }
+    //obtener los cursos asignados a un isntructor logueado (Done)
+    public function getInstructorByCourses(getCoursesByResponsibleRequest $request)
+    {
+
+        $instructor = Instructor::FirstWhere('user_id', $request->user()->id)->first();
+        $detailPlanification = $instructor->detailPlanifications()->get();
+
+        return (new DetailPlanificationCollection($detailPlanification))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Consulta exitosa',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ]);
     }
 }

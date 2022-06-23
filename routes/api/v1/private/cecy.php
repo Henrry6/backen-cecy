@@ -87,6 +87,7 @@ Route::controller(DetailPlanificationController::class)->group(function () {
     });
 
     Route::prefix('detail-planifications')->group(function () {
+        Route::get('instructor-courses', 'getInstructorByCourses');//santillan
         Route::get('catalogue', 'catalogue');
         Route::patch('destroys', 'destroys'); //Pérez
     });
@@ -112,7 +113,6 @@ Route::controller(CourseController::class)->group(function () {
         Route::get('private-courses-category/{category}', 'getPrivateCoursesByParticipantTypeAndCategory'); //Guachagmira
         Route::get('by-responsible', 'getCoursesByResponsibleCourse'); //Matango
         Route::get('by-instructor/{instructor}', 'getCoursesByInstructor');
-        Route::get('instructor-courses', 'getInstructorByCourses');//santillan
         Route::get('by-coodinator', 'getCoursesByCoordinator');
         Route::get('kpi', 'getCoursesKPI');
         Route::get('year-schedule', 'showYearSchedule');
