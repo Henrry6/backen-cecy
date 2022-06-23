@@ -10,6 +10,8 @@ use App\Http\Requests\V1\Cecy\Participants\GetCoursesByParticipantRequest;
 use App\Http\Requests\V1\Cecy\Registrations\RegisterStudentRequest;
 use App\Http\Requests\V1\Cecy\Registrations\IndexRegistrationRequest;
 use App\Http\Requests\V1\Cecy\Registrations\NullifyParticipantRegistrationRequest;
+use App\Http\Requests\V1\Cecy\Registrations\RegistrationRequest;
+use App\Http\Requests\V1\Cecy\Registrations\ReviewRequest;
 use App\Http\Requests\V1\Cecy\Registrations\NullifyRegistrationRequest;
 use App\Http\Resources\V1\Cecy\Registrations\RegisterStudentCollection;
 use App\Http\Resources\V1\Cecy\Registrations\RegisterStudentResource;
@@ -18,6 +20,7 @@ use App\Http\Resources\V1\Cecy\Participants\CoursesByParticipantCollection;
 use App\Http\Resources\V1\Cecy\Registrations\RegistrationCollection;
 use App\Http\Resources\V1\Cecy\Registrations\RegistrationRecordCompetitorResource;
 use App\Http\Resources\V1\Cecy\Registrations\RegistrationResource;
+use App\Http\Resources\V1\Cecy\Registrations\ParticipantRegistrationResource;
 use App\Http\Resources\V1\Cecy\Users\UserResource;
 use App\Models\Authentication\User;
 use App\Models\Cecy\AdditionalInformation;
@@ -136,8 +139,22 @@ class RegistrationController extends Controller
     }
 
     
+// DDRC-C: Obtiene la informacion de un participante y de un registro dado un id de incripcion 
+public function getParticipant(IndexRegistrationRequest $request, Registration $registration){
+            return (new ParticipantRegistrationResource($registration))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => 'Peticion exitosa',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
+}
+
 // DDRC-C: matricular a un participante 
 public function register(RegistrationRequest $request, Registration $registration){
+    $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
     $currentState = Catalogue::firstWhere('code', $catalogue['registration_state']['registered']);
             $registration->observations = $request->input('observations');
             $registration->state()->associate(Catalogue::find($currentState->id));
@@ -155,6 +172,7 @@ public function register(RegistrationRequest $request, Registration $registratio
 
 // DDRC-C: cambia el estado a 'en revición' de una incripción  
 public function setRegistrationinReview(ReviewRequest $request, Registration $registration){
+    $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
     $currentState = Catalogue::firstWhere('code', $catalogue['registration_state']['in_review']);
             $registration->observations = $request->input('observations');
             $registration->state()->associate(Catalogue::find($currentState->id));
