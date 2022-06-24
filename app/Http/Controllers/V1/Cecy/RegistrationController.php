@@ -138,8 +138,10 @@ class RegistrationController extends Controller
         return $catalogue->downloadFile($file);
     }
 
-    
-// DDRC-C: Obtiene la informacion de un participante y de un registro dado un id de incripcion 
+
+// DDRC-C: matricular a un participante
+
+// DDRC-C: Obtiene la informacion de un participante y de un registro dado un id de incripcion
 public function getParticipant(IndexRegistrationRequest $request, Registration $registration){
             return (new ParticipantRegistrationResource($registration))
             ->additional([
@@ -152,7 +154,8 @@ public function getParticipant(IndexRegistrationRequest $request, Registration $
             ->response()->setStatusCode(201);
 }
 
-// DDRC-C: matricular a un participante 
+// DDRC-C: matricular a un participante
+
 public function register(RegistrationRequest $request, Registration $registration){
     $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
     $currentState = Catalogue::firstWhere('code', $catalogue['registration_state']['registered']);
@@ -170,7 +173,7 @@ public function register(RegistrationRequest $request, Registration $registratio
             ->response()->setStatusCode(201);
 }
 
-// DDRC-C: cambia el estado a 'en revición' de una incripción  
+// DDRC-C: cambia el estado a 'en revición' de una incripción
 public function setRegistrationinReview(ReviewRequest $request, Registration $registration){
     $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
     $currentState = Catalogue::firstWhere('code', $catalogue['registration_state']['in_review']);
@@ -288,13 +291,13 @@ public function setRegistrationinReview(ReviewRequest $request, Registration $re
     {
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
         $currentDate = Date::now();
-        if(Carbon::after($currentDate->greaterThanOrEqualTo($detailSchoolPeriod->ordinary_started_at))){
+        if($currentDate->greaterThanOrEqualTo($detailSchoolPeriod->ordinary_started_at)){
             return $catalogue['registration']['ordinary'];
         }
-        if(Carbon::after($currentDate->greaterThanOrEqualTo($detailSchoolPeriod->extraordinary_started_at))){
+        if($currentDate->greaterThanOrEqualTo($detailSchoolPeriod->extraordinary_started_at)){
             return $catalogue['registration']['extraordinary'];
         }
-        if(Carbon::after($currentDate->greaterThanOrEqualTo($detailSchoolPeriod->extraordinary_started_at))){
+        if($currentDate->greaterThanOrEqualTo($detailSchoolPeriod->extraordinary_started_at)){
             return $catalogue['registration']['special'];
         }
     }
@@ -308,16 +311,14 @@ public function setRegistrationinReview(ReviewRequest $request, Registration $re
         $detailPlanification = DetailPlanification::find($request->input('detailPlanification.id'));
         $planification = $detailPlanification->planification()->first();
         $detailSchoolPeriod = $planification->detailSchoolPeriod()->first();
-        // Funcion para saber el tipo de matricula
         $registrationType = Catalogue::firstWhere('code', $this->check($detailSchoolPeriod));
 
         $registration = new Registration();
         $registration->participant()->associate($participant);
-        $registration->detailPlanification()->associate(DetailPlanification::find($detailPlanification));//
-        $registration->type()->associate(Catalogue::find($registrationType));//
-        // Enviar por predetermiando el estado en revision
-        $registration->state()->associate(Catalogue::find($state));//
-        $registration->typeParticipant()->associate(Catalogue::find($participant->type));//
+        $registration->detailPlanification()->associate($detailPlanification);
+        $registration->type()->associate($registrationType);
+        $registration->state()->associate($state);
+        $registration->typeParticipant()->associate($participant->type);
         $registration->registered_at = now();
 
         DB::transaction(function ($registration, $request) {

@@ -722,22 +722,7 @@ class CourseController extends Controller
             ->response()->setStatusCode(201);
     }
 
-    //obtener los cursos asignados a un isntructor logueado (Done)
-    public function getInstructorByCourses(getCoursesByResponsibleRequest $request)
-    {
 
-        $instructor = Instructor::FirstWhere('user_id', $request->user()->id)->first();
-        $detailPlanification = $instructor->detailPlanifications()->get();
-
-        return (new DetailPlanificationCollection($detailPlanification))
-            ->additional([
-                'msg' => [
-                    'summary' => 'Consulta exitosa',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ]);
-    }
 
     // Files
     public function indexFiles(IndexFileRequest $request, Course $course)
