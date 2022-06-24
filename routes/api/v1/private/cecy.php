@@ -57,7 +57,7 @@ Route::controller(PlanificationController::class)->group(function () {
         Route::put('assign-code', 'assignCode');
         Route::patch('assign-responsible-cecy', 'assignResponsibleCecy');
         Route::put('initial-planification', 'updateInitialPlanification'); //Rivas
-        Route::put('needs', 'addNeeds'); // Pérez
+        Route::patch('needs', 'addNeeds'); // Pérez
         Route::get('detail-planifications', 'getDetailPlanifications');
     });
 
@@ -365,7 +365,7 @@ Route::controller(RegistrationController::class)->group(function () {
         Route::patch('nullify-registration', 'nullifyRegistration'); //Rivas
         Route::put('register', 'register'); //Rivas
         Route::put('review', 'setRegistrationinReview'); //Rivas
-        Route::get('participant', 'getParticipant'); // Rivas
+//        Route::get('participant', 'getParticipant'); // Rivas
     });
 
     Route::prefix('registrations')->group(function () {
