@@ -196,6 +196,7 @@ Route::controller(DetailAttendanceController::class)->group(function () {
 
     Route::prefix('detail-attendances')->group(function () {
         Route::patch('type', 'updateType');  // actualizacion del tipo.// Santillan-Molina
+        Route::get('attendances/{attendance}', 'getByAttendance');  // actualizacion del tipo.// Santillan-Molina
     });
 });
 Route::apiResource('detail-attendances', DetailAttendanceController::class); //metodo generales // Santillan-Molina
