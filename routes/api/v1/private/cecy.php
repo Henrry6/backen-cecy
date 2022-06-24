@@ -153,7 +153,7 @@ Route::controller(CourseController::class)->group(function () {
         Route::prefix('')->group(function () {
             Route::get('/topics', [TopicController::class, 'getTopics']); //Guachagmira - Alvarado
             Route::post('/topics', [TopicController::class, 'storesTopics']); //Alvarado
-            Route::put('/topics', [TopicController::class, 'updateTopics']); // Alvarado
+            Route::put('/topics', [TopicControlaler::class, 'updateTopics']); // Alvarado
             Route::delete('/topics/{topic}', [TopicController::class, 'destroyTopic']); //Alvarado
         });
         Route::prefix('')->group(function () {
@@ -369,6 +369,7 @@ Route::controller(RegistrationController::class)->group(function () {
     });
 
     Route::prefix('registrations')->group(function () {
+        Route::put('participant-grades/{registration}', 'updateGradesParticipant'); // Actualizar notas
         Route::get('courses/participant', 'getCoursesByParticipant'); // Molina
         Route::get('participant/{detailPlanification}', 'getParticipantByDetailPlanification');//santillan
         Route::post('register-student', 'registerStudent');
@@ -377,3 +378,18 @@ Route::controller(RegistrationController::class)->group(function () {
     });
 });
 Route::apiResource('registrations', RegistrationController::class);
+
+
+//topics files
+Route::prefix('topic/{topic}')->group(function () {
+    Route::prefix('file')->group(function () {
+        Route::get('{file}/download', [TopicController::class, 'downloadFile']);
+        Route::get('download', [TopicController::class, 'downloadFiles']);
+        Route::get('', [TopicController::class, 'indexFiles']);
+        Route::get('{file}', [TopicController::class, 'showFile']);
+        Route::post('', [TopicController::class, 'uploadFile']);
+        Route::post('{file}', [TopicController::class, 'updateFile']);
+        Route::delete('{file}', [TopicController::class, 'destroyFile']);
+        Route::patch('', [TopicController::class, 'destroyFiles']);
+    });
+});
