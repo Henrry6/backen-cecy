@@ -365,7 +365,7 @@ Route::controller(RegistrationController::class)->group(function () {
         Route::patch('nullify-registration', 'nullifyRegistration'); //Rivas
         Route::put('register', 'register'); //Rivas
         Route::put('review', 'setRegistrationinReview'); //Rivas
-        Route::get('participant', 'getParticipant'); // Rivas
+//        Route::get('participant', 'getParticipant'); // Rivas
     });
 
     Route::prefix('registrations')->group(function () {

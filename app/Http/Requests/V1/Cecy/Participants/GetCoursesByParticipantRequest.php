@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Requests\V1\Cecy\Participants;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -9,10 +10,11 @@ class GetCoursesByParticipantRequest extends FormRequest
     {
         return true;
     }
+
     public function rules()
     {
         return [
-            
+
         ];
     }
 
@@ -20,7 +22,7 @@ class GetCoursesByParticipantRequest extends FormRequest
     {
         return [
             'participant.id' => ['required', 'integer'],
-        
+
         ];
     }
 
