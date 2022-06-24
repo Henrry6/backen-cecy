@@ -344,8 +344,8 @@ Route::prefix('attendances')->group(function () {
 
 Route::prefix('pdf')->group(function () {
     Route::get('attendance-evaluation/{course}', [AttendanceController::class, 'attendanceEvaluation']); //Salazar
-    Route::get('curricular-design/{course}', [PlanificationController::class, 'curricularDesign']); //Salazar
-    Route::get('informe-final/{course}', [PlanificationController::class, 'informeFinal']); //Salazar
+    Route::get('curricular-design/{planification}', [PlanificationController::class, 'curricularDesign']); //Salazar
+    Route::get('informe-final/{planification}', [PlanificationController::class, 'informeFinal']); //Salazar
     Route::get('photographic-record/{course}', [AttendanceController::class, 'showPhotographicRecord']); //Rivera
     Route::get('year-schedule/{year}', [CourseController::class, 'showYearSchedule']); //Rivera
     Route::get('year-schedule', [CourseController::class, 'showYearSchedule']); //Rivera
