@@ -57,7 +57,7 @@ Route::controller(PlanificationController::class)->group(function () {
         Route::put('assign-code', 'assignCode');
         Route::patch('assign-responsible-cecy', 'assignResponsibleCecy');
         Route::put('initial-planification', 'updateInitialPlanification'); //Rivas
-        Route::put('needs', 'addNeeds'); // Pérez
+        Route::patch('needs', 'addNeeds'); // Pérez
         Route::get('detail-planifications', 'getDetailPlanifications');
     });
 
