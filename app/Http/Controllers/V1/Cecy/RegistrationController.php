@@ -51,17 +51,16 @@ class RegistrationController extends Controller
     // RegistrationController
     public function getCoursesByParticipant(GetCoursesByParticipantRequest $request)
     {
-        // $catalogues = Catalogue::where(["code" => "APPROVED", "type" => "PARTICIPANT_STATE"])->get();
         $participant = Participant::where('user_id', $request->user()->id)->first();
-        /*if (!isset($participant))
+        if (!isset($participant))
             return response()->json([
                 'msg' => [
                     'sumary' => 'Este usuario no es participante',
                     'detail' => '',
                     'code' => '404'
                 ],
-                'data'=>null
-            ],404);*/
+                'data' => null
+            ], 404);
         $registrations = $participant->registrations()->paginate($request->input('per_page'));
 
         return (new CoursesByParticipantCollection($registrations))
@@ -142,8 +141,9 @@ class RegistrationController extends Controller
 // DDRC-C: matricular a un participante
 
 // DDRC-C: Obtiene la informacion de un participante y de un registro dado un id de incripcion
-public function getParticipant(IndexRegistrationRequest $request, Registration $registration){
-            return (new ParticipantRegistrationResource($registration))
+    public function getParticipant(IndexRegistrationRequest $request, Registration $registration)
+    {
+        return (new ParticipantRegistrationResource($registration))
             ->additional([
                 'msg' => [
                     'summary' => 'success',
@@ -152,17 +152,18 @@ public function getParticipant(IndexRegistrationRequest $request, Registration $
                 ]
             ])
             ->response()->setStatusCode(201);
-}
+    }
 
 // DDRC-C: matricular a un participante
 
-public function register(RegistrationRequest $request, Registration $registration){
-    $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
-    $currentState = Catalogue::firstWhere('code', $catalogue['registration_state']['registered']);
-            $registration->observations = $request->input('observations');
-            $registration->state()->associate(Catalogue::find($currentState->id));
-            $registration->save();
-            return (new RegistrationResource($registration))
+    public function register(RegistrationRequest $request, Registration $registration)
+    {
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+        $currentState = Catalogue::firstWhere('code', $catalogue['registration_state']['registered']);
+        $registration->observations = $request->input('observations');
+        $registration->state()->associate(Catalogue::find($currentState->id));
+        $registration->save();
+        return (new RegistrationResource($registration))
             ->additional([
                 'msg' => [
                     'summary' => 'success',
@@ -171,16 +172,17 @@ public function register(RegistrationRequest $request, Registration $registratio
                 ]
             ])
             ->response()->setStatusCode(201);
-}
+    }
 
 // DDRC-C: cambia el estado a 'en revición' de una incripción
-public function setRegistrationinReview(ReviewRequest $request, Registration $registration){
-    $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
-    $currentState = Catalogue::firstWhere('code', $catalogue['registration_state']['in_review']);
-            $registration->observations = $request->input('observations');
-            $registration->state()->associate(Catalogue::find($currentState->id));
-            $registration->save();
-            return (new RegistrationResource($registration))
+    public function setRegistrationinReview(ReviewRequest $request, Registration $registration)
+    {
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+        $currentState = Catalogue::firstWhere('code', $catalogue['registration_state']['in_review']);
+        $registration->observations = $request->input('observations');
+        $registration->state()->associate(Catalogue::find($currentState->id));
+        $registration->save();
+        return (new RegistrationResource($registration))
             ->additional([
                 'msg' => [
                     'summary' => 'success',
@@ -189,7 +191,7 @@ public function setRegistrationinReview(ReviewRequest $request, Registration $re
                 ]
             ])
             ->response()->setStatusCode(201);
-}
+    }
     /*DDRC-C: Anular varias Matriculas */
     // RegistrationController
     public function nullifyRegistrations(NullifyRegistrationRequest $request)
@@ -291,13 +293,13 @@ public function setRegistrationinReview(ReviewRequest $request, Registration $re
     {
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
         $currentDate = Date::now();
-        if($currentDate->greaterThanOrEqualTo($detailSchoolPeriod->ordinary_started_at)){
+        if ($currentDate->greaterThanOrEqualTo($detailSchoolPeriod->ordinary_started_at)) {
             return $catalogue['registration']['ordinary'];
         }
-        if($currentDate->greaterThanOrEqualTo($detailSchoolPeriod->extraordinary_started_at)){
+        if ($currentDate->greaterThanOrEqualTo($detailSchoolPeriod->extraordinary_started_at)) {
             return $catalogue['registration']['extraordinary'];
         }
-        if($currentDate->greaterThanOrEqualTo($detailSchoolPeriod->extraordinary_started_at)){
+        if ($currentDate->greaterThanOrEqualTo($detailSchoolPeriod->extraordinary_started_at)) {
             return $catalogue['registration']['special'];
         }
     }

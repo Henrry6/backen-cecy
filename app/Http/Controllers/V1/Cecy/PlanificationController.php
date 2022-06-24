@@ -13,7 +13,7 @@ use App\Http\Requests\V1\Cecy\Authorities\IndexAuthorityRequest;
 use App\Http\Resources\V1\Cecy\Courses\CourseCollection;
 use App\Http\Requests\V1\Cecy\Planifications\CataloguePlanificationRequest;
 use App\Http\Requests\V1\Cecy\Planifications\StorePlanificationByCourseRequest;
-use App\Http\Requests\V1\Cecy\Planifications\AddNeedsOfPlanification;
+use App\Http\Requests\V1\Cecy\Planifications\AddNeeds;
 use App\Http\Requests\V1\Cecy\Planifications\AssignResponsibleCecyRequest;
 use App\Http\Requests\V1\Cecy\Planifications\UpdatePlanificationByCourseRequest;
 use App\Http\Requests\V1\Cecy\Planifications\UpdatePlanificationRequest;
@@ -118,46 +118,46 @@ class PlanificationController extends Controller
             ->response()->setStatusCode(201);
     }
 
-    public function addNeeds(AddNeedsOfPlanification $request, Planification $planification)
+    public function addNeeds(AddNeeds $request, Planification $planification)
     {
-        $loggedInInstructor = Instructor::where('user_id', $request->user()->id)->first();
-        if (!$loggedInInstructor) {
-            return response()->json([
-                'data' => '',
-                'msg' => [
-                    'summary' => 'Error',
-                    'detail' => 'No es instructor o no se encuentra registrado',
-                    'code' => '400'
-                ]
-            ], 400);
-        }
+        // $loggedInInstructor = Instructor::where('user_id', $request->user()->id)->first();
+        // if (!$loggedInInstructor) {
+        //     return response()->json([
+        //         'data' => '',
+        //         'msg' => [
+        //             'summary' => 'Error',
+        //             'detail' => 'No es instructor o no se encuentra registrado',
+        //             'code' => '400'
+        //         ]
+        //     ], 400);
+        // }
 
-        $responsibleCourse = $planification->responsibleCourse()->first();
+        // $responsibleCourse = $planification->responsibleCourse()->first();
 
-        if ($loggedInInstructor->id !== $responsibleCourse->id) {
-            return response()->json([
-                'data' => '',
-                'msg' => [
-                    'summary' => 'Error',
-                    'detail' => 'No le pertece esta planificación',
-                    'code' => '400'
-                ]
-            ], 400);
-        }
+        // if ($loggedInInstructor->id !== $responsibleCourse->id) {
+        //     return response()->json([
+        //         'data' => '',
+        //         'msg' => [
+        //             'summary' => 'Error',
+        //             'detail' => 'No le pertece esta planificación',
+        //             'code' => '400'
+        //         ]
+        //     ], 400);
+        // }
 
         //validar que la planification ha culminado
-        if (
-            $planification->state()->first()->code === State::CULMINATED ||
-            $planification->state()->first()->code === State::NOT_APPROVED
-        ) {
-            return response()->json([
-                'msg' => [
-                    'summary' => 'Error',
-                    'detail' => 'La planificación ha culminado o no fue aprobada.',
-                    'code' => '400'
-                ]
-            ], 400);
-        }
+        // if (
+        //     $planification->state()->first()->code === State::CULMINATED ||
+        //     $planification->state()->first()->code === State::NOT_APPROVED
+        // ) {
+        //     return response()->json([
+        //         'msg' => [
+        //             'summary' => 'Error',
+        //             'detail' => 'La planificación ha culminado o no fue aprobada.',
+        //             'code' => '400'
+        //         ]
+        //     ], 400);
+        // }
 
         $planification->needs = $request->input('needs');
 
