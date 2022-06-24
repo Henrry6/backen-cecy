@@ -276,6 +276,9 @@ class AuthenticationSeeder extends Seeder
         $coordinator_career = User::find(6);
         $coordinator_career->assignRole('coordinator_career');
 
+        $responsible_course = User::find(7);
+        $responsible_course->assignRole('responsible_course');
+
         $instructors = User::where('id', '>=', 7)->where('id', '<=', 35)->get();
 
         foreach ( $instructors as $instructor) {
@@ -287,9 +290,6 @@ class AuthenticationSeeder extends Seeder
         foreach ( $students as $student) {
             $student->assignRole('student');
         }
-
-        $responsible_course = User::find(7);
-        $responsible_course->assignRole('responsible_course');
     }
 
     private function createLocationCatalogues()
