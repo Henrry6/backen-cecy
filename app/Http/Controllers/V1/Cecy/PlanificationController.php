@@ -184,10 +184,11 @@ class PlanificationController extends Controller
 
     public function getPlanificationsByCourse(GetPlanificationsByCourseRequest $request, Course $course)
     {
+        // DDRC-C: método para obtener las planificaciones dado un curso
         $sorts = explode(',', $request->input('sort'));
 
         $loggedInInstructor = Instructor::where('user_id', $request->user()->id)->first();
-        // return $loggedInInstructor;
+        // return $loggedInInstructor->id;
 
         // if (!isset($loggedInInstructor)) {
         //     return response()->json([
@@ -206,6 +207,7 @@ class PlanificationController extends Controller
             ->code($request->input('search'))
             ->state($request->input('search'))
             ->paginate($request->input('perPage'));
+            
 
         return (new PlanificationByCourseCollection($planifications))
             ->additional([
@@ -238,7 +240,7 @@ class PlanificationController extends Controller
 
     public function getCurrentPlanificationsByAuthority(IndexAuthorityRequest $request)
     {
-
+    // DDRC-C: metodo para obtenr las planificaciones 
         $sorts = explode(',', $request->input('sort'));
 
         $authority = Authority::firstWhere('user_id', $request->user()->id);

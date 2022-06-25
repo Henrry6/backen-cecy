@@ -77,12 +77,13 @@ class AuthenticationSeeder extends Seeder
             ],
             [
                 'icon' => PrimeIcons::$CHECK_SQUARE,
-                'label' => 'Admin Users 2',
-                'router_link' => '/user-administration',
+                'label' => 'Coordinador CECY',
+                'router_link' => '/cecy/coordinator-career',
             ],
             [
                 'icon' => PrimeIcons::$CHECK_SQUARE,
-                'label' => 'Admin Users 3',
+                'label' => 'Responsable CECY',
+                'router_link' => '/cecy/resposible-cecy',
             ],
             [
                 'icon' => PrimeIcons::$CHECK_SQUARE,
@@ -112,8 +113,14 @@ class AuthenticationSeeder extends Seeder
             [
                 'parent_id' => 2,
                 'icon' => PrimeIcons::$CHECK_SQUARE,
-                'label' => 'Admin Users 2.1',
-                'router_link' => '/user-administration',
+                'label' => 'Proponer planificaciones',
+                'router_link' => '/course',
+            ],
+            [
+                'parent_id' => 3,
+                'icon' => PrimeIcons::$CHECK_SQUARE,
+                'label' => 'Matricular participantes',
+                'router_link' => '/planifications',
             ],
             [
                 'parent_id' => 4,
