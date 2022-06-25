@@ -78,6 +78,7 @@ class ParticipantController extends Controller
         // $user->civilStatus()->associate(Catalogue::find($request->input('civilStatus.id')));
         // $user->sex()->associate(Catalogue::find($request->input('sex.id')));
 
+        $user->phone = $request->input('phone');
         $user->username = $request->input('username');
         $user->name = $request->input('name');
         $user->lastname = $request->input('lastname');
@@ -87,7 +88,7 @@ class ParticipantController extends Controller
 
         DB::transaction(function () use ($request, $user) {
             $user->save();
-            $user->addPhones($request->input('phones'));
+            // $user->addPhones($request->input('phones'));
             $user->addEmails($request->input('emails'));
             $participant = $this->createParticipant($request->input('participantType.id'), $user);
             $participant->save();
