@@ -97,7 +97,7 @@ class ParticipantController extends Controller
         return (new UserResource($user))
             ->additional([
                 'msg' => [
-                    'summary' => 'Participante Creado',
+                    'summary' => 'success',
                     'detail' => '',
                     'code' => '200'
                 ]
