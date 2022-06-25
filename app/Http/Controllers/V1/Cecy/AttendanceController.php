@@ -171,9 +171,9 @@ class AttendanceController extends Controller
         $detailPlanification = $planification->detailPlanifications()->first();
         $registrations = $detailPlanification->registrations()->get();
         $responsiblececy = $planification->responsibleCecy()->first();
-        $institution = Institution::firstWhere('id', $responsiblececy->intitution_id);
+        $institution = Institution::firstWhere('id', $responsiblececy->institution_id);
         $instructor = Instructor::where('id', $planification->responsible_course_id)->first();
-        $user =  $instructor->user();
+        $user = $instructor->user();
         $user = User::firstWhere('id', $instructor->user_id);
         $grade1 = $registrations[0]['grade1'];
         $grade2 = $registrations[0]['grade2'];

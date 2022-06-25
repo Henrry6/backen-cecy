@@ -324,6 +324,7 @@ class PlanificationController extends Controller
         //return $course->evaluation_mechanisms->diagnostic['tecnique'];
         //return $topics;
         //return $course;
+       // return $planification;
 
         $pdf = PDF::loadView('reports/desing-curricular', [
             'planification' => $planification,
@@ -347,7 +348,7 @@ class PlanificationController extends Controller
         $course = $planification->course()->first();
         $topics = $course->topics()->first();
         $responsiblececy = $planification->responsibleCecy()->first();
-        $institution = Institution::firstWhere('id', $responsiblececy->intitution_id);
+        $institution = Institution::firstWhere('id', $responsiblececy->institution_id);
 
         $instructor = Instructor::where('id', $planification->responsible_course_id)->first();
         //$user =  $instructor->user();

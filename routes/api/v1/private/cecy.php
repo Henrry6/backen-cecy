@@ -153,7 +153,7 @@ Route::controller(CourseController::class)->group(function () {
         Route::prefix('')->group(function () {
             Route::get('/topics', [TopicController::class, 'getTopics']); //Guachagmira - Alvarado
             Route::post('/topics', [TopicController::class, 'storesTopics']); //Alvarado
-            Route::put('/topics', [TopicController::class, 'updateTopics']); // Alvarado
+            Route::put('/topics', [TopicControlaler::class, 'updateTopics']); // Alvarado
             Route::delete('/topics/{topic}', [TopicController::class, 'destroyTopic']); //Alvarado
         });
         Route::prefix('')->group(function () {
@@ -196,6 +196,7 @@ Route::controller(DetailAttendanceController::class)->group(function () {
 
     Route::prefix('detail-attendances')->group(function () {
         Route::patch('type', 'updateType');  // actualizacion del tipo.// Santillan-Molina
+        Route::get('attendances/{attendance}', 'getByAttendance');  // actualizacion del tipo.// Santillan-Molina
     });
 });
 Route::apiResource('detail-attendances', DetailAttendanceController::class); //metodo generales // Santillan-Molina
@@ -344,8 +345,8 @@ Route::prefix('attendances')->group(function () {
 
 Route::prefix('pdf')->group(function () {
     Route::get('attendance-evaluation/{course}', [AttendanceController::class, 'attendanceEvaluation']); //Salazar
-    Route::get('curricular-design/{course}', [PlanificationController::class, 'curricularDesign']); //Salazar
-    Route::get('informe-final/{course}', [PlanificationController::class, 'informeFinal']); //Salazar
+    Route::get('curricular-design/{planification}', [PlanificationController::class, 'curricularDesign']); //Salazar
+    Route::get('informe-final/{planification}', [PlanificationController::class, 'informeFinal']); //Salazar
     Route::get('photographic-record/{course}', [AttendanceController::class, 'showPhotographicRecord']); //Rivera
     Route::get('year-schedule/{year}', [CourseController::class, 'showYearSchedule']); //Rivera
     Route::get('year-schedule', [CourseController::class, 'showYearSchedule']); //Rivera
@@ -365,10 +366,11 @@ Route::controller(RegistrationController::class)->group(function () {
         Route::patch('nullify-registration', 'nullifyRegistration'); //Rivas
         Route::put('register', 'register'); //Rivas
         Route::put('review', 'setRegistrationinReview'); //Rivas
-        Route::get('participant', 'getParticipant'); // Rivas
+//        Route::get('participant', 'getParticipant'); // Rivas
     });
 
     Route::prefix('registrations')->group(function () {
+        Route::put('participant-grades/{registration}', 'updateGradesParticipant'); // Actualizar notas
         Route::get('courses/participant', 'getCoursesByParticipant'); // Molina
         Route::get('participant/{detailPlanification}', 'getParticipantByDetailPlanification');//santillan
         Route::post('register-student', 'registerStudent');
@@ -377,3 +379,18 @@ Route::controller(RegistrationController::class)->group(function () {
     });
 });
 Route::apiResource('registrations', RegistrationController::class);
+
+
+//topics files
+Route::prefix('topic/{topic}')->group(function () {
+    Route::prefix('file')->group(function () {
+        Route::get('{file}/download', [TopicController::class, 'downloadFile']);
+        Route::get('download', [TopicController::class, 'downloadFiles']);
+        Route::get('', [TopicController::class, 'indexFiles']);
+        Route::get('{file}', [TopicController::class, 'showFile']);
+        Route::post('', [TopicController::class, 'uploadFile']);
+        Route::post('{file}', [TopicController::class, 'updateFile']);
+        Route::delete('{file}', [TopicController::class, 'destroyFile']);
+        Route::patch('', [TopicController::class, 'destroyFiles']);
+    });
+});

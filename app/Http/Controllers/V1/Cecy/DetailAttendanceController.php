@@ -8,6 +8,7 @@ use App\Http\Requests\V1\Cecy\DetailAttendance\CatalogueDetailAttendanceRequest;
 use App\Http\Requests\V1\Cecy\DetailAttendance\GetDetailAttendancesByParticipantRequest;
 use App\Http\Resources\V1\Cecy\Attendances\AttendanceResource;
 use App\Http\Resources\V1\Cecy\Attendances\SaveDetailAttendanceResource;
+use App\Http\Resources\V1\Cecy\DetailAttendances\DetailAttendanceByAttendanceCollection;
 use App\Http\Resources\V1\Cecy\DetailAttendances\DetailAttendanceCollection;
 use App\Models\Cecy\Attendance;
 use App\Models\Cecy\DetailAttendance;
@@ -95,5 +96,19 @@ class  DetailAttendanceController extends Controller
                 ]
             ])
             ->response()->setStatusCode(200);
+    }
+
+    public function getByAttendance(Attendance $attendance)
+    {
+        $detailAttendances = $attendance->detailAttendances()->get();
+
+        return (new DetailAttendanceByAttendanceCollection($detailAttendances))
+            ->additional([
+                'msg' => [
+                    'sumary' => 'consulta exitosa',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ]);
     }
 }

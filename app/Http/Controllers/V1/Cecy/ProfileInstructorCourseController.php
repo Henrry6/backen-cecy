@@ -21,7 +21,7 @@ class ProfileInstructorCourseController extends Controller
     
     public function getCourses()
     {
-        return (new CourseCollection(Course::paginate(100)))
+        return (new ProfileCourseCollection(Course::paginate(100)))
             ->additional([
                 'msg' => [
                     'summary' => 'Me trae los cursos',
