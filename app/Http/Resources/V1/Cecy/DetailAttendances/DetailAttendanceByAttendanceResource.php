@@ -14,8 +14,9 @@ class DetailAttendanceByAttendanceResource extends JsonResource
         return [
             'id' => $this->id,
             'attendance' => AttendanceResource::make($this->attendance),
-            'user' => UserResource::make($this->registration->participant->user),
-            'participant' => UserResource::make($this->registration->participant),
+//            'user' => UserResource::make($this->registration->participant->user),
+//            'participant' => UserResource::make($this->registration->participant),
+            'registration' => UserResource::make($this->registration->participant->user),
             'type' => CatalogueResource::make($this->type)
         ];
     }

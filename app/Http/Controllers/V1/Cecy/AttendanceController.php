@@ -122,7 +122,7 @@ class AttendanceController extends Controller
     }
     //eliminar una asistencia
     // AttendanceController
-    public function destroysByDetailPlanification(DestroysAttendanceRequest $request)
+    public function destroys(DestroysAttendanceRequest $request)
     {
         $attendance = Attendance::whereIn('id', $request->input('ids'))->get();
         Attendance::destroy($request->input('ids'));
@@ -136,6 +136,20 @@ class AttendanceController extends Controller
                 ]
             ])
             ->response()->setStatusCode(200);
+    }
+    public function destroyAttendance(Attendance $attendance)
+    {
+        $attendance->delete();
+
+        return (new AttendanceResource($attendance))
+            ->additional([
+                'msg' => [
+                    'summary' => 'asistencia eliminada',
+                    'detail' => '',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
     }
 
     public function index()

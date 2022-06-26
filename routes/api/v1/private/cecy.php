@@ -196,7 +196,7 @@ Route::controller(DetailAttendanceController::class)->group(function () {
 
     Route::prefix('detail-attendances')->group(function () {
         Route::patch('type', 'updateType');  // actualizacion del tipo.// Santillan-Molina
-        Route::get('attendances/{attendance}', 'getByAttendance');  // actualizacion del tipo.// Santillan-Molina
+        Route::get('attendances/{attendance}', 'getByAttendance');  // asistencias por id
     });
 });
 Route::apiResource('detail-attendances', DetailAttendanceController::class); //metodo generales // Santillan-Molina
@@ -340,7 +340,8 @@ Route::apiResource('requirements', RequirementController::class);
  **********************************************************************************************************************/
 Route::prefix('attendances')->group(function () {
     Route::get('detail-planifications/{detail_planification}', [AttendanceController::class, 'getByDetailPlanification']);
-    Route::delete('detail-planifications/{detail_planification}', [AttendanceController::class, 'destroysByDetailPlanification']); // eliminacion santillan
+    Route::delete('detail-planifications/{detail_planification}', [AttendanceController::class, 'destroyAttendance']); // eliminacion santillan
+    Route::delete('destroys', [AttendanceController::class, 'destroys']);
 });
 
 Route::prefix('pdf')->group(function () {
