@@ -339,6 +339,27 @@ class RegistrationController extends Controller
             ])->response()->setStatusCode(200);
     }
 
+    public function showRecordCompetitor(GetCoursesByNameRequest $request, DetailPlanification $detailPlanification, AdditionalInformation $additionalInformation)
+    {
+
+        $planification=$detailPlanification->planification()->first();
+        $course=$planification->course()->first();
+        $regitrations=$detailPlanification->registrations()->with(['participant.user.sex','state','additionalInformation.levelInstruction'])->get();
+        $classroom = $detailPlanification->classroom()->first();
+
+        $pdf = PDF::loadView('reports/report-record-competitors', [
+            'planification' => $planification,
+            'detailPlanification' => $detailPlanification,
+            'registrations' => $regitrations,
+            'course'=>$course,
+            'clasrroom'=>$classroom,
+        ]);
+        $pdf->setOptions([
+            'orientation' => 'landscape',
+        ]);
+        return $pdf->stream('reporte registro participantes.pdf', []);
+    }
+
     // llenar informacion adicional de la solicitud de matricula
     private function storeAdditionalInformation(RegisterStudentRequest $request, Registration $registration)
     {
