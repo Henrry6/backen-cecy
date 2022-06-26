@@ -137,8 +137,9 @@ class AttendanceController extends Controller
             ])
             ->response()->setStatusCode(200);
     }
-    public function destroyAttendance(Attendance $attendance)
+    public function destroyAttendance( $attendance)
     {
+        $attendance = Attendance::find($attendance);
         $attendance->delete();
 
         return (new AttendanceResource($attendance))
