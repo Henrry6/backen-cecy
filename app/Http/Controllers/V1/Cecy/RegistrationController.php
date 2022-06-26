@@ -386,8 +386,10 @@ class RegistrationController extends Controller
     {
         $registration->grade1 = $request->input('grade1');
         $registration->grade2 = $request->input('grade2');
-        $registration->final_grade = $request->input('finalGrade');//calculado
+
+//        $registration->final_grade = $request->input('finalGrade');//calculado
         $registration->save();
+        $this->FinalGrade($request, $registration);
         return (new RegistrationResource($registration))
             ->additional([
                 'msg' => [
@@ -397,5 +399,26 @@ class RegistrationController extends Controller
                 ]
             ])
             ->response()->setStatusCode(200);
+    }
+    //nota final del estudiante
+    public function FinalGrade(HttpRequest $request,Registration $registration){
+
+        $grade1 =  $registration->grade1 = $request->input('grade1');
+        $grade2 =  $registration->grade2 = $request->input('grade2');
+        $registration->final_grade = ($grade1+$grade2) / 2;
+
+        $registration->save();
+        return (new RegistrationResource($registration))
+            ->additional([
+                'msg' => [
+                    'summary' => 'nota final actualizada',
+                    'Institution' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+
+
+
     }
 }
