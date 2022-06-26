@@ -350,6 +350,8 @@ Route::prefix('pdf')->group(function () {
     Route::get('photographic-record/{course}', [AttendanceController::class, 'showPhotographicRecord']); //Rivera
     Route::get('year-schedule/{year}', [CourseController::class, 'showYearSchedule']); //Rivera
     Route::get('year-schedule', [CourseController::class, 'showYearSchedule']); //Rivera
+    Route::get('show-record-competitor/{detailPlanification}', [RegistrationController::class, 'showRecordCompetitor']);
+
 });
 
 Route::prefix('records')->group(function (){
@@ -393,4 +395,8 @@ Route::prefix('topic/{topic}')->group(function () {
         Route::delete('{file}', [TopicController::class, 'destroyFile']);
         Route::patch('', [TopicController::class, 'destroyFiles']);
     });
+});
+
+Route::prefix('registration')->group(function () {
+ 
 });
