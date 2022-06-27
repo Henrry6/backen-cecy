@@ -112,7 +112,7 @@ Route::controller(CourseController::class)->group(function () {
         Route::get('private-courses-participant', 'getPrivateCoursesByParticipantType'); //Guachagmira
         Route::get('private-courses-category/{category}', 'getPrivateCoursesByParticipantTypeAndCategory'); //Guachagmira
         Route::get('by-responsible', 'getCoursesByResponsibleCourse'); //Matango
-        Route::get('by-instructor/{instructor}', 'getCoursesByInstructor');
+        Route::get('by-instructor/{instructor}', 'getCoursesByInstructor');//Rivas
         Route::get('by-coodinator', 'getCoursesByCoordinator');
         Route::get('kpi', 'getCoursesKPI');
         Route::get('year-schedule', 'showYearSchedule');
@@ -272,25 +272,6 @@ Route::controller(InstructorController::class)->group(function () {
 Route::apiResource('instructors', InstructorController::class);
 
 /***********************************************************************************************************************
- * REGISTRATIONS - to remove
- **********************************************************************************************************************/
-//Route::controller(RegistrationController::class)->group(function () {
-//     Route::prefix('registrations/{registration}')->group(function () {
-//     });
-
-//     Route::prefix('registrations')->group(function () {
-//         Route::post('register-student/{detailPlanification}', 'registerStudent');
-//         Route::post('register-student', 'registerStudent');
-//         Route::get('participant/{detailPlanification}', 'getParticipant');
-//         Route::patch('nullify-registration', 'nullifyRegistration'); //Rivas
-//         Route::patch('nullify-registrations', 'nullifyRegistrations'); //Rivas
-//         Route::patch('participant-grades/{registration}', 'updateGradesParticipant');
-//     });
-// });
-// Route::apiResource('registrations', RegistrationController::class);
-
-
-/***********************************************************************************************************************
  * PARTICIPANTS
  **********************************************************************************************************************/
 Route::controller(ParticipantController::class)->group(function () {
@@ -369,7 +350,7 @@ Route::controller(RegistrationController::class)->group(function () {
         Route::patch('nullify-registration', 'nullifyRegistration'); //Rivas
         Route::put('register', 'register'); //Rivas
         Route::put('review', 'setRegistrationinReview'); //Rivas
-//        Route::get('participant', 'getParticipant'); // Rivas
+//        Route::get('participant', 'getParticipant'); // Rivas to-remove not-used
     });
 
     Route::prefix('registrations')->group(function () {
@@ -377,7 +358,7 @@ Route::controller(RegistrationController::class)->group(function () {
         Route::get('courses/participant', 'getCoursesByParticipant'); // Molina
         Route::get('participant/{detailPlanification}', 'getParticipantByDetailPlanification');//santillan
         Route::post('register-student', 'registerStudent');
-        Route::patch('nullify-registration', 'nullifyRegistration'); //Rivas
+        // Route::patch('nullify-registration', 'nullifyRegistration'); //Rivas to remove not-used
         Route::patch('nullify-registrations', 'nullifyRegistrations'); //Rivas
     });
 });

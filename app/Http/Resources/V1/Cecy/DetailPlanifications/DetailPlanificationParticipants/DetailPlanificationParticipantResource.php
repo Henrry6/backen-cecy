@@ -7,7 +7,7 @@ use App\Http\Resources\V1\Cecy\Catalogues\CatalogueResource;
 use App\Http\Resources\V1\Cecy\Certificates\CertificateResource;
 use App\Http\Resources\V1\Cecy\Participants\ParticipantResource;
 use App\Http\Resources\V1\Cecy\RegistrationRequeriments\RegistrationRequerimentResource;
-use App\Http\Resources\V1\Cecy\Requeriments\RequerimentResource;
+use App\Http\Resources\V1\Cecy\Requeriments\RequirementResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 // use Illuminate\Http\Re
 
@@ -18,7 +18,7 @@ class DetailPlanificationParticipantResource extends JsonResource
         return [
             'id' => $this->id,
             'participant' => ParticipantResource::make($this->participant),
-            // 'requirements'=> RequerimentResource::collection($this->requirements),
+            'requirements'=> RequirementResource::collection($this->requirements),
             'registrationRequirements'=> RegistrationRequerimentResource::collection($this->requirements),
             'aditionalInformation' => AdditionalInformationResource::make($this->additionalInformation),
             'state' => CatalogueResource::make($this->state),

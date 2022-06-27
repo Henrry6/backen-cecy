@@ -186,24 +186,25 @@ class PlanificationController extends Controller
     public function getPlanificationsByCourse(GetPlanificationsByCourseRequest $request, Course $course)
     {
         // DDRC-C: método para obtener las planificaciones dado un curso
+        // DDRC-CI: antes consultaba de instructores se cambio a autoridad por que sino no encontraba 
         $sorts = explode(',', $request->input('sort'));
 
-        $loggedInInstructor = Instructor::where('user_id', $request->user()->id)->first();
-        // return $loggedInInstructor->id;
+        $loggedInAuthority = Authority::where('user_id', $request->user()->id)->first();
+        // return $loggedInAuthority->id;
 
-        // if (!isset($loggedInInstructor)) {
-        //     return response()->json([
-        //         'msg' => [
-        //             'summary' => 'El usuario no es un instructor',
-        //             'detail' => '',
-        //             'code' => '404'
-        //         ],
-        //         'data' => null
-        //     ], 404);
-        // }
+        if (!$loggedInAuthority) {
+            return response()->json([
+                'msg' => [
+                    'summary' => 'El usuario no es una autoridad',
+                    'detail' => '',
+                    'code' => '404'
+                ],
+                'data' => null
+            ], 404);
+        }
 
         $planifications = $course->planifications()
-            ->where('responsible_course_id', $loggedInInstructor->id)
+            ->where('responsible_course_id', $loggedInAuthority->id)
             ->customOrderBy($sorts)
             ->code($request->input('search'))
             ->state($request->input('search'))
@@ -391,6 +392,7 @@ class PlanificationController extends Controller
      */
     public function storePlanificationByCourse(StorePlanificationByCourseRequest $request, Course $course)
     {
+        // DDRC-C: crea una planificacion como parte de una propuesta de una planificacion
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
 
         $currentState = Catalogue::where('type', $catalogue['school_period_state']['type'])
