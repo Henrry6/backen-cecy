@@ -81,7 +81,7 @@
         <th colspan="4">RENDIMIENTO</th>
         <th rowspan="3">RETIRADO</th>
         <th rowspan="3">REPROBADO</th>
-        <th rowspan="3">APROBADO</th>
+        <th rowspan="3">APROBADO </th>
         <th rowspan="3">OBSERVACIONES</th>
 
       </tr>
