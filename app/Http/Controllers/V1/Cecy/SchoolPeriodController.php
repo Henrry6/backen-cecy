@@ -57,8 +57,7 @@ class SchoolPeriodController extends Controller
         $sorts = explode(',', $request->input('sort'));
 
         $schoolPeriods =  SchoolPeriod::customOrderBy($sorts)
-            ->code($request->input('search'))
-            ->name($request->input('search'))
+            ->description($request->input('search'))
             ->limit(1000)
             ->get();
 

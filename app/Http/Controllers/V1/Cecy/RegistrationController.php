@@ -346,7 +346,7 @@ class RegistrationController extends Controller
 
         $additionalInformation->registration()->associate($registration);
 
-        $additionalInformation->levelInstruction()->associate(Catalogue::find($request->input('level_instruction.id')));
+        $additionalInformation->levelInstruction()->associate(Catalogue::find($request->input('levelInstruction.id')));
         $additionalInformation->worked = $request->input('worked');
         $additionalInformation->company_activity = $request->input('companyActivity');
         $additionalInformation->company_address = $request->input('companyAddress');

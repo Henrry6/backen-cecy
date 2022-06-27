@@ -245,7 +245,6 @@ Route::apiResource('school-periods', SchoolPeriodController::class);
 Route::controller(ClassroomController::class)->group(function () {
     Route::prefix('classrooms/{classroom}')->group(function () {
     });
-
     Route::prefix('classrooms')->group(function () {
         Route::patch('destroys', 'destroys');
         Route::get('catalogue', 'catalogue');
@@ -317,7 +316,6 @@ Route::apiResource('detail-school-periods', DetailSchoolPeriodController::class)
 ******************************************************************************************************************
  * REQUIREMENTS
  **********************************************************************************************************************/
-// Revisar todos las rutas
 Route::controller(RequirementController::class)->group(function () {
     Route::prefix('requirements/{requirement}')->group(function () {
         Route::get('file', 'showFile');
