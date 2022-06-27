@@ -114,7 +114,7 @@
         <td></td>
         <td></td>
         <td></td>
-        <td></td>
+        <td>Observaciones: {{$course->observations}}</td>
 
       </tr>
       @endforeach
@@ -127,13 +127,14 @@
 
 
     <div class="col-11">
-      <div20> FECHA DE ELABORACION</div20>
-      <div21> FIRMA DOCENTE</div21>
+      <div20>.....................................................  <br> FECHA DE ELABORACION
+      </div20>
+      <div21>...............................................<br> FIRMA DOCENTE</div21>
     </div>
 
     <div class="col-11">
-      <div22> RESPONSABLE DE CAPACITACION</div22>
-      <div23> ...........................................................</div23>
+      <div22>.................................................................. <br>RESPONSABLE DE CAPACITACION</div22>
+    
     </div>
 
 
@@ -261,33 +262,33 @@
       height: 100%;
       margin-left: 60px;
       font-weight: bold;
+      margin-top: 50px;
 
     }
 
     div21 {
       float: left;
       height: 100%;
-      margin-left: 350px;
+      margin-left: 200px;
       font-weight: bold;
+      margin-top: 50px;
+
+
 
     }
 
     div22 {
-      float: left;
+      float: right;
       height: 100%;
-      margin-left: 240px;
+      margin-left: 200px;
       font-weight: bold;
+      margin-top: -40px;
 
 
-    }
-
-    div23 {
-      float: left;
-      height: 100%;
-      margin-left: 19px;
-      margin-top: -30px;
 
     }
+
+   
 
     .table-1 {
       font-weight: bold;

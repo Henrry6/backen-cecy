@@ -82,7 +82,7 @@
 		<br><br>
 		
 		<div38>Fecha de iniciacion:   {{$planification->started_at}}</div38>
-		<div39>Fecha prevista de finalizacion:</div39>
+		<div39>Fecha prevista de finalizacion:   {{$planification->ended_at}}</div39>
 
 		<div40>Fecha real de finalizacion:  {{$planification->ended_at}}</div40>
 
