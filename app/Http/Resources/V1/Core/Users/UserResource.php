@@ -29,7 +29,7 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'phone' => $this->phone,
             'birthdate' => $this->birthdate,
-            'fullname' => $this->getFullnameAttribute(),
+//            'fullname' => $this->getFullnameAttribute(),
             'emails' => EmailResource::collection($this->emails),
             'phones' => PhoneResource::collection($this->phones),
             'images' => ImageResource::collection($this->images),
