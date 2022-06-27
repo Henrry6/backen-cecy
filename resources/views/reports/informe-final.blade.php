@@ -40,7 +40,7 @@
 		<br>
 
 		<h4>Contenido del curso (Temas generales)</h4>
-		<div9>1 {{$topics->description}}</div9>
+		<div9>1 {{$topics->description}}............................</div9>
 		<div10>2 {{$topics->description}}...........................</div10>
 		<div11>3 {{$topics->description}}............................</div11>
 		<div12>4 {{$topics->description}}........................</div12>
@@ -82,7 +82,7 @@
 		<br><br>
 		
 		<div38>Fecha de iniciacion:   {{$planification->started_at}}</div38>
-		<div39>Fecha prevista de finalizacion:</div39>
+		<div39>Fecha prevista de finalizacion:   {{$planification->ended_at}}</div39>
 
 		<div40>Fecha real de finalizacion:  {{$planification->ended_at}}</div40>
 
@@ -257,7 +257,7 @@
 		div9 {
 			float: left;
 			height: 100%;
-			margin-left: 0px;
+			margin-left: 10px;
 			margin-top: 5px;
 			color: blue;
 
@@ -266,7 +266,7 @@
 		div10 {
 			float: left;
 			height: 100%;
-			margin-left: -95px;
+			margin-left: -142px;
 			margin-top: 30px;
 			color: blue;
 
@@ -276,7 +276,7 @@
 		div11 {
 			float: left;
 			height: 100%;
-			margin-left: -210px;
+			margin-left: -142px;
 			margin-top: 55px;
 			color: blue;
 
@@ -286,7 +286,7 @@
 		div12 {
 			float: left;
 			height: 100%;
-			margin-left: -210px;
+			margin-left: -142px;
 			margin-top: 80px;
 			color: blue;
 
@@ -296,7 +296,7 @@
 		div13 {
 			float: left;
 			height: 100%;
-			margin-left: -210px;
+			margin-left: -142px;
 			margin-top: 105px;
 			color: blue;
 
@@ -306,7 +306,7 @@
 		div14 {
 			float: left;
 			height: 100%;
-			margin-left: -210px;
+			margin-left: -142px;
 			margin-top: 130px;
 			color: blue;
 
@@ -317,7 +317,7 @@
 		div15 {
 			float: left;
 			height: 100%;
-			margin-left: -200px;
+			margin-left: -140px;
 			font-weight: bold;
 			margin-top: 170px;
 
@@ -326,7 +326,7 @@
 		div16 {
 			float: left;
 			height: 100%;
-			margin-left: 0px;
+			margin-left: 20px;
 			font-weight: bold;
 			margin-top: 170px;
 
@@ -344,7 +344,7 @@
 		div18 {
 			float: left;
 			height: 100%;
-			margin-left: -310px;
+			margin-left: -280px;
 			font-weight: bold;
 			margin-top: 200px;
 

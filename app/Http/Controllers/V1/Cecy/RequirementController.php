@@ -4,6 +4,7 @@ namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Cecy\Requirements\CatalogueRequirementRequest;
+use App\Http\Requests\V1\Cecy\Requirements\DestroysRequirementRequest;
 use App\Http\Requests\V1\Cecy\Requirements\IndexRequirementRequest;
 use App\Http\Requests\V1\Cecy\Requirements\StoreRequirementRequest;
 use App\Http\Requests\V1\Cecy\Requirements\UpdateRequirementRequest;
@@ -120,6 +121,22 @@ class RequirementController extends Controller
                     'code' => '201'
                 ]
             ])->response()->setStatusCode(201);
+    }
+    public function destroys(DestroysRequirementRequest $request)
+    {
+        $requirement = Requirement::whereIn('id', $request->input('ids'))->get();
+
+        Requirement::destroy($request->input('ids'));
+
+        return (new RequirementCollection($requirement))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Periodos Eliminados',
+                    'detail' => '',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
     }
     /*******************************************************************************************************************
      * FILES

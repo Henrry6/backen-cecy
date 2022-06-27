@@ -401,7 +401,7 @@ public function getParticipant(IndexRegistrationRequest $request, Registration $
 
         $additionalInformation->registration()->associate($registration);
 
-        $additionalInformation->levelInstruction()->associate(Catalogue::find($request->input('level_instruction.id')));
+        $additionalInformation->levelInstruction()->associate(Catalogue::find($request->input('levelInstruction.id')));
         $additionalInformation->worked = $request->input('worked');
         $additionalInformation->company_activity = $request->input('companyActivity');
         $additionalInformation->company_address = $request->input('companyAddress');
@@ -420,8 +420,10 @@ public function getParticipant(IndexRegistrationRequest $request, Registration $
     {
         $registration->grade1 = $request->input('grade1');
         $registration->grade2 = $request->input('grade2');
-        $registration->final_grade = $request->input('finalGrade');//calculado
+
+//        $registration->final_grade = $request->input('finalGrade');//calculado
         $registration->save();
+        $this->FinalGrade($request, $registration);
         return (new RegistrationResource($registration))
             ->additional([
                 'msg' => [
@@ -431,5 +433,26 @@ public function getParticipant(IndexRegistrationRequest $request, Registration $
                 ]
             ])
             ->response()->setStatusCode(200);
+    }
+    //nota final del estudiante
+    public function FinalGrade(HttpRequest $request,Registration $registration){
+
+        $grade1 =  $registration->grade1 = $request->input('grade1');
+        $grade2 =  $registration->grade2 = $request->input('grade2');
+        $registration->final_grade = ($grade1+$grade2) / 2;
+
+        $registration->save();
+        return (new RegistrationResource($registration))
+            ->additional([
+                'msg' => [
+                    'summary' => 'nota final actualizada',
+                    'Institution' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+
+
+
     }
 }

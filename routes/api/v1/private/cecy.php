@@ -153,7 +153,7 @@ Route::controller(CourseController::class)->group(function () {
         Route::prefix('')->group(function () {
             Route::get('/topics', [TopicController::class, 'getTopics']); //Guachagmira - Alvarado
             Route::post('/topics', [TopicController::class, 'storesTopics']); //Alvarado
-            Route::put('/topics', [TopicControlaler::class, 'updateTopics']); // Alvarado
+            Route::put('/topics', [TopicController::class, 'updateTopics']); // Alvarado
             Route::delete('/topics/{topic}', [TopicController::class, 'destroyTopic']); //Alvarado
         });
         Route::prefix('')->group(function () {
@@ -245,7 +245,6 @@ Route::apiResource('school-periods', SchoolPeriodController::class);
 Route::controller(ClassroomController::class)->group(function () {
     Route::prefix('classrooms/{classroom}')->group(function () {
     });
-
     Route::prefix('classrooms')->group(function () {
         Route::patch('destroys', 'destroys');
         Route::get('catalogue', 'catalogue');
@@ -298,7 +297,6 @@ Route::apiResource('detail-school-periods', DetailSchoolPeriodController::class)
 ******************************************************************************************************************
  * REQUIREMENTS
  **********************************************************************************************************************/
-// Revisar todos las rutas
 Route::controller(RequirementController::class)->group(function () {
     Route::prefix('requirements/{requirement}')->group(function () {
         Route::get('file', 'showFile');
@@ -364,6 +362,19 @@ Route::controller(RegistrationController::class)->group(function () {
 });
 Route::apiResource('registrations', RegistrationController::class);
 
+//photofraphicRecords files-images
+Route::prefix('record/{record}')->group(function () {
+    Route::prefix('file')->group(function () {
+        Route::get('{file}/download', [PhotographicRecordController::class, 'downloadFile']);
+        Route::get('download', [PhotographicRecordController::class, 'downloadFiles']);
+        Route::get('', [PhotographicRecordController::class, 'indexFiles']);
+        Route::get('{file}', [PhotographicRecordController::class, 'showFile']);
+        Route::post('', [PhotographicRecordController::class, 'uploadFile']);
+        Route::post('{file}', [PhotographicRecordController::class, 'updateFile']);
+        Route::delete('{file}', [PhotographicRecordController::class, 'destroyFile']);
+        Route::patch('', [PhotographicRecordController::class, 'destroyFiles']);
+    });
+});
 
 //topics files
 Route::prefix('topic/{topic}')->group(function () {
@@ -379,6 +390,7 @@ Route::prefix('topic/{topic}')->group(function () {
     });
 });
 
+
 Route::prefix('registration')->group(function () {
- 
+
 });
