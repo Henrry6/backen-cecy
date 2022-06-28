@@ -56,28 +56,12 @@ Route::controller(PlanificationController::class)->group(function () {
         Route::put('approve', 'approve');
         Route::put('assign-code', 'assignCode');
         Route::patch('assign-responsible-cecy', 'assignResponsibleCecy');
-<<<<<<< HEAD
         Route::put('initial-planification', 'updateInitialPlanification'); //Rivas
         Route::put('needs', 'addNeeds'); // Pérez
     });
 
     Route::prefix('planifications')->group(function () {
         Route::get('period-states', 'getCurrentPlanificationsByAuthority'); //Rivas
-=======
-        Route::put('initial-planification', 'updateInitialPlanification'); //Rivas-Pplanificacion
-        Route::delete('initial-planification', 'destroy'); //Rivas-Pplanificacion
-        Route::patch('needs', 'addNeeds'); // Pérez
-        Route::get('detail-planifications', 'getDetailPlanifications');
-    });
-
-    Route::prefix('planifications')->group(function () {
-        Route::get('period-states', 'getCurrentPlanificationsByAuthority'); //Rivas-matriculacion
-        Route::patch('destroys', 'destroys'); //Rivas
-        Route::prefix('courses/{course}')->group(function () {
-            Route::get('', 'getPlanificationsByCourse'); //Rivas, Pérez, pplanificacion
-            Route::post('', 'storePlanificationByCourse'); //Rivas - pplanificacion
-        });
->>>>>>> 1d403c80c2cf3161249dc690728f3104e800f03b
         Route::get('detail-planifications', 'getPlanificationsByDetailPlanification'); // no existe el metodo
         Route::get('course-parallels-works', 'getCoursesParallelsWorkdays'); // no existe el metodo
         Route::get('kpis/{state}', 'getKpi');
@@ -281,7 +265,6 @@ Route::controller(InstructorController::class)->group(function () {
 Route::apiResource('instructors', InstructorController::class);
 
 /***********************************************************************************************************************
-<<<<<<< HEAD
  * REGISTRATIONS - to remove
  **********************************************************************************************************************/
  //Route::controller(RegistrationController::class)->group(function () {
@@ -301,8 +284,6 @@ Route::apiResource('instructors', InstructorController::class);
 
 
 /***********************************************************************************************************************
-=======
->>>>>>> 1d403c80c2cf3161249dc690728f3104e800f03b
  * PARTICIPANTS
  **********************************************************************************************************************/
 Route::controller(ParticipantController::class)->group(function () {
@@ -350,14 +331,8 @@ Route::apiResource('requirements', RequirementController::class);
  * ATTENDANCES / Santillan-Molina
  **********************************************************************************************************************/
 Route::prefix('attendances')->group(function () {
-<<<<<<< HEAD
     Route::get('detail-planifications/{detail_planification}', [AttendanceController::class, 'getByDetailPlanification']); //asistencias por el detalle de la planificacion santillan
     Route::delete('detail-planifications/{detail_planification}', [AttendanceController::class, 'destroysByDetailPlanification']); // eliminacion santillan
-=======
-    Route::get('detail-planifications/{detail_planification}', [AttendanceController::class, 'getByDetailPlanification']);
-    Route::delete('detail-planifications/{detail_planification}', [AttendanceController::class, 'destroyAttendance']); // eliminacion santillan
-    Route::delete('destroys', [AttendanceController::class, 'destroys']);
->>>>>>> 1d403c80c2cf3161249dc690728f3104e800f03b
 });
 
 Route::prefix('pdf')->group(function () {
@@ -378,19 +353,10 @@ Route::apiResource('attendances', AttendanceController::class);
  ****************************************/
 Route::controller(RegistrationController::class)->group(function () {
     Route::prefix('registrations/{registration}')->group(function () {
-<<<<<<< HEAD
         Route::patch('nullify-registration', 'nullifyRegistration'); //Rivas
         Route::put('register', 'register'); //Rivas
         Route::put('review', 'setRegistrationinReview'); //Rivas
         Route::get('participant', 'getParticipant');// Rivas
-=======
-        Route::patch('nullify-registration', 'nullifyRegistration'); //Rivas - matriculacion
-        Route::put('register', 'register'); //Rivas -matriculacion
-        Route::put('review', 'setRegistrationinReview'); //Rivas - matriculacion
-        Route::delete('eliminate', 'eliminate'); //Rivas - matriculacion
-        Route::put('reenroll', 'reEnroll'); //Rivas - matriculacion
-
->>>>>>> 1d403c80c2cf3161249dc690728f3104e800f03b
     });
 
     Route::prefix('registrations')->group(function () {
