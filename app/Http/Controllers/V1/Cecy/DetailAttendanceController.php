@@ -70,9 +70,24 @@ class  DetailAttendanceController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    public function getByRegistration(Registration $registration)
+    // loadDetailAttendancesWithOutPaginate getByRegistration en el metodo y ruta
+    public function getByRegistration(GetDetailAttendancesByParticipantRequest $request, DetailPlanification $detailPlanification)
     {
-        $detailAttendances = $registration->detailAttendances()->get();
+
+        $sorts = explode(',', $request->input('sort'));
+
+        $participant = Participant::where('user_id', $request->user()->id)->first();
+
+        $registration = Registration::where(
+            [
+                'detail_planification_id' => $detailPlanification->id,
+                'participant_id' => $participant->id
+            ]
+        )->first();
+
+        $detailAttendances = DetailAttendance::customOrderBy($sorts)
+            ->registration($registration)
+            ->get();
 
         return (new DetailAttendanceCollection($detailAttendances))
             ->additional([
@@ -128,4 +143,33 @@ class  DetailAttendanceController extends Controller
                 ]
             ]);
     }
+    public function getCurrentDateDetailAttendance(GetDetailAttendancesByParticipantRequest $request, DetailPlanification $detailPlanification)
+    {
+
+        $dateToday = Date('Y-m-d');
+
+        //return $detailPlanification;
+
+       // echo($detailPlanification['id']);
+
+        $attendance = Attendance::where(
+
+            ['detail_planification_id' => $detailPlanification->id],
+            [    'registered_at' => $dateToday]
+
+        )->first();
+
+        //echo($attendance);
+
+        return (new AttendanceResource($attendance))
+            ->additional([
+                'msg' => [
+                    'summary' => 'consulta exitosa',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
 }
+

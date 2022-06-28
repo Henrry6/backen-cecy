@@ -15,6 +15,7 @@ use App\Http\Requests\V1\Cecy\Planifications\CataloguePlanificationRequest;
 use App\Http\Requests\V1\Cecy\Planifications\StorePlanificationByCourseRequest;
 use App\Http\Requests\V1\Cecy\Planifications\AddNeeds;
 use App\Http\Requests\V1\Cecy\Planifications\AssignResponsibleCecyRequest;
+use App\Http\Requests\V1\Cecy\Planifications\DestroysPlanificationRequest;
 use App\Http\Requests\V1\Cecy\Planifications\UpdatePlanificationByCourseRequest;
 use App\Http\Requests\V1\Cecy\Planifications\UpdatePlanificationRequest;
 use App\Http\Requests\V1\Cecy\Planifications\UpdateStatePlanificationRequest;
@@ -392,7 +393,7 @@ class PlanificationController extends Controller
      */
     public function storePlanificationByCourse(StorePlanificationByCourseRequest $request, Course $course)
     {
-        // DDRC-C: crea una planificacion como parte de una propuesta de una planificacion
+        // DDRC-C: crea una planificacion como parte de una propuesta del coordinador de carrera
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
 
         $currentState = Catalogue::where('type', $catalogue['school_period_state']['type'])
@@ -488,6 +489,23 @@ class PlanificationController extends Controller
                 ]
             ])
             ->response()->setStatusCode(201);
+    }
+
+    public function destroys(DestroysPlanificationRequest $request)
+    {
+        // DDRC-C: elimina planificaciones propuestas
+        $planifications = Planification::whereIn('id', $request->input('ids'))->get();
+        Planification::destroy($request->input('ids'));
+
+        return (new PlanificationCollection($planifications))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Asistencia eliminada',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
     }
 
     /**
