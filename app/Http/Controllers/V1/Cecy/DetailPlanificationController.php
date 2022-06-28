@@ -81,45 +81,7 @@ class DetailPlanificationController extends Controller
 
     public function store(RegisterDetailPlanificationRequest $request)
     {
-        // $loggedInInstructor = Instructor::where('user_id', $request->user()->id)->first();
-        // if (!$loggedInInstructor) {
-        //     return response()->json([
-        //         'data' => '',
-        //         'msg' => [
-        //             'summary' => 'Error',
-        //             'detail' => 'No es instructor o no se encuentra registrado',
-        //             'code' => '400'
-        //         ]
-        //     ], 400);
-        // }
-
         $planification = Planification::find($request->input('planification.id'));
-        // $responsibleCourse = $planification->responsibleCourse()->first();
-
-        // if ($loggedInInstructor->id !== $responsibleCourse->id) {
-        //     return response()->json([
-        //         'data' => '',
-        //         'msg' => [
-        //             'summary' => 'Error',
-        //             'detail' => 'No le pertece esta planificación',
-        //             'code' => '400'
-        //         ]
-        //     ], 400);
-        // }
-
-        //validar que la planification ha culminado
-        // if (
-        //     $planification->state()->first()->code === State::CULMINATED ||
-        //     $planification->state()->first()->code === State::APPROVED
-        // ) {
-        //     return response()->json([
-        //         'msg' => [
-        //             'summary' => 'Error',
-        //             'detail' => 'La planificación ha culminado o ya fue aprobada.',
-        //             'code' => '400'
-        //         ]
-        //     ], 400);
-        // }
 
         $state = Catalogue::firstWhere('code', State::TO_BE_APPROVED);
         $classroom = Classroom::find($request->input('classroom.id'));
@@ -185,8 +147,6 @@ class DetailPlanificationController extends Controller
             ], 400);
         }
 
-        // $planification = $loggedInInstructor->planifications()->get();
-        // $planification = Planification::find($request->input('planification.id'));
         $planification = $detailPlanification->planification()->first();
         $responsibleCourse = $planification->responsibleCourse()->first();
 
@@ -200,19 +160,6 @@ class DetailPlanificationController extends Controller
                 ]
             ], 400);
         }
-
-        // if (
-        //     $planification->state()->first()->code === State::CULMINATED ||
-        //     $planification->state()->first()->code === State::APPROVED
-        // ) {
-        //     return response()->json([
-        //         'msg' => [
-        //             'summary' => 'Error',
-        //             'detail' => 'La planificación ha culminado o ya fue aprobada.',
-        //             'code' => '400'
-        //         ]
-        //     ], 400);
-        // }
 
         $classroom = Classroom::find($request->input('classroom.id'));
         $day = Catalogue::find($request->input('day.id'));

@@ -185,31 +185,26 @@ class PlanificationController extends Controller
 
     public function getPlanificationsByCourse(GetPlanificationsByCourseRequest $request, Course $course)
     {
-        // DDRC-C: método para obtener las planificaciones dado un curso
-        // DDRC-CI: antes consultaba de instructores se cambio a autoridad por que sino no encontraba 
         $sorts = explode(',', $request->input('sort'));
 
         $loggedInAuthority = Authority::where('user_id', $request->user()->id)->first();
-        // return $loggedInAuthority->id;
+        $responsibleCourse = Instructor::where('user_id', $request->user()->id)->first();
 
-        if (!$loggedInAuthority) {
-            return response()->json([
-                'msg' => [
-                    'summary' => 'El usuario no es una autoridad',
-                    'detail' => '',
-                    'code' => '404'
-                ],
-                'data' => null
-            ], 404);
+        if ($loggedInAuthority) {
+            $planifications = $course->planifications()
+                ->where('responsible_cecy_id', $loggedInAuthority->id)
+                ->customOrderBy($sorts)
+                ->code($request->input('search'))
+                ->state($request->input('search'))
+                ->paginate($request->input('perPage'));
+        } else {
+            $planifications = $course->planifications()
+                ->where('responsible_course_id', $responsibleCourse->id)
+                ->customOrderBy($sorts)
+                ->code($request->input('search'))
+                ->state($request->input('search'))
+                ->paginate($request->input('perPage'));
         }
-
-        $planifications = $course->planifications()
-            ->where('responsible_course_id', $loggedInAuthority->id)
-            ->customOrderBy($sorts)
-            ->code($request->input('search'))
-            ->state($request->input('search'))
-            ->paginate($request->input('perPage'));
-
 
         return (new PlanificationByCourseCollection($planifications))
             ->additional([
@@ -244,7 +239,7 @@ class PlanificationController extends Controller
     {
         // DDRC-C: metodo para obtener las planificaciones 
         $sorts = explode(',', $request->input('sort'));
-        
+
         $authority = Authority::firstWhere('user_id', $request->user()->id);
         //verificar que el usuario logeado es una autoridad de Authority
         if (!$authority) {
