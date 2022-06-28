@@ -109,7 +109,6 @@ class RegistrationController extends Controller
     }
 
 
-
     //Descargar matriz
     // RegistrationController
     public function downloadFile(Catalogue $catalogue, File $file)
@@ -119,6 +118,7 @@ class RegistrationController extends Controller
         return $catalogue->downloadFile($file);
     }
 
+   
 
     public function reEnroll(RegistrationRequest $request, Registration $registration)
     {
