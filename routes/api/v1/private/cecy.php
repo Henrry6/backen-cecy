@@ -200,7 +200,7 @@ Route::get('/inform', function () {
 
         });
 
-        Route::prefix('detail-attendances/{detail_attendance}')->group(function () {
+        Route::prefix('detail-attendances/{detail_attendances}')->group(function () {
             Route::patch('type', 'updateType');  // actualizacion del tipo.// Santillan-Molina
             Route::get('attendances/{attendance}', 'getByAttendance');  // asistencias por id.
             Route::patch('types/{type}', 'changeType');  // actualizacion del tipo.// Santillan-Molina
