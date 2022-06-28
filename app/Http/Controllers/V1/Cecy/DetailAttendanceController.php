@@ -8,8 +8,11 @@ use App\Http\Requests\V1\Cecy\DetailAttendance\CatalogueDetailAttendanceRequest;
 use App\Http\Requests\V1\Cecy\DetailAttendance\GetDetailAttendancesByParticipantRequest;
 use App\Http\Resources\V1\Cecy\Attendances\AttendanceResource;
 use App\Http\Resources\V1\Cecy\Attendances\SaveDetailAttendanceResource;
+use App\Http\Resources\V1\Cecy\DetailAttendances\DetailAttendanceByAttendanceCollection;
 use App\Http\Resources\V1\Cecy\DetailAttendances\DetailAttendanceCollection;
+use App\Http\Resources\V1\Cecy\DetailAttendances\DetailAttendanceResource;
 use App\Models\Cecy\Attendance;
+use App\Models\Cecy\Catalogue;
 use App\Models\Cecy\DetailAttendance;
 use App\Models\Cecy\DetailPlanification;
 use App\Models\Cecy\Participant;
@@ -36,9 +39,21 @@ class  DetailAttendanceController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    // Guardar la asitencia de los estudiantes de un curso
-    // nombre del metodo y de la ruta updateType
+    public function changeType(DetailAttendance $detailAttendance,Catalogue $type)
+    {
+        $detailAttendance->type()->associate($type);
+        $detailAttendance->save();
 
+        return (new DetailAttendanceResource($detailAttendance))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Asistencia gaurdada',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
     public function updateType(SaveDetailAttendanceRequest $request, DetailAttendance $detailAttendance)
     {
         
@@ -118,6 +133,19 @@ class  DetailAttendanceController extends Controller
             ->response()->setStatusCode(200);
     }
 
+    public function getByAttendance(Attendance $attendance)
+    {
+        $detailAttendances = $attendance->detailAttendances()->get();
+
+        return (new DetailAttendanceByAttendanceCollection($detailAttendances))
+            ->additional([
+                'msg' => [
+                    'sumary' => 'consulta exitosa',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ]);
+    }
     public function getCurrentDateDetailAttendance(GetDetailAttendancesByParticipantRequest $request, DetailPlanification $detailPlanification)
     {
 

@@ -138,26 +138,43 @@ class RegistrationController extends Controller
     }
 
 
-// DDRC-C: matricular a un participante
-
-// DDRC-C: Obtiene la informacion de un participante y de un registro dado un id de incripcion
-    public function getParticipant(IndexRegistrationRequest $request, Registration $registration)
+    public function reEnroll(RegistrationRequest $request, Registration $registration)
     {
-        return (new ParticipantRegistrationResource($registration))
+        // DDRC-C: rematricula a un participante
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+        $currentState = Catalogue::firstWhere('code', $catalogue['registration_state']['registered']);
+        $registration->observations = $request->input('observations');
+        $registration->state()->associate(Catalogue::find($currentState->id));
+        $registration->save();
+        return (new RegistrationResource($registration))
             ->additional([
                 'msg' => [
                     'summary' => 'success',
-                    'detail' => 'Peticion exitosa',
+                    'detail' => 'Rematriculación exitosa',
                     'code' => '201'
                 ]
             ])
             ->response()->setStatusCode(201);
     }
 
-// DDRC-C: matricular a un participante
+    public function eliminate(Registration $registration)
+    {
+        // DDRC-C: elimina logicamente una incripción
+        $registration->delete();
+        return (new RegistrationResource($registration))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => 'Matricula Eliminada',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
+    }
 
     public function register(RegistrationRequest $request, Registration $registration)
     {
+        // DDRC-C: matricular a un participante
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
         $currentState = Catalogue::firstWhere('code', $catalogue['registration_state']['registered']);
         $registration->observations = $request->input('observations');
@@ -174,9 +191,9 @@ class RegistrationController extends Controller
             ->response()->setStatusCode(201);
     }
 
-// DDRC-C: cambia el estado a 'en revición' de una incripción
     public function setRegistrationinReview(ReviewRequest $request, Registration $registration)
     {
+        // DDRC-C: cambia el estado a 'en revición' de una incripción
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
         $currentState = Catalogue::firstWhere('code', $catalogue['registration_state']['in_review']);
         $registration->observations = $request->input('observations');
@@ -186,16 +203,16 @@ class RegistrationController extends Controller
             ->additional([
                 'msg' => [
                     'summary' => 'success',
-                    'detail' => 'Matriculación exitosa',
+                    'detail' => 'Cambio de estado exitoso',
                     'code' => '201'
                 ]
             ])
             ->response()->setStatusCode(201);
     }
-    /*DDRC-C: Anular varias Matriculas */
-    // RegistrationController
     public function nullifyRegistrations(NullifyRegistrationRequest $request)
     {
+        //DDRC-C: cancela varias Matriculas */
+        // RegistrationController
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
         $currentState = Catalogue::firstWhere('code', $catalogue['registration_state']['cancelled']);
 
@@ -230,10 +247,10 @@ class RegistrationController extends Controller
     }
 
 
-    /*DDRC-C: anula una matricula de un participante en un curso especifico */
-    // RegistrationController
     public function nullifyRegistration(NullifyParticipantRegistrationRequest $request, Registration $registration)
     {
+        //DDRC-C: cancela una matricula de un participante en un curso especifico 
+        // RegistrationController
 
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
         $currentState = Catalogue::firstWhere('code', $catalogue['registration_state']['cancelled']);
@@ -339,6 +356,27 @@ class RegistrationController extends Controller
             ])->response()->setStatusCode(200);
     }
 
+    public function showRecordCompetitor(IndexRegistrationRequest $request, DetailPlanification $detailPlanification, AdditionalInformation $additionalInformation)
+    {
+        
+        $planification=$detailPlanification->planification()->first();
+        $course=$planification->course()->first();
+        $regitrations=$detailPlanification->registrations()->with(['participant.user.sex','state','additionalInformation.levelInstruction'])->get();
+        $classroom = $detailPlanification->classroom()->first();
+
+        $pdf = PDF::loadView('reports/report-record-competitors', [
+            'planification' => $planification,
+            'detailPlanification' => $detailPlanification,
+            'registrations' => $regitrations,
+            'course'=>$course,
+            'clasrroom'=>$classroom,
+        ]);
+        $pdf->setOptions([
+            'orientation' => 'landscape',
+        ]);
+        return $pdf->stream('reporte registro participantes.pdf', []);
+    }
+
     // llenar informacion adicional de la solicitud de matricula
     private function storeAdditionalInformation(RegisterStudentRequest $request, Registration $registration)
     {
@@ -346,7 +384,7 @@ class RegistrationController extends Controller
 
         $additionalInformation->registration()->associate($registration);
 
-        $additionalInformation->levelInstruction()->associate(Catalogue::find($request->input('level_instruction.id')));
+        $additionalInformation->levelInstruction()->associate(Catalogue::find($request->input('levelInstruction.id')));
         $additionalInformation->worked = $request->input('worked');
         $additionalInformation->company_activity = $request->input('companyActivity');
         $additionalInformation->company_address = $request->input('companyAddress');
@@ -365,8 +403,10 @@ class RegistrationController extends Controller
     {
         $registration->grade1 = $request->input('grade1');
         $registration->grade2 = $request->input('grade2');
-        $registration->final_grade = $request->input('finalGrade');//calculado
+
+//        $registration->final_grade = $request->input('finalGrade');//calculado
         $registration->save();
+        $this->FinalGrade($request, $registration);
         return (new RegistrationResource($registration))
             ->additional([
                 'msg' => [
@@ -376,5 +416,26 @@ class RegistrationController extends Controller
                 ]
             ])
             ->response()->setStatusCode(200);
+    }
+    //nota final del estudiante
+    public function FinalGrade(HttpRequest $request,Registration $registration){
+
+        $grade1 =  $registration->grade1 = $request->input('grade1');
+        $grade2 =  $registration->grade2 = $request->input('grade2');
+        $registration->final_grade = ($grade1+$grade2) / 2;
+
+        $registration->save();
+        return (new RegistrationResource($registration))
+            ->additional([
+                'msg' => [
+                    'summary' => 'nota final actualizada',
+                    'Institution' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+
+
+
     }
 }

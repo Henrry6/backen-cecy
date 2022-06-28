@@ -15,6 +15,7 @@ use App\Http\Requests\V1\Cecy\Planifications\CataloguePlanificationRequest;
 use App\Http\Requests\V1\Cecy\Planifications\StorePlanificationByCourseRequest;
 use App\Http\Requests\V1\Cecy\Planifications\AddNeeds;
 use App\Http\Requests\V1\Cecy\Planifications\AssignResponsibleCecyRequest;
+use App\Http\Requests\V1\Cecy\Planifications\DestroysPlanificationRequest;
 use App\Http\Requests\V1\Cecy\Planifications\UpdatePlanificationByCourseRequest;
 use App\Http\Requests\V1\Cecy\Planifications\UpdatePlanificationRequest;
 use App\Http\Requests\V1\Cecy\Planifications\UpdateStatePlanificationRequest;
@@ -27,6 +28,7 @@ use App\Models\Authentication\User;
 use App\Models\Cecy\Authority;
 use App\Models\Cecy\Catalogue;
 use App\Models\Cecy\Course;
+use App\Models\Cecy\DetailPlanification;
 use App\Models\Cecy\DetailSchoolPeriod;
 use App\Models\Cecy\Institution;
 use App\Models\Cecy\Instructor;
@@ -184,28 +186,31 @@ class PlanificationController extends Controller
 
     public function getPlanificationsByCourse(GetPlanificationsByCourseRequest $request, Course $course)
     {
+        // DDRC-C: método para obtener las planificaciones dado un curso
+        // DDRC-CI: antes consultaba de instructores se cambio a autoridad por que sino no encontraba 
         $sorts = explode(',', $request->input('sort'));
 
-        $loggedInInstructor = Instructor::where('user_id', $request->user()->id)->first();
-        // return $loggedInInstructor;
+        $loggedInAuthority = Authority::where('user_id', $request->user()->id)->first();
+        // return $loggedInAuthority->id;
 
-        // if (!isset($loggedInInstructor)) {
-        //     return response()->json([
-        //         'msg' => [
-        //             'summary' => 'El usuario no es un instructor',
-        //             'detail' => '',
-        //             'code' => '404'
-        //         ],
-        //         'data' => null
-        //     ], 404);
-        // }
+        if (!$loggedInAuthority) {
+            return response()->json([
+                'msg' => [
+                    'summary' => 'El usuario no es una autoridad',
+                    'detail' => '',
+                    'code' => '404'
+                ],
+                'data' => null
+            ], 404);
+        }
 
         $planifications = $course->planifications()
-            ->where('responsible_course_id', $loggedInInstructor->id)
+            ->where('responsible_course_id', $loggedInAuthority->id)
             ->customOrderBy($sorts)
             ->code($request->input('search'))
             ->state($request->input('search'))
             ->paginate($request->input('perPage'));
+
 
         return (new PlanificationByCourseCollection($planifications))
             ->additional([
@@ -238,9 +243,9 @@ class PlanificationController extends Controller
 
     public function getCurrentPlanificationsByAuthority(IndexAuthorityRequest $request)
     {
-
+        // DDRC-C: metodo para obtener las planificaciones 
         $sorts = explode(',', $request->input('sort'));
-
+        
         $authority = Authority::firstWhere('user_id', $request->user()->id);
         //verificar que el usuario logeado es una autoridad de Authority
         if (!$authority) {
@@ -253,7 +258,6 @@ class PlanificationController extends Controller
                 ]
             ], 400);
         }
-
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
         $currentState = Catalogue::firstWhere('code', $catalogue['school_period_state']['current']);
         $schoolPeriod = SchoolPeriod::firstWhere('state_id', $currentState->id);
@@ -262,8 +266,6 @@ class PlanificationController extends Controller
             $detailSchoolPeriod->where('school_period_id', $schoolPeriod->id);
         })->customOrderBy($sorts)
             ->get();
-
-        // paginate($request->input('per_page'))
 
         return (new PlanificationCollection($planifications))
             ->additional([
@@ -322,6 +324,7 @@ class PlanificationController extends Controller
         //return $course->evaluation_mechanisms->diagnostic['tecnique'];
         //return $topics;
         //return $course;
+        // return $planification;
 
         $pdf = PDF::loadView('reports/desing-curricular', [
             'planification' => $planification,
@@ -345,7 +348,7 @@ class PlanificationController extends Controller
         $course = $planification->course()->first();
         $topics = $course->topics()->first();
         $responsiblececy = $planification->responsibleCecy()->first();
-        $institution = Institution::firstWhere('id', $responsiblececy->intitution_id);
+        $institution = Institution::firstWhere('id', $responsiblececy->institution_id);
 
         $instructor = Instructor::where('id', $planification->responsible_course_id)->first();
         //$user =  $instructor->user();
@@ -390,6 +393,7 @@ class PlanificationController extends Controller
      */
     public function storePlanificationByCourse(StorePlanificationByCourseRequest $request, Course $course)
     {
+        // DDRC-C: crea una planificacion como parte de una propuesta del coordinador de carrera
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
 
         $currentState = Catalogue::where('type', $catalogue['school_period_state']['type'])
@@ -448,6 +452,7 @@ class PlanificationController extends Controller
      */
     public function updateInitialPlanification(UpdatePlanificationByCourseRequest $request, Planification $planification)
     {
+        // DDRC-C: actualiza los estados de inicio, fin y responsable del curso
         $instructor = Instructor::find($request->input('responsibleCourse.id'));
 
         $planification->responsibleCourse()->associate($instructor);
@@ -484,6 +489,23 @@ class PlanificationController extends Controller
                 ]
             ])
             ->response()->setStatusCode(201);
+    }
+
+    public function destroys(DestroysPlanificationRequest $request)
+    {
+        // DDRC-C: elimina planificaciones propuestas
+        $planifications = Planification::whereIn('id', $request->input('ids'))->get();
+        Planification::destroy($request->input('ids'));
+
+        return (new PlanificationCollection($planifications))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Asistencia eliminada',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
     }
 
     /**

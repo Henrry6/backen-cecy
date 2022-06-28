@@ -17,7 +17,7 @@ Route::prefix('cecy-catalogue')->group(function () {
 /***********************************************************************************************************************
  * USERS/PARTICIPANT
  **********************************************************************************************************************/
-Route::prefix('participant-user')->group(function () {
+Route::prefix('participants')->group(function () {
     Route::post('registration', [ParticipantController::class, 'registerParticipantUser']);//Guachagmira
 });
 
