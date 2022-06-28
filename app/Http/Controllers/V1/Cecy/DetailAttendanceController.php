@@ -54,6 +54,21 @@ class  DetailAttendanceController extends Controller
             ])
             ->response()->setStatusCode(200);
     }
+    public function updateType(SaveDetailAttendanceRequest $request, DetailAttendance $detailAttendance)
+    {
+        $detailAttendance->type()->associate($request->input('type.id'));
+        $detailAttendance->save();
+
+        return (new SaveDetailAttendanceResource($detailAttendance))
+            ->additional([
+                'msg' => [
+                    'summary' => 'asistencia guardada',
+                    'detail' => 'Asistencia guardada correctamente',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
 
     public function getByRegistration(Registration $registration)
     {
