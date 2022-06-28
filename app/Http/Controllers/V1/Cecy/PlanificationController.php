@@ -13,8 +13,9 @@ use App\Http\Requests\V1\Cecy\Authorities\IndexAuthorityRequest;
 use App\Http\Resources\V1\Cecy\Courses\CourseCollection;
 use App\Http\Requests\V1\Cecy\Planifications\CataloguePlanificationRequest;
 use App\Http\Requests\V1\Cecy\Planifications\StorePlanificationByCourseRequest;
-use App\Http\Requests\V1\Cecy\Planifications\AddNeedsOfPlanification;
+use App\Http\Requests\V1\Cecy\Planifications\AddNeeds;
 use App\Http\Requests\V1\Cecy\Planifications\AssignResponsibleCecyRequest;
+use App\Http\Requests\V1\Cecy\Planifications\DestroysPlanificationRequest;
 use App\Http\Requests\V1\Cecy\Planifications\UpdatePlanificationByCourseRequest;
 use App\Http\Requests\V1\Cecy\Planifications\UpdatePlanificationRequest;
 use App\Http\Requests\V1\Cecy\Planifications\UpdateStatePlanificationRequest;
@@ -27,6 +28,7 @@ use App\Models\Authentication\User;
 use App\Models\Cecy\Authority;
 use App\Models\Cecy\Catalogue;
 use App\Models\Cecy\Course;
+use App\Models\Cecy\DetailPlanification;
 use App\Models\Cecy\DetailSchoolPeriod;
 use App\Models\Cecy\Institution;
 use App\Models\Cecy\Instructor;
@@ -118,46 +120,46 @@ class PlanificationController extends Controller
             ->response()->setStatusCode(201);
     }
 
-    public function addNeeds(AddNeedsOfPlanification $request, Planification $planification)
+    public function addNeeds(AddNeeds $request, Planification $planification)
     {
-        $loggedInInstructor = Instructor::where('user_id', $request->user()->id)->first();
-        if (!$loggedInInstructor) {
-            return response()->json([
-                'data' => '',
-                'msg' => [
-                    'summary' => 'Error',
-                    'detail' => 'No es instructor o no se encuentra registrado',
-                    'code' => '400'
-                ]
-            ], 400);
-        }
+        // $loggedInInstructor = Instructor::where('user_id', $request->user()->id)->first();
+        // if (!$loggedInInstructor) {
+        //     return response()->json([
+        //         'data' => '',
+        //         'msg' => [
+        //             'summary' => 'Error',
+        //             'detail' => 'No es instructor o no se encuentra registrado',
+        //             'code' => '400'
+        //         ]
+        //     ], 400);
+        // }
 
-        $responsibleCourse = $planification->responsibleCourse()->first();
+        // $responsibleCourse = $planification->responsibleCourse()->first();
 
-        if ($loggedInInstructor->id !== $responsibleCourse->id) {
-            return response()->json([
-                'data' => '',
-                'msg' => [
-                    'summary' => 'Error',
-                    'detail' => 'No le pertece esta planificación',
-                    'code' => '400'
-                ]
-            ], 400);
-        }
+        // if ($loggedInInstructor->id !== $responsibleCourse->id) {
+        //     return response()->json([
+        //         'data' => '',
+        //         'msg' => [
+        //             'summary' => 'Error',
+        //             'detail' => 'No le pertece esta planificación',
+        //             'code' => '400'
+        //         ]
+        //     ], 400);
+        // }
 
         //validar que la planification ha culminado
-        if (
-            $planification->state()->first()->code === State::CULMINATED ||
-            $planification->state()->first()->code === State::NOT_APPROVED
-        ) {
-            return response()->json([
-                'msg' => [
-                    'summary' => 'Error',
-                    'detail' => 'La planificación ha culminado o no fue aprobada.',
-                    'code' => '400'
-                ]
-            ], 400);
-        }
+        // if (
+        //     $planification->state()->first()->code === State::CULMINATED ||
+        //     $planification->state()->first()->code === State::NOT_APPROVED
+        // ) {
+        //     return response()->json([
+        //         'msg' => [
+        //             'summary' => 'Error',
+        //             'detail' => 'La planificación ha culminado o no fue aprobada.',
+        //             'code' => '400'
+        //         ]
+        //     ], 400);
+        // }
 
         $planification->needs = $request->input('needs');
 
@@ -186,26 +188,24 @@ class PlanificationController extends Controller
     {
         $sorts = explode(',', $request->input('sort'));
 
-        $loggedInInstructor = Instructor::where('user_id', $request->user()->id)->first();
-        // return $loggedInInstructor;
+        $loggedInAuthority = Authority::where('user_id', $request->user()->id)->first();
+        $responsibleCourse = Instructor::where('user_id', $request->user()->id)->first();
 
-        // if (!isset($loggedInInstructor)) {
-        //     return response()->json([
-        //         'msg' => [
-        //             'summary' => 'El usuario no es un instructor',
-        //             'detail' => '',
-        //             'code' => '404'
-        //         ],
-        //         'data' => null
-        //     ], 404);
-        // }
-
-        $planifications = $course->planifications()
-            ->where('responsible_course_id', $loggedInInstructor->id)
-            ->customOrderBy($sorts)
-            ->code($request->input('search'))
-            ->state($request->input('search'))
-            ->paginate($request->input('perPage'));
+        if ($loggedInAuthority) {
+            $planifications = $course->planifications()
+                ->where('responsible_cecy_id', $loggedInAuthority->id)
+                ->customOrderBy($sorts)
+                ->code($request->input('search'))
+                ->state($request->input('search'))
+                ->paginate($request->input('perPage'));
+        } else {
+            $planifications = $course->planifications()
+                ->where('responsible_course_id', $responsibleCourse->id)
+                ->customOrderBy($sorts)
+                ->code($request->input('search'))
+                ->state($request->input('search'))
+                ->paginate($request->input('perPage'));
+        }
 
         return (new PlanificationByCourseCollection($planifications))
             ->additional([
@@ -238,7 +238,7 @@ class PlanificationController extends Controller
 
     public function getCurrentPlanificationsByAuthority(IndexAuthorityRequest $request)
     {
-
+        // DDRC-C: metodo para obtener las planificaciones 
         $sorts = explode(',', $request->input('sort'));
 
         $authority = Authority::firstWhere('user_id', $request->user()->id);
@@ -253,7 +253,6 @@ class PlanificationController extends Controller
                 ]
             ], 400);
         }
-
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
         $currentState = Catalogue::firstWhere('code', $catalogue['school_period_state']['current']);
         $schoolPeriod = SchoolPeriod::firstWhere('state_id', $currentState->id);
@@ -262,8 +261,6 @@ class PlanificationController extends Controller
             $detailSchoolPeriod->where('school_period_id', $schoolPeriod->id);
         })->customOrderBy($sorts)
             ->get();
-
-        // paginate($request->input('per_page'))
 
         return (new PlanificationCollection($planifications))
             ->additional([
@@ -322,6 +319,7 @@ class PlanificationController extends Controller
         //return $course->evaluation_mechanisms->diagnostic['tecnique'];
         //return $topics;
         //return $course;
+        // return $planification;
 
         $pdf = PDF::loadView('reports/desing-curricular', [
             'planification' => $planification,
@@ -345,7 +343,7 @@ class PlanificationController extends Controller
         $course = $planification->course()->first();
         $topics = $course->topics()->first();
         $responsiblececy = $planification->responsibleCecy()->first();
-        $institution = Institution::firstWhere('id', $responsiblececy->intitution_id);
+        $institution = Institution::firstWhere('id', $responsiblececy->institution_id);
 
         $instructor = Instructor::where('id', $planification->responsible_course_id)->first();
         //$user =  $instructor->user();
@@ -390,6 +388,7 @@ class PlanificationController extends Controller
      */
     public function storePlanificationByCourse(StorePlanificationByCourseRequest $request, Course $course)
     {
+        // DDRC-C: crea una planificacion como parte de una propuesta del coordinador de carrera
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
 
         $currentState = Catalogue::where('type', $catalogue['school_period_state']['type'])
@@ -448,6 +447,7 @@ class PlanificationController extends Controller
      */
     public function updateInitialPlanification(UpdatePlanificationByCourseRequest $request, Planification $planification)
     {
+        // DDRC-C: actualiza los estados de inicio, fin y responsable del curso
         $instructor = Instructor::find($request->input('responsibleCourse.id'));
 
         $planification->responsibleCourse()->associate($instructor);
@@ -484,6 +484,23 @@ class PlanificationController extends Controller
                 ]
             ])
             ->response()->setStatusCode(201);
+    }
+
+    public function destroys(DestroysPlanificationRequest $request)
+    {
+        // DDRC-C: elimina planificaciones propuestas
+        $planifications = Planification::whereIn('id', $request->input('ids'))->get();
+        Planification::destroy($request->input('ids'));
+
+        return (new PlanificationCollection($planifications))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Planificaciones eliminadas',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
     }
 
     /**

@@ -16,7 +16,7 @@ class UpdatePhotographicRecordRequest extends FormRequest
             'detailPlanification.id' => ['required', 'integer'],
             'description' => ['required', 'string'],
             'numberWeek' => ['required', 'integer'],
-            'urlImage' => ['required','string'],
+//            'urlImage' => ['required','string'],
             'weekAt' => ['required','date'],
 
         ];
@@ -28,7 +28,7 @@ class UpdatePhotographicRecordRequest extends FormRequest
             'detailPlanification.id' => 'Id detalle de la planificacion',
             'description' => 'descripción',
             'numberWeek' => 'numero de semanas',
-            'urlImage' => 'url de la imagen',
+//            'urlImage' => 'url de la imagen',
             'weekAt' => 'fecha',
         ];
     }

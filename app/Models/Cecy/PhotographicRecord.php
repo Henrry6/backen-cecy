@@ -2,6 +2,8 @@
 
 namespace App\Models\Cecy;
 
+use App\Models\Core\File;
+use App\Traits\FileTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as Auditing;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,7 +16,7 @@ class PhotographicRecord extends Model implements Auditable
 {
     use HasFactory;
     use Auditing;
-    use SoftDeletes;
+    use SoftDeletes;use FileTrait;
 
     protected $table = 'cecy.photographic_records';
 
@@ -36,6 +38,11 @@ class PhotographicRecord extends Model implements Auditable
         return $this->morphMany(Image::class, 'imageable');
     }
 
+    public function files()
+    {
+        return $this->morphMany(File::class, 'fileable');
+    }
+
     // Mutators
 
     public function setDescriptionAttribute($value)
@@ -51,7 +58,7 @@ class PhotographicRecord extends Model implements Auditable
             return $query->orWhere('description','iLike', "%$description%");
         }
     }
-    
+
     //revisar
     public function scopeImage($query, $image)
     {
@@ -89,5 +96,5 @@ class PhotographicRecord extends Model implements Auditable
             array_unshift($fields, 'id');
             return $query->select($fields);
         }
-    }    
+    }
 }
