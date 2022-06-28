@@ -625,6 +625,7 @@ class CourseController extends Controller
      */
     public function updateInitialCourse(UpdateCourseNameAndDurationRequest $request, Course $course)
     {
+        // DDRC-C: actualiza los campos duracion nombre resonsables
         if ($request->input('duration') < Course::MINIMUM_HOURS) {
             return response()->json([
                 'msg' => [
@@ -684,7 +685,7 @@ class CourseController extends Controller
         return (new CourseCollection($courses))
             ->additional([
                 'msg' => [
-                    'summary' => 'Asistencia eliminada',
+                    'summary' => 'Cursos eliminados',
                     'detail' => '',
                     'code' => '200'
                 ]
