@@ -108,25 +108,7 @@ class RegistrationController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    //trae participantes matriculados
-    // RegistrationController
-    public function getParticipantsByDetailPlanification(ShowParticipantsRequest $request, DetailPlanification $detailPlanification)
-    {
-        $responsibleCourse = course::where('course_id', $request->course()->id)->get();
 
-        $registrations = $detailPlanification->registrations()
-            ->paginate($request->input('per_page'));
-
-        return (new CertificateResource($registrations))
-            ->additional([
-                'msg' => [
-                    'summary' => 'success',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ])
-            ->response()->setStatusCode(200);
-    }
 
     //Descargar matriz
     // RegistrationController
@@ -143,7 +125,7 @@ class RegistrationController extends Controller
         // DDRC-C: rematricula a un participante
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
         $currentState = Catalogue::firstWhere('code', $catalogue['registration_state']['registered']);
-        $registration->observations = $request->input('observations');
+        $registration->observations = "";
         $registration->state()->associate(Catalogue::find($currentState->id));
         $registration->save();
         return (new RegistrationResource($registration))

@@ -16,7 +16,9 @@ class FullnameResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'fullname' => $this->getFullnameAttribute()
+            'fullname' => $this->getFullnameAttribute(),
+            'name' => $this->name,
+            'lastname' => $this->lastname,
         ];
     }
 }
