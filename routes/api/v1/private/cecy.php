@@ -57,6 +57,7 @@ Route::controller(PlanificationController::class)->group(function () {
         Route::put('assign-code', 'assignCode');
         Route::patch('assign-responsible-cecy', 'assignResponsibleCecy');
         Route::put('initial-planification', 'updateInitialPlanification'); //Rivas-Pplanificacion
+        Route::delete('initial-planification', 'destroy'); //Rivas-Pplanificacion
         Route::patch('needs', 'addNeeds'); // Pérez
         Route::get('detail-planifications', 'getDetailPlanifications');
     });
@@ -117,7 +118,7 @@ Route::controller(CourseController::class)->group(function () {
         Route::get('by-coodinator', 'getCoursesByCoordinator');
         Route::get('kpi', 'getCoursesKPI');
         Route::get('year-schedule', 'showYearSchedule');
-
+        Route::patch('initial-course', 'destroys'); //Rivas - pcurso
         // Route::put('{course}', [CourseController::class, 'updateStateCourse']);
     });
 
@@ -150,7 +151,6 @@ Route::controller(CourseController::class)->group(function () {
 
         Route::put('initial-course', 'updateInitialCourse'); //Rivas - pcurso
         Route::delete('initial-course', 'destroyCourse'); //Rivas - pcurso
-        Route::patch('initial-course', 'destroysCourse'); //Rivas - pcurso
 
         Route::prefix('')->group(function () {
             Route::get('/topics', [TopicController::class, 'getTopics']); //Guachagmira - Alvarado
@@ -350,8 +350,8 @@ Route::controller(RegistrationController::class)->group(function () {
         Route::patch('nullify-registration', 'nullifyRegistration'); //Rivas - matriculacion
         Route::put('register', 'register'); //Rivas -matriculacion
         Route::put('review', 'setRegistrationinReview'); //Rivas - matriculacion
-        Route::delete('eliminate', 'setRegistrationinReview'); //Rivas - matriculacion
-        Route::put('reenroll', 'setRegistrationinReview'); //Rivas - matriculacion
+        Route::delete('eliminate', 'eliminate'); //Rivas - matriculacion
+        Route::put('reenroll', 'reEnroll'); //Rivas - matriculacion
 
     });
 
