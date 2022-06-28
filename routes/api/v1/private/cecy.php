@@ -193,13 +193,13 @@ Route::get('/inform', function () {
  **********************************************************************************************************************/
     Route::controller(DetailAttendanceController::class)->group(function () {
         Route::prefix('detail-attendances')->group(function () {
-    
+            Route::get('attendances/{attendance}', 'getByAttendance');
             Route::get('/{detail_planification}/no-paginate', 'getByRegistration'); //detalle de asistencia por paginado .// Santillan-Molina
             Route::get('/{detail_planification}', [DetailAttendanceController::class, 'getDetailAttendancesByParticipant']);// trae el detalle de asistencia del participante.  Molina
             Route::get('/{detail_planification}/current-date', [DetailAttendanceController::class, 'getCurrentDateDetailAttendance']);//obtiene la fecha actual del detalle de asistencia.  Molina
-    
+
         });
-    
+
         Route::prefix('detail-attendances/{detail_attendance}')->group(function () {
             Route::patch('type', 'updateType');  // actualizacion del tipo.// Santillan-Molina
             Route::get('attendances/{attendance}', 'getByAttendance');  // asistencias por id.
@@ -207,7 +207,7 @@ Route::get('/inform', function () {
             Route::get('', 'getByRegistration'); // assitencias de un participante ordenada y con paginacion .// Santillan-Molina
         });
     });
-    
+
     Route::apiResource('detail-attendances', DetailAttendanceController::class); //metodo generales // Santillan-Molina
 
 
