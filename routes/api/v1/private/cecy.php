@@ -169,7 +169,7 @@ Route::controller(CourseController::class)->group(function () {
         });
     });
 });
-// Route::apiResource('courses', CourseController::class);
+Route::apiResource('courses', CourseController::class);
 
 /***********************************************************************************************************************
  *
