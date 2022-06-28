@@ -138,23 +138,7 @@ class RegistrationController extends Controller
     }
 
 
-// DDRC-C: matricular a un participante
-
-public function getParticipant(IndexRegistrationRequest $request, Registration $registration)
-{
-        // DDRC-C: Obtiene la informacion de un participante y de un registro dado un id de incripcion
-        return (new ParticipantRegistrationResource($registration))
-            ->additional([
-                'msg' => [
-                    'summary' => 'success',
-                    'detail' => 'Peticion exitosa',
-                    'code' => '201'
-                ]
-            ])
-            ->response()->setStatusCode(201);
-    }
-
-    public function ReEnroll(RegistrationRequest $request, Registration $registration)
+    public function reEnroll(RegistrationRequest $request, Registration $registration)
     {
         // DDRC-C: rematricula a un participante
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
@@ -173,10 +157,9 @@ public function getParticipant(IndexRegistrationRequest $request, Registration $
             ->response()->setStatusCode(201);
     }
 
-    public function destroy(Registration $registration)
+    public function eliminate(Registration $registration)
     {
         // DDRC-C: elimina logicamente una incripción
-       
         $registration->delete();
         return (new RegistrationResource($registration))
             ->additional([
