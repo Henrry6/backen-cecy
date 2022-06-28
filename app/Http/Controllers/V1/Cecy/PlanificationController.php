@@ -341,6 +341,7 @@ class PlanificationController extends Controller
     {
         $planification = Planification::firstWhere('id', $planification->id);
         $course = $planification->course()->first();
+        $days = $planification->detailPlanifications()->with('day')->get();
         $topics = $course->topics()->first();
         $responsiblececy = $planification->responsibleCecy()->first();
         $institution = Institution::firstWhere('id', $responsiblececy->institution_id);
@@ -357,6 +358,7 @@ class PlanificationController extends Controller
         $pdf = PDF::loadView('reports/informe-final', [
             'planification' => $planification,
             'course' => $course,
+            'days'=>$days,
             'topics' => $topics,
             'institution' => $institution,
             'user' => $user,
