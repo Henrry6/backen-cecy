@@ -10,7 +10,9 @@ use App\Http\Resources\V1\Cecy\Attendances\AttendanceResource;
 use App\Http\Resources\V1\Cecy\Attendances\SaveDetailAttendanceResource;
 use App\Http\Resources\V1\Cecy\DetailAttendances\DetailAttendanceByAttendanceCollection;
 use App\Http\Resources\V1\Cecy\DetailAttendances\DetailAttendanceCollection;
+use App\Http\Resources\V1\Cecy\DetailAttendances\DetailAttendanceResource;
 use App\Models\Cecy\Attendance;
+use App\Models\Cecy\Catalogue;
 use App\Models\Cecy\DetailAttendance;
 use App\Models\Cecy\DetailPlanification;
 use App\Models\Cecy\Participant;
@@ -37,16 +39,16 @@ class  DetailAttendanceController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    public function updateType(SaveDetailAttendanceRequest $request, DetailAttendance $detailAttendance)
+    public function changeType(DetailAttendance $detailAttendance,Catalogue $type)
     {
-        $detailAttendance->type()->associate($request->input('type.id'));
+        $detailAttendance->type()->associate($type);
         $detailAttendance->save();
 
-        return (new SaveDetailAttendanceResource($detailAttendance))
+        return (new DetailAttendanceResource($detailAttendance))
             ->additional([
                 'msg' => [
-                    'summary' => $detailAttendance,
-                    'detail' => 'Asistencia guardada correctamente',
+                    'summary' => 'Asistencia gaurdada',
+                    'detail' => '',
                     'code' => '200'
                 ]
             ])
