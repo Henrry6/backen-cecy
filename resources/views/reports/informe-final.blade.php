@@ -71,7 +71,7 @@
 				<br>
 
 				@foreach($days as $day)
-				<table class="table" align="center">
+				<table class="table_1" align="center">
 					<tr>
 
 						<th class="th">Horario Curso:</th>
@@ -122,6 +122,7 @@
 			</div>
 		</div>
 		<br>
+		<br><br>
 
 		<div class="table_1 ">
 
@@ -179,6 +180,7 @@
 		<br><br>
 		<br><br>
 		<br><br>
+		
 		<br>
 		<div class="col-12">
 			<div50> {{$user->name}} <br> DOCENTE</div50>
@@ -214,6 +216,7 @@
 
 		}
 
+		
 		div50 {
 			float: left;
 			height: 100%;
