@@ -324,11 +324,6 @@ Route::controller(RequirementController::class)->group(function () {
 
     Route::prefix('requirements')->group(function () {
         Route::get('catalogue', 'catalogue');
-        Route::get('', 'getAllRequirement');
-        Route::get('/{requirements}', 'getRequirement');
-        Route::post('/{requirements}', 'storeRequirement');
-        Route::put('/{requirements}', 'updateRequirement');
-        Route::delete('/{requirements}', 'destroy');
     });
 });
 Route::apiResource('requirements', RequirementController::class);
