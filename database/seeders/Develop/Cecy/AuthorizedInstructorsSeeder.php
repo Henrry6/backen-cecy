@@ -5,6 +5,8 @@ namespace Database\Seeders\Develop\Cecy;
 use App\Models\Cecy\CourseProfile;
 use App\Models\Cecy\Instructor;
 use Illuminate\Database\Seeder;
+use Faker\Factory;
+
 
 class AuthorizedInstructorsSeeder extends Seeder
 {
@@ -15,17 +17,23 @@ class AuthorizedInstructorsSeeder extends Seeder
      */
     public function run()
     {
-        // Instructor::factory()->create();
+        $faker = Factory::create();
 
-        // $courseProfiles = CourseProfile::get();
-        // $instructors = Instructor::get();
+        $courseProfiles = CourseProfile::get();
+        $instructors = Instructor::get();
 
-        // foreach ($instructors as $instructor) {
-        //     foreach ($courseProfiles as $courseProfile) {
-        //         $instructor->courseProfiles()->attach(
-        //             $courseProfile->id
-        //         );
-        //     }
-        // }
+        foreach ($courseProfiles as $courseProfile) {
+            for ($i = 0; $i < 5; $i++) {
+                $instructor = $faker->randomElement($instructors);
+                $instructor->courseProfiles()->attach(
+                    $courseProfile->id,
+                    [
+                        'instructor_id' => $instructor->id,
+                        'updated_at' => now(),
+                        'created_at' => now(),
+                    ]
+                );
+            }
+        }
     }
 }

@@ -3,7 +3,7 @@
 namespace App\Http\Resources\V1\Cecy\RegistrationRequeriments;
 
 use App\Http\Resources\V1\Cecy\Registrations\RegistrationResource;
-use App\Http\Resources\V1\Cecy\Requeriments\RequerimentResource;
+use App\Http\Resources\V1\Cecy\Requeriments\RequirementResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class RegistrationRequerimentResource extends JsonResource
@@ -18,8 +18,8 @@ class RegistrationRequerimentResource extends JsonResource
     {
         return [
             'id'=> $this->id,
-            // 'registration'=> RegistrationResource::make($this->registration_id),
-            // 'requirement'=> RequerimentResource::make($this->requirement_id),
+            // 'registration'=> RegistrationResource::make($this->registration),
+            // 'requirement'=> RequirementResource::make($this->requirement),
             'url' => $this->url,
         ];
     }

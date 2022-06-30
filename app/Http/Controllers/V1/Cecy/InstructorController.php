@@ -158,6 +158,8 @@ class InstructorController extends Controller
             ->response()->setStatusCode(201);
     }
 
+    
+
     public function destroy(Instructor $instructor)
     {
         $instructor->delete();

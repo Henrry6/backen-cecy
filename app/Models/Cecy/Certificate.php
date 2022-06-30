@@ -20,7 +20,7 @@ class Certificate extends Model implements Auditable
     protected $fillable = [
         'code',
         'issued_at',
-        'certificateable_type', //revisar 
+        'certificateable_type',
         'certificateable_id',
         'state_id',
     ];
