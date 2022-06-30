@@ -56,7 +56,8 @@ class  DetailAttendanceController extends Controller
     }
     public function updateType(SaveDetailAttendanceRequest $request, DetailAttendance $detailAttendance)
     {
-        $detailAttendance->type()->associate($request->input('type.id'));
+        $detailAttendance->type_id = $request->input('type.id');
+        $detailAttendance->registration_id = $request->input('registration.id');  
         $detailAttendance->save();
 
         return (new SaveDetailAttendanceResource($detailAttendance))

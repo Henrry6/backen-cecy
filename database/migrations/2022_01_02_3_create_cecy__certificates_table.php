@@ -22,7 +22,7 @@ class CreateCecyCertificatesTable extends Migration
             $table->string('code')
                 ->comment('Código del certificado');
 
-            $table->Date('generated_at')
+            $table->Date('issued_at')
                 ->comment('Fecha de emisión del certificado');
         });
     }
