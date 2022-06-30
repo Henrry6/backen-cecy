@@ -137,8 +137,9 @@ class AttendanceController extends Controller
             ])
             ->response()->setStatusCode(200);
     }
-    public function destroyAttendance(Attendance $attendance)
+    public function destroyAttendance( $attendance)
     {
+        $attendance = Attendance::find($attendance);
         $attendance->delete();
 
         return (new AttendanceResource($attendance))
@@ -183,6 +184,7 @@ class AttendanceController extends Controller
     {
         $planification = $course->planifications()->first();
         $detailPlanification = $planification->detailPlanifications()->first();
+        $days = $planification->detailPlanifications()->with('day')->get();
         $registrations = $detailPlanification->registrations()->get();
         $responsiblececy = $planification->responsibleCecy()->first();
         $institution = Institution::firstWhere('id', $responsiblececy->institution_id);
@@ -203,6 +205,7 @@ class AttendanceController extends Controller
         $pdf = PDF::loadView('reports/atendence-evaluation', [
             'planification' => $planification,
             'course' => $course,
+            'days'=>$days,
             'registrations' => $registrations,
             'institution' => $institution,
             'instructor' => $instructor,
@@ -213,8 +216,13 @@ class AttendanceController extends Controller
 
 
         ]);
+        $pdf->setOptions([
+            'orientation' => 'landscape',
+            'page-size' => 'a4'
+        ]);
 
         return $pdf->stream('Asistencia-evaluacion.pdf');
+        
     }
     /*******************************************************************************************************************
      * IMAGES

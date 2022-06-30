@@ -267,7 +267,6 @@ class AuthenticationSeeder extends Seeder
         $user = User::find(1);
         $user->assignRole('admin');
 
-
         $rector = User::find(2);
         $rector->assignRole('rector');
 
@@ -286,8 +285,8 @@ class AuthenticationSeeder extends Seeder
         $responsible_course = User::find(7);
         $responsible_course->assignRole('responsible_course');
 
-        $responsible_course = User::find(7);
-        $responsible_course->assignRole('coordinator_cecy');
+        $coordinator_cecy = User::find(7);
+        $coordinator_cecy->assignRole('coordinator_cecy');
 
         $instructors = User::where('id', '>=', 7)->where('id', '<=', 35)->get();
 

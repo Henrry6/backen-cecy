@@ -24,6 +24,7 @@ use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationCollectio
 use App\Http\Resources\V1\Cecy\DetailPlanifications\ResponsibleCourseDetailPlanifications\DetailPlanificationCollection as ResponsibleCourseDetailPlanificationsCollection;
 
 use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationParticipants\DetailPlanificationParticipantCollection;
+use App\Models\Authentication\User;
 use App\Models\Core\State;
 use App\Models\Cecy\Authority;
 use App\Models\Cecy\Catalogue;
@@ -31,6 +32,7 @@ use App\Models\Cecy\Classroom;
 use App\Models\Cecy\Course;
 use App\Models\Cecy\DetailPlanification;
 use App\Models\Cecy\Instructor;
+use App\Models\Cecy\Participant;
 use App\Models\Cecy\Planification;
 use App\Models\Cecy\Registration;
 
@@ -81,45 +83,7 @@ class DetailPlanificationController extends Controller
 
     public function store(RegisterDetailPlanificationRequest $request)
     {
-        // $loggedInInstructor = Instructor::where('user_id', $request->user()->id)->first();
-        // if (!$loggedInInstructor) {
-        //     return response()->json([
-        //         'data' => '',
-        //         'msg' => [
-        //             'summary' => 'Error',
-        //             'detail' => 'No es instructor o no se encuentra registrado',
-        //             'code' => '400'
-        //         ]
-        //     ], 400);
-        // }
-
         $planification = Planification::find($request->input('planification.id'));
-        // $responsibleCourse = $planification->responsibleCourse()->first();
-
-        // if ($loggedInInstructor->id !== $responsibleCourse->id) {
-        //     return response()->json([
-        //         'data' => '',
-        //         'msg' => [
-        //             'summary' => 'Error',
-        //             'detail' => 'No le pertece esta planificación',
-        //             'code' => '400'
-        //         ]
-        //     ], 400);
-        // }
-
-        //validar que la planification ha culminado
-        // if (
-        //     $planification->state()->first()->code === State::CULMINATED ||
-        //     $planification->state()->first()->code === State::APPROVED
-        // ) {
-        //     return response()->json([
-        //         'msg' => [
-        //             'summary' => 'Error',
-        //             'detail' => 'La planificación ha culminado o ya fue aprobada.',
-        //             'code' => '400'
-        //         ]
-        //     ], 400);
-        // }
 
         $state = Catalogue::firstWhere('code', State::TO_BE_APPROVED);
         $classroom = Classroom::find($request->input('classroom.id'));
@@ -185,8 +149,6 @@ class DetailPlanificationController extends Controller
             ], 400);
         }
 
-        // $planification = $loggedInInstructor->planifications()->get();
-        // $planification = Planification::find($request->input('planification.id'));
         $planification = $detailPlanification->planification()->first();
         $responsibleCourse = $planification->responsibleCourse()->first();
 
@@ -200,19 +162,6 @@ class DetailPlanificationController extends Controller
                 ]
             ], 400);
         }
-
-        // if (
-        //     $planification->state()->first()->code === State::CULMINATED ||
-        //     $planification->state()->first()->code === State::APPROVED
-        // ) {
-        //     return response()->json([
-        //         'msg' => [
-        //             'summary' => 'Error',
-        //             'detail' => 'La planificación ha culminado o ya fue aprobada.',
-        //             'code' => '400'
-        //         ]
-        //     ], 400);
-        // }
 
         $classroom = Classroom::find($request->input('classroom.id'));
         $day = Catalogue::find($request->input('day.id'));
@@ -391,13 +340,16 @@ class DetailPlanificationController extends Controller
             ])->response()->setStatusCode(200);
     }
 
-    // DDRC-C: obtiene una lista de participantes de una planificación dado el detalle de la planificación
     public function getParticipantsByDetailPlanification(IndexDetailPlanificationRequest $request, DetailPlanification $detailPlanification)
     {
-
-        $participants = Registration::where('detail_planification_id', $detailPlanification->id)
-            ->paginate($request->input('per_page'));
-
+    // DDRC-C: obtiene una lista de participantes de una planificación dado el detalle de la planificación
+    $sorts = explode(',', $request->input('sort'));
+    
+        $participants = $detailPlanification->registrations()
+        ->participantUsername($request->input('search'))
+        ->customOrderBy($sorts)
+        ->paginate($request->input('per_page'));
+    
         return (new DetailPlanificationParticipantCollection($participants))
             ->additional([
                 'msg' => [
@@ -408,6 +360,7 @@ class DetailPlanificationController extends Controller
             ])
             ->response()->setStatusCode(200);
     }
+    
     //obtener los cursos asignados a un isntructor logueado (Done)
     public function getInstructorByCourses(getCoursesByResponsibleRequest $request)
     {

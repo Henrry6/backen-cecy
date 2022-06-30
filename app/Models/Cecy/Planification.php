@@ -107,6 +107,14 @@ class Planification extends Model implements Auditable
             return $query->orWhere('course_id', $course->id);
         }
     }
+    public function scopeCourseNameFilter($query, $coursename)
+    {
+        if ($coursename) {
+            return $query->whereHas('course',function($q) use ($coursename){
+                $q->where('name','like','%'.$coursename.'%');
+            });
+        }
+    }
 
     //revisar, no es ilike es between
     public function scopeStartedAt($query, $started_at)

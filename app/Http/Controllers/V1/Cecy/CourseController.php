@@ -13,6 +13,7 @@ use App\Http\Requests\V1\Core\Images\UploadImageRequest;
 use App\Http\Requests\V1\Cecy\Courses\ApproveCourseRequest;
 use App\Http\Requests\V1\Cecy\Courses\DeclineCourseRequest;
 use App\Http\Requests\V1\Cecy\Courses\CareerCoordinator\DestroyCourseRequest;
+use App\Http\Requests\V1\Cecy\Courses\CareerCoordinator\DestroysCourseRequest;
 use App\Http\Requests\V1\Cecy\Courses\CoordinatorCecy\GetCoursesByCoordinatorCecyRequest;
 use App\Http\Requests\V1\Cecy\Courses\GetCoursesByCategoryRequest;
 use App\Http\Requests\V1\Cecy\Courses\GetCoursesByNameRequest;
@@ -634,6 +635,7 @@ class CourseController extends Controller
      */
     public function updateInitialCourse(UpdateCourseNameAndDurationRequest $request, Course $course)
     {
+        // DDRC-C: actualiza los campos duracion nombre resonsables
         if ($request->input('duration') < Course::MINIMUM_HOURS) {
             return response()->json([
                 'msg' => [
@@ -670,6 +672,7 @@ class CourseController extends Controller
      */
     public function destroyCourse(DestroyCourseRequest $request, Course $course)
     {
+        // DDRC-C: Elimina un curso
         $course->delete();
 
         return (new CourseResource($course))
@@ -681,6 +684,23 @@ class CourseController extends Controller
                 ]
             ])
             ->response()->setStatusCode(201);
+    }
+
+    public function destroys(DestroysCourseRequest $request)
+    {
+        // DDRC-C: elimina cursos
+        $courses = Course::whereIn('id', $request->input('ids'))->get();
+        Course::destroy($request->input('ids'));
+
+        return (new CourseCollection($courses))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Cursos eliminados',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
     }
 
     /*
