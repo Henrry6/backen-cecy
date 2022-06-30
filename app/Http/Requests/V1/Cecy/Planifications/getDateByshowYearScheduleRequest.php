@@ -14,18 +14,16 @@ class GetDateByshowYearScheduleRequest extends FormRequest
     public function rules()
     {
         return [
-            'startedAt' => ['required', 'date'],
-            'sector.id' => ['required', 'integer'],
-            'area.id' => ['required', 'integer'],
+            'startedAt' => ['required', 'integer']
+
         ];
     }
 
     public function attributes()
     {
         return [
-            'startedAt' => 'fecha de la planificacion',
-            'sector.id' => 'sector de la planificacion',
-            'area.id' => 'area de la planificacion',
+            'startedAt' => 'fecha de la planificacion'
+
         ];
     }
 }

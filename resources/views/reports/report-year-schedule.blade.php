@@ -76,7 +76,7 @@
           @foreach($planifications as $planification)
 
           <tr>
-          
+
             <td>{{$planification->id}}</td>
             <td></td>
             <td></td>
@@ -85,15 +85,29 @@
 
             <td>{{$planification->started_at}}</td>
             <td>{{$planification->ended_at}}</td>
-            <td>{{$planifications->detailPlanification->started_time}}</td>
-            <td>{{$planifications->detailPlanification->ended_time}</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
 
+            <td>
+              @foreach($detailPlanifications as $detailPlanification)
+              {{$detailPlanification->started_time}}
+              @endforeach
+            </td>
+            <td>
+              @foreach($detailPlanifications as $detailPlanification)
+              {{$detailPlanification->ended_time}}
+              @endforeach
+
+            </td>
+
+
+            <td></td>
+            <td></td>
+            <td>{{$planification->responsible_course_id ===null}}</td>
+            @if($planification->responsible_course_id !=null)
+            <td>{{$planification->responsible_course->user}}</td>
+            @endif
           </tr>
           @endforeach
+
 
         </table>
       </div>
