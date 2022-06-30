@@ -251,7 +251,7 @@ Route::apiResource('classroom', ClassroomController::class);
  **********************************************************************************************************************/
 Route::controller(InstructorController::class)->group(function () {
     Route::prefix('instructors/{instructor}')->group(function () {
-        Route::put('state-type', 'updateInstructorStateAndType'); //Rivera
+        Route::put('state-type', 'updateStateType'); //Rivera
     });
 
     Route::prefix('instructors')->group(function () {
