@@ -189,6 +189,7 @@ class PlanificationController extends Controller
         $sorts = explode(',', $request->input('sort'));
 
         $loggedInAuthority = Authority::where('user_id', $request->user()->id)->first();
+        // return $loggedInAuthority;
         $responsibleCourse = Instructor::where('user_id', $request->user()->id)->first();
 
         if ($loggedInAuthority) {
@@ -239,7 +240,7 @@ class PlanificationController extends Controller
     public function getCurrentPlanificationsByAuthority(IndexAuthorityRequest $request)
     {
         // DDRC-C: metodo para obtener las planificaciones 
-        $sorts = explode(',', $request->input('sort'));
+        // $sorts = explode(',', $request->input('sort'));
 
         $authority = Authority::firstWhere('user_id', $request->user()->id);
         //verificar que el usuario logeado es una autoridad de Authority
@@ -257,11 +258,15 @@ class PlanificationController extends Controller
         $currentState = Catalogue::firstWhere('code', $catalogue['school_period_state']['current']);
         $schoolPeriod = SchoolPeriod::firstWhere('state_id', $currentState->id);
 
-        $planifications = $authority->planifications()->whereHas('detailSchoolPeriod', function ($detailSchoolPeriod) use ($schoolPeriod) {
+        $planifications = $authority->planifications()
+        ->whereHas('detailSchoolPeriod', function ($detailSchoolPeriod) use ($schoolPeriod) {
             $detailSchoolPeriod->where('school_period_id', $schoolPeriod->id);
-        })->customOrderBy($sorts)
-            ->get();
-
+        })
+        ->courseNameFilter($request->input('search'))
+        ->paginate($request->input('per_page'));
+        // ->customOrderBy($sorts);
+        // ->get();
+// return $planifications;
         return (new PlanificationCollection($planifications))
             ->additional([
                 'msg' => [
@@ -398,6 +403,7 @@ class PlanificationController extends Controller
             ->where('code', $catalogue['planification_state']['to_be_approved'])
             ->first();
         $instructor = Instructor::find($request->input('responsibleCourse.id'));
+        $authority = Authority::firstWhere('user_id',strVal($request->user()->id)); 
         $detailSchoolPeriod = DetailSchoolPeriod::whereRelation('schoolPeriod', 'state_id', $currentState->id)
             ->first();
         // $lastPlanification = Planification::latest('ended_at')
@@ -423,6 +429,7 @@ class PlanificationController extends Controller
         $planification->course()->associate($course);
         $planification->detailSchoolPeriod()->associate($detailSchoolPeriod);
         $planification->responsibleCourse()->associate($instructor);
+        $planification->responsibleCecy()->associate($authority);
         $planification->state()->associate($toBeApproved);
 
         $planification->ended_at = $request->input('endedAt');

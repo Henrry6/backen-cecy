@@ -18,8 +18,7 @@ class DetailPlanificationParticipantResource extends JsonResource
         return [
             'id' => $this->id,
             'participant' => ParticipantResource::make($this->participant),
-            'requirements'=> RequirementResource::collection($this->requirements),
-            'registrationRequirements'=> RegistrationRequerimentResource::collection($this->requirements),
+            'requirements'=> $this->requirements,
             'aditionalInformation' => AdditionalInformationResource::make($this->additionalInformation),
             'state' => CatalogueResource::make($this->state),
             'stateCourse' => CatalogueResource::make($this->stateCourse),
