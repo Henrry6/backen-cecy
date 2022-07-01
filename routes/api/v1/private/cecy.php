@@ -120,6 +120,7 @@ Route::controller(CourseController::class)->group(function () {
         Route::get('year-schedule', 'showYearSchedule');
         Route::patch('initial-course', 'destroys'); //Rivas - pcurso
         // Route::put('{course}', [CourseController::class, 'updateStateCourse']);
+        Route::get('getCoursesVisualization','getPublicCourses');
     });
 
     Route::prefix('courses/{course}')->group(function () {
@@ -364,16 +365,16 @@ Route::controller(RegistrationController::class)->group(function () {
 Route::apiResource('registrations', RegistrationController::class);
 
 //photofraphicRecords files-images
-Route::prefix('record/{record}')->group(function () {
+Route::prefix('detailPlanification/{detailPlanification}')->group(function () {
     Route::prefix('file')->group(function () {
-        Route::get('{file}/download', [PhotographicRecordController::class, 'downloadFile']);
-        Route::get('download', [PhotographicRecordController::class, 'downloadFiles']);
-        Route::get('', [PhotographicRecordController::class, 'indexFiles']);
-        Route::get('{file}', [PhotographicRecordController::class, 'showFile']);
-        Route::post('', [PhotographicRecordController::class, 'uploadFile']);
-        Route::post('{file}', [PhotographicRecordController::class, 'updateFile']);
-        Route::delete('{file}', [PhotographicRecordController::class, 'destroyFile']);
-        Route::patch('', [PhotographicRecordController::class, 'destroyFiles']);
+        Route::get('{file}/download', [DetailPlanificationController::class, 'downloadFile']);
+        Route::get('download', [DetailPlanificationController::class, 'downloadFiles']);
+        Route::get('', [DetailPlanificationController::class, 'indexFiles']);
+        Route::get('{file}', [DetailPlanificationController::class, 'showFile']);
+        Route::post('', [DetailPlanificationController::class, 'uploadFile']);
+        Route::post('{file}', [DetailPlanificationController::class, 'updateFile']);
+        Route::delete('{file}', [DetailPlanificationController::class, 'destroyFile']);
+        Route::patch('', [DetailPlanificationController::class, 'destroyFiles']);
     });
 });
 

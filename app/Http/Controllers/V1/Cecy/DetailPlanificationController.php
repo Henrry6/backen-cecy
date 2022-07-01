@@ -16,6 +16,10 @@ use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\RegisterDeta
 use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\ShowDetailPlanificationRequest;
 use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\UpdateDetailPlanificationRequest as UpdateDetailPlanification;
 use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\GetDetailPlanificationsByPlanificationRequest;
+use App\Http\Requests\V1\Core\Files\DestroysFileRequest;
+use App\Http\Requests\V1\Core\Files\IndexFileRequest;
+use App\Http\Requests\V1\Core\Files\UpdateFileRequest;
+use App\Http\Requests\V1\Core\Files\UploadFileRequest;
 use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationByInstructorCollection;
 use App\Http\Resources\V1\Cecy\DetailPlanifications\ResponsibleCourseDetailPlanifications\DetailPlanificationCollection as ResponsibleCourseDetailPlanificationCollection;
 use App\Http\Resources\V1\Cecy\DetailPlanifications\ResponsibleCourseDetailPlanifications\DetailPlanificationResource as ResponsibleCourseDetailPlanificationResource;
@@ -25,6 +29,7 @@ use App\Http\Resources\V1\Cecy\DetailPlanifications\ResponsibleCourseDetailPlani
 
 use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationParticipants\DetailPlanificationParticipantCollection;
 use App\Models\Authentication\User;
+use App\Models\Core\File;
 use App\Models\Core\State;
 use App\Models\Cecy\Authority;
 use App\Models\Cecy\Catalogue;
@@ -344,12 +349,12 @@ class DetailPlanificationController extends Controller
     {
     // DDRC-C: obtiene una lista de participantes de una planificación dado el detalle de la planificación
     $sorts = explode(',', $request->input('sort'));
-    
+
         $participants = $detailPlanification->registrations()
         ->participantUsername($request->input('search'))
         ->customOrderBy($sorts)
         ->paginate($request->input('per_page'));
-    
+
         return (new DetailPlanificationParticipantCollection($participants))
             ->additional([
                 'msg' => [
@@ -360,7 +365,7 @@ class DetailPlanificationController extends Controller
             ])
             ->response()->setStatusCode(200);
     }
-    
+
     //obtener los cursos asignados a un isntructor logueado (Done)
     public function getInstructorByCourses(getCoursesByResponsibleRequest $request)
     {
@@ -376,5 +381,41 @@ class DetailPlanificationController extends Controller
                     'code' => '200'
                 ]
             ]);
+    }
+
+    // Files
+    public function indexFiles(IndexFileRequest $request, DetailPlanification $detailPlanification)
+    {
+        return $detailPlanification->indexFiles($request);
+    }
+
+    public function uploadFile(UploadFileRequest $request, DetailPlanification $detailPlanification)
+    {
+        return $detailPlanification->uploadFile($request);
+    }
+
+    public function downloadFile(DetailPlanification $detailPlanification, File $file)
+    {
+        return $detailPlanification->downloadFile($file);
+    }
+
+    public function showFile(DetailPlanification $detailPlanification, File $file)
+    {
+        return $detailPlanification->showFile($file);
+    }
+
+    public function updateFile(UpdateFileRequest $request, DetailPlanification $detailPlanification, File $file)
+    {
+        return $detailPlanification->updateFile($request, $file);
+    }
+
+    public function destroyFile(DetailPlanification $detailPlanification, File $file)
+    {
+        return $detailPlanification->destroyFile($file);
+    }
+
+    public function destroyFiles(DetailPlanification $detailPlanification, DestroysFileRequest $request)
+    {
+        return $detailPlanification->destroyFiles($request);
     }
 }
