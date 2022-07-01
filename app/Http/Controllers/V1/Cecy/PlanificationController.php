@@ -467,12 +467,12 @@ class PlanificationController extends Controller
         $position = Catalogue::where('type', $catalogue['position']['type'])
             ->where('code', $catalogue['position']['rector']['vicerrector'])
             ->first();
-        $detailSchoolPeriod = Authority::whereRelation('planification', 'position_id', $position->id)
+        $authority = Authority::whereRelation('planification', 'position_id', $position->id)
             ->first();
 
         $planification = new Planification();
 
-        $planification->detailSchoolPeriod()->associate($detailSchoolPeriod);
+        $planification->vicerector()->associate($authority);
   ;
 
         $planification->trade_number = $request->input('tradeNumber');
