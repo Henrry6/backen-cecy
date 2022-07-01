@@ -268,7 +268,7 @@ class AuthenticationSeeder extends Seeder
         $user->assignRole('admin');
 
         $rector = User::find(2);
-        $rector->assignRole('rector');
+        $rector->assignRole('rector', 'responsible_course');
 
         $vicerector = User::find(3);
         $vicerector->assignRole('vicerector');
