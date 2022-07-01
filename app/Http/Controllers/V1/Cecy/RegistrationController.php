@@ -111,7 +111,7 @@ class RegistrationController extends Controller
         return $catalogue->downloadFile($file);
     }
 
-   
+
 
     public function reEnroll(RegistrationRequest $request, Registration $registration)
     {
@@ -224,7 +224,7 @@ class RegistrationController extends Controller
 
     public function nullifyRegistration(NullifyParticipantRegistrationRequest $request, Registration $registration)
     {
-        //DDRC-C: cancela una matricula de un participante en un curso especifico 
+        //DDRC-C: cancela una matricula de un participante en un curso especifico
         // RegistrationController
 
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
@@ -367,7 +367,7 @@ class RegistrationController extends Controller
 
     public function showRecordCompetitor(IndexRegistrationRequest $request, DetailPlanification $detailPlanification, AdditionalInformation $additionalInformation)
     {
-        
+
         $planification=$detailPlanification->planification()->first();
         $course=$planification->course()->first();
         $regitrations=$detailPlanification->registrations()->with(['participant.user.sex','state','additionalInformation.levelInstruction'])->get();
@@ -393,7 +393,6 @@ class RegistrationController extends Controller
     {
         $registration->grade1 = $request->input('grade1');
         $registration->grade2 = $request->input('grade2');
-
 //        $registration->final_grade = $request->input('finalGrade');//calculado
         $registration->save();
         $this->FinalGrade($request, $registration);
@@ -413,7 +412,6 @@ class RegistrationController extends Controller
         $grade1 =  $registration->grade1 = $request->input('grade1');
         $grade2 =  $registration->grade2 = $request->input('grade2');
         $registration->final_grade = ($grade1+$grade2) / 2;
-
         $registration->save();
         return (new RegistrationResource($registration))
             ->additional([
