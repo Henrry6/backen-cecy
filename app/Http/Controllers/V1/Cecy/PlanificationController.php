@@ -461,7 +461,7 @@ class PlanificationController extends Controller
 
     public function storeAnnualOperativePlan(StoreAnnualOperativePlanRequest $request)
     {
-        // DDRC-C: crea una planificacion como parte de una propuesta del coordinador de carrera
+        // DDRC-C: crea una planificacion como parte de un plan anual
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
 
         $position = Catalogue::where('type', $catalogue['position']['type'])
