@@ -42,6 +42,7 @@ use App\Http\Resources\V1\Cecy\Certificates\CertificateResource;
 use App\Http\Resources\V1\Cecy\Courses\CoordinatorCecy\CourseByCoordinatorCecyCollection;
 use App\Http\Resources\V1\Cecy\Courses\CourseResource;
 use App\Http\Resources\V1\Cecy\Courses\CourseCollection;
+use App\Http\Resources\V1\Core\ImageResource;
 use App\Models\Core\File;
 use App\Models\Core\Career;
 use App\Models\Core\State;
@@ -53,7 +54,9 @@ use App\Models\Cecy\Participant;
 use App\Models\Cecy\Planification;
 use App\Models\Cecy\SchoolPeriod;
 use App\Models\Authentication\User;
-
+use App\Models\Core\Image;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image as InterventionImage;
 
 //use App\Models\Cecy\Requirement;
 
@@ -781,9 +784,44 @@ class CourseController extends Controller
     }
 
     //Images
-    public function uploadPublicImage(UploadImageRequest $request, Course $course)
+    public function uploadImage(UploadImageRequest $request, Course $course)
     {
-        return $course->uploadPublicImage($request);
+        $images = $course->images()->get();
+        foreach ($images as $image) {
+            // Storage::deleteDirectory($image->directory);
+            Storage::disk('public')->deleteDirectory('images/' . $image->id);
+            $image->delete();
+        } 
+
+        foreach ($request->file('images') as $image) {
+            $newImage = new Image();
+            $newImage->name = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+            $newImage->description = $request->input('description');
+            $newImage->extension = 'jpg';
+            $newImage->imageable()->associate($course);
+            $newImage->save();
+            
+
+            Storage::disk('public')->makeDirectory('images/' . $newImage->id);
+
+            $storagePath = storage_path('app/public/images/');
+            $course->uploadOriginal(InterventionImage::make($image), $newImage->id, $storagePath);
+            $course->uploadLargeImage(InterventionImage::make($image), $newImage->id, $storagePath);
+            $course->uploadMediumImage(InterventionImage::make($image), $newImage->id, $storagePath);
+            $course->uploadSmallImage(InterventionImage::make($image), $newImage->id, $storagePath);
+
+            $newImage->directory = 'images/' . $newImage->id;
+            $newImage->save();
+        }
+        return (new ImageResource($newImage))->additional(
+            [
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ]
+        );
     }
 
     public function indexPublicImages(IndexImageRequest $request, Course $course)
