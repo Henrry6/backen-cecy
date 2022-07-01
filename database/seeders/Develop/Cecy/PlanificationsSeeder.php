@@ -2,6 +2,7 @@
 
 namespace Database\Seeders\Develop\Cecy;
 
+use App\Models\Cecy\AnnualOperativePlan;
 use App\Models\Cecy\Authority;
 use App\Models\Cecy\Catalogue;
 use App\Models\Cecy\Course;
@@ -86,6 +87,7 @@ class PlanificationsSeeder extends Seeder
         $vicerector = Authority::where('position_id', $vicerectorposition->id)->first();
         $responsablesCourse = Instructor::get();
         $detailSchoolPeriods = DetailSchoolPeriod::get();
+        $annualOperativePlan= AnnualOperativePlan::get();
 
         for ($i = 0; $i <= 29; $i++) {
 
@@ -93,6 +95,7 @@ class PlanificationsSeeder extends Seeder
                 [
                     'course_id' => $courses[$i],
                     'detail_school_period_id' =>  $faker->randomElement($detailSchoolPeriods),
+                    'annual_operating_plan_id' => $faker->randomElement($annualOperativePlan),
                     'vicerector_id' => $vicerector,
                     'responsible_course_id' => $responsablesCourse[rand(0, sizeof($responsablesCourse) - 1)],
                     'responsible_ocs_id' => $responsableOcs,
