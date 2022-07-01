@@ -227,7 +227,7 @@ trait ImageTrait
     }
 
     // Guarda imagenes con su tamaño original
-    private function uploadOriginal($image, $name, $storagePath)
+    public function uploadOriginal($image, $name, $storagePath)
     {
         $path = $storagePath . $name . '/' . $name . '.jpg';
         $image->save($path, 75);
@@ -237,7 +237,7 @@ trait ImageTrait
     }
 
     // Guarda imagenes con una resolución de 300px de ancho y el alto es ajustable para celulares
-    private function uploadSmallImage($image, $name, $storagePath)
+    public function uploadSmallImage($image, $name, $storagePath)
     {
         $path = $storagePath . $name . '/' . $name . '-sm.jpg';
         $image->widen(300, function ($constraint) {
@@ -251,7 +251,7 @@ trait ImageTrait
     }
 
     // Guarda imagenes con una resolución de 750px de ancho y el alto es ajustable para tablets
-    private function uploadMediumImage($image, $name, $storagePath)
+    public function uploadMediumImage($image, $name, $storagePath)
     {
         $path = $storagePath . $name . '/' . $name . '-md.jpg';
         $image->widen(750, function ($constraint) {
@@ -265,7 +265,7 @@ trait ImageTrait
     }
 
     // Guarda imagenes con una resolución de 1250px de ancho y el alto es ajustable para pc
-    private function uploadLargeImage($image, $name, $storagePath)
+    public function uploadLargeImage($image, $name, $storagePath)
     {
         $path = $storagePath . $name . '/' . $name . '-lg.jpg';
         $image->widen(1250, function ($constraint) {
