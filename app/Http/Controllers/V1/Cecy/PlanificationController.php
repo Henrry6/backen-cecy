@@ -193,8 +193,8 @@ class PlanificationController extends Controller
         // return $loggedInAuthority;
         $responsibleCourse = Instructor::where('user_id', $request->user()->id)->first();
 
-if ($loggedInAuthority) {
-            
+        if ($loggedInAuthority) {
+
             $planifications = $course->planifications()
                 ->where('responsible_cecy_id', $loggedInAuthority->id)
                 ->customOrderBy($sorts)
@@ -202,7 +202,6 @@ if ($loggedInAuthority) {
                 // ->state($request->input('search'))
                 // ->courseNameFilter($request->input('search'))
                 ->paginate($request->input('perPage'));
-                
         } else {
             $planifications = $course->planifications()
                 ->where('responsible_course_id', $responsibleCourse->id)
@@ -211,7 +210,6 @@ if ($loggedInAuthority) {
                 // ->state($request->input('search'))
                 // ->courseNameFilter($request->input('search'))
                 ->paginate($request->input('perPage'));
-                
         }
 
         return (new PlanificationByCourseCollection($planifications))
@@ -356,14 +354,12 @@ if ($loggedInAuthority) {
         $topics = $course->topics()->first();
         $responsiblececy = $planification->responsibleCecy()->first();
         $institution = Institution::firstWhere('id', $responsiblececy->institution_id);
-        $registrations = $planification->detailPlanifications()->first()->registrations()->get()->
-        where("state_course_id",'107');
-        $registrations = $planification->detailPlanifications()->first()->registrations()->get()->
-        where("state_course_id",'106');
+        $registrations = $planification->detailPlanifications()->first()->registrations()->get()->where("state_course_id", '107');
+        $registrations = $planification->detailPlanifications()->first()->registrations()->get()->where("state_course_id", '106');
         $instructor = Instructor::where('id', $planification->responsible_course_id)->first();
         //$user =  $instructor->user();
         $user = User::firstWhere('id', $instructor->user_id);
-        
+
 
         //return $institution;
         //return $registrations;
@@ -496,7 +492,7 @@ if ($loggedInAuthority) {
             ])
             ->response()->setStatusCode(201);
     }
-    
+
     /**
      * updatePlanificationByCourse
      * Actualiza ended_at, started_at and responsibleCourse
