@@ -465,7 +465,7 @@ class PlanificationController extends Controller
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
 
         $position = Catalogue::where('type', $catalogue['position']['type'])
-            ->where('code', $catalogue['position']['rector']['vicerrector'])
+            ->where('code', $catalogue['position']['rector']['vicerector'])
             ->first();
         $authority = Authority::whereRelation('planification', 'position_id', $position->id)
             ->first();
