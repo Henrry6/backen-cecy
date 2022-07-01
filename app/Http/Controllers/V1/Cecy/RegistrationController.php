@@ -13,6 +13,9 @@ use App\Http\Requests\V1\Cecy\Registrations\NullifyParticipantRegistrationReques
 use App\Http\Requests\V1\Cecy\Registrations\RegistrationRequest;
 use App\Http\Requests\V1\Cecy\Registrations\ReviewRequest;
 use App\Http\Requests\V1\Cecy\Registrations\NullifyRegistrationRequest;
+use App\Http\Requests\V1\Core\Files\DestroysFileRequest;
+use App\Http\Requests\V1\Core\Files\IndexFileRequest;
+use App\Http\Requests\V1\Core\Files\UpdateFileRequest;
 use App\Http\Resources\V1\Cecy\Registrations\RegisterStudentResource;
 use App\Http\Resources\V1\Cecy\Certificates\CertificateResource;
 use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationParticipants\DetailPlanificationParticipantResource;
@@ -28,6 +31,7 @@ use App\Models\Cecy\Catalogue;
 use App\Models\Cecy\DetailPlanification;
 use App\Models\Cecy\Participant;
 use App\Models\Cecy\Registration;
+use App\Models\Cecy\Requirement;
 use Carbon\Carbon;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\DB;
@@ -444,4 +448,42 @@ class RegistrationController extends Controller
 
 
     }
+
+
+    // Files
+    public function indexFiles(IndexFileRequest $request, Requirement $course)
+    {
+        return $course->indexFiles($request);
+    }
+
+    public function uploadFileA(UploadFileRequest $request, Requirement $course)
+    {
+        return $course->uploadFile($request);
+    }
+
+    public function downloadFileA(Requirement $course, File $file)
+    {
+        return $course->downloadFile($file);
+    }
+
+    public function showFileR(Requirement $course, File $file)
+    {
+        return $course->showFile($file);
+    }
+
+    public function updateFile(UpdateFileRequest $request, Requirement $course, File $file)
+    {
+        return $course->updateFile($request, $file);
+    }
+
+    public function destroyFileA(Requirement $course, File $file)
+    {
+        return $course->destroyFile($file);
+    }
+
+    public function destroyFiles(Requirement $course, DestroysFileRequest $request)
+    {
+        return $course->destroyFiles($request);
+    }
+
 }

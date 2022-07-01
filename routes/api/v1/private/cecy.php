@@ -338,6 +338,19 @@ Route::controller(RegistrationController::class)->group(function () {
         Route::put('review', 'setRegistrationinReview'); //Rivas  - matriculacion
         Route::delete('eliminate', 'eliminate'); //Rivas - matriculacion
         Route::put('reenroll', 'reEnroll'); //Rivas - matriculacion
+
+        //Rivas
+        Route::prefix('cecy-responsible')->group(function () {
+            Route::prefix('files')->group(function () {
+                Route::get('{file}/download', 'downloadFileA');
+                Route::get('', 'indexFiles');
+                Route::get('{file}', 'showFileR');
+                Route::post('', 'uploadFileA');
+                Route::put('{file}', 'updateFile');
+                Route::delete('{file}', 'destroyFileA');
+                Route::patch('', 'destroyFiles');
+            });
+        });
     });
 
     Route::prefix('registrations')->group(function () {
