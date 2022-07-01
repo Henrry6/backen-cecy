@@ -106,23 +106,34 @@
         </tr>
         @foreach($registrations as $informe)
         <tr>
-          <td>{{$informe->participant->user->id}}</td>
+        <td>{{$informe->participant->user->id}}</td>
           <td>{{$informe->participant->user->name}}</td>
           <td>{{$informe->participant->user->username}}</td>
           <td></td>
           <td></td>
           <td></td>
-          <td>{{$grade1}}</td>
-          <td>{{$grade2}}</td>
-          <td>{{$final_grade}}</td>
-          <td>{{$final_grade}}</td>
+          <td>{{$informe->grade1}}</td>
+          <td>{{$informe->grade2}}</td>
+          <td>{{$informe->final_grade}}</td>
+          <td>{{$informe->final_grade}} %</td>
+          @if($informe->state_course_id== "107")
           <td></td>
           <td></td>
+          <td>x</td>
+          @endif
+
+
+          @if($informe->state_course_id== "106")
           <td></td>
-          <td>{{$course->observations}}</td>
+          <td>x</td>
+          <td></td>
+          @endif
+          <td>{{$informe->observations[0]}}</td>
+
 
         </tr>
         @endforeach
+       
 
 
       </table>

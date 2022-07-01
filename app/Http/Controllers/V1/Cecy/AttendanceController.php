@@ -191,13 +191,12 @@ class AttendanceController extends Controller
         $instructor = Instructor::where('id', $planification->responsible_course_id)->first();
         $user = $instructor->user();
         $user = User::firstWhere('id', $instructor->user_id);
-        $grade1 = $registrations[0]['grade1'];
-        $grade2 = $registrations[0]['grade2'];
-        $final_grade = $registrations[0]['final_grade'];
+        $grade1 = $registrations;
+        $grade2 = $registrations;
+        $final_grade = $registrations;
 
 
-        //return $registrations['grade1'];
-        //return $registrations[0]['grade1'];
+        //return $registrations;
         //return $course;
         //return $planification;
 
