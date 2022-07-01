@@ -24,24 +24,24 @@ class RegisterStudentRequest extends FormRequest
     public function rules()
     {
         return [
-            'detailPlanification' => ['required'],
-            'additionalInformation.companyActivity' => ['required'],
-            'additionalInformation.companyAddress' => ['required'],
-            'additionalInformation.companyEmail' => ['required'],
-            'additionalInformation.courseFollows' => ['required'],
-            'additionalInformation.companyName' => ['required'],
-            'additionalInformation.contactName' => ['required'],
-            'additionalInformation.companyPhone' => ['required'],
-            'additionalInformation.companySponsored' => ['required'],
-            'additionalInformation.courseKnows' => ['required'],
-            'additionalInformation.levelInstruction.id' => ['required'],
-            'additionalInformation.worked' => ['required'],
+            'levelInstruction' => ['required'],
+            'detailPlanificationId' => ['required'],
+            'companyActivity' => ['required'],
+            'companyAddress' => ['required'],
+            'companyEmail' => ['required'],
+            'courseFollows' => ['required'],
+            'companyName' => ['required'],
+            'contactName' => ['required'],
+            'companyPhone' => ['required'],
+            'companySponsored' => ['required'],
+            'courseKnows' => ['required'],
+            'levelInstruction.id' => ['required'],
+            'worked' => ['required'],
         ];
     }
 
     public function attributes()
     {
-        //revisar
         return [
             'levelInstruction.id' => 'Id del nivel de instrucción',
             'registration.id' => 'Id del registro',

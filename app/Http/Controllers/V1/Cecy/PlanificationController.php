@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\Cecy\AnnualOperativePlans\StoreAnnualOperativePlanRequest;
 use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\GetDetailPlanificationsByPlanificationRequest;
 use App\Http\Resources\V1\Cecy\DetailPlanifications\ResponsibleCourseDetailPlanifications\DetailPlanificationCollection as ResponsibleCourseDetailPlanificationsCollection;
 use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
@@ -264,14 +265,14 @@ if ($loggedInAuthority) {
         $schoolPeriod = SchoolPeriod::firstWhere('state_id', $currentState->id);
 
         $planifications = $authority->planifications()
-        ->whereHas('detailSchoolPeriod', function ($detailSchoolPeriod) use ($schoolPeriod) {
-            $detailSchoolPeriod->where('school_period_id', $schoolPeriod->id);
-        })
-        ->courseNameFilter($request->input('search'))
-        ->paginate($request->input('per_page'));
+            ->whereHas('detailSchoolPeriod', function ($detailSchoolPeriod) use ($schoolPeriod) {
+                $detailSchoolPeriod->where('school_period_id', $schoolPeriod->id);
+            })
+            ->courseNameFilter($request->input('search'))
+            ->paginate($request->input('per_page'));
         // ->customOrderBy($sorts);
         // ->get();
-// return $planifications;
+        // return $planifications;
         return (new PlanificationCollection($planifications))
             ->additional([
                 'msg' => [
@@ -355,24 +356,30 @@ if ($loggedInAuthority) {
         $topics = $course->topics()->first();
         $responsiblececy = $planification->responsibleCecy()->first();
         $institution = Institution::firstWhere('id', $responsiblececy->institution_id);
-
+        $registrations = $planification->detailPlanifications()->first()->registrations()->get()->
+        where("state_course_id",'107');
+        $registrations = $planification->detailPlanifications()->first()->registrations()->get()->
+        where("state_course_id",'106');
         $instructor = Instructor::where('id', $planification->responsible_course_id)->first();
         //$user =  $instructor->user();
         $user = User::firstWhere('id', $instructor->user_id);
+        
 
         //return $institution;
-
+        //return $registrations;
         //return $course;
         //return $planification;
 
         $pdf = PDF::loadView('reports/informe-final', [
             'planification' => $planification,
             'course' => $course,
-            'days'=>$days,
+            'days' => $days,
             'topics' => $topics,
             'institution' => $institution,
             'user' => $user,
             'instructor' => $instructor,
+            'registrations' => $registrations,
+
 
         ]);
 
@@ -410,7 +417,7 @@ if ($loggedInAuthority) {
             ->where('code', $catalogue['planification_state']['to_be_approved'])
             ->first();
         $instructor = Instructor::find($request->input('responsibleCourse.id'));
-        $authority = Authority::firstWhere('user_id',strVal($request->user()->id)); 
+        $authority = Authority::firstWhere('user_id', strVal($request->user()->id));
         $detailSchoolPeriod = DetailSchoolPeriod::whereRelation('schoolPeriod', 'state_id', $currentState->id)
             ->first();
         // $lastPlanification = Planification::latest('ended_at')
@@ -455,6 +462,41 @@ if ($loggedInAuthority) {
             ->response()->setStatusCode(201);
     }
 
+
+
+    public function storeAnnualOperativePlan(StoreAnnualOperativePlanRequest $request)
+    {
+        // DDRC-C: crea una planificacion como parte de un plan operativo anual
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+
+        $position = Catalogue::where('type', $catalogue['position']['type'])
+            ->where('code', $catalogue['position']['rector']['vicerector'])
+            ->first();
+        $authority = Authority::whereRelation('planification', 'position_id', $position->id)
+            ->first();
+
+        $planification = new Planification();
+
+        $planification->vicerector()->associate($authority);
+
+        $planification->trade_number = $request->input('tradeNumber');
+        $planification->year = $request->input('year');
+        $planification->official_date_at = $request->input('officialDateAt');
+
+
+        $planification->save();
+
+        return (new PlanificationResource($planification))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Éxito ',
+                    'detail' => 'Planificación creada',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
+    }
+    
     /**
      * updatePlanificationByCourse
      * Actualiza ended_at, started_at and responsibleCourse

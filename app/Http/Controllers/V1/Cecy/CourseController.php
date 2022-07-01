@@ -28,6 +28,7 @@ use App\Http\Requests\V1\Cecy\Courses\CareerCoordinator\StoreCourseRequest;
 use App\Http\Requests\V1\Cecy\Courses\CareerCoordinator\UpdateCourseNameAndDurationRequest;
 use App\Http\Requests\V1\Cecy\Courses\CatalogueCourseRequest;
 use App\Http\Requests\V1\Cecy\Courses\UpdateCourseRequest;
+use App\Http\Requests\V1\Cecy\Planifications\GetDateByshowYearScheduleRequest;
 use App\Http\Requests\V1\Cecy\Planifications\GetPlanificationByResponsableCourseRequest;
 use App\Http\Requests\V1\Cecy\Planifications\IndexPlanificationRequest;
 use App\Http\Requests\V1\Core\Files\DestroysFileRequest;
@@ -463,23 +464,32 @@ class CourseController extends Controller
     //Traer todos los cursos planificados de un año en especifico (Done)
     // el que hizo esto debe enviar el año en especifico bien por el url
     // o por params
-    public function showYearSchedule(Planification $planification)
+    public function showYearSchedule( GetDateByshowYearScheduleRequest $request )
     {
         // $year = $planificacion->whereYear('started_at')->first();
-        $planifications = Planification::whereYear('started_at', '=', 2022)->with(['course', 'detailPlanifications'])->get();
+        //$planifications = Planification::whereYear('started_at', '=', 2022)->with(['course', 'detailPlanifications'])->get();
+
+        $planifications = Planification::whereYear('started_at', '=', $request->input("startedAt"))->with(['course', 'responsibleCourse.user', 'detailPlanifications'])->get();
+        //$detailPlanifications = $planifications->detailPlanifications()->get();
+        //$detailPlanifications=$planifications->detailPlanifications()->with('classroom')->get();
+        
         //$detailPlanifications = $planification->detailPlanifications()->get();
-        $detailPlanifications = Planification::whereYear('started_at', '=', 2022)->with('detailPlanifications')->get();
-        $responsibleCourse = Planification::whereYear('started_at', '=', 2022)->with('responsibleCourse.user')->get();
-        /*       $course = $planifications->course()->get();
+        $detailPlanifications = Planification::whereYear('started_at', '=', $request->input("startedAt"))->with(['detailPlanifications'])->get();
+        //$responsibleCourse = Planification::whereYear('started_at', '=', $request->input("startedAt"))->with('responsibleCourse.user')->get(); 
+          /*     $course = $planifications->course()->get();
         $detailPlanifications=$planifications->detailPlanifications()->get(); */
+        $data=[
+        'planifications' => $planifications,
+        'detailPlanifications' => $detailPlanifications,
+       // 'responsibleCourse' => $responsibleCourse
 
-
-        // return $planifications ;
+        ];
+        //return $data ;
 
         $pdf = PDF::loadView('reports/report-year-schedule', [
             'planifications' => $planifications,
             'detailPlanifications' => $detailPlanifications,
-            'responsibleCourse' => $responsibleCourse
+            //'responsibleCourse' => $responsibleCourse
         ]);
         $pdf->setOptions([
             'orientation' => 'landscape',

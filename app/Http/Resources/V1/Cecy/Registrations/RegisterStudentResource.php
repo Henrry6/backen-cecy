@@ -21,14 +21,12 @@ class RegisterStudentResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'levelInstruction' => CatalogueResource::make($this->levelInstruction),
             'participant' => ParticipantResource::make($this->participant),
             'state' =>CatalogueResource::make($this->state),
             'type' =>CatalogueResource::make($this->type),
-            'number' => $this->number,
             'registeredAt' => $this->registered_at,
-        //    'typeParticipant' => CatalogueResource::make($this->typeParticipant),
-        //    'additionalInformation' => AdditionalInformationResource::make($this->additionalInformation),
+            'typeParticipant' => CatalogueResource::make($this->typeParticipant),
+            'additionalInformation' => AdditionalInformationResource::make($this->additionalInformation),
         ];
     }
 }

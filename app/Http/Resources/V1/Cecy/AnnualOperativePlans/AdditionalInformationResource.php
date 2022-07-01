@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Http\Resources\V1\Cecy\Requeriments;
+namespace App\Http\Resources\V1\Cecy\AnnualOperativePlans;
 
 use App\Http\Resources\V1\Cecy\Catalogues\CatalogueResource;
+use App\Http\Resources\V1\Cecy\Registrations\RegistrationResource;
+use App\Models\Cecy\Registration;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class RequirementResource extends JsonResource
+class AnnualOperativePlanResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,9 +19,11 @@ class RequirementResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'state' => CatalogueResource::make($this->state),
-            'name' => $this->name,
-            'required' => $this->required,
+      
+            'tradeNumber'=>$this->trade_number,
+            'year'=>$this->year,
+            'officialDateAt'=>$this->official_date_at,
+            'activities'=>$this->activities
         ];
     }
 }

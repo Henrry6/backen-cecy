@@ -13,20 +13,15 @@ use App\Http\Requests\V1\Cecy\Registrations\NullifyParticipantRegistrationReques
 use App\Http\Requests\V1\Cecy\Registrations\RegistrationRequest;
 use App\Http\Requests\V1\Cecy\Registrations\ReviewRequest;
 use App\Http\Requests\V1\Cecy\Registrations\NullifyRegistrationRequest;
-use App\Http\Resources\V1\Cecy\Registrations\RegisterStudentCollection;
 use App\Http\Resources\V1\Cecy\Registrations\RegisterStudentResource;
 use App\Http\Resources\V1\Cecy\Certificates\CertificateResource;
 use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationParticipants\DetailPlanificationParticipantResource;
 use App\Http\Resources\V1\Cecy\Participants\CoursesByParticipantCollection;
 use App\Http\Resources\V1\Cecy\Registrations\RegistrationCollection;
-use App\Http\Resources\V1\Cecy\Registrations\RegistrationRecordCompetitorResource;
 use App\Http\Resources\V1\Cecy\Registrations\RegistrationResource;
 use App\Http\Resources\V1\Cecy\Registrations\ParticipantRegistrationResource;
-use App\Http\Resources\V1\Cecy\Users\UserResource;
-use App\Models\Authentication\User;
 use App\Models\Cecy\AdditionalInformation;
 use App\Models\Cecy\DetailSchoolPeriod;
-use App\Models\Core\Catalogue as CoreCatalogue;
 use App\Models\Core\File;
 use App\Models\Cecy\Course;
 use App\Models\Cecy\Catalogue;
@@ -34,8 +29,6 @@ use App\Models\Cecy\DetailPlanification;
 use App\Models\Cecy\Participant;
 use App\Models\Cecy\Registration;
 use Carbon\Carbon;
-use Carbon\Traits\Date;
-use http\Env\Request;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
@@ -307,16 +300,46 @@ class RegistrationController extends Controller
     private function check(DetailSchoolPeriod $detailSchoolPeriod)
     {
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
-        $currentDate = Date::now();
-        if ($currentDate->greaterThanOrEqualTo($detailSchoolPeriod->ordinary_started_at)) {
-            return $catalogue['registration']['ordinary'];
+        $currentDate = Carbon::now();
+        $ordinaryStartedAt = Carbon::create($detailSchoolPeriod->ordinary_started_at);
+        $ordinaryEndedAt = Carbon::create($detailSchoolPeriod->ordinary_ended_at);
+        $extraordinaryStartedAt = Carbon::create($detailSchoolPeriod->extraordinary_started_at);
+        $extraordinaryEndedAt = Carbon::create($detailSchoolPeriod->extraordinary_ended_at);
+        $especialStartedAt = Carbon::create($detailSchoolPeriod->especial_started_at);
+        $especialEndedAt = Carbon::create($detailSchoolPeriod->especial_ended_at);
+
+        if ($currentDate->greaterThanOrEqualTo($ordinaryStartedAt)
+            && $currentDate->greaterThanOrEqualTo($ordinaryEndedAt)) {
+                return $catalogue['registration']['ordinary'];
         }
-        if ($currentDate->greaterThanOrEqualTo($detailSchoolPeriod->extraordinary_started_at)) {
-            return $catalogue['registration']['extraordinary'];
+        if ($currentDate->greaterThanOrEqualTo($extraordinaryStartedAt)
+            && $currentDate->greaterThanOrEqualTo($extraordinaryEndedAt)) {
+                return $catalogue['registration']['extraordinary'];
         }
-        if ($currentDate->greaterThanOrEqualTo($detailSchoolPeriod->extraordinary_started_at)) {
-            return $catalogue['registration']['special'];
+        if ($currentDate->greaterThanOrEqualTo($especialStartedAt)
+            && $currentDate->greaterThanOrEqualTo($especialEndedAt)) {
+                return $catalogue['registration']['special'];
         }
+    }
+
+    private function storeAdditionalInformation(RegisterStudentRequest $request, Registration $registration)
+    {
+        $additionalInformation = new AdditionalInformation();
+
+        $additionalInformation->registration()->associate($registration);
+        $additionalInformation->levelInstruction()->associate(Catalogue::find($request->input('levelInstruction.id')));
+        $additionalInformation->worked = $request->input('worked');
+        $additionalInformation->company_activity = $request->input('companyActivity');
+        $additionalInformation->company_address = $request->input('companyAddress');
+        $additionalInformation->company_email = $request->input('companyEmail');
+        $additionalInformation->company_name = $request->input('companyName');
+        $additionalInformation->company_phone = $request->input('companyPhone');
+        $additionalInformation->company_sponsored = $request->input('companySponsored');
+        $additionalInformation->contact_name = $request->input('contactName');
+        $additionalInformation->course_knows = $request->input('courseKnows');
+        $additionalInformation->course_follows = $request->input('courseFollows');
+
+        return $additionalInformation;
     }
 
     // registrar estudiante al curso con la informacion adicional
@@ -325,9 +348,13 @@ class RegistrationController extends Controller
         $participant = Participant::firstWhere('user_id', $request->user()->id);
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
         $state = Catalogue::firstWhere('code', $catalogue['registration_state']['in_review']);
-        $detailPlanification = DetailPlanification::find($request->input('detailPlanification.id'));
+
+        $detailPlanification = DetailPlanification::find($request->input('detailPlanificationId'));
+
         $planification = $detailPlanification->planification()->first();
+
         $detailSchoolPeriod = $planification->detailSchoolPeriod()->first();
+
         $registrationType = Catalogue::firstWhere('code', $this->check($detailSchoolPeriod));
 
         $registration = new Registration();
@@ -338,7 +365,7 @@ class RegistrationController extends Controller
         $registration->typeParticipant()->associate($participant->type);
         $registration->registered_at = now();
 
-        DB::transaction(function ($registration, $request) {
+        DB::transaction(function () use($registration, $request) {
             $registration->save();
             $additionalInformation = $this->storeAdditionalInformation($request, $registration);
             $additionalInformation->save();
@@ -347,7 +374,7 @@ class RegistrationController extends Controller
         return (new RegisterStudentResource($registration))
             ->additional([
                 'msg' => [
-                    'summary' => 'Registro Creado',
+                    'summary' => 'Registro realizado con éxito',
                     'detail' => '',
                     'code' => '200'
                 ]
@@ -376,26 +403,7 @@ class RegistrationController extends Controller
     }
 
     // llenar informacion adicional de la solicitud de matricula
-    private function storeAdditionalInformation(RegisterStudentRequest $request, Registration $registration)
-    {
-        $additionalInformation = new AdditionalInformation();
 
-        $additionalInformation->registration()->associate($registration);
-
-        $additionalInformation->levelInstruction()->associate(Catalogue::find($request->input('levelInstruction.id')));
-        $additionalInformation->worked = $request->input('worked');
-        $additionalInformation->company_activity = $request->input('companyActivity');
-        $additionalInformation->company_address = $request->input('companyAddress');
-        $additionalInformation->company_email = $request->input('companyEmail');
-        $additionalInformation->company_name = $request->input('companyName');
-        $additionalInformation->company_phone = $request->input('companyPhone');
-        $additionalInformation->company_sponsored = $request->input('companySponsored');
-        $additionalInformation->contact_name = $request->input('contactName');
-        $additionalInformation->course_knows = $request->input('courseKnows');
-        $additionalInformation->course_follows = $request->input('courseFollows');
-
-        return $additionalInformation;
-    }
 
     public function updateGradesParticipant(HttpRequest $request, Registration $registration)
     {

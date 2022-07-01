@@ -41,7 +41,7 @@ class RequirementController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    public function getAllRequirement(IndexRequirementRequest $request)
+    public function index(IndexRequirementRequest $request)
     {
         $sorts = explode(',', $request->sort);
 
@@ -60,7 +60,7 @@ class RequirementController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    public function getRequirement(Requirement $requirement)
+    public function show(Requirement $requirement)
     {
         return (new RequirementResource($requirement))
             ->additional([
@@ -72,11 +72,10 @@ class RequirementController extends Controller
             ])->response()->setStatusCode(200);
     }
 
-    public function storeRequirement(StoreRequirementRequest $request)
+    public function store(StoreRequirementRequest $request)
     {
         $requirement = new Requirement();
-        $requirement->state()
-            ->associate(Catalogue::find($request->input('state.id')));
+        $requirement->state()->associate(Catalogue::find($request->input('state.id')));
         $requirement->name = $request->input('name');
         $requirement->required = $request->input('required');
         $requirement->save();
@@ -92,7 +91,7 @@ class RequirementController extends Controller
             ->response()->setStatusCode(201);
     }
 
-    public function updateRequirement(UpdateRequirementRequest $request, Requirement $requirement)
+    public function update(UpdateRequirementRequest $request, Requirement $requirement)
     {
         $requirement->state()
             ->associate(Catalogue::find($request->input('state.id')));
@@ -122,6 +121,7 @@ class RequirementController extends Controller
                 ]
             ])->response()->setStatusCode(201);
     }
+
     public function destroys(DestroysRequirementRequest $request)
     {
         $requirement = Requirement::whereIn('id', $request->input('ids'))->get();
