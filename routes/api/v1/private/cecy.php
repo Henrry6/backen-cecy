@@ -62,6 +62,11 @@ Route::controller(PlanificationController::class)->group(function () {
 
     Route::prefix('planifications')->group(function () {
         Route::get('period-states', 'getCurrentPlanificationsByAuthority'); //Rivas
+        Route::patch('destroys', 'destroys'); //Rivas
+        Route::prefix('courses/{course}')->group(function () {
+            Route::get('', 'getPlanificationsByCourse'); //Rivas, Pérez, pplanificacion
+            Route::post('', 'storePlanificationByCourse'); //Rivas - pplanificacion
+        });
         Route::get('detail-planifications', 'getPlanificationsByDetailPlanification'); // no existe el metodo
         Route::get('course-parallels-works', 'getCoursesParallelsWorkdays'); // no existe el metodo
         Route::get('kpis/{state}', 'getKpi');
@@ -265,25 +270,6 @@ Route::controller(InstructorController::class)->group(function () {
 Route::apiResource('instructors', InstructorController::class);
 
 /***********************************************************************************************************************
- * REGISTRATIONS - to remove
- **********************************************************************************************************************/
- //Route::controller(RegistrationController::class)->group(function () {
-//     Route::prefix('registrations/{registration}')->group(function () {
-//     });
-
-//     Route::prefix('registrations')->group(function () {
-//         Route::post('register-student/{detailPlanification}', 'registerStudent');
-//         Route::post('register-student', 'registerStudent');
-//         Route::get('participant/{detailPlanification}', 'getParticipant');
-//         Route::patch('nullify-registration', 'nullifyRegistration'); //Rivas
-//         Route::patch('nullify-registrations', 'nullifyRegistrations'); //Rivas
-//         Route::patch('participant-grades/{registration}', 'updateGradesParticipant');
-//     });
-// });
-// Route::apiResource('registrations', RegistrationController::class);
-
-
-/***********************************************************************************************************************
  * PARTICIPANTS
  **********************************************************************************************************************/
 Route::controller(ParticipantController::class)->group(function () {
@@ -353,9 +339,11 @@ Route::apiResource('attendances', AttendanceController::class);
  ****************************************/
 Route::controller(RegistrationController::class)->group(function () {
     Route::prefix('registrations/{registration}')->group(function () {
-        Route::patch('nullify-registration', 'nullifyRegistration'); //Rivas
-        Route::put('register', 'register'); //Rivas
-        Route::put('review', 'setRegistrationinReview'); //Rivas
+        Route::patch('nullify-registration', 'nullifyRegistration'); //Rivas  - matriculacion
+        Route::put('register', 'register'); //Rivas  - matriculacion
+        Route::put('review', 'setRegistrationinReview'); //Rivas  - matriculacion
+        Route::delete('eliminate', 'eliminate'); //Rivas - matriculacion
+        Route::put('reenroll', 'reEnroll'); //Rivas - matriculacion
     });
 
     Route::prefix('registrations')->group(function () {

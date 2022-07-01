@@ -192,20 +192,25 @@ class PlanificationController extends Controller
         // return $loggedInAuthority;
         $responsibleCourse = Instructor::where('user_id', $request->user()->id)->first();
 
-        if ($loggedInAuthority) {
+if ($loggedInAuthority) {
+            
             $planifications = $course->planifications()
                 ->where('responsible_cecy_id', $loggedInAuthority->id)
                 ->customOrderBy($sorts)
                 ->code($request->input('search'))
-                ->state($request->input('search'))
+                // ->state($request->input('search'))
+                // ->courseNameFilter($request->input('search'))
                 ->paginate($request->input('perPage'));
+                
         } else {
             $planifications = $course->planifications()
                 ->where('responsible_course_id', $responsibleCourse->id)
                 ->customOrderBy($sorts)
                 ->code($request->input('search'))
-                ->state($request->input('search'))
+                // ->state($request->input('search'))
+                // ->courseNameFilter($request->input('search'))
                 ->paginate($request->input('perPage'));
+                
         }
 
         return (new PlanificationByCourseCollection($planifications))

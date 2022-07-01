@@ -16,6 +16,7 @@ use App\Http\Requests\V1\Cecy\Registrations\NullifyRegistrationRequest;
 use App\Http\Resources\V1\Cecy\Registrations\RegisterStudentCollection;
 use App\Http\Resources\V1\Cecy\Registrations\RegisterStudentResource;
 use App\Http\Resources\V1\Cecy\Certificates\CertificateResource;
+use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationParticipants\DetailPlanificationParticipantResource;
 use App\Http\Resources\V1\Cecy\Participants\CoursesByParticipantCollection;
 use App\Http\Resources\V1\Cecy\Registrations\RegistrationCollection;
 use App\Http\Resources\V1\Cecy\Registrations\RegistrationRecordCompetitorResource;
@@ -73,6 +74,21 @@ class RegistrationController extends Controller
             ])
             ->response()->setStatusCode(200);
     }
+
+    public function show(Registration $registration)
+    {
+        // datos de un registro
+        return (new DetailPlanificationParticipantResource($registration))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
+
 
     //participantes de un curso por detalle de la planificacion
     public function getParticipantByDetailPlanification(DetailPlanification $detailPlanification)
