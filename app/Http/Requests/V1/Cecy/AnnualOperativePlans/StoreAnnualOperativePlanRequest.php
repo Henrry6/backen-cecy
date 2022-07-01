@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\V1\Cecy\AdditionalInformations;
+namespace App\Http\Requests\V1\Cecy\AnnualOperativePlans;
 
 use Illuminate\Foundation\Http\FormRequest;
 
