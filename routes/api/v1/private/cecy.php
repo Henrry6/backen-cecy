@@ -142,7 +142,7 @@ Route::controller(CourseController::class)->group(function () {
             Route::get('', 'indexImages');
             Route::get('public', 'indexPublicImages');
             Route::get('{image}', 'showImage');
-            Route::post('public', 'uploadPublicImage');
+            Route::post('', 'uploadImage');
             Route::put('{image}', 'updateImage');
             Route::delete('{image}', 'destroyImage');
             Route::patch('', 'destroyImages');
