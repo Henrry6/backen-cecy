@@ -473,7 +473,6 @@ class PlanificationController extends Controller
         $planification = new Planification();
 
         $planification->vicerector()->associate($authority);
-  ;
 
         $planification->trade_number = $request->input('tradeNumber');
         $planification->year = $request->input('year');
