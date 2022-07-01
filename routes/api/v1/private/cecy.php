@@ -117,6 +117,7 @@ Route::controller(CourseController::class)->group(function () {
         Route::get('year-schedule', 'showYearSchedule');
         Route::patch('initial-course', 'destroys'); //Rivas - pcurso
         // Route::put('{course}', [CourseController::class, 'updateStateCourse']);
+        Route::get('getCoursesVisualization','getPublicCourses');
     });
 
     Route::prefix('courses/{course}')->group(function () {
