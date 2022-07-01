@@ -221,7 +221,7 @@ class AttendanceController extends Controller
         ]);
 
         return $pdf->stream('Asistencia-evaluacion.pdf');
-        
+
     }
     /*******************************************************************************************************************
      * IMAGES
