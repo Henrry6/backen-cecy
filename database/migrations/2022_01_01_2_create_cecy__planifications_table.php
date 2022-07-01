@@ -18,6 +18,10 @@ class CreateCecyPlanificationsTable extends Migration
             $table->foreignId('course_id')
                 ->comment('Id del curso al que esta atado la planificación')
                 ->constrained('cecy.courses');
+                
+                $table->foreignId('annual_operating_plan_id')
+                ->comment('Id del curso al que esta atado la planificación')
+                ->constrained('cecy.annual_operative_plans');
 
             $table->foreignId('detail_school_period_id')
                 ->comment('Id del periodo escolar')

@@ -32,6 +32,11 @@ class Planification extends Model implements Auditable
     ];
     
     // Relationships
+    public function annualOperativePlan()
+    {
+        return $this->belongsTo(AnnualOperativePlan::class);
+    }
+
     public function course()
     {
         return $this->belongsTo(Course::class);
@@ -46,6 +51,7 @@ class Planification extends Model implements Auditable
     {
         return $this->hasMany(DetailPlanification::class);
     }
+
 
     public function detailSchoolPeriod()
     {
@@ -105,6 +111,14 @@ class Planification extends Model implements Auditable
     {
         if ($course) {
             return $query->orWhere('course_id', $course->id);
+        }
+    }
+    public function scopeCourseNameFilter($query, $coursename)
+    {
+        if ($coursename) {
+            return $query->whereHas('course',function($q) use ($coursename){
+                $q->where('name','like','%'.$coursename.'%');
+            });
         }
     }
 
