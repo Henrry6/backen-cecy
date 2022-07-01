@@ -194,18 +194,21 @@ class PlanificationController extends Controller
         $responsibleCourse = Instructor::where('user_id', $request->user()->id)->first();
 
         if ($loggedInAuthority) {
+
             $planifications = $course->planifications()
                 ->where('responsible_cecy_id', $loggedInAuthority->id)
                 ->customOrderBy($sorts)
                 ->code($request->input('search'))
-                ->state($request->input('search'))
+                // ->state($request->input('search'))
+                // ->courseNameFilter($request->input('search'))
                 ->paginate($request->input('perPage'));
         } else {
             $planifications = $course->planifications()
                 ->where('responsible_course_id', $responsibleCourse->id)
                 ->customOrderBy($sorts)
                 ->code($request->input('search'))
-                ->state($request->input('search'))
+                // ->state($request->input('search'))
+                // ->courseNameFilter($request->input('search'))
                 ->paginate($request->input('perPage'));
         }
 
@@ -351,14 +354,12 @@ class PlanificationController extends Controller
         $topics = $course->topics()->first();
         $responsiblececy = $planification->responsibleCecy()->first();
         $institution = Institution::firstWhere('id', $responsiblececy->institution_id);
-        $registrations = $planification->detailPlanifications()->first()->registrations()->get()->
-        where("state_course_id",'107');
-        $registrations = $planification->detailPlanifications()->first()->registrations()->get()->
-        where("state_course_id",'106');
+        $registrations = $planification->detailPlanifications()->first()->registrations()->get()->where("state_course_id", '107');
+        $registrations = $planification->detailPlanifications()->first()->registrations()->get()->where("state_course_id", '106');
         $instructor = Instructor::where('id', $planification->responsible_course_id)->first();
         //$user =  $instructor->user();
         $user = User::firstWhere('id', $instructor->user_id);
-        
+
 
         //return $institution;
         //return $registrations;
@@ -461,19 +462,18 @@ class PlanificationController extends Controller
 
     public function storeAnnualOperativePlan(StoreAnnualOperativePlanRequest $request)
     {
-        // DDRC-C: crea una planificacion como parte de una propuesta del coordinador de carrera
+        // DDRC-C: crea una planificacion como parte de un plan operativo anual
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
 
         $position = Catalogue::where('type', $catalogue['position']['type'])
-            ->where('code', $catalogue['position']['rector']['vicerrector'])
+            ->where('code', $catalogue['position']['rector']['vicerector'])
             ->first();
-        $detailSchoolPeriod = Authority::whereRelation('planification', 'position_id', $position->id)
+        $authority = Authority::whereRelation('planification', 'position_id', $position->id)
             ->first();
 
         $planification = new Planification();
 
-        $planification->detailSchoolPeriod()->associate($detailSchoolPeriod);
-  ;
+        $planification->vicerector()->associate($authority);
 
         $planification->trade_number = $request->input('tradeNumber');
         $planification->year = $request->input('year');
@@ -492,7 +492,7 @@ class PlanificationController extends Controller
             ])
             ->response()->setStatusCode(201);
     }
-    
+
     /**
      * updatePlanificationByCourse
      * Actualiza ended_at, started_at and responsibleCourse
