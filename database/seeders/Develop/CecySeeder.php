@@ -4,6 +4,7 @@ namespace Database\Seeders\Develop;
 
 use App\Models\Cecy\Planification;
 use Database\Seeders\Develop\Cecy\AdditionalInformationsSeeder;
+use Database\Seeders\Develop\Cecy\AnnualOperativePlanSeeder;
 use Database\Seeders\Develop\Cecy\AttendancesSeeder;
 use Database\Seeders\Develop\Cecy\AuthoritiesSeeder;
 use Database\Seeders\Develop\Cecy\AuthorizedInstructorsSeeder;
@@ -46,6 +47,7 @@ class CecySeeder extends Seeder
             AuthoritiesSeeder::class,
             DetailSchoolPeriodsSeeder::class,
             ParticipantsSeeder::class,
+            AnnualOperativePlanSeeder::class,
             PlanificationsSeeder::class,
             DetailPlanificationsSeeder::class,
             RegistrationsSeeder::class,

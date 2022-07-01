@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\Cecy\AnnualOperativePlans\StoreAnnualOperativePlanRequest;
 use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\GetDetailPlanificationsByPlanificationRequest;
 use App\Http\Resources\V1\Cecy\DetailPlanifications\ResponsibleCourseDetailPlanifications\DetailPlanificationCollection as ResponsibleCourseDetailPlanificationsCollection;
 use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
@@ -456,6 +457,42 @@ class PlanificationController extends Controller
             ->response()->setStatusCode(201);
     }
 
+
+
+    public function storeAnnualOperativePlan(StoreAnnualOperativePlanRequest $request)
+    {
+        // DDRC-C: crea una planificacion como parte de una propuesta del coordinador de carrera
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+
+        $position = Catalogue::where('type', $catalogue['position']['type'])
+            ->where('code', $catalogue['position']['rector']['vicerrector'])
+            ->first();
+        $detailSchoolPeriod = Authority::whereRelation('planification', 'position_id', $position->id)
+            ->first();
+
+        $planification = new Planification();
+
+        $planification->detailSchoolPeriod()->associate($detailSchoolPeriod);
+  ;
+
+        $planification->trade_number = $request->input('tradeNumber');
+        $planification->year = $request->input('year');
+        $planification->official_date_at = $request->input('officialDateAt');
+
+
+        $planification->save();
+
+        return (new PlanificationResource($planification))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Éxito ',
+                    'detail' => 'Planificación creada',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
+    }
+    
     /**
      * updatePlanificationByCourse
      * Actualiza ended_at, started_at and responsibleCourse

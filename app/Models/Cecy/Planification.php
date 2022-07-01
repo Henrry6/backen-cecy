@@ -32,6 +32,11 @@ class Planification extends Model implements Auditable
     ];
     
     // Relationships
+    public function annualOperativePlan()
+    {
+        return $this->belongsTo(AnnualOperativePlan::class);
+    }
+
     public function course()
     {
         return $this->belongsTo(Course::class);
@@ -46,6 +51,7 @@ class Planification extends Model implements Auditable
     {
         return $this->hasMany(DetailPlanification::class);
     }
+
 
     public function detailSchoolPeriod()
     {
