@@ -3,7 +3,9 @@
 namespace App\Models\Cecy;
 
 use App\Models\Core\File;
+use App\Models\Core\Image;
 use App\Traits\FileTrait;
+use App\Traits\ImageTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as Auditing;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -16,6 +18,7 @@ class PhotographicRecord extends Model implements Auditable
 {
     use HasFactory;
     use Auditing;
+    use ImageTrait;
     use SoftDeletes;use FileTrait;
 
     protected $table = 'cecy.photographic_records';
