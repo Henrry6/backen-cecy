@@ -13,7 +13,7 @@ class StoreParticipantUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'type.id' => ['required', 'integer'],
+            'participantType.id' => ['required', 'integer'],
             'username' => ['required', 'max:20'],
             'name' => ['required', 'max:100'],
             'lastname' => ['required', 'max:100'],

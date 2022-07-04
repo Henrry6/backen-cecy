@@ -89,6 +89,11 @@ class DetailPlanification extends Model implements Auditable
         return $this->belongsTo(Catalogue::class);
     }
 
+    public function files()
+    {
+        return $this->morphMany(File::class, 'fileable');
+    }
+
     //Mutators
     public function setObservationAttribute($value)
     {
@@ -104,12 +109,12 @@ class DetailPlanification extends Model implements Auditable
     }
 
     //revisar
-    public function scopePlanification($query, $planification)
-    {
-        if ($planification) {
-            return $query->orWhere('planification_id', $planification->id);
-        }
-    }
+//    public function scopePlanification($query, $planification)
+//    {
+//        if ($planification) {
+//            return $query->orWhere('planification_id', $planification->id);
+//        }
+//    }
 
     public function scopeCustomOrderBy($query, $sorts)
     {

@@ -2,6 +2,7 @@
 
 namespace Database\Factories\Cecy;
 
+use App\Models\Cecy\AnnualOperativePlan;
 use App\Models\Cecy\Course;
 use App\Models\Cecy\Planification;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -12,6 +13,8 @@ class PlanificationFactory extends Factory
 
     public function definition()
     {
-        return [];
+      return[  
+        //
+      ];
     }
 }

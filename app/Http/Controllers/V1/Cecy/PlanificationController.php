@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\Cecy\AnnualOperativePlans\StoreAnnualOperativePlanRequest;
 use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\GetDetailPlanificationsByPlanificationRequest;
 use App\Http\Resources\V1\Cecy\DetailPlanifications\ResponsibleCourseDetailPlanifications\DetailPlanificationCollection as ResponsibleCourseDetailPlanificationsCollection;
 use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
@@ -15,6 +16,7 @@ use App\Http\Requests\V1\Cecy\Planifications\CataloguePlanificationRequest;
 use App\Http\Requests\V1\Cecy\Planifications\StorePlanificationByCourseRequest;
 use App\Http\Requests\V1\Cecy\Planifications\AddNeeds;
 use App\Http\Requests\V1\Cecy\Planifications\AssignResponsibleCecyRequest;
+use App\Http\Requests\V1\Cecy\Planifications\DestroysPlanificationRequest;
 use App\Http\Requests\V1\Cecy\Planifications\UpdatePlanificationByCourseRequest;
 use App\Http\Requests\V1\Cecy\Planifications\UpdatePlanificationRequest;
 use App\Http\Requests\V1\Cecy\Planifications\UpdateStatePlanificationRequest;
@@ -27,6 +29,7 @@ use App\Models\Authentication\User;
 use App\Models\Cecy\Authority;
 use App\Models\Cecy\Catalogue;
 use App\Models\Cecy\Course;
+use App\Models\Cecy\DetailPlanification;
 use App\Models\Cecy\DetailSchoolPeriod;
 use App\Models\Cecy\Institution;
 use App\Models\Cecy\Instructor;
@@ -186,26 +189,28 @@ class PlanificationController extends Controller
     {
         $sorts = explode(',', $request->input('sort'));
 
-        $loggedInInstructor = Instructor::where('user_id', $request->user()->id)->first();
-        // return $loggedInInstructor;
+        $loggedInAuthority = Authority::where('user_id', $request->user()->id)->first();
+        // return $loggedInAuthority;
+        $responsibleCourse = Instructor::where('user_id', $request->user()->id)->first();
 
-        // if (!isset($loggedInInstructor)) {
-        //     return response()->json([
-        //         'msg' => [
-        //             'summary' => 'El usuario no es un instructor',
-        //             'detail' => '',
-        //             'code' => '404'
-        //         ],
-        //         'data' => null
-        //     ], 404);
-        // }
+        if ($loggedInAuthority) {
 
-        $planifications = $course->planifications()
-            ->where('responsible_course_id', $loggedInInstructor->id)
-            ->customOrderBy($sorts)
-            ->code($request->input('search'))
-            ->state($request->input('search'))
-            ->paginate($request->input('perPage'));
+            $planifications = $course->planifications()
+                ->where('responsible_cecy_id', $loggedInAuthority->id)
+                ->customOrderBy($sorts)
+                ->code($request->input('search'))
+                // ->state($request->input('search'))
+                // ->courseNameFilter($request->input('search'))
+                ->paginate($request->input('perPage'));
+        } else {
+            $planifications = $course->planifications()
+                ->where('responsible_course_id', $responsibleCourse->id)
+                ->customOrderBy($sorts)
+                ->code($request->input('search'))
+                // ->state($request->input('search'))
+                // ->courseNameFilter($request->input('search'))
+                ->paginate($request->input('perPage'));
+        }
 
         return (new PlanificationByCourseCollection($planifications))
             ->additional([
@@ -238,8 +243,8 @@ class PlanificationController extends Controller
 
     public function getCurrentPlanificationsByAuthority(IndexAuthorityRequest $request)
     {
-
-        $sorts = explode(',', $request->input('sort'));
+        // DDRC-C: metodo para obtener las planificaciones 
+        // $sorts = explode(',', $request->input('sort'));
 
         $authority = Authority::firstWhere('user_id', $request->user()->id);
         //verificar que el usuario logeado es una autoridad de Authority
@@ -253,18 +258,19 @@ class PlanificationController extends Controller
                 ]
             ], 400);
         }
-
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
         $currentState = Catalogue::firstWhere('code', $catalogue['school_period_state']['current']);
         $schoolPeriod = SchoolPeriod::firstWhere('state_id', $currentState->id);
 
-        $planifications = $authority->planifications()->whereHas('detailSchoolPeriod', function ($detailSchoolPeriod) use ($schoolPeriod) {
-            $detailSchoolPeriod->where('school_period_id', $schoolPeriod->id);
-        })->customOrderBy($sorts)
-            ->get();
-
-        // paginate($request->input('per_page'))
-
+        $planifications = $authority->planifications()
+            ->whereHas('detailSchoolPeriod', function ($detailSchoolPeriod) use ($schoolPeriod) {
+                $detailSchoolPeriod->where('school_period_id', $schoolPeriod->id);
+            })
+            ->courseNameFilter($request->input('search'))
+            ->paginate($request->input('per_page'));
+        // ->customOrderBy($sorts);
+        // ->get();
+        // return $planifications;
         return (new PlanificationCollection($planifications))
             ->additional([
                 'msg' => [
@@ -322,6 +328,7 @@ class PlanificationController extends Controller
         //return $course->evaluation_mechanisms->diagnostic['tecnique'];
         //return $topics;
         //return $course;
+        // return $planification;
 
         $pdf = PDF::loadView('reports/desing-curricular', [
             'planification' => $planification,
@@ -343,26 +350,32 @@ class PlanificationController extends Controller
     {
         $planification = Planification::firstWhere('id', $planification->id);
         $course = $planification->course()->first();
+        $days = $planification->detailPlanifications()->with('day')->get();
         $topics = $course->topics()->first();
         $responsiblececy = $planification->responsibleCecy()->first();
-        $institution = Institution::firstWhere('id', $responsiblececy->intitution_id);
-
+        $institution = Institution::firstWhere('id', $responsiblececy->institution_id);
+        $registrations = $planification->detailPlanifications()->first()->registrations()->get()->where("state_course_id", '107');
+        $registrations = $planification->detailPlanifications()->first()->registrations()->get()->where("state_course_id", '106');
         $instructor = Instructor::where('id', $planification->responsible_course_id)->first();
         //$user =  $instructor->user();
         $user = User::firstWhere('id', $instructor->user_id);
 
-        //return $institution;
 
+        //return $institution;
+        //return $registrations;
         //return $course;
         //return $planification;
 
         $pdf = PDF::loadView('reports/informe-final', [
             'planification' => $planification,
             'course' => $course,
+            'days' => $days,
             'topics' => $topics,
             'institution' => $institution,
             'user' => $user,
             'instructor' => $instructor,
+            'registrations' => $registrations,
+
 
         ]);
 
@@ -390,6 +403,7 @@ class PlanificationController extends Controller
      */
     public function storePlanificationByCourse(StorePlanificationByCourseRequest $request, Course $course)
     {
+        // DDRC-C: crea una planificacion como parte de una propuesta del coordinador de carrera
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
 
         $currentState = Catalogue::where('type', $catalogue['school_period_state']['type'])
@@ -399,6 +413,7 @@ class PlanificationController extends Controller
             ->where('code', $catalogue['planification_state']['to_be_approved'])
             ->first();
         $instructor = Instructor::find($request->input('responsibleCourse.id'));
+        $authority = Authority::firstWhere('user_id', strVal($request->user()->id));
         $detailSchoolPeriod = DetailSchoolPeriod::whereRelation('schoolPeriod', 'state_id', $currentState->id)
             ->first();
         // $lastPlanification = Planification::latest('ended_at')
@@ -424,10 +439,46 @@ class PlanificationController extends Controller
         $planification->course()->associate($course);
         $planification->detailSchoolPeriod()->associate($detailSchoolPeriod);
         $planification->responsibleCourse()->associate($instructor);
+        $planification->responsibleCecy()->associate($authority);
         $planification->state()->associate($toBeApproved);
 
         $planification->ended_at = $request->input('endedAt');
         $planification->started_at = $request->input('startedAt');
+
+        $planification->save();
+
+        return (new PlanificationResource($planification))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Éxito ',
+                    'detail' => 'Planificación creada',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
+    }
+
+
+
+    public function storeAnnualOperativePlan(StoreAnnualOperativePlanRequest $request)
+    {
+        // DDRC-C: crea una planificacion como parte de un plan operativo anual
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+
+        $position = Catalogue::where('type', $catalogue['position']['type'])
+            ->where('code', $catalogue['position']['rector']['vicerector'])
+            ->first();
+        $authority = Authority::whereRelation('planification', 'position_id', $position->id)
+            ->first();
+
+        $planification = new Planification();
+
+        $planification->vicerector()->associate($authority);
+
+        $planification->trade_number = $request->input('tradeNumber');
+        $planification->year = $request->input('year');
+        $planification->official_date_at = $request->input('officialDateAt');
+
 
         $planification->save();
 
@@ -448,6 +499,7 @@ class PlanificationController extends Controller
      */
     public function updateInitialPlanification(UpdatePlanificationByCourseRequest $request, Planification $planification)
     {
+        // DDRC-C: actualiza los estados de inicio, fin y responsable del curso
         $instructor = Instructor::find($request->input('responsibleCourse.id'));
 
         $planification->responsibleCourse()->associate($instructor);
@@ -484,6 +536,23 @@ class PlanificationController extends Controller
                 ]
             ])
             ->response()->setStatusCode(201);
+    }
+
+    public function destroys(DestroysPlanificationRequest $request)
+    {
+        // DDRC-C: elimina planificaciones propuestas
+        $planifications = Planification::whereIn('id', $request->input('ids'))->get();
+        Planification::destroy($request->input('ids'));
+
+        return (new PlanificationCollection($planifications))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Planificaciones eliminadas',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
     }
 
     /**

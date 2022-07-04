@@ -13,6 +13,7 @@ use App\Http\Requests\V1\Core\Images\UploadImageRequest;
 use App\Http\Requests\V1\Cecy\Courses\ApproveCourseRequest;
 use App\Http\Requests\V1\Cecy\Courses\DeclineCourseRequest;
 use App\Http\Requests\V1\Cecy\Courses\CareerCoordinator\DestroyCourseRequest;
+use App\Http\Requests\V1\Cecy\Courses\CareerCoordinator\DestroysCourseRequest;
 use App\Http\Requests\V1\Cecy\Courses\CoordinatorCecy\GetCoursesByCoordinatorCecyRequest;
 use App\Http\Requests\V1\Cecy\Courses\GetCoursesByCategoryRequest;
 use App\Http\Requests\V1\Cecy\Courses\GetCoursesByNameRequest;
@@ -27,6 +28,7 @@ use App\Http\Requests\V1\Cecy\Courses\CareerCoordinator\StoreCourseRequest;
 use App\Http\Requests\V1\Cecy\Courses\CareerCoordinator\UpdateCourseNameAndDurationRequest;
 use App\Http\Requests\V1\Cecy\Courses\CatalogueCourseRequest;
 use App\Http\Requests\V1\Cecy\Courses\UpdateCourseRequest;
+use App\Http\Requests\V1\Cecy\Planifications\GetDateByshowYearScheduleRequest;
 use App\Http\Requests\V1\Cecy\Planifications\GetPlanificationByResponsableCourseRequest;
 use App\Http\Requests\V1\Cecy\Planifications\IndexPlanificationRequest;
 use App\Http\Requests\V1\Core\Files\DestroysFileRequest;
@@ -41,6 +43,7 @@ use App\Http\Resources\V1\Cecy\Certificates\CertificateResource;
 use App\Http\Resources\V1\Cecy\Courses\CoordinatorCecy\CourseByCoordinatorCecyCollection;
 use App\Http\Resources\V1\Cecy\Courses\CourseResource;
 use App\Http\Resources\V1\Cecy\Courses\CourseCollection;
+use App\Http\Resources\V1\Core\ImageResource;
 use App\Models\Core\File;
 use App\Models\Core\Career;
 use App\Models\Core\State;
@@ -52,7 +55,9 @@ use App\Models\Cecy\Participant;
 use App\Models\Cecy\Planification;
 use App\Models\Cecy\SchoolPeriod;
 use App\Models\Authentication\User;
-
+use App\Models\Core\Image;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image as InterventionImage;
 
 //use App\Models\Cecy\Requirement;
 
@@ -462,23 +467,32 @@ class CourseController extends Controller
     //Traer todos los cursos planificados de un año en especifico (Done)
     // el que hizo esto debe enviar el año en especifico bien por el url
     // o por params
-    public function showYearSchedule(Planification $planification)
+    public function showYearSchedule( GetDateByshowYearScheduleRequest $request )
     {
         // $year = $planificacion->whereYear('started_at')->first();
-        $planifications = Planification::whereYear('started_at', '=', 2022)->with(['course', 'detailPlanifications'])->get();
+        //$planifications = Planification::whereYear('started_at', '=', 2022)->with(['course', 'detailPlanifications'])->get();
+
+        $planifications = Planification::whereYear('started_at', '=', $request->input("startedAt"))->with(['course', 'responsibleCourse.user', 'detailPlanifications'])->get();
+        //$detailPlanifications = $planifications->detailPlanifications()->get();
+        //$detailPlanifications=$planifications->detailPlanifications()->with('classroom')->get();
+        
         //$detailPlanifications = $planification->detailPlanifications()->get();
-        $detailPlanifications = Planification::whereYear('started_at', '=', 2022)->with('detailPlanifications')->get();
-        $responsibleCourse = Planification::whereYear('started_at', '=', 2022)->with('responsibleCourse.user')->get();
-        /*       $course = $planifications->course()->get();
+        $detailPlanifications = Planification::whereYear('started_at', '=', $request->input("startedAt"))->with(['detailPlanifications'])->get();
+        //$responsibleCourse = Planification::whereYear('started_at', '=', $request->input("startedAt"))->with('responsibleCourse.user')->get(); 
+          /*     $course = $planifications->course()->get();
         $detailPlanifications=$planifications->detailPlanifications()->get(); */
+        $data=[
+        'planifications' => $planifications,
+        'detailPlanifications' => $detailPlanifications,
+       // 'responsibleCourse' => $responsibleCourse
 
-
-        // return $planifications ;
+        ];
+        //return $data ;
 
         $pdf = PDF::loadView('reports/report-year-schedule', [
             'planifications' => $planifications,
             'detailPlanifications' => $detailPlanifications,
-            'responsibleCourse' => $responsibleCourse
+            //'responsibleCourse' => $responsibleCourse
         ]);
         $pdf->setOptions([
             'orientation' => 'landscape',
@@ -624,6 +638,7 @@ class CourseController extends Controller
      */
     public function updateInitialCourse(UpdateCourseNameAndDurationRequest $request, Course $course)
     {
+        // DDRC-C: actualiza los campos duracion nombre resonsables
         if ($request->input('duration') < Course::MINIMUM_HOURS) {
             return response()->json([
                 'msg' => [
@@ -660,6 +675,7 @@ class CourseController extends Controller
      */
     public function destroyCourse(DestroyCourseRequest $request, Course $course)
     {
+        // DDRC-C: Elimina un curso
         $course->delete();
 
         return (new CourseResource($course))
@@ -671,6 +687,23 @@ class CourseController extends Controller
                 ]
             ])
             ->response()->setStatusCode(201);
+    }
+
+    public function destroys(DestroysCourseRequest $request)
+    {
+        // DDRC-C: elimina cursos
+        $courses = Course::whereIn('id', $request->input('ids'))->get();
+        Course::destroy($request->input('ids'));
+
+        return (new CourseCollection($courses))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Cursos eliminados',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
     }
 
     /*
@@ -761,9 +794,44 @@ class CourseController extends Controller
     }
 
     //Images
-    public function uploadPublicImage(UploadImageRequest $request, Course $course)
+    public function uploadImage(UploadImageRequest $request, Course $course)
     {
-        return $course->uploadPublicImage($request);
+        $images = $course->images()->get();
+        foreach ($images as $image) {
+            // Storage::deleteDirectory($image->directory);
+            Storage::disk('public')->deleteDirectory('images/' . $image->id);
+            $image->delete();
+        } 
+
+        foreach ($request->file('images') as $image) {
+            $newImage = new Image();
+            $newImage->name = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+            $newImage->description = $request->input('description');
+            $newImage->extension = 'jpg';
+            $newImage->imageable()->associate($course);
+            $newImage->save();
+            
+
+            Storage::disk('public')->makeDirectory('images/' . $newImage->id);
+
+            $storagePath = storage_path('app/public/images/');
+            $course->uploadOriginal(InterventionImage::make($image), $newImage->id, $storagePath);
+            $course->uploadLargeImage(InterventionImage::make($image), $newImage->id, $storagePath);
+            $course->uploadMediumImage(InterventionImage::make($image), $newImage->id, $storagePath);
+            $course->uploadSmallImage(InterventionImage::make($image), $newImage->id, $storagePath);
+
+            $newImage->directory = 'images/' . $newImage->id;
+            $newImage->save();
+        }
+        return (new ImageResource($newImage))->additional(
+            [
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ]
+        );
     }
 
     public function indexPublicImages(IndexImageRequest $request, Course $course)

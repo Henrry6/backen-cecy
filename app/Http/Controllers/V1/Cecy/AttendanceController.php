@@ -122,7 +122,7 @@ class AttendanceController extends Controller
     }
     //eliminar una asistencia
     // AttendanceController
-    public function destroysByDetailPlanification(DestroysAttendanceRequest $request)
+    public function destroys(DestroysAttendanceRequest $request)
     {
         $attendance = Attendance::whereIn('id', $request->input('ids'))->get();
         Attendance::destroy($request->input('ids'));
@@ -136,6 +136,21 @@ class AttendanceController extends Controller
                 ]
             ])
             ->response()->setStatusCode(200);
+    }
+    public function destroyAttendance( $attendance)
+    {
+        $attendance = Attendance::find($attendance);
+        $attendance->delete();
+
+        return (new AttendanceResource($attendance))
+            ->additional([
+                'msg' => [
+                    'summary' => 'asistencia eliminada',
+                    'detail' => '',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
     }
 
     public function index()
@@ -169,19 +184,19 @@ class AttendanceController extends Controller
     {
         $planification = $course->planifications()->first();
         $detailPlanification = $planification->detailPlanifications()->first();
+        $days = $planification->detailPlanifications()->with('day')->get();
         $registrations = $detailPlanification->registrations()->get();
         $responsiblececy = $planification->responsibleCecy()->first();
-        $institution = Institution::firstWhere('id', $responsiblececy->intitution_id);
+        $institution = Institution::firstWhere('id', $responsiblececy->institution_id);
         $instructor = Instructor::where('id', $planification->responsible_course_id)->first();
         $user = $instructor->user();
         $user = User::firstWhere('id', $instructor->user_id);
-        $grade1 = $registrations[0]['grade1'];
-        $grade2 = $registrations[0]['grade2'];
-        $final_grade = $registrations[0]['final_grade'];
+        $grade1 = $registrations;
+        $grade2 = $registrations;
+        $final_grade = $registrations;
 
 
-        //return $registrations['grade1'];
-        //return $registrations[0]['grade1'];
+        //return $registrations;
         //return $course;
         //return $planification;
 
@@ -189,6 +204,7 @@ class AttendanceController extends Controller
         $pdf = PDF::loadView('reports/atendence-evaluation', [
             'planification' => $planification,
             'course' => $course,
+            'days'=>$days,
             'registrations' => $registrations,
             'institution' => $institution,
             'instructor' => $instructor,
@@ -199,8 +215,13 @@ class AttendanceController extends Controller
 
 
         ]);
+        $pdf->setOptions([
+            'orientation' => 'landscape',
+            'page-size' => 'a4'
+        ]);
 
         return $pdf->stream('Asistencia-evaluacion.pdf');
+
     }
     /*******************************************************************************************************************
      * IMAGES

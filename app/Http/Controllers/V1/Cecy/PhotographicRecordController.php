@@ -6,10 +6,22 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Cecy\PhotographicRecords\DestroyPhotographicRecordRequest;
 use App\Http\Requests\V1\Cecy\PhotographicRecords\StorePhotographicRecordRequest;
 use App\Http\Requests\V1\Cecy\PhotographicRecords\UpdatePhotographicRecordRequest;
+use App\Http\Requests\V1\Core\Files\DestroysFileRequest;
+use App\Http\Requests\V1\Core\Files\IndexFileRequest;
+use App\Http\Requests\V1\Core\Files\UpdateFileRequest;
+use App\Http\Requests\V1\Core\Files\UploadFileRequest;
+use App\Http\Requests\V1\Core\Images\IndexImageRequest;
+use App\Http\Requests\V1\Core\Images\UploadImageRequest;
 use App\Http\Resources\V1\Cecy\PhotographicRecords\PhotographicRecordCollection;
 use App\Http\Resources\V1\Cecy\PhotographicRecords\PhotographicRecordResource;
+use App\Http\Resources\V1\Core\ImageResource;
+use App\Models\Cecy\Course;
 use App\Models\Cecy\DetailPlanification;
 use App\Models\Cecy\PhotographicRecord;
+use App\Models\Core\File;
+use App\Models\Core\Image;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image as InterventionImage;
 
 class PhotographicRecordController extends Controller
 {
@@ -69,7 +81,7 @@ class PhotographicRecordController extends Controller
 
         $photographicRecord->description = $request->input('description');
         $photographicRecord->number_week = $request->input('number_week');
-        $photographicRecord->url_image = $request->input('url_image');
+//        $photographicRecord->url_image = $request->input('url_image');
         $photographicRecord->week_at = $request->input('week_at');
 
         $photographicRecord->save();
@@ -127,5 +139,54 @@ class PhotographicRecordController extends Controller
                 ]
             ])
             ->response()->setStatusCode(200);
+    }
+    /*******************************************************************************************************************
+     * imagenes
+     ******************************************************************************************************************/
+
+    //Images
+    public function uploadImage(UploadImageRequest $request, PhotographicRecord $record)
+    {
+        $images = $record->images()->get();
+        foreach ($images as $image) {
+            // Storage::deleteDirectory($image->directory);
+            Storage::disk('public')->deleteDirectory('records' . $image->id);
+            $image->delete();
+        }
+
+        foreach ($request->file('images') as $image) {
+            $newImage = new Image();
+            $newImage->name = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+            $newImage->description = $request->input('description');
+            $newImage->extension = 'jpg';
+            $newImage->imageable()->associate($record);
+            $newImage->save();
+
+
+            Storage::disk('public')->makeDirectory('records/' . $newImage->id);
+
+            $storagePath = storage_path('app/public/records/');
+            $record->uploadOriginal(InterventionImage::make($image), $newImage->id, $storagePath);
+            $record->uploadLargeImage(InterventionImage::make($image), $newImage->id, $storagePath);
+            $record->uploadMediumImage(InterventionImage::make($image), $newImage->id, $storagePath);
+            $record->uploadSmallImage(InterventionImage::make($image), $newImage->id, $storagePath);
+
+            $newImage->directory = 'images/' . $newImage->id;
+            $newImage->save();
+        }
+        return (new ImageResource($newImage))->additional(
+            [
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ]
+        );
+    }
+
+    public function indexPublicImages(IndexImageRequest $request, PhotographicRecord $record)
+    {
+        return $record->indexPublicImages($request);
     }
 }

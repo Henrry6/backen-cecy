@@ -68,7 +68,8 @@ class Registration extends Model implements Auditable
     //revisar
     public function requirements()
     {
-        return $this->belongsToMany(Requirement::class, 'cecy.registration_requirement', 'registration_id', 'requirement_id');
+        return $this->belongsToMany(Requirement::class, 'cecy.registration_requirement', 'registration_id', 'requirement_id')
+        ->withPivot(['url']);
     }
 
     public function state()
@@ -113,6 +114,14 @@ class Registration extends Model implements Auditable
     {
         if ($participant) {
             return $query->orWhere('participant_id', $participant->id);
+        }
+    }
+    public function scopeParticipantUsername($query, $participantUserName)
+    {
+        if ($participantUserName) {
+            return $query->whereHas('participant.user',function($q) use($participantUserName){
+                $q->where('username','like','%'.$participantUserName.'%');
+            });
         }
     }
 

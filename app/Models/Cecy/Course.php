@@ -308,7 +308,7 @@ class Course extends Model implements Auditable
     public function scopeName($query, $name)
     {
         if ($name) {
-            return $query->orWhere('name', 'iLike', "%$name%");
+            return $query->Where('name', 'iLike', "%$name%");
         }
     }
 

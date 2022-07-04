@@ -14,7 +14,7 @@ class SaveDetailAttendanceRequest extends FormRequest
     {
         return [
             'type.id' => ['required', 'integer'],
-            // 'registration.id'=> ['required','integer']
+             'registration.id'=> ['required','integer']
         ];
     }
 
@@ -22,7 +22,7 @@ class SaveDetailAttendanceRequest extends FormRequest
     {
         return [
             'type.id' => 'tipo de  asistencia',
-            // 'registration.id'=> 'id del registro'
+             'registration.id'=> 'id del registro'
         ];
     }
 }
