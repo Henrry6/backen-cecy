@@ -15,14 +15,8 @@ class UpdateCurricularDesign extends FormRequest
     return [
       'area.id' => ['required', 'integer'],
       'speciality.id' => ['required', 'integer'],
-      'alignment' => ['required', 'string', 'max:1000'],
-      'bibliographies' => ['required'],
-      'evaluationMechanisms' => ['required'],
-      'learningEnvironments' => ['required'],
       'objective' => ['required', 'string', 'max:1000'],
       'practiceHours' => ['required', 'integer'],
-      'teachingStrategies' => ['required'],
-      'techniquesRequisites' => ['required'],
       'theoryHours' => ['required'],
     ];
   }
