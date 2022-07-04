@@ -449,39 +449,39 @@ class RegistrationController extends Controller
 
 
     // Files
-    public function indexFiles(IndexFileRequest $request, Requirement $requirement)
+    public function indexFiles(IndexFileRequest $request, Registration $registration)
     {
-        return $requirement->indexFiles($request);
+        return $registration->indexFiles($request);
     }
 
-    public function uploadFileA(UploadFileRequest $request, Requirement $requirement)
+    public function uploadFileA(UploadFileRequest $request, Registration $registration)
     {
-        return $requirement->uploadFile($request);
+        return $registration->uploadFile($request);
     }
 
-    public function downloadFileA(Requirement $requirement, File $file)
+    public function downloadFileA(Registration $registration, File $file)
     {
-        return $requirement->downloadFile($file);
+        return $registration->downloadFile($file);
     }
 
-    public function showFileR(Requirement $requirement, File $file)
+    public function showFileR(Registration $registration, File $file)
     {
-        return $requirement->showFile($file);
+        return $registration->showFile($file);
     }
 
-    public function updateFile(UpdateFileRequest $request, Requirement $requirement, File $file)
+    public function updateFile(UpdateFileRequest $request, Registration $registration, File $file)
     {
-        return $requirement->updateFile($request, $file);
+        return $registration->updateFile($request, $file);
     }
 
-    public function destroyFileA(Requirement $requirement, File $file)
+    public function destroyFileA(Registration $registration, File $file)
     {
-        return $requirement->destroyFile($file);
+        return $registration->destroyFile($file);
     }
 
-    public function destroyFiles(Requirement $requirement, DestroysFileRequest $request)
+    public function destroyFiles(Registration $registration, DestroysFileRequest $request)
     {
-        return $requirement->destroyFiles($request);
+        return $registration->destroyFiles($request);
     }
 
 }
