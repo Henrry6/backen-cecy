@@ -449,39 +449,39 @@ class RegistrationController extends Controller
 
 
     // Files
-    public function indexFiles(IndexFileRequest $request, Requirement $course)
+    public function indexFiles(IndexFileRequest $request, Requirement $requirement)
     {
-        return $course->indexFiles($request);
+        return $requirement->indexFiles($request);
     }
 
-    public function uploadFileA(UploadFileRequest $request, Requirement $course)
+    public function uploadFileA(UploadFileRequest $request, Requirement $requirement)
     {
-        return $course->uploadFile($request);
+        return $requirement->uploadFile($request);
     }
 
-    public function downloadFileA(Requirement $course, File $file)
+    public function downloadFileA(Requirement $requirement, File $file)
     {
-        return $course->downloadFile($file);
+        return $requirement->downloadFile($file);
     }
 
-    public function showFileR(Requirement $course, File $file)
+    public function showFileR(Requirement $requirement, File $file)
     {
-        return $course->showFile($file);
+        return $requirement->showFile($file);
     }
 
-    public function updateFile(UpdateFileRequest $request, Requirement $course, File $file)
+    public function updateFile(UpdateFileRequest $request, Requirement $requirement, File $file)
     {
-        return $course->updateFile($request, $file);
+        return $requirement->updateFile($request, $file);
     }
 
-    public function destroyFileA(Requirement $course, File $file)
+    public function destroyFileA(Requirement $requirement, File $file)
     {
-        return $course->destroyFile($file);
+        return $requirement->destroyFile($file);
     }
 
-    public function destroyFiles(Requirement $course, DestroysFileRequest $request)
+    public function destroyFiles(Requirement $requirement, DestroysFileRequest $request)
     {
-        return $course->destroyFiles($request);
+        return $requirement->destroyFiles($request);
     }
 
 }
