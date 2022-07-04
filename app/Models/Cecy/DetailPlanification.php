@@ -89,6 +89,11 @@ class DetailPlanification extends Model implements Auditable
         return $this->belongsTo(Catalogue::class);
     }
 
+    public function files()
+    {
+        return $this->morphMany(File::class, 'fileable');
+    }
+
     //Mutators
     public function setObservationAttribute($value)
     {

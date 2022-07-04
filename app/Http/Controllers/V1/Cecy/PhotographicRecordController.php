@@ -10,11 +10,18 @@ use App\Http\Requests\V1\Core\Files\DestroysFileRequest;
 use App\Http\Requests\V1\Core\Files\IndexFileRequest;
 use App\Http\Requests\V1\Core\Files\UpdateFileRequest;
 use App\Http\Requests\V1\Core\Files\UploadFileRequest;
+use App\Http\Requests\V1\Core\Images\IndexImageRequest;
+use App\Http\Requests\V1\Core\Images\UploadImageRequest;
 use App\Http\Resources\V1\Cecy\PhotographicRecords\PhotographicRecordCollection;
 use App\Http\Resources\V1\Cecy\PhotographicRecords\PhotographicRecordResource;
+use App\Http\Resources\V1\Core\ImageResource;
+use App\Models\Cecy\Course;
 use App\Models\Cecy\DetailPlanification;
 use App\Models\Cecy\PhotographicRecord;
 use App\Models\Core\File;
+use App\Models\Core\Image;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image as InterventionImage;
 
 class PhotographicRecordController extends Controller
 {
@@ -134,45 +141,52 @@ class PhotographicRecordController extends Controller
             ->response()->setStatusCode(200);
     }
     /*******************************************************************************************************************
-     * FILES
+     * imagenes
      ******************************************************************************************************************/
-    public function indexFiles(IndexFileRequest $request, PhotographicRecord $record)
+
+    //Images
+    public function uploadImage(UploadImageRequest $request, PhotographicRecord $record)
     {
-        return $record->indexFiles($request);
+        $images = $record->images()->get();
+        foreach ($images as $image) {
+            // Storage::deleteDirectory($image->directory);
+            Storage::disk('public')->deleteDirectory('records' . $image->id);
+            $image->delete();
+        }
+
+        foreach ($request->file('images') as $image) {
+            $newImage = new Image();
+            $newImage->name = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+            $newImage->description = $request->input('description');
+            $newImage->extension = 'jpg';
+            $newImage->imageable()->associate($record);
+            $newImage->save();
+
+
+            Storage::disk('public')->makeDirectory('records/' . $newImage->id);
+
+            $storagePath = storage_path('app/public/records/');
+            $record->uploadOriginal(InterventionImage::make($image), $newImage->id, $storagePath);
+            $record->uploadLargeImage(InterventionImage::make($image), $newImage->id, $storagePath);
+            $record->uploadMediumImage(InterventionImage::make($image), $newImage->id, $storagePath);
+            $record->uploadSmallImage(InterventionImage::make($image), $newImage->id, $storagePath);
+
+            $newImage->directory = 'images/' . $newImage->id;
+            $newImage->save();
+        }
+        return (new ImageResource($newImage))->additional(
+            [
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ]
+        );
     }
 
-    public function uploadFile(UploadFileRequest $request, PhotographicRecord $record)
+    public function indexPublicImages(IndexImageRequest $request, PhotographicRecord $record)
     {
-        return $record->uploadFile($request);
-    }
-
-    public function downloadFile(PhotographicRecord $record, File $file)
-    {
-        return $record->downloadFile($file);
-    }
-
-    public function downloadFiles(PhotographicRecord $record)
-    {
-        return $record->downloadFiles();
-    }
-
-    public function showFile(PhotographicRecord $record, File $file)
-    {
-        return $record->showFile($file);
-    }
-
-    public function updateFile(UpdateFileRequest $request, PhotographicRecord $record, File $file)
-    {
-        return $record->updateFile($request, $file);
-    }
-
-    public function destroyFile(PhotographicRecord $record, File $file)
-    {
-        return $record->destroyFile($file);
-    }
-
-    public function destroyFiles(PhotographicRecord $record, DestroysFileRequest $request)
-    {
-        return $record->destroyFiles($request);
+        return $record->indexPublicImages($request);
     }
 }

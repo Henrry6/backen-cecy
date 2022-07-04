@@ -13,8 +13,12 @@ use App\Http\Requests\V1\Cecy\Registrations\NullifyParticipantRegistrationReques
 use App\Http\Requests\V1\Cecy\Registrations\RegistrationRequest;
 use App\Http\Requests\V1\Cecy\Registrations\ReviewRequest;
 use App\Http\Requests\V1\Cecy\Registrations\NullifyRegistrationRequest;
+use App\Http\Requests\V1\Core\Files\DestroysFileRequest;
+use App\Http\Requests\V1\Core\Files\IndexFileRequest;
+use App\Http\Requests\V1\Core\Files\UpdateFileRequest;
 use App\Http\Resources\V1\Cecy\Registrations\RegisterStudentResource;
 use App\Http\Resources\V1\Cecy\Certificates\CertificateResource;
+use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationParticipants\DetailPlanificationParticipantResource;
 use App\Http\Resources\V1\Cecy\Participants\CoursesByParticipantCollection;
 use App\Http\Resources\V1\Cecy\Registrations\RegistrationCollection;
 use App\Http\Resources\V1\Cecy\Registrations\RegistrationResource;
@@ -27,6 +31,7 @@ use App\Models\Cecy\Catalogue;
 use App\Models\Cecy\DetailPlanification;
 use App\Models\Cecy\Participant;
 use App\Models\Cecy\Registration;
+use App\Models\Cecy\Requirement;
 use Carbon\Carbon;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\DB;
@@ -66,6 +71,21 @@ class RegistrationController extends Controller
             ])
             ->response()->setStatusCode(200);
     }
+
+    public function show(Registration $registration)
+    {
+        // datos de un registro
+        return (new DetailPlanificationParticipantResource($registration))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
+
 
     //participantes de un curso por detalle de la planificacion
     public function getParticipantByDetailPlanification(DetailPlanification $detailPlanification)
@@ -111,7 +131,7 @@ class RegistrationController extends Controller
         return $catalogue->downloadFile($file);
     }
 
-   
+
 
     public function reEnroll(RegistrationRequest $request, Registration $registration)
     {
@@ -224,7 +244,7 @@ class RegistrationController extends Controller
 
     public function nullifyRegistration(NullifyParticipantRegistrationRequest $request, Registration $registration)
     {
-        //DDRC-C: cancela una matricula de un participante en un curso especifico 
+        //DDRC-C: cancela una matricula de un participante en un curso especifico
         // RegistrationController
 
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
@@ -367,7 +387,7 @@ class RegistrationController extends Controller
 
     public function showRecordCompetitor(IndexRegistrationRequest $request, DetailPlanification $detailPlanification, AdditionalInformation $additionalInformation)
     {
-        
+
         $planification=$detailPlanification->planification()->first();
         $course=$planification->course()->first();
         $regitrations=$detailPlanification->registrations()->with(['participant.user.sex','state','additionalInformation.levelInstruction'])->get();
@@ -393,7 +413,6 @@ class RegistrationController extends Controller
     {
         $registration->grade1 = $request->input('grade1');
         $registration->grade2 = $request->input('grade2');
-
 //        $registration->final_grade = $request->input('finalGrade');//calculado
         $registration->save();
         $this->FinalGrade($request, $registration);
@@ -413,7 +432,6 @@ class RegistrationController extends Controller
         $grade1 =  $registration->grade1 = $request->input('grade1');
         $grade2 =  $registration->grade2 = $request->input('grade2');
         $registration->final_grade = ($grade1+$grade2) / 2;
-
         $registration->save();
         return (new RegistrationResource($registration))
             ->additional([
@@ -428,4 +446,42 @@ class RegistrationController extends Controller
 
 
     }
+
+
+    // Files
+    public function indexFiles(IndexFileRequest $request, Requirement $requirement)
+    {
+        return $requirement->indexFiles($request);
+    }
+
+    public function uploadFileA(UploadFileRequest $request, Requirement $requirement)
+    {
+        return $requirement->uploadFile($request);
+    }
+
+    public function downloadFileA(Requirement $requirement, File $file)
+    {
+        return $requirement->downloadFile($file);
+    }
+
+    public function showFileR(Requirement $requirement, File $file)
+    {
+        return $requirement->showFile($file);
+    }
+
+    public function updateFile(UpdateFileRequest $request, Requirement $requirement, File $file)
+    {
+        return $requirement->updateFile($request, $file);
+    }
+
+    public function destroyFileA(Requirement $requirement, File $file)
+    {
+        return $requirement->destroyFile($file);
+    }
+
+    public function destroyFiles(Requirement $requirement, DestroysFileRequest $request)
+    {
+        return $requirement->destroyFiles($request);
+    }
+
 }
