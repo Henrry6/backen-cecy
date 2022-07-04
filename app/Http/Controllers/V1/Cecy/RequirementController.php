@@ -10,10 +10,12 @@ use App\Http\Requests\V1\Cecy\Requirements\StoreRequirementRequest;
 use App\Http\Requests\V1\Cecy\Requirements\UpdateRequirementRequest;
 use App\Http\Resources\V1\Cecy\Requeriments\RequirementCollection;
 use App\Http\Resources\V1\Cecy\Requeriments\RequirementResource;
+use App\Http\Resources\V1\Core\FileCollection;
 use App\Models\Core\File;
 use App\Models\Core\Image;
 use App\Models\Cecy\Catalogue;
 use App\Models\Cecy\Requirement;
+use Illuminate\Support\Facades\Storage;
 
 class RequirementController extends Controller
 {
@@ -152,5 +154,22 @@ class RequirementController extends Controller
     public function showImage(Requirement $Requirement, Image $image)
     {
         return $Requirement->showImage($image);
+    }
+
+    public function downloadRequirement(Requirement $requirement)
+    {
+        $url = storage_path('app/private/registration-requirement/').$requirement->url;
+        if (!Storage::exists($url)) {
+            return (new FileCollection([]))->additional(
+                [
+                    'msg' => [
+                        'summary' => 'Archivo no encontrado',
+                        'detail' => 'Intente de nuevo',
+                        'code' => '404'
+                    ]
+                ]);
+        }
+
+        return Storage::download($url);
     }
 }
