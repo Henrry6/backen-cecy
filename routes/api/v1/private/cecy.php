@@ -365,6 +365,26 @@ Route::controller(RegistrationController::class)->group(function () {
 Route::apiResource('registrations', RegistrationController::class);
 
 //photofraphicRecords files-images
+Route::controller(PhotographicRecordController::class)->group(function (){
+    Route::prefix('records/{record}')->group(function (){
+        Route::prefix('images')->group(function () {
+            Route::get('{image}/download', 'downloadImage');
+            Route::get('', 'indexImages');
+            Route::get('public', 'indexPublicImages');
+            Route::get('{image}', 'showImage');
+            Route::post('', 'uploadImage');
+            Route::put('{image}', 'updateImage');
+            Route::delete('{image}', 'destroyImage');
+            Route::patch('', 'destroyImages');
+        });
+    });
+});
+
+Route::prefix('records')->group(function (){
+    Route::get('detail-record/{detail_planification}', [PhotographicRecordController::class, 'getPhotograficRecord']);
+});
+
+
 Route::prefix('detailPlanification/{detailPlanification}')->group(function () {
     Route::prefix('file')->group(function () {
         Route::get('{file}/download', [DetailPlanificationController::class, 'downloadFile']);
