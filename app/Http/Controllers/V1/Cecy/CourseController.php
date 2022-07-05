@@ -355,7 +355,7 @@ class CourseController extends Controller
         return (new CourseResource($course))
             ->additional([
                 'msg' => [
-                    'summary' => 'success',
+                    'summary' => 'Información general del curso actualizada',
                     'detail' => '',
                     'code' => '200'
                 ]
@@ -826,7 +826,7 @@ class CourseController extends Controller
         return (new ImageResource($newImage))->additional(
             [
                 'msg' => [
-                    'summary' => 'success',
+                    'summary' => 'Imagen cargada exitosamente!',
                     'detail' => '',
                     'code' => '200'
                 ]
