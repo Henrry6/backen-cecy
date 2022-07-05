@@ -447,41 +447,40 @@ class RegistrationController extends Controller
 
     }
 
-
     // Files
-    public function indexFiles(IndexFileRequest $request, Requirement $course)
+    public function indexFiles(IndexFileRequest $request, Registration $registration)
     {
-        return $course->indexFiles($request);
+        return $registration->indexFiles($request);
     }
 
-    public function uploadFileA(UploadFileRequest $request, Requirement $course)
+    public function uploadFileA(UploadFileRequest $request, Registration $registration)
     {
-        return $course->uploadFile($request);
+        return $registration->uploadFile($request);
     }
 
-    public function downloadFileA(Requirement $course, File $file)
+    public function downloadFileA(Registration $registration, File $file)
     {
-        return $course->downloadFile($file);
+        return $registration->downloadFile($file);
     }
 
-    public function showFileR(Requirement $course, File $file)
+    public function showFileR(Registration $registration, File $file)
     {
-        return $course->showFile($file);
+        return $registration->showFile($file);
     }
 
-    public function updateFile(UpdateFileRequest $request, Requirement $course, File $file)
+    public function updateFile(UpdateFileRequest $request, Registration $registration, File $file)
     {
-        return $course->updateFile($request, $file);
+        return $registration->updateFile($request, $file);
     }
 
-    public function destroyFileA(Requirement $course, File $file)
+    public function destroyFileA(Registration $registration, File $file)
     {
-        return $course->destroyFile($file);
+        return $registration->destroyFile($file);
     }
 
-    public function destroyFiles(Requirement $course, DestroysFileRequest $request)
+    public function destroyFiles(Registration $registration, DestroysFileRequest $request)
     {
-        return $course->destroyFiles($request);
+        return $registration->destroyFiles($request);
     }
 
 }
