@@ -20,7 +20,7 @@ class DetailPlanificationParticipantResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'participant' => ParticipantResource::make($this->participant),
+            'participant' => ParticipantResource::make($this->participant),            
             'requirements'=> $this->requirements,
             'aditionalInformation' => AdditionalInformationResource::make($this->additionalInformation),
             'detailPlanification' => DetailPlanificationResource::make($this->detailPlanification),

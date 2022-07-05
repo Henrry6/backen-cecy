@@ -169,7 +169,6 @@ class RequirementController extends Controller
                     ]
                 ]);
         }
-
         return Storage::download($url);
     }
 }

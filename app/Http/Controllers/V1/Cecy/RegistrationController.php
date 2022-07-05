@@ -75,7 +75,7 @@ class RegistrationController extends Controller
     public function show(Registration $registration)
     {
         // datos de un registro
-        return (new DetailPlanificationParticipantResource($registration))
+        return (new ParticipantRegistrationResource($registration))
             ->additional([
                 'msg' => [
                     'summary' => 'success',
@@ -461,6 +461,22 @@ class RegistrationController extends Controller
     public function downloadFileA(Registration $registration, File $file)
     {
         return $registration->downloadFile($file);
+    }
+
+    public function downloadRequirement(Requirement $requirement)
+    {
+        $url = storage_path('app/private/registration-requirement/').$requirement->url;
+        if (!Storage::exists($url)) {
+            return (new FileCollection([]))->additional(
+                [
+                    'msg' => [
+                        'summary' => 'Archivo no encontrado',
+                        'detail' => 'Intente de nuevo',
+                        'code' => '404'
+                    ]
+                ]);
+        }
+        return Storage::download($url);
     }
 
     public function showFileR(Registration $registration, File $file)

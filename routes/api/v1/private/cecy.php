@@ -341,6 +341,7 @@ Route::controller(RegistrationController::class)->group(function () {
         Route::put('reenroll', 'reEnroll'); //Rivas - matriculacion
 
         //Rivas
+        Route::prefix('cecy-responsible')->group(function () {
             Route::prefix('files')->group(function () {
                 Route::get('{file}/download', 'downloadFileA');
                 Route::get('', 'indexFiles');
@@ -350,6 +351,7 @@ Route::controller(RegistrationController::class)->group(function () {
                 Route::delete('{file}', 'destroyFileA');
                 Route::patch('', 'destroyFiles');
             });
+        });
     });
 
     Route::prefix('registrations')->group(function () {

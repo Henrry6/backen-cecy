@@ -17,16 +17,18 @@ class ParticipantRegistrationResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'participant' => ParticipantResource::make($this->participant),
-            // 'requirements'=> RequerimentResource::collection($this->requirements),
-            'registrationRequirements'=> RegistrationRequerimentResource::collection($this->requirements),
-            'aditionalInformation' => AdditionalInformationResource::make($this->additionalInformation),
-            'state' => CatalogueResource::make($this->state),
-            'stateCourse' => CatalogueResource::make($this->stateCourse),
-            'type' => CatalogueResource::make($this->type),
-            'typeParticipant' => CatalogueResource::make($this->typeParticipant),
-            'number' => $this->number,
+            'email' => $this->participant->user->email,
+            'lastname' => $this->participant->user->lastname,
+            'name' => $this->participant->user->name,
+            'username' => $this->participant->user->username,
+            'instruction' => $this->additionalInformation->levelInstruction->name,
+            'companyName' => $this->additionalInformation->company_name,
+            'companySponsored' => $this->additionalInformation->company_sponsored,
+            'companyAddress' => $this->additionalInformation->company_address,
+            'companyActivity' => $this->additionalInformation->company_activity,
             'observations' => $this->observations,
+            'requirements'=> $this->requirements,
+            'detailPlanificationId' => $this->detailPlanification->id,
         ];
     }
 }

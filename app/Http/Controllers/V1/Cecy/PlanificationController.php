@@ -198,17 +198,19 @@ class PlanificationController extends Controller
             $planifications = $course->planifications()
                 ->where('responsible_cecy_id', $loggedInAuthority->id)
                 ->customOrderBy($sorts)
-                ->code($request->input('search'))
+                // ->code($request->input('search'))
                 // ->state($request->input('search'))
                 // ->courseNameFilter($request->input('search'))
+                ->responsibleCourse($request->input('search'))
                 ->paginate($request->input('perPage'));
         } else {
             $planifications = $course->planifications()
                 ->where('responsible_course_id', $responsibleCourse->id)
                 ->customOrderBy($sorts)
-                ->code($request->input('search'))
+                // ->code($request->input('search'))
                 // ->state($request->input('search'))
                 // ->courseNameFilter($request->input('search'))
+                ->resposibleCourse($request->input('search'))
                 ->paginate($request->input('perPage'));
         }
 
