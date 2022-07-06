@@ -226,24 +226,6 @@ class PlanificationController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    public function getPlanitifications()
-    {
-        return "hola";
-        $planifications = Planification::where(['state_id' => function ($state) {
-            $state->where('code', State::APPROVED);
-        }])->paginate();
-
-        return (new CourseCollection($planifications))
-            ->additional([
-                'msg' => [
-                    'summary' => 'Me trae los cursos',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ])
-            ->response()->setStatusCode(200);
-    }
-
     public function getCurrentPlanificationsByAuthority(IndexAuthorityRequest $request)
     {
         // DDRC-C: metodo para obtener las planificaciones 
