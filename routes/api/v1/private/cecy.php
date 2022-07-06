@@ -234,6 +234,7 @@ Route::controller(SchoolPeriodController::class)->group(function () {
     Route::prefix('school-periods')->group(function () {
         Route::patch('destroys', 'destroys');
         Route::get('catalogue', 'catalogue');
+        Route::get('current', 'getCurrent');
     });
 });
 Route::apiResource('school-periods', SchoolPeriodController::class);

@@ -29,6 +29,7 @@ class ParticipantRegistrationResource extends JsonResource
             'observations' => $this->observations,
             'requirements'=> $this->requirements,
             'detailPlanificationId' => $this->detailPlanification->id,
+            'registrationState' => $this->state->name,
         ];
     }
 }
