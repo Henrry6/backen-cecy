@@ -78,6 +78,8 @@ class CourseController extends Controller
         $sorts = explode(',', $request->input('sort'));
 
         $courses = Course::customOrderBy($sorts)
+            ->name($request->input('search'))
+            ->code($request->input('search'))
             ->schoolPeriodId($request->input('schoolPeriod.id'))
             ->paginate($request->input('per_page'));
 
