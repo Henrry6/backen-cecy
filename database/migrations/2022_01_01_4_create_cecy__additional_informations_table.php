@@ -28,7 +28,7 @@ class CreateCecyAdditionalInformationsTable extends Migration
                 ->comment('Información adicional de trabajo para el registro')
                 ->constrained('cecy.registrations');
 
-            $table->string('company_activity')
+            $table->text('company_activity')
                 ->nullable()
                 ->comment('Actividad de la empresa');
 
