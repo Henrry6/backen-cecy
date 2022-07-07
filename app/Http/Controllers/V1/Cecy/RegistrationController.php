@@ -69,8 +69,8 @@ class RegistrationController extends Controller
 
     public function show(Registration $registration)
     {
-        // datos de un registro
-        return (new DetailPlanificationParticipantResource($registration))
+        // DDRC-C: datos de un registro
+        return (new ParticipantRegistrationResource($registration))
             ->additional([
                 'msg' => [
                     'summary' => 'success',
@@ -131,9 +131,12 @@ class RegistrationController extends Controller
     public function reEnroll(RegistrationRequest $request, Registration $registration)
     {
         // DDRC-C: rematricula a un participante
+        $observaciones=(is_null($registration->observations))? array():$registration->observations ;
+        array_push($observaciones,$request->input('observations'));
+        $registration->observations=$observaciones;
+        // return $observaciones;
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
         $currentState = Catalogue::firstWhere('code', $catalogue['registration_state']['registered']);
-        $registration->observations = "";
         $registration->state()->associate(Catalogue::find($currentState->id));
         $registration->save();
         return (new RegistrationResource($registration))
@@ -167,7 +170,10 @@ class RegistrationController extends Controller
         // DDRC-C: matricular a un participante
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
         $currentState = Catalogue::firstWhere('code', $catalogue['registration_state']['registered']);
-        $registration->observations = $request->input('observations');
+        // $registration->observations = $request->input('observations');
+        $observaciones=(is_null($registration->observations))? array():$registration->observations ;
+        array_push($observaciones,$request->input('observations'));
+        $registration->observations=$observaciones;
         $registration->state()->associate(Catalogue::find($currentState->id));
         $registration->save();
         return (new RegistrationResource($registration))
@@ -186,7 +192,10 @@ class RegistrationController extends Controller
         // DDRC-C: cambia el estado a 'en revición' de una incripción
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
         $currentState = Catalogue::firstWhere('code', $catalogue['registration_state']['in_review']);
-        $registration->observations = $request->input('observations');
+        // $registration->observations = $request->input('observations');
+        $observaciones=(is_null($registration->observations))? array():$registration->observations ;
+        array_push($observaciones,$request->input('observations'));
+        $registration->observations=$observaciones;
         $registration->state()->associate(Catalogue::find($currentState->id));
         $registration->save();
         return (new RegistrationResource($registration))
@@ -211,7 +220,10 @@ class RegistrationController extends Controller
             $registration = Registration::firstWhere('id', $value);
             $detailPlanification = $registration->detailPlanification;
 
-            $registration->observations = $request->input('observations');
+            // $registration->observations = $request->input('observations');
+            $observaciones=(is_null($registration->observations))? array():$registration->observations ;
+        array_push($observaciones,$request->input('observations'));
+        $registration->observations=$observaciones;
             $registration->state()->associate($currentState);
 
             $remainingRegistrations = $registration->detailPlanification->capacity;
@@ -246,7 +258,10 @@ class RegistrationController extends Controller
         $currentState = Catalogue::firstWhere('code', $catalogue['registration_state']['cancelled']);
         $detailPlanification = $registration->detailPlanification;
 
-        $registration->observations = $request->input('observations');
+        // $registration->observations = $request->input('observations');
+        $observaciones=(is_null($registration->observations))? array():$registration->observations ;
+        array_push($observaciones,$request->input('observations'));
+        $registration->observations=$observaciones;
         $registration->state()->associate(Catalogue::find($currentState->id));
 
         $remainingRegistrations = $registration->detailPlanification->capacity;
@@ -442,41 +457,56 @@ class RegistrationController extends Controller
 
     }
 
-
     // Files
-    public function indexFiles(IndexFileRequest $request, Requirement $course)
+    public function indexFiles(IndexFileRequest $request, Registration $registration)
     {
-        return $course->indexFiles($request);
+        return $registration->indexFiles($request);
     }
 
-    public function uploadFileA(UploadFileRequest $request, Requirement $course)
+    public function uploadFileA(UploadFileRequest $request, Registration $registration)
     {
-        return $course->uploadFile($request);
+        return $registration->uploadFile($request);
     }
 
-    public function downloadFileA(Requirement $course, File $file)
+    public function downloadFileA(Registration $registration, File $file)
     {
-        return $course->downloadFile($file);
+        return $registration->downloadFile($file);
     }
 
-    public function showFileR(Requirement $course, File $file)
+    public function downloadRequirement(Requirement $requirement)
     {
-        return $course->showFile($file);
+        $url = storage_path('app/private/registration-requirement/').$requirement->url;
+        if (!Storage::exists($url)) {
+            return (new FileCollection([]))->additional(
+                [
+                    'msg' => [
+                        'summary' => 'Archivo no encontrado',
+                        'detail' => 'Intente de nuevo',
+                        'code' => '404'
+                    ]
+                ]);
+        }
+        return Storage::download($url);
     }
 
-    public function updateFile(UpdateFileRequest $request, Requirement $course, File $file)
+    public function showFileR(Registration $registration, File $file)
     {
-        return $course->updateFile($request, $file);
+        return $registration->showFile($file);
     }
 
-    public function destroyFileA(Requirement $course, File $file)
+    public function updateFile(UpdateFileRequest $request, Registration $registration, File $file)
     {
-        return $course->destroyFile($file);
+        return $registration->updateFile($request, $file);
     }
 
-    public function destroyFiles(Requirement $course, DestroysFileRequest $request)
+    public function destroyFileA(Registration $registration, File $file)
     {
-        return $course->destroyFiles($request);
+        return $registration->destroyFile($file);
+    }
+
+    public function destroyFiles(Registration $registration, DestroysFileRequest $request)
+    {
+        return $registration->destroyFiles($request);
     }
 
 }

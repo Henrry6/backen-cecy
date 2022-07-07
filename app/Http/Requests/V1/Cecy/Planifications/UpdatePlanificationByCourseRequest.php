@@ -14,7 +14,7 @@ class UpdatePlanificationByCourseRequest extends FormRequest
   {
     return [
       'responsibleCourse.id' => ['required', 'integer'],
-      'endedAt' => ['required', 'date'],
+      'endedAt' => ['required', 'date', 'after:startedAt'],
       'startedAt' => ['required', 'date'],
     ];
   }

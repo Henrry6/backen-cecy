@@ -55,7 +55,7 @@ Route::controller(PlanificationController::class)->group(function () {
     Route::prefix('planifications/{planification}')->group(function () {
         Route::put('approve', 'approve');
         Route::put('assign-code', 'assignCode');
-        Route::patch('assign-responsible-cecy', 'assignResponsibleCecy');
+        Route::patch('responsible-cecy', 'assignResponsibleCecy');
         Route::put('initial-planification', 'updateInitialPlanification'); //Rivas
         Route::get('detail-planifications', 'getDetailPlanifications'); // Pérez
     });
@@ -64,7 +64,7 @@ Route::controller(PlanificationController::class)->group(function () {
         Route::get('period-states', 'getCurrentPlanificationsByAuthority'); //Rivas
         Route::patch('destroys', 'destroys'); //Rivas
         Route::prefix('courses/{course}')->group(function () {
-            Route::get('', 'getPlanificationsByCourse'); //Rivas, Pérez, pplanificacion
+            Route::get('', 'getPlanificationsByCourse'); //Rivas - Pérez
             Route::post('', 'storePlanificationByCourse'); //Rivas - pplanificacion
         });
         Route::get('kpis/{state}', 'getKpi');
@@ -120,13 +120,17 @@ Route::controller(CourseController::class)->group(function () {
         Route::get('year-schedule', 'showYearSchedule');
         Route::patch('initial-course', 'destroys'); //Rivas - pcurso
         // Route::put('{course}', [CourseController::class, 'updateStateCourse']);
-        Route::get('getCoursesVisualization','getPublicCourses');
+        Route::get('getCoursesVisualization', 'getPublicCourses');
     });
 
     Route::prefix('courses/{course}')->group(function () {
-        Route::put('approve', 'approveCourse'); //sin responsable
-        Route::put('decline', 'declineCourse'); //sin responsable
+        Route::patch('approve', 'approveCourse'); //sin responsable
+        Route::patch('decline', 'declineCourse'); //sin responsable
 
+        Route::prefix('planifications')->group(function () {
+            Route::get('', 'getPlanifications'); // Pérez
+
+        });
         //Para subir acta de curso aprobado
         Route::prefix('files')->group(function () {
             Route::get('{file}/download', 'downloadFile');
@@ -234,6 +238,7 @@ Route::controller(SchoolPeriodController::class)->group(function () {
     Route::prefix('school-periods')->group(function () {
         Route::patch('destroys', 'destroys');
         Route::get('catalogue', 'catalogue');
+        Route::get('current', 'getCurrent');
     });
 });
 Route::apiResource('school-periods', SchoolPeriodController::class);
@@ -364,9 +369,24 @@ Route::controller(RegistrationController::class)->group(function () {
 });
 Route::apiResource('registrations', RegistrationController::class);
 
+/***********************************************************************************************************************
+ * AUTHORITIES
+ **********************************************************************************************************************/
+Route::controller(AuthorityController::class)->group(function () {
+    Route::prefix('authorities')->group(function () {
+        Route::patch('catalogue', [AuthorityController::class, 'catalogue']);//Perez
+        Route::patch('destroys', [AuthorityController::class, 'destroys']);
+    });
+
+    Route::prefix('authorities/{authority}')->group(function () {
+    });
+});
+
+Route::apiResource('authorities', AuthorityController::class);
+
 //photofraphicRecords files-images
-Route::controller(PhotographicRecordController::class)->group(function (){
-    Route::prefix('records/{record}')->group(function (){
+Route::controller(PhotographicRecordController::class)->group(function () {
+    Route::prefix('records/{record}')->group(function () {
         Route::prefix('images')->group(function () {
             Route::get('{image}/download', 'downloadImage');
             Route::get('', 'indexImages');
@@ -380,7 +400,7 @@ Route::controller(PhotographicRecordController::class)->group(function (){
     });
 });
 
-Route::prefix('records')->group(function (){
+Route::prefix('records')->group(function () {
     Route::get('detail-record/{detail_planification}', [PhotographicRecordController::class, 'getPhotograficRecord']);
 });
 

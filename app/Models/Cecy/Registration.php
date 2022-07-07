@@ -2,6 +2,7 @@
 
 namespace App\Models\Cecy;
 
+use App\Models\Core\File;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as Auditing;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -37,17 +38,20 @@ class Registration extends Model implements Auditable
     {
         return $this->hasOne(AdditionalInformation::class);
     }
-    
+
     public function additionalInformations()
     {
         return $this->hasMany(AdditionalInformation::class);
     }
-    
+
     public function certificates()
     {
         return $this->morphMany(Certificate::class, 'certificateable');
     }
-    
+    public function files()
+    {
+        return $this->morphMany(File::class, 'fileable');
+    }
     // Relationships
     //revisar
     public function detailAttendances()
@@ -156,7 +160,7 @@ class Registration extends Model implements Auditable
             return $query->orWhere('type_participant_id', $typeParticipant->id);
         }
     }
-    
+
     public function scopeCustomOrderBy($query, $sorts)
     {
         if (!empty($sorts[0])) {
@@ -187,6 +191,6 @@ class Registration extends Model implements Auditable
             return $query->select($fields);
         }
     }
-    
+
 }
 

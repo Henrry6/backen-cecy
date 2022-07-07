@@ -39,8 +39,25 @@ class SchoolPeriodController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    public function show(SchoolPeriod $schoolPeriod)
+    public function show()
     {
+        return (new SchoolPeriodResource($schoolPeriod))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
+
+    public function getCurrent(SchoolPeriod $schoolPeriod)
+    {
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+        $currentState = Catalogue::firstWhere('code', $catalogue['school_period_state']['current']);
+        $schoolPeriod = SchoolPeriod::firstWhere('state_id', $currentState->id);
+        
         return (new SchoolPeriodResource($schoolPeriod))
             ->additional([
                 'msg' => [
