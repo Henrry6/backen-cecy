@@ -507,10 +507,31 @@ class PlanificationController extends Controller
     public function updateInitialPlanification(UpdatePlanificationByCourseRequest $request, Planification $planification)
     {
         // DDRC-C: actualiza los estados de inicio, fin y responsable del curso
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+        // validaciones
         $instructor = Instructor::find($request->input('responsibleCourse.id'));
-
+        $currentState = Catalogue::firstWhere('code', $catalogue['school_period_state']['current']);
+        $schoolPeriod = SchoolPeriod::firstWhere('state_id', $currentState->id);
+        $fechaMinima=Carbon::createFromFormat('Y-m-d',$schoolPeriod->started_at);
+        $fechaMaxima=Carbon::createFromFormat('Y-m-d',$schoolPeriod->ended_at);
+        $fechaInicio=Carbon::createFromFormat('Y-m-d',$request->input('startedAt'));
+        $fechaFin=Carbon::createFromFormat('Y-m-d',$request->input('endedAt'));
+        $rangoFechaInicio=$fechaInicio->between($fechaMinima,$fechaMaxima);
+        $rangoFechaFin=$fechaFin->between($fechaMinima,$fechaMaxima);
+        // return($schoolPeriod);
+        if (!$rangoFechaInicio || !$rangoFechaFin) {
+            return response()->json([
+                'data' => '',
+                'msg' => [
+                    'summary' => 'Error',
+                    'detail' => 'Las fechas se encuentran fuera del rango del periodo actual',
+                    'code' => '400'
+                ]
+            ], 400);
+        } 
+        
+        // asignacion
         $planification->responsibleCourse()->associate($instructor);
-
         $planification->ended_at = $request->input('endedAt');
         $planification->started_at = $request->input('startedAt');
 

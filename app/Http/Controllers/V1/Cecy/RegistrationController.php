@@ -74,7 +74,7 @@ class RegistrationController extends Controller
 
     public function show(Registration $registration)
     {
-        // datos de un registro
+        // DDRC-C: datos de un registro
         return (new ParticipantRegistrationResource($registration))
             ->additional([
                 'msg' => [
@@ -136,9 +136,12 @@ class RegistrationController extends Controller
     public function reEnroll(RegistrationRequest $request, Registration $registration)
     {
         // DDRC-C: rematricula a un participante
+        $observaciones=(is_null($registration->observations))? array():$registration->observations ;
+        array_push($observaciones,$request->input('observations'));
+        $registration->observations=$observaciones;
+        // return $observaciones;
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
         $currentState = Catalogue::firstWhere('code', $catalogue['registration_state']['registered']);
-        $registration->observations = "";
         $registration->state()->associate(Catalogue::find($currentState->id));
         $registration->save();
         return (new RegistrationResource($registration))
@@ -172,7 +175,10 @@ class RegistrationController extends Controller
         // DDRC-C: matricular a un participante
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
         $currentState = Catalogue::firstWhere('code', $catalogue['registration_state']['registered']);
-        $registration->observations = $request->input('observations');
+        // $registration->observations = $request->input('observations');
+        $observaciones=(is_null($registration->observations))? array():$registration->observations ;
+        array_push($observaciones,$request->input('observations'));
+        $registration->observations=$observaciones;
         $registration->state()->associate(Catalogue::find($currentState->id));
         $registration->save();
         return (new RegistrationResource($registration))
@@ -191,7 +197,10 @@ class RegistrationController extends Controller
         // DDRC-C: cambia el estado a 'en revición' de una incripción
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
         $currentState = Catalogue::firstWhere('code', $catalogue['registration_state']['in_review']);
-        $registration->observations = $request->input('observations');
+        // $registration->observations = $request->input('observations');
+        $observaciones=(is_null($registration->observations))? array():$registration->observations ;
+        array_push($observaciones,$request->input('observations'));
+        $registration->observations=$observaciones;
         $registration->state()->associate(Catalogue::find($currentState->id));
         $registration->save();
         return (new RegistrationResource($registration))
@@ -216,7 +225,10 @@ class RegistrationController extends Controller
             $registration = Registration::firstWhere('id', $value);
             $detailPlanification = $registration->detailPlanification;
 
-            $registration->observations = $request->input('observations');
+            // $registration->observations = $request->input('observations');
+            $observaciones=(is_null($registration->observations))? array():$registration->observations ;
+        array_push($observaciones,$request->input('observations'));
+        $registration->observations=$observaciones;
             $registration->state()->associate($currentState);
 
             $remainingRegistrations = $registration->detailPlanification->capacity;
@@ -251,7 +263,10 @@ class RegistrationController extends Controller
         $currentState = Catalogue::firstWhere('code', $catalogue['registration_state']['cancelled']);
         $detailPlanification = $registration->detailPlanification;
 
-        $registration->observations = $request->input('observations');
+        // $registration->observations = $request->input('observations');
+        $observaciones=(is_null($registration->observations))? array():$registration->observations ;
+        array_push($observaciones,$request->input('observations'));
+        $registration->observations=$observaciones;
         $registration->state()->associate(Catalogue::find($currentState->id));
 
         $remainingRegistrations = $registration->detailPlanification->capacity;

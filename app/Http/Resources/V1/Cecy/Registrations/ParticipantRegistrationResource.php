@@ -15,6 +15,9 @@ class ParticipantRegistrationResource extends JsonResource
 {
     public function toArray($request)
     {
+        // $value=json_decode($this->observations,true);
+        $observaciones=(is_string($this->observations)||is_null($this->observations))?array(""):$this->observations;
+        $lastObservation=end($observaciones);
         return [
             'id' => $this->id,
             'email' => $this->participant->user->email,
@@ -26,7 +29,7 @@ class ParticipantRegistrationResource extends JsonResource
             'companySponsored' => $this->additionalInformation->company_sponsored,
             'companyAddress' => $this->additionalInformation->company_address,
             'companyActivity' => $this->additionalInformation->company_activity,
-            'observations' => $this->observations,
+            'observations' => $lastObservation,
             'requirements'=> $this->requirements,
             'detailPlanificationId' => $this->detailPlanification->id,
             'registrationState' => $this->state->name,

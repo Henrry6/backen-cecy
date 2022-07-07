@@ -18,6 +18,8 @@ class DetailPlanificationParticipantResource extends JsonResource
 {
     public function toArray($request)
     {
+        $observaciones=(is_string($this->observations)||is_null($this->observations))?array(""):$this->observations;
+        $lastObservation=end($observaciones);
         return [
             'id' => $this->id,
             'participant' => ParticipantResource::make($this->participant),            
@@ -29,7 +31,7 @@ class DetailPlanificationParticipantResource extends JsonResource
             'type' => CatalogueResource::make($this->type),
             'typeParticipant' => CatalogueResource::make($this->typeParticipant),
             'number' => $this->number,
-            'observations' => $this->observations,
+            'observations' => $lastObservation,
         ];
     }
 }
