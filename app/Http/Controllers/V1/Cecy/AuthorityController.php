@@ -19,7 +19,6 @@ class AuthorityController extends Controller
 
     public function catalogue(CatalogueAuthorityRequest $request)
     {
-
         $authorities = Authority::get();
 
         return (new AuthorityCollection($authorities))
