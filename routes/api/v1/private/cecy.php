@@ -404,6 +404,8 @@ Route::prefix('records')->group(function () {
     Route::get('detail-record/{detail_planification}', [PhotographicRecordController::class, 'getPhotograficRecord']);
 });
 
+Route::apiResource('records', PhotographicRecordController::class);
+
 
 Route::prefix('detailPlanification/{detailPlanification}')->group(function () {
     Route::prefix('file')->group(function () {
