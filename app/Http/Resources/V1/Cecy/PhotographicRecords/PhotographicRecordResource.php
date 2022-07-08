@@ -16,7 +16,7 @@ class PhotographicRecordResource extends JsonResource
             'detailPlanification' => DetailPlanificationResource::make($this->detailPlanification),
             'description' => $this->description,
             'numberWeek'=>$this->number_week,
-            'urlImage'=> $this->url_image,
+            'image'=> $this->image,
             'weekAt' =>$this->week_at,
 
         ];
