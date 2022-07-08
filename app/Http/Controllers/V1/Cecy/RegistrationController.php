@@ -15,7 +15,6 @@ use App\Http\Requests\V1\Core\Files\DestroysFileRequest;
 use App\Http\Requests\V1\Core\Files\IndexFileRequest;
 use App\Http\Requests\V1\Core\Files\UpdateFileRequest;
 use App\Http\Resources\V1\Cecy\Registrations\RegisterStudentResource;
-use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationParticipants\DetailPlanificationParticipantResource;
 use App\Http\Resources\V1\Cecy\Participants\CoursesByParticipantCollection;
 use App\Http\Resources\V1\Cecy\Registrations\RegistrationCollection;
 use App\Http\Resources\V1\Cecy\Registrations\RegistrationResource;
@@ -388,7 +387,7 @@ class RegistrationController extends Controller
         return (new RegisterStudentResource($registration))
             ->additional([
                 'msg' => [
-                    'summary' => 'Registro realizado con éxito',
+                    'summary' => 'Matricula Enviada',
                     'detail' => '',
                     'code' => '200'
                 ]
@@ -488,6 +487,8 @@ class RegistrationController extends Controller
         }
         return Storage::download($url);
     }
+
+
 
     public function showFileR(Registration $registration, File $file)
     {
