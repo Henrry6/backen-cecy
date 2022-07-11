@@ -15,6 +15,7 @@ use App\Http\Requests\V1\Core\Files\DestroysFileRequest;
 use App\Http\Requests\V1\Core\Files\IndexFileRequest;
 use App\Http\Requests\V1\Core\Files\UpdateFileRequest;
 use App\Http\Resources\V1\Cecy\Registrations\RegisterStudentResource;
+use App\Http\Resources\V1\Cecy\Registrations\ParticipantRegistrationResource;
 use App\Http\Resources\V1\Cecy\Participants\CoursesByParticipantCollection;
 use App\Http\Resources\V1\Cecy\Registrations\RegistrationCollection;
 use App\Http\Resources\V1\Cecy\Registrations\RegistrationResource;
