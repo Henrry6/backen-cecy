@@ -69,7 +69,7 @@ class AuthenticationSeeder extends Seeder
 
     private function createMenus()
     {
-        Menu::factory(5)->sequence(
+        Menu::factory(7)->sequence(
             [
                 'icon' => PrimeIcons::$CHECK_SQUARE,
                 'label' => 'Admin Users 1',
@@ -99,10 +99,15 @@ class AuthenticationSeeder extends Seeder
                 'icon' => PrimeIcons::$CHECK_SQUARE,
                 'label' => 'Cursos Intructor',
                 'router_link' => '/cecy/instructor',
+            ],
+            [
+                'icon' => PrimeIcons::$CHECK_SQUARE,
+                'label' => 'Responsable de curso',
+                'router_link' => '/cecy/responsible-course',
             ]
         )->create();
 
-        Menu::factory(5)->sequence(
+        Menu::factory(8)->sequence(
             [
 
                 'parent_id' => 1,
@@ -145,6 +150,12 @@ class AuthenticationSeeder extends Seeder
                 'icon' => PrimeIcons::$CHECK_SQUARE,
                 'label' => 'Mis cursos',
                 'router_link' => '/cecy/instructor/courses',
+            ],
+            [
+                'parent_id' => 7,
+                'icon' => PrimeIcons::$CHECK_SQUARE,
+                'label' => 'Mis cursos',
+                'router_link' => '/cecy/responsible-course',
             ]
             //Preguntar como se hace cuando el router link tiene adjunto un id
         )->create();
