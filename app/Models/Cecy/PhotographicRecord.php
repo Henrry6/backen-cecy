@@ -19,7 +19,8 @@ class PhotographicRecord extends Model implements Auditable
     use HasFactory;
     use Auditing;
     use ImageTrait;
-    use SoftDeletes;use FileTrait;
+    use SoftDeletes;
+    use FileTrait;
 
     protected $table = 'cecy.photographic_records';
 
