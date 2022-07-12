@@ -18,6 +18,7 @@ use App\Http\Requests\V1\Core\Images\UploadImageRequest;
 use App\Http\Resources\V1\Cecy\PhotographicRecords\PhotographicRecordResource;
 use App\Http\Resources\V1\Cecy\RegistrationRequeriments\RegistrationRequerimentResource;
 use App\Http\Resources\V1\Cecy\Registrations\RegisterStudentResource;
+use App\Http\Resources\V1\Cecy\Registrations\ParticipantRegistrationResource;
 use App\Http\Resources\V1\Cecy\Participants\CoursesByParticipantCollection;
 use App\Http\Resources\V1\Cecy\Registrations\RegistrationCollection;
 use App\Http\Resources\V1\Cecy\Registrations\RegistrationResource;
