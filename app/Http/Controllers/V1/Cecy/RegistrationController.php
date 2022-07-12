@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\V1\Cecy;
 
+use App\Exports\RegistrationExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Core\Files\UploadFileRequest;
 use App\Http\Requests\V1\Cecy\Participants\GetCoursesByParticipantRequest;
@@ -22,6 +23,7 @@ use App\Http\Resources\V1\Cecy\Registrations\ParticipantRegistrationResource;
 use App\Http\Resources\V1\Cecy\Participants\CoursesByParticipantCollection;
 use App\Http\Resources\V1\Cecy\Registrations\RegistrationCollection;
 use App\Http\Resources\V1\Cecy\Registrations\RegistrationResource;
+use App\Imports\RegistrationImport;
 use App\Models\Cecy\AdditionalInformation;
 use App\Models\Cecy\DetailSchoolPeriod;
 use App\Models\Cecy\RegistrationRequirement;
@@ -35,7 +37,11 @@ use Carbon\Carbon;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
+<<<<<<< Updated upstream
 use Illuminate\Support\Facades\Storage;
+=======
+use Maatwebsite\Excel\Facades\Excel;
+>>>>>>> Stashed changes
 
 
 class RegistrationController extends Controller
@@ -518,6 +524,7 @@ class RegistrationController extends Controller
         return $registration->destroyFiles($request);
     }
 
+<<<<<<< Updated upstream
     public function uploadDocuments(UploadImageRequest $request,  RegistrationRequirement $registrationRequirement)
     {
         $files = $registrationRequirement->files()->get();
@@ -543,4 +550,16 @@ class RegistrationController extends Controller
             ]
         );
     }
+=======
+    public function ExcelImport(){
+
+        $file = request()->file('excel');
+        Excel::import(new RegistrationImport, $file);
+    }
+    public function exportExcel()
+    {
+        return Excel::download(new RegistrationExport, 'registration.xlsx');
+    }
+
+>>>>>>> Stashed changes
 }

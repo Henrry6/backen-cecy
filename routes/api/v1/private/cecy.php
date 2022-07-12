@@ -317,6 +317,7 @@ Route::apiResource('requirements', RequirementController::class);
  * ATTENDANCES / Santillan-Molina
  **********************************************************************************************************************/
 Route::prefix('attendances')->group(function () {
+    Route::post('detail-attendance',[AttendanceController::class,'storeAttendance']);
     Route::get('detail-planifications/{detail_planification}', [AttendanceController::class, 'getByDetailPlanification']); //asistencias por el detalle de la planificacion santillan
     Route::delete('detail-planifications/{detail_planification}', [AttendanceController::class, 'destroyAttendance']); // eliminacion santillan
     Route::delete('destroys', [AttendanceController::class, 'destroys']);
@@ -360,6 +361,8 @@ Route::controller(RegistrationController::class)->group(function () {
     });
 
     Route::prefix('registrations')->group(function () {
+//        Route::post('excel-reading', [RegistrationController::class, 'ExcelImport']);   //Importa-Lee Datos del Excell y los guarda en BD Santillan
+        Route::get('excel', [RegistrationController::class, 'exportExcel']);   //exportar Excel Santillan
         Route::put('participant-grades/{registration}', 'updateGradesParticipant'); // Actualizar notas
         Route::get('courses/participant', 'getCoursesByParticipant'); // Molina
         Route::post('register-student', 'registerStudent');
