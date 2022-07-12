@@ -37,12 +37,8 @@ use Carbon\Carbon;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
-<<<<<<< Updated upstream
 use Illuminate\Support\Facades\Storage;
-=======
 use Maatwebsite\Excel\Facades\Excel;
->>>>>>> Stashed changes
-
 
 class RegistrationController extends Controller
 {
@@ -524,7 +520,6 @@ class RegistrationController extends Controller
         return $registration->destroyFiles($request);
     }
 
-<<<<<<< Updated upstream
     public function uploadDocuments(UploadImageRequest $request,  RegistrationRequirement $registrationRequirement)
     {
         $files = $registrationRequirement->files()->get();
@@ -550,7 +545,6 @@ class RegistrationController extends Controller
             ]
         );
     }
-=======
     public function ExcelImport(){
 
         $file = request()->file('excel');
@@ -560,6 +554,4 @@ class RegistrationController extends Controller
     {
         return Excel::download(new RegistrationExport, 'registration.xlsx');
     }
-
->>>>>>> Stashed changes
 }
