@@ -344,7 +344,7 @@ Route::controller(RegistrationController::class)->group(function () {
         Route::put('review', 'setRegistrationinReview'); //Rivas  - matriculacion
         Route::delete('eliminate', 'eliminate'); //Rivas - matriculacion
         Route::put('reenroll', 'reEnroll'); //Rivas - matriculacion
-
+        Route::post('', 'uploadDocuments');
         //Rivas
         Route::prefix('cecy-responsible')->group(function () {
             Route::prefix('files')->group(function () {
