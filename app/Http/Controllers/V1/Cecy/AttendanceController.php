@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\V1\Cecy;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cecy\DetailAttendance;
+use App\Models\Cecy\Registration;
 use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 use App\Http\Requests\V1\Core\Images\UploadImageRequest;
 use App\Http\Requests\V1\Cecy\Attendances\DestroysAttendanceRequest;
@@ -21,6 +23,7 @@ use App\Models\Cecy\Course;
 use App\Models\Cecy\DetailPlanification;
 use App\Models\Cecy\Institution;
 use App\Models\Cecy\Instructor;
+use Illuminate\Support\Facades\DB;
 
 class AttendanceController extends Controller
 {
@@ -81,20 +84,22 @@ class AttendanceController extends Controller
     }
     //crear una asistencia a partir de las fechas y horarios de detalle planificacion.
     // AttendanceController
-    public function storeAttendanceTeacher(StoreAttendanceRequest $request)
+    public function store(StoreAttendanceRequest $request)
     {
         $attendance = new Attendance();
 
-        $attendance->detailPlanification()
-            ->associate(DetailPlanification::find($request->input('detail_planification.id')));
+//        $attendance->detailPlanification()
+//            ->associate(DetailPlanification::find($request->input('detailPlanificationId')));
 
+        $attendance->detail_planification_id = $request->input('detailPlanificationId');
         $attendance->duration = $request->input('duration');
-
         $attendance->registered_at = $request->input('registeredAt');
 
         $attendance->save();
-
-        return (new AttendanceCollection($attendance))
+        //una vez creada tomamos el id de la asistencia
+        //despues tomamos el id de detalle de planificacion para obtener los registros
+        //despues iteramos sobre los registros para ir creando uno por uno.
+        return (new AttendanceResource($attendance))
             ->additional([
                 'msg' => [
                     'summary' => 'Registro Creado',
@@ -103,6 +108,34 @@ class AttendanceController extends Controller
                 ]
             ])
             ->response()->setStatusCode(200);
+    }
+    public function storeAttendance(StoreAttendanceRequest $request)
+    {
+        $attendance = new Attendance();
+        $attendance->detail_planification_id = $request->input('detailPlanificationId');
+        $attendance->duration = $request->input('duration');
+        $attendance->registered_at = $request->input('registeredAt');
+        $attendance->save();
+        DB::transaction(function () use ($request, $attendance) {
+            $registrations = Registration::get();
+            foreach ($registrations as $registration) {
+                $detailAttendace = new DetailAttendance();
+                $detailAttendace->registration()->associate($registration);
+                $detailAttendace->attendance()->associate($attendance);
+                $detailAttendace->type_id = $request->input('type_id');
+                $detailAttendace->save();
+            }
+        });
+
+        return (new AttendanceResource($attendance))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Detalle de asistencia creada',
+                    'Institution' => '',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
     }
     //ver asistencia una por una
     // AttendanceController
@@ -222,19 +255,5 @@ class AttendanceController extends Controller
 
         return $pdf->stream('Asistencia-evaluacion.pdf');
 
-    }
-    /*******************************************************************************************************************
-     * IMAGES
-     ******************************************************************************************************************/
-    //subir evidencia fotografica
-    // AttendanceController
-    public function uploadImage(UploadImageRequest $request, PhotograficRecord $photograficRecord)
-    {
-        $storagePath = storage_path('app/private/images/');
-        $image = InterventionImage::make($image);
-        $path = $storagePath . time() . '.jpg';
-        $image->save($path, 75);
-
-        return $photograficRecord->uploadImage($request);
     }
 }

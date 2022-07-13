@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\V1\Cecy;
 
+use App\Exports\RegistrationExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Core\Files\UploadFileRequest;
 use App\Http\Requests\V1\Cecy\Participants\GetCoursesByParticipantRequest;
@@ -14,13 +15,18 @@ use App\Http\Requests\V1\Cecy\Registrations\NullifyRegistrationRequest;
 use App\Http\Requests\V1\Core\Files\DestroysFileRequest;
 use App\Http\Requests\V1\Core\Files\IndexFileRequest;
 use App\Http\Requests\V1\Core\Files\UpdateFileRequest;
+use App\Http\Requests\V1\Core\Images\UploadImageRequest;
+use App\Http\Resources\V1\Cecy\PhotographicRecords\PhotographicRecordResource;
+use App\Http\Resources\V1\Cecy\RegistrationRequeriments\RegistrationRequerimentResource;
 use App\Http\Resources\V1\Cecy\Registrations\RegisterStudentResource;
 use App\Http\Resources\V1\Cecy\Registrations\ParticipantRegistrationResource;
 use App\Http\Resources\V1\Cecy\Participants\CoursesByParticipantCollection;
 use App\Http\Resources\V1\Cecy\Registrations\RegistrationCollection;
 use App\Http\Resources\V1\Cecy\Registrations\RegistrationResource;
+use App\Imports\RegistrationImport;
 use App\Models\Cecy\AdditionalInformation;
 use App\Models\Cecy\DetailSchoolPeriod;
+use App\Models\Cecy\RegistrationRequirement;
 use App\Models\Core\File;
 use App\Models\Cecy\Catalogue;
 use App\Models\Cecy\DetailPlanification;
@@ -31,7 +37,8 @@ use Carbon\Carbon;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
-
+use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 class RegistrationController extends Controller
 {
@@ -463,6 +470,8 @@ class RegistrationController extends Controller
         return $registration->indexFiles($request);
     }
 
+
+
     public function uploadFileA(UploadFileRequest $request, Registration $registration)
     {
         return $registration->uploadFile($request);
@@ -511,4 +520,38 @@ class RegistrationController extends Controller
         return $registration->destroyFiles($request);
     }
 
+    public function uploadDocuments(UploadImageRequest $request,  RegistrationRequirement $registrationRequirement)
+    {
+        $files = $registrationRequirement->files()->get();
+        foreach ($files as $file) {
+            // Storage::deleteDirectory($image->directory);
+            Storage::disk('public')->deleteDirectory('registrationRequirements' . $file->id);
+            $file->delete();
+        }
+
+        foreach ($request->file('files') as $file) {
+
+            $registrationRequirement->url =  'registrationRequirements/'. $registrationRequirement->id.'.'.$file->getClientOriginalExtension();
+            $registrationRequirement->save();
+            $file->storeAs('', $registrationRequirement->url, 'public');
+        }
+        return (new RegistrationRequerimentResource($registrationRequirement))->additional(
+            [
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ]
+        );
+    }
+    public function ExcelImport(){
+
+        $file = request()->file('excel');
+        Excel::import(new RegistrationImport, $file);
+    }
+    public function exportExcel()
+    {
+        return Excel::download(new RegistrationExport, 'registration.xlsx');
+    }
 }

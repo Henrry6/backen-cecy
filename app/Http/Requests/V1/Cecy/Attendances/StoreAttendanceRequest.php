@@ -13,7 +13,7 @@ class StoreAttendanceRequest extends FormRequest
     public function rules()
     {
         return [
-            'type.id' => ['required', 'integer'],
+            'detailPlanificationId' => ['required', 'integer'],
             'duration' => ['required'],
             'registeredAt' => ['required']
         ];
@@ -22,7 +22,7 @@ class StoreAttendanceRequest extends FormRequest
     public function attributes()
     {
         return [
-            'type.id' => 'tipo de asistencia',
+            'detailPlanificationId' => 'detalle de planificacion id',
             'duration' => 'duración de la clase',
             'registeredAt' => 'fecha de la clase'
         ];
