@@ -34,6 +34,7 @@ use App\Models\Cecy\Participant;
 use App\Models\Cecy\Registration;
 use App\Models\Cecy\Requirement;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
@@ -550,8 +551,10 @@ class RegistrationController extends Controller
         $file = request()->file('excel');
         Excel::import(new RegistrationImport, $file);
     }
-    public function exportExcel()
+    public function exportExcel(DetailPlanification $detailPlanification)
     {
-        return Excel::download(new RegistrationExport, 'registration.xlsx');
+//        return Excel::download(new RegistrationExport, 'registration.xlsx');
+//        return $detailPlanification->id;
+        return Excel::download(new RegistrationExport($detailPlanification->id), '-participants.xlsx');
     }
 }

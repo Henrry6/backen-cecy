@@ -17,7 +17,7 @@ class PhotographicRecordResource extends JsonResource
             'description' => $this->description,
             'numberWeek'=>$this->number_week,
             'image'=> $this->image,
-            'weekAt' =>$this->week_at,
+            'registeredAt' =>$this->registered_at,
 
         ];
     }

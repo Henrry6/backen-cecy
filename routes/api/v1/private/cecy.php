@@ -362,7 +362,7 @@ Route::controller(RegistrationController::class)->group(function () {
 
     Route::prefix('registrations')->group(function () {
 //        Route::post('excel-reading', [RegistrationController::class, 'ExcelImport']);   //Importa-Lee Datos del Excell y los guarda en BD Santillan
-        Route::get('excel', [RegistrationController::class, 'exportExcel']);   //exportar Excel Santillan
+        Route::get('excel/{detailPlanification}', [RegistrationController::class, 'exportExcel']);   //exportar Excel Santillan
         Route::put('participant-grades/{registration}', 'updateGradesParticipant'); // Actualizar notas
         Route::get('courses/participant', 'getCoursesByParticipant'); // Molina
         Route::post('register-student', 'registerStudent');
