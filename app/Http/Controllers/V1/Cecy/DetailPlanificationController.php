@@ -372,7 +372,7 @@ class DetailPlanificationController extends Controller
 
     public function getParticipantsByDetailPlanification(IndexDetailPlanificationRequest $request, DetailPlanification $detailPlanification)
     {
-        // DDRC-C: obtiene una lista de participantes de una planificación dado el detalle de la planificación
+        // DDRC-C: obtiene una lista de participantes inscritos a un curso dado el detalle de la planificación
         $sorts = explode(',', $request->input('sort'));
 
         $participants = $detailPlanification->registrations()
