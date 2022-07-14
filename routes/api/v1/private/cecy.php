@@ -61,7 +61,8 @@ Route::controller(PlanificationController::class)->group(function () {
     });
 
     Route::prefix('planifications')->group(function () {
-        Route::get('period-states', 'getCurrentPlanificationsByAuthority'); //Rivas
+        Route::get('current-period-state', 'getCurrentPlanificationsByAuthority'); //Rivas
+        Route::get('previous-period-states', 'getPreviousPlanificationsByAuthority'); //Rivas
         Route::patch('destroys', 'destroys'); //Rivas
         Route::prefix('courses/{course}')->group(function () {
             Route::get('', 'getPlanificationsByCourse'); //Rivas - Pérez

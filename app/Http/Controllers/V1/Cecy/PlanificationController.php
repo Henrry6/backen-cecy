@@ -270,6 +270,48 @@ class PlanificationController extends Controller
             ])->response()->setStatusCode(200);
     }
 
+    public function getPreviousPlanificationsByAuthority(IndexAuthorityRequest $request)
+    {
+        // DDRC-C: metodo para obtener las planificaciones 
+        // $sorts = explode(',', $request->input('sort'));
+
+        $authority = Authority::firstWhere('user_id', $request->user()->id);
+        //verificar que el usuario logeado es una autoridad de Authority
+        if (!$authority) {
+            return response()->json([
+                'data' => '',
+                'msg' => [
+                    'summary' => 'Error',
+                    'detail' => 'No se encontró al usuario: no es una autoridad o no está registrado.',
+                    'code' => '400'
+                ]
+            ], 400);
+        }
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+        $culminatedState = Catalogue::where([
+            ['code','=', 'CULMINATED'],
+            ['type','=','PLANIFICATION_STATE']
+            ])->first();
+        $schoolPeriod = SchoolPeriod::Where('state_id', null)->pluck('id');
+
+        $planifications = $authority->planifications()
+            ->whereHas('detailSchoolPeriod', function ($detailSchoolPeriod) use ($schoolPeriod) {
+                $detailSchoolPeriod->whereIn('school_period_id', $schoolPeriod);
+            })
+            ->Where('state_id',$culminatedState->id)
+            ->courseNameFilter($request->input('search'))
+            ->paginate($request->input('per_page'));
+
+        return (new PlanificationByAuthorityCollection($planifications))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])->response()->setStatusCode(200);
+    }
+
     public function assignCode(Planification $planification, $request)
     {
         $planification->code = $request->input('code');
