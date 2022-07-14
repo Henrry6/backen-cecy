@@ -120,4 +120,11 @@ class Instructor extends Model implements Auditable
             return $query->select($fields);
         }
     }
+
+    public function hasCourseProfile(int $courseProfileId): int
+    {
+        return $this->courseProfiles()
+            ->where('course_profile_id', $courseProfileId)
+            ->count();
+    }
 }
