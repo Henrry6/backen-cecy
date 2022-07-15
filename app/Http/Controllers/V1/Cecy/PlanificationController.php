@@ -245,16 +245,26 @@ class PlanificationController extends Controller
         }
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
         $currentState = Catalogue::firstWhere('code', $catalogue['school_period_state']['current']);
-        $approvedState = Catalogue::where([
-            ['code','=', $catalogue['planification_state']['approved']],
+        $detailPlanificationState = Catalogue::where([
+            ['code','=', 'CULMINATED'],
+            ['type','=','DETAIL_PLANIFICATION_STATE']
+            ])->first();
+            
+            // firstWhere('code', $catalogue['detail_planification_state']['to_be_approved']);
+            $approvedState = Catalogue::where([
+                ['code','=', $catalogue['planification_state']['approved']],
             ['type','=','PLANIFICATION_STATE']
             ])->first();
-        
+            // return $authority;
+            
         $schoolPeriod = SchoolPeriod::firstWhere('state_id', $currentState->id);
 
         $planifications = $authority->planifications()
             ->whereHas('detailSchoolPeriod', function ($detailSchoolPeriod) use ($schoolPeriod) {
                 $detailSchoolPeriod->where('school_period_id', $schoolPeriod->id);
+            })
+            ->with('detailPlanifications', function ($DTPL) use ($detailPlanificationState) {
+                $DTPL->where('state_id', $detailPlanificationState->id);
             })
             ->Where('state_id',$approvedState->id)
             ->courseNameFilter($request->input('search'))
@@ -292,11 +302,18 @@ class PlanificationController extends Controller
             ['code','=', 'CULMINATED'],
             ['type','=','PLANIFICATION_STATE']
             ])->first();
+            $detailPlanificationState = Catalogue::where([
+                ['code','=', 'CULMINATED'],
+                ['type','=','DETAIL_PLANIFICATION_STATE']
+                ])->first();
         $schoolPeriod = SchoolPeriod::Where('state_id', null)->pluck('id');
 
         $planifications = $authority->planifications()
             ->whereHas('detailSchoolPeriod', function ($detailSchoolPeriod) use ($schoolPeriod) {
                 $detailSchoolPeriod->whereIn('school_period_id', $schoolPeriod);
+            })
+            ->with('detailPlanifications', function ($DTPL) use ($detailPlanificationState) {
+                $DTPL->where('state_id', $detailPlanificationState->id);
             })
             ->Where('state_id',$culminatedState->id)
             ->courseNameFilter($request->input('search'))
