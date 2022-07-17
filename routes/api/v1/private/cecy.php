@@ -374,6 +374,7 @@ Route::controller(RegistrationController::class)->group(function () {
 Route::apiResource('registrations', RegistrationController::class);
 
 Route::prefix('registration')->group(function () {
+    //lee el excel de las notas y lo carga a la base de datos
     Route::post('import', [RegistrationController::class, 'registrationImport']);
 });
 /***********************************************************************************************************************
