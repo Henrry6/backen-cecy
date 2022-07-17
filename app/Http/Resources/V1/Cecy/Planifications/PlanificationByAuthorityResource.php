@@ -22,6 +22,7 @@ class PlanificationByAuthorityResource extends JsonResource
             'id' => $this->id,
             'course' => CourseResource::make($this->course),
             'detailPlanifications' => DetailPlanificationResource::collection($this->detailPlanifications),
+            'period'=>DetailSchoolPeriodResource::make($this->detailSchoolPeriod)->schoolPeriod,
         ];
     }
 }
