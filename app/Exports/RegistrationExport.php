@@ -39,7 +39,6 @@ class RegistrationExport implements FromCollection, WithMapping,WithHeadings
             $row->participant ? $row->participant->user->phone: '',
             $row->grade1,
             $row->grade2,
-            $row->final_grade,
 
         ];
     }
@@ -47,15 +46,14 @@ class RegistrationExport implements FromCollection, WithMapping,WithHeadings
     public function headings(): array
     {
         $headers = [
-            'Id',
-            'Cedula',
-            'Nombre',
-            'Apellido',
-            'Correo',
-            'Telefono',
-            'Primer Parcial',
-            'Segundo Parcial',
-            'Nota Final',
+            'id',
+            'cedula',
+            'nombre',
+            'apellido',
+            'correo',
+            'telefono',
+            'primer_parcial',
+            'segundo_parcial',
         ];
 
         return $headers;

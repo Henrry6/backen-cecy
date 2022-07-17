@@ -437,8 +437,8 @@ class RegistrationController extends Controller
         return (new RegistrationResource($registration))
             ->additional([
                 'msg' => [
-                    'summary' => 'registro Actualizado',
-                    'Institution' => '',
+                    'summary' => 'succes',
+                    'detail' => 'registro Actualizado',
                     'code' => '200'
                 ]
             ])
@@ -454,8 +454,8 @@ class RegistrationController extends Controller
         return (new RegistrationResource($registration))
             ->additional([
                 'msg' => [
-                    'summary' => 'nota final actualizada',
-                    'Institution' => '',
+                    'summary' => 'succes',
+                    'detail' => 'nota final actualizada',
                     'code' => '200'
                 ]
             ])
@@ -546,15 +546,36 @@ class RegistrationController extends Controller
             ]
         );
     }
-    public function ExcelImport(){
+    public function registrationImport(Request $request){
+        $file = $request->file('excel');
 
-        $file = request()->file('excel');
+        if (!isset($file)) {
+//            echo 'No esta enviando el nombre del archivo, el nombre es excel';
+            return(
+            [
+                'msg' => [
+                    'summary' => 'error',
+                    'detail' => 'No esta enviando el nombre del archivo, el nombre es excel',
+                    'code' => '200'
+                ]
+            ]
+            );
+        }
         Excel::import(new RegistrationImport, $file);
+//        echo 'Se importo correctamente';
+        return (
+        [
+            'msg' => [
+                'summary' => 'success',
+                'detail' => 'Se cargaron correctamente los datos',
+                'code' => '200'
+            ]
+        ]
+        );
+
     }
     public function exportExcel(DetailPlanification $detailPlanification)
     {
-//        return Excel::download(new RegistrationExport, 'registration.xlsx');
-//        return $detailPlanification->id;
         return Excel::download(new RegistrationExport($detailPlanification->id), '-participants.xlsx');
     }
 }
