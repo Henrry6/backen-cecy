@@ -292,6 +292,10 @@ class DetailPlanificationController extends Controller
     {
         $instructors = Instructor::whereIn('id', $request->input('ids'))->get();
         $course = $detailPlanification->load('planification.course.courseProfile');
+        //$course_id=$detailPlanification->planification->course_id;
+        //$course=Course::where('id','=','2')->first();
+        //return $course;
+
         foreach ($instructors as $instructor) {
             $instructor = $instructor->load('user');
             throw_if(
@@ -314,6 +318,9 @@ class DetailPlanificationController extends Controller
             ])
             ->response()->setStatusCode(201);
     }
+
+
+    
 
     /*
         Obtener los horarios de cada paralelo dado un curso
