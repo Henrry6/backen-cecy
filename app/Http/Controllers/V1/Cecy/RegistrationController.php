@@ -146,6 +146,7 @@ class RegistrationController extends Controller
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
         $currentState = Catalogue::firstWhere('code', $catalogue['registration_state']['registered']);
         $registration->state()->associate(Catalogue::find($currentState->id));
+        $registration->registered_at=Date('Y-m-d');
         $registration->save();
         return (new RegistrationResource($registration))
             ->additional([
@@ -182,6 +183,7 @@ class RegistrationController extends Controller
         $observaciones=(is_null($registration->observations))? array():$registration->observations ;
         array_push($observaciones,$request->input('observations'));
         $registration->observations=$observaciones;
+        $registration->registered_at=Date('Y-m-d');
         $registration->state()->associate(Catalogue::find($currentState->id));
         $registration->save();
         return (new RegistrationResource($registration))
