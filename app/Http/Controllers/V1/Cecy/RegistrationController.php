@@ -34,8 +34,13 @@ use App\Models\Cecy\Participant;
 use App\Models\Cecy\Registration;
 use App\Models\Cecy\Requirement;
 use Carbon\Carbon;
+<<<<<<< HEAD
+use FontLib\Table\Type\name;
+use Illuminate\Http\Request;
+=======
 use Illuminate\Http\Request;
 use Illuminate\Http\Request as HttpRequest;
+>>>>>>> e45c77acb1cdf7a3a45b78f597c2497edeb0a41f
 use Illuminate\Support\Facades\DB;
 use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 use Illuminate\Support\Facades\Storage;
@@ -146,6 +151,7 @@ class RegistrationController extends Controller
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
         $currentState = Catalogue::firstWhere('code', $catalogue['registration_state']['registered']);
         $registration->state()->associate(Catalogue::find($currentState->id));
+        $registration->registered_at=Date('Y-m-d');
         $registration->save();
         return (new RegistrationResource($registration))
             ->additional([
@@ -182,6 +188,7 @@ class RegistrationController extends Controller
         $observaciones=(is_null($registration->observations))? array():$registration->observations ;
         array_push($observaciones,$request->input('observations'));
         $registration->observations=$observaciones;
+        $registration->registered_at=Date('Y-m-d');
         $registration->state()->associate(Catalogue::find($currentState->id));
         $registration->save();
         return (new RegistrationResource($registration))
@@ -344,28 +351,28 @@ class RegistrationController extends Controller
         }
     }
 
-    private function storeAdditionalInformation(RegisterStudentRequest $request, Registration $registration)
+    private function storeAdditionalInformation( $student, Registration $registration)
     {
         $additionalInformation = new AdditionalInformation();
 
         $additionalInformation->registration()->associate($registration);
-        $additionalInformation->levelInstruction()->associate(Catalogue::find($request->input('levelInstruction.id')));
-        $additionalInformation->worked = $request->input('worked');
-        $additionalInformation->company_activity = $request->input('companyActivity');
-        $additionalInformation->company_address = $request->input('companyAddress');
-        $additionalInformation->company_email = $request->input('companyEmail');
-        $additionalInformation->company_name = $request->input('companyName');
-        $additionalInformation->company_phone = $request->input('companyPhone');
-        $additionalInformation->company_sponsored = $request->input('companySponsored');
-        $additionalInformation->contact_name = $request->input('contactName');
-        $additionalInformation->course_knows = $request->input('courseKnows');
-        $additionalInformation->course_follows = $request->input('courseFollows');
+        $additionalInformation->levelInstruction()->associate(Catalogue::find($student->input('levelInstruction.id')));
+        $additionalInformation->worked = $student->input('worked');
+        $additionalInformation->company_activity = $student->input('companyActivity');
+        $additionalInformation->company_address = $student->input('companyAddress');
+        $additionalInformation->company_email = $student->input('companyEmail');
+        $additionalInformation->company_name = $student->input('companyName');
+        $additionalInformation->company_phone = $student->input('companyPhone');
+        $additionalInformation->company_sponsored = $student->input('companySponsored');
+        $additionalInformation->contact_name = $student->input('contactName');
+        $additionalInformation->course_knows = $student->input('courseKnows');
+        $additionalInformation->course_follows = $student->input('courseFollows');
 
         return $additionalInformation;
     }
 
     // registrar estudiante al curso con la informacion adicional
-    public function registerStudent(RegisterStudentRequest $request)
+    public function registerStudent(Request $request)
     {
         $participant = Participant::firstWhere('user_id', $request->user()->id);
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
@@ -437,8 +444,8 @@ class RegistrationController extends Controller
         return (new RegistrationResource($registration))
             ->additional([
                 'msg' => [
-                    'summary' => 'registro Actualizado',
-                    'Institution' => '',
+                    'summary' => 'succes',
+                    'detail' => 'registro Actualizado',
                     'code' => '200'
                 ]
             ])
@@ -454,8 +461,8 @@ class RegistrationController extends Controller
         return (new RegistrationResource($registration))
             ->additional([
                 'msg' => [
-                    'summary' => 'nota final actualizada',
-                    'Institution' => '',
+                    'summary' => 'succes',
+                    'detail' => 'nota final actualizada',
                     'code' => '200'
                 ]
             ])
@@ -521,17 +528,44 @@ class RegistrationController extends Controller
         return $registration->destroyFiles($request);
     }
 
-    public function uploadDocuments(UploadImageRequest $request,  RegistrationRequirement $registrationRequirement)
+    public function uploadDocuments(Request $request,  RegistrationRequirement $registrationRequirement)
     {
+        $dataStudent= json_decode($request->dataStudent, true);
+        $participant = Participant::firstWhere('user_id', $request->user()->id);
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+        $state = Catalogue::firstWhere('code', $catalogue['registration_state']['in_review']);
+
+        $detailPlanification = DetailPlanification::find($dataStudent['detailPlanificationId']);
+
+        $planification = $detailPlanification->planification()->first();
+
+        $detailSchoolPeriod = $planification->detailSchoolPeriod()->first();
+
+        $registrationType = Catalogue::firstWhere('code', $this->check($detailSchoolPeriod));
+
+        $registration = new Registration();
+        $registration->participant()->associate($participant);
+        $registration->detailPlanification()->associate($detailPlanification);
+        $registration->type()->associate($registrationType);
+        $registration->state()->associate($state);
+        $registration->typeParticipant()->associate($participant->type);
+        $registration->registered_at = now();
+
+        DB::transaction(function () use($registration, $request) {
+            $registration->save();
+            $additionalInformation = $this->storeAdditionalInformation($request, $registration);
+            $additionalInformation->save();
+        });
+
         $files = $registrationRequirement->files()->get();
         foreach ($files as $file) {
-            // Storage::deleteDirectory($image->directory);
             Storage::disk('public')->deleteDirectory('registrationRequirements' . $file->id);
             $file->delete();
         }
 
         foreach ($request->file('files') as $file) {
-
+            $registrationRequirement-->requirement()->associate(1);
+            $registrationRequirement->registration()->associate($registration->id);
             $registrationRequirement->url =  'registrationRequirements/'. $registrationRequirement->id.'.'.$file->getClientOriginalExtension();
             $registrationRequirement->save();
             $file->storeAs('', $registrationRequirement->url, 'public');
@@ -546,15 +580,36 @@ class RegistrationController extends Controller
             ]
         );
     }
-    public function ExcelImport(){
+    public function registrationImport(Request $request){
+        $file = $request->file('excel');
 
-        $file = request()->file('excel');
+        if (!isset($file)) {
+//            echo 'No esta enviando el nombre del archivo, el nombre es excel';
+            return(
+            [
+                'msg' => [
+                    'summary' => 'error',
+                    'detail' => 'No esta enviando el nombre del archivo, el nombre es excel',
+                    'code' => '200'
+                ]
+            ]
+            );
+        }
         Excel::import(new RegistrationImport, $file);
+//        echo 'Se importo correctamente';
+        return (
+        [
+            'msg' => [
+                'summary' => 'success',
+                'detail' => 'Se cargaron correctamente los datos',
+                'code' => '200'
+            ]
+        ]
+        );
+
     }
     public function exportExcel(DetailPlanification $detailPlanification)
     {
-//        return Excel::download(new RegistrationExport, 'registration.xlsx');
-//        return $detailPlanification->id;
         return Excel::download(new RegistrationExport($detailPlanification->id), '-participants.xlsx');
     }
 }

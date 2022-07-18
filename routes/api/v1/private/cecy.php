@@ -61,7 +61,8 @@ Route::controller(PlanificationController::class)->group(function () {
     });
 
     Route::prefix('planifications')->group(function () {
-        Route::get('period-states', 'getCurrentPlanificationsByAuthority'); //Rivas
+        Route::get('current-period-state', 'getCurrentPlanificationsByAuthority'); //Rivas
+        Route::get('previous-period-states', 'getPreviousPlanificationsByAuthority'); //Rivas
         Route::patch('destroys', 'destroys'); //Rivas
         Route::prefix('courses/{course}')->group(function () {
             Route::get('', 'getPlanificationsByCourse'); //Rivas - Pérez
@@ -361,7 +362,7 @@ Route::controller(RegistrationController::class)->group(function () {
     });
 
     Route::prefix('registrations')->group(function () {
-//        Route::post('excel-reading', [RegistrationController::class, 'ExcelImport']);   //Importa-Lee Datos del Excell y los guarda en BD Santillan
+          //Importa-Lee Datos del Excell y los guarda en BD Santillan
         Route::get('excel/{detailPlanification}', [RegistrationController::class, 'exportExcel']);   //exportar Excel Santillan
         Route::put('participant-grades/{registration}', 'updateGradesParticipant'); // Actualizar notas
         Route::get('courses/participant', 'getCoursesByParticipant'); // Molina
@@ -372,6 +373,10 @@ Route::controller(RegistrationController::class)->group(function () {
 });
 Route::apiResource('registrations', RegistrationController::class);
 
+Route::prefix('registration')->group(function () {
+    //lee el excel de las notas y lo carga a la base de datos
+    Route::post('import', [RegistrationController::class, 'registrationImport']);
+});
 /***********************************************************************************************************************
  * AUTHORITIES
  **********************************************************************************************************************/
