@@ -34,8 +34,13 @@ use App\Models\Cecy\Participant;
 use App\Models\Cecy\Registration;
 use App\Models\Cecy\Requirement;
 use Carbon\Carbon;
+<<<<<<< HEAD
 use FontLib\Table\Type\name;
 use Illuminate\Http\Request;
+=======
+use Illuminate\Http\Request;
+use Illuminate\Http\Request as HttpRequest;
+>>>>>>> e45c77acb1cdf7a3a45b78f597c2497edeb0a41f
 use Illuminate\Support\Facades\DB;
 use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 use Illuminate\Support\Facades\Storage;
@@ -146,6 +151,7 @@ class RegistrationController extends Controller
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
         $currentState = Catalogue::firstWhere('code', $catalogue['registration_state']['registered']);
         $registration->state()->associate(Catalogue::find($currentState->id));
+        $registration->registered_at=Date('Y-m-d');
         $registration->save();
         return (new RegistrationResource($registration))
             ->additional([
@@ -182,6 +188,7 @@ class RegistrationController extends Controller
         $observaciones=(is_null($registration->observations))? array():$registration->observations ;
         array_push($observaciones,$request->input('observations'));
         $registration->observations=$observaciones;
+        $registration->registered_at=Date('Y-m-d');
         $registration->state()->associate(Catalogue::find($currentState->id));
         $registration->save();
         return (new RegistrationResource($registration))
@@ -437,8 +444,8 @@ class RegistrationController extends Controller
         return (new RegistrationResource($registration))
             ->additional([
                 'msg' => [
-                    'summary' => 'registro Actualizado',
-                    'Institution' => '',
+                    'summary' => 'succes',
+                    'detail' => 'registro Actualizado',
                     'code' => '200'
                 ]
             ])
@@ -454,8 +461,8 @@ class RegistrationController extends Controller
         return (new RegistrationResource($registration))
             ->additional([
                 'msg' => [
-                    'summary' => 'nota final actualizada',
-                    'Institution' => '',
+                    'summary' => 'succes',
+                    'detail' => 'nota final actualizada',
                     'code' => '200'
                 ]
             ])
@@ -573,13 +580,36 @@ class RegistrationController extends Controller
             ]
         );
     }
-    public function ExcelImport(){
+    public function registrationImport(Request $request){
+        $file = $request->file('excel');
 
-        $file = request()->file('excel');
+        if (!isset($file)) {
+//            echo 'No esta enviando el nombre del archivo, el nombre es excel';
+            return(
+            [
+                'msg' => [
+                    'summary' => 'error',
+                    'detail' => 'No esta enviando el nombre del archivo, el nombre es excel',
+                    'code' => '200'
+                ]
+            ]
+            );
+        }
         Excel::import(new RegistrationImport, $file);
+//        echo 'Se importo correctamente';
+        return (
+        [
+            'msg' => [
+                'summary' => 'success',
+                'detail' => 'Se cargaron correctamente los datos',
+                'code' => '200'
+            ]
+        ]
+        );
+
     }
-    public function exportExcel()
+    public function exportExcel(DetailPlanification $detailPlanification)
     {
-        return Excel::download(new RegistrationExport, 'registration.xlsx');
+        return Excel::download(new RegistrationExport($detailPlanification->id), '-participants.xlsx');
     }
 }

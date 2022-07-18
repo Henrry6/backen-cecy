@@ -125,6 +125,19 @@ class DetailPlanificationController extends Controller
             ->response()->setStatusCode(201);
     }
 
+    private function checkHours(DetailPlanification $detailPlanification, Planification $planification): bool
+    {
+        $detailPlanifications = DetailPlanification::where('planification_id', $planification->id)
+            ->where('state_id', Catalogue::firstWhere('code', State::TO_BE_APPROVED)->id)
+            ->get();
+
+        foreach ($detailPlanifications as $detailPlanification) {
+            // if ($detailPlanification->started_time <= $s && $detailPlanification->ended_time >= $e) {
+            // return false;
+            // }
+        }
+        return true;
+    }
 
     public function show(ShowDetailPlanificationRequest $request, DetailPlanification $detailPlanification)
     {
@@ -277,6 +290,18 @@ class DetailPlanificationController extends Controller
      */
     public function assignInstructors(AssignInstructorsRequest $request, DetailPlanification $detailPlanification)
     {
+        $instructors = Instructor::whereIn('id', $request->input('ids'))->get();
+        $course = $detailPlanification->load('planification.course.courseProfile');
+        foreach ($instructors as $instructor) {
+            $instructor = $instructor->load('user');
+            throw_if(
+                $instructor->hasCourseProfile($course->planification->course->courseProfile->id) === 0,
+                \Exception::class,
+                "Instructor {$instructor->user['name']} no tiene el perfil del curso",
+                400
+            );
+        }
+
         $detailPlanification->instructors()->sync($request->input('ids'));
 
         return (new ResponsibleCourseDetailPlanificationResource($detailPlanification))
@@ -347,13 +372,13 @@ class DetailPlanificationController extends Controller
 
     public function getParticipantsByDetailPlanification(IndexDetailPlanificationRequest $request, DetailPlanification $detailPlanification)
     {
-    // DDRC-C: obtiene una lista de participantes de una planificación dado el detalle de la planificación
-    $sorts = explode(',', $request->input('sort'));
+        // DDRC-C: obtiene una lista de participantes inscritos a un curso dado el detalle de la planificación
+        $sorts = explode(',', $request->input('sort'));
 
         $participants = $detailPlanification->registrations()
-        ->participantUsername($request->input('search'))
-        ->customOrderBy($sorts)
-        ->paginate($request->input('per_page'));
+            ->participantUsername($request->input('search'))
+            ->customOrderBy($sorts)
+            ->paginate($request->input('per_page'));
 
         return (new DetailPlanificationParticipantCollection($participants))
             ->additional([

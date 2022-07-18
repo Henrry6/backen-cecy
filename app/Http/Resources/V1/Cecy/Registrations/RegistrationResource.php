@@ -23,6 +23,7 @@ class RegistrationResource extends JsonResource
         $lastObservation=end($observaciones);
         return [
             'id' => $this->id,
+//            'detailPlanification' => DetailPlanificationResource::make($this->detailPlanification),
             'participant' => ParticipantResource::make($this->participant),
             'state' => CatalogueResource::make($this->state),
             'stateCourse' => CatalogueResource::make($this->stateCourse),

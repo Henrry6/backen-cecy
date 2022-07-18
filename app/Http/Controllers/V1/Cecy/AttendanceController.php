@@ -117,13 +117,12 @@ class AttendanceController extends Controller
         $attendance->registered_at = $request->input('registeredAt');
         $attendance->save();
         DB::transaction(function () use ($request, $attendance) {
-            $registrations = Registration::get();
+             $registrations = Registration::where('detail_planification_id','=',$attendance->detail_planification_id)->get();
             foreach ($registrations as $registration) {
-                $detailAttendace = new DetailAttendance();
-                $detailAttendace->registration()->associate($registration);
-                $detailAttendace->attendance()->associate($attendance);
-                $detailAttendace->type_id = $request->input('type_id');
-                $detailAttendace->save();
+                $detailAttendance = new DetailAttendance();
+                $detailAttendance->registration()->associate($registration);
+                $detailAttendance->attendance()->associate($attendance);
+                $detailAttendance->save();
             }
         });
 

@@ -304,9 +304,8 @@ class CourseController extends Controller
             ], 404);
         }
 
-        // $courses = Course::where('responsible_id', $instructor->id)->get();
         $courses = Course::where('responsible_id', $instructor->id)
-            ->orWhereHas('planifications', function (Builder $query) use ($instructor) {
+            ->orWhereHas('planifications', function ($query) use ($instructor) {
                 $query->where('responsible_course_id', $instructor->id);
             })
             ->get();
