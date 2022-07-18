@@ -271,6 +271,7 @@ Route::controller(InstructorController::class)->group(function () {
         Route::get('catalogue', 'catalogue');
         Route::post('stores', 'storeInstructors'); //Rivera
         Route::get('courses/{course}', 'getInstructorsByCourseProfile'); //Perez
+        Route::get('courses/{course}/instructors-assigned', 'getAssignedInstructorsByCourseProfile'); //Perez
         Route::get('detail-planifications/{detail_planification}', 'getAssignedInstructorsByDetailPlanification'); //Perez
         Route::delete('destroys', 'destroys');
     });
