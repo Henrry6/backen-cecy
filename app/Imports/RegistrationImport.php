@@ -2,46 +2,49 @@
 
 namespace App\Imports;
 
-use App\Models\Cecy\DetailPlanification;
-use App\Models\Cecy\Participant;
 use App\Models\Cecy\Registration;
-use Maatwebsite\Excel\Concerns\ToModel;
-use Maatwebsite\Excel\Concerns\WithBatchInserts;
-use Maatwebsite\Excel\Concerns\WithChunkReading;
+use Illuminate\Support\Collection;
+use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithValidation;
 
-class RegistrationImport implements ToModel, WithHeadingRow, WithBatchInserts, WithChunkReading
+class RegistrationImport implements ToCollection, WithHeadingRow, WithValidation
 {
    /**
     * @param array $row
     * @return \Illuminate\Database\Eloquent\Model|null
 
 */
-    private $participants;
-    private $detailPlanifications;
-
     public function __construct()
     {
-        $this->participants = Participant::pluck('id');
-        $this->detailPlanifications = DetailPlanification::pluck('id');
     }
-public function model(array $row)
+public function collection(Collection $rows)
 {
-    return new Registration([
-        'participant_id' => $this->participants[$row['participants']],
-        'detail_planification_id' => $this->detailPlanifications[$row['detailPlanifications']],
-        'grade1' => $row['primer_parcial'],
-        'grade2' => $row['segundo_parcial'],
-        'final_grade' => $row['nota_final'],
-    ]);
+    foreach ($rows as $row){
+        $registration = Registration::find($row['id']);
+        $registration->grade1 = $row['primer_parcial'];
+        $registration->grade2 = $row['segundo_parcial'];
+        $registration->final_grade = ($row['primer_parcial'] + $row['segundo_parcial'])/2;
+        $registration->save();
+    }
 }
+    public function rules(): array
+    {
+        return [
+            'primer_parcial' =>[
+                'numeric',
+                'required',
+                'min:0',
+                'max:100'
 
-    public function batchSize(): int
-    {
-        return 1000;
+            ] ,
+            'segundo_parcial' =>[
+                'numeric',
+                'required',
+                'min:0',
+                'max:100'
+            ] ,
+        ];
     }
-    public function chunkSize(): int
-    {
-        return 1000;
-    }
+
 }
