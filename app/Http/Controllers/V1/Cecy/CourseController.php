@@ -28,6 +28,7 @@ use App\Http\Requests\V1\Cecy\Courses\CareerCoordinator\StoreCourseRequest;
 use App\Http\Requests\V1\Cecy\Courses\CareerCoordinator\UpdateCourseNameAndDurationRequest;
 use App\Http\Requests\V1\Cecy\Courses\CatalogueCourseRequest;
 use App\Http\Requests\V1\Cecy\Courses\UpdateCourseRequest;
+use App\Http\Requests\V1\Cecy\DetailPlanifications\AssignInstructorsRequest;
 use App\Http\Requests\V1\Cecy\Planifications\GetDateByshowYearScheduleRequest;
 use App\Http\Requests\V1\Cecy\Planifications\GetPlanificationByResponsableCourseRequest;
 use App\Http\Requests\V1\Cecy\Planifications\IndexPlanificationRequest;
@@ -41,6 +42,7 @@ use App\Http\Resources\V1\Cecy\Planifications\InformCourseNeedsResource;
 use App\Http\Resources\V1\Cecy\Courses\CoursesByResponsibleCollection;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationCollection;
 use App\Http\Resources\V1\Cecy\Certificates\CertificateResource;
+use App\Http\Resources\V1\Cecy\CourseProfiles\CourseProfileResource;
 use App\Http\Resources\V1\Cecy\Courses\CoordinatorCecy\CourseByCoordinatorCecyCollection;
 use App\Http\Resources\V1\Cecy\Courses\CourseResource;
 use App\Http\Resources\V1\Cecy\Courses\CourseCollection;
@@ -778,6 +780,25 @@ class CourseController extends Controller
                 ]
             ])
             ->response()->setStatusCode(200);
+    }
+
+    /**
+     * Assign instructors to profile.
+     */
+    public function assignInstructors(AssignInstructorsRequest $request, Course $course)
+    {
+        $courseProfile = $course->profile;
+        $courseProfile->instructors()->sync($request->input('ids'));
+
+        return (new CourseResource($course))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Éxito',
+                    'detail' => 'Asignación actualizada',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
     }
 
 

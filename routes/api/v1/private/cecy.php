@@ -125,8 +125,10 @@ Route::controller(CourseController::class)->group(function () {
     });
 
     Route::prefix('courses/{course}')->group(function () {
-        Route::patch('approve', 'approveCourse'); //sin responsable
-        Route::patch('decline', 'declineCourse'); //sin responsable
+        Route::post('profile-instructors-assignment', 'assignInstructors'); // Salazar
+        
+        Route::patch('approve', 'approveCourse'); //se está usando
+        Route::patch('decline', 'declineCourse'); //se está usando
 
         Route::prefix('planifications')->group(function () {
             Route::get('', 'getPlanifications'); // Pérez
