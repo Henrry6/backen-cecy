@@ -34,7 +34,8 @@ use App\Models\Cecy\Participant;
 use App\Models\Cecy\Registration;
 use App\Models\Cecy\Requirement;
 use Carbon\Carbon;
-use Illuminate\Http\Request as HttpRequest;
+use FontLib\Table\Type\name;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 use Illuminate\Support\Facades\Storage;
@@ -343,28 +344,28 @@ class RegistrationController extends Controller
         }
     }
 
-    private function storeAdditionalInformation(RegisterStudentRequest $request, Registration $registration)
+    private function storeAdditionalInformation( $student, Registration $registration)
     {
         $additionalInformation = new AdditionalInformation();
 
         $additionalInformation->registration()->associate($registration);
-        $additionalInformation->levelInstruction()->associate(Catalogue::find($request->input('levelInstruction.id')));
-        $additionalInformation->worked = $request->input('worked');
-        $additionalInformation->company_activity = $request->input('companyActivity');
-        $additionalInformation->company_address = $request->input('companyAddress');
-        $additionalInformation->company_email = $request->input('companyEmail');
-        $additionalInformation->company_name = $request->input('companyName');
-        $additionalInformation->company_phone = $request->input('companyPhone');
-        $additionalInformation->company_sponsored = $request->input('companySponsored');
-        $additionalInformation->contact_name = $request->input('contactName');
-        $additionalInformation->course_knows = $request->input('courseKnows');
-        $additionalInformation->course_follows = $request->input('courseFollows');
+        $additionalInformation->levelInstruction()->associate(Catalogue::find($student->input('levelInstruction.id')));
+        $additionalInformation->worked = $student->input('worked');
+        $additionalInformation->company_activity = $student->input('companyActivity');
+        $additionalInformation->company_address = $student->input('companyAddress');
+        $additionalInformation->company_email = $student->input('companyEmail');
+        $additionalInformation->company_name = $student->input('companyName');
+        $additionalInformation->company_phone = $student->input('companyPhone');
+        $additionalInformation->company_sponsored = $student->input('companySponsored');
+        $additionalInformation->contact_name = $student->input('contactName');
+        $additionalInformation->course_knows = $student->input('courseKnows');
+        $additionalInformation->course_follows = $student->input('courseFollows');
 
         return $additionalInformation;
     }
 
     // registrar estudiante al curso con la informacion adicional
-    public function registerStudent(RegisterStudentRequest $request)
+    public function registerStudent(Request $request)
     {
         $participant = Participant::firstWhere('user_id', $request->user()->id);
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
@@ -520,17 +521,44 @@ class RegistrationController extends Controller
         return $registration->destroyFiles($request);
     }
 
-    public function uploadDocuments(UploadImageRequest $request,  RegistrationRequirement $registrationRequirement)
+    public function uploadDocuments(Request $request,  RegistrationRequirement $registrationRequirement)
     {
+        $dataStudent= json_decode($request->dataStudent, true);
+        $participant = Participant::firstWhere('user_id', $request->user()->id);
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+        $state = Catalogue::firstWhere('code', $catalogue['registration_state']['in_review']);
+
+        $detailPlanification = DetailPlanification::find($dataStudent['detailPlanificationId']);
+
+        $planification = $detailPlanification->planification()->first();
+
+        $detailSchoolPeriod = $planification->detailSchoolPeriod()->first();
+
+        $registrationType = Catalogue::firstWhere('code', $this->check($detailSchoolPeriod));
+
+        $registration = new Registration();
+        $registration->participant()->associate($participant);
+        $registration->detailPlanification()->associate($detailPlanification);
+        $registration->type()->associate($registrationType);
+        $registration->state()->associate($state);
+        $registration->typeParticipant()->associate($participant->type);
+        $registration->registered_at = now();
+
+        DB::transaction(function () use($registration, $request) {
+            $registration->save();
+            $additionalInformation = $this->storeAdditionalInformation($request, $registration);
+            $additionalInformation->save();
+        });
+
         $files = $registrationRequirement->files()->get();
         foreach ($files as $file) {
-            // Storage::deleteDirectory($image->directory);
             Storage::disk('public')->deleteDirectory('registrationRequirements' . $file->id);
             $file->delete();
         }
 
         foreach ($request->file('files') as $file) {
-
+            $registrationRequirement-->requirement()->associate(1);
+            $registrationRequirement->registration()->associate($registration->id);
             $registrationRequirement->url =  'registrationRequirements/'. $registrationRequirement->id.'.'.$file->getClientOriginalExtension();
             $registrationRequirement->save();
             $file->storeAs('', $registrationRequirement->url, 'public');
