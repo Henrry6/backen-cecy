@@ -787,7 +787,7 @@ class CourseController extends Controller
      */
     public function assignInstructors(AssignInstructorsRequest $request, Course $course)
     {
-        $courseProfile = $course->profile;
+        $courseProfile = $course->courseProfile;
         $courseProfile->instructors()->sync($request->input('ids'));
 
         return (new CourseResource($course))
