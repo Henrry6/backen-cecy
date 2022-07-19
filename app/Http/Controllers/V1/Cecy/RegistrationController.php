@@ -34,13 +34,9 @@ use App\Models\Cecy\Participant;
 use App\Models\Cecy\Registration;
 use App\Models\Cecy\Requirement;
 use Carbon\Carbon;
-<<<<<<< HEAD
 use FontLib\Table\Type\name;
 use Illuminate\Http\Request;
-=======
-use Illuminate\Http\Request;
 use Illuminate\Http\Request as HttpRequest;
->>>>>>> e45c77acb1cdf7a3a45b78f597c2497edeb0a41f
 use Illuminate\Support\Facades\DB;
 use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 use Illuminate\Support\Facades\Storage;
