@@ -560,7 +560,7 @@ class RegistrationController extends Controller
         }
 
         foreach ($request->file('files') as $file) {
-            $registrationRequirement-->requirement()->associate(1);
+            // $registrationRequirement-->requirement()->associate(1);
             $registrationRequirement->registration()->associate($registration->id);
             $registrationRequirement->url =  'registrationRequirements/'. $registrationRequirement->id.'.'.$file->getClientOriginalExtension();
             $registrationRequirement->save();
