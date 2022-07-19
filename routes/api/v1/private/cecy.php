@@ -9,6 +9,7 @@ use App\Http\Controllers\V1\Cecy\CatalogueController;
 use App\Http\Controllers\V1\Cecy\CertificateController;
 use App\Http\Controllers\V1\Cecy\ClassroomController;
 use App\Http\Controllers\V1\Cecy\CourseController;
+use App\Http\Controllers\V1\Cecy\CourseProfileController;
 use App\Http\Controllers\V1\Cecy\DetailAttendanceController;
 use App\Http\Controllers\V1\Cecy\DetailPlanificationController;
 use App\Http\Controllers\V1\Cecy\InstitutionController;
@@ -194,6 +195,12 @@ Route::get('/inform', function () {
 
     return $pdf->inline('Informe.pdf');
 });
+
+
+/***********************************************************************************************************************
+ * PROFILE COURSE
+ **************************/
+ Route::apiResource('course-profiles', CourseProfileController::class); //salazar
 
 /***********************************************************************************************************************
  * DETAIL ATTENDANCES
