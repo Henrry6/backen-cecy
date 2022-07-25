@@ -129,8 +129,8 @@ class AttendanceController extends Controller
         return (new AttendanceResource($attendance))
             ->additional([
                 'msg' => [
-                    'summary' => 'Detalle de asistencia creada',
-                    'Institution' => '',
+                    'summary' => 'success',
+                    'detail' => 'Asistencia creada',
                     'code' => '201'
                 ]
             ])
@@ -177,8 +177,8 @@ class AttendanceController extends Controller
         return (new AttendanceResource($attendance))
             ->additional([
                 'msg' => [
-                    'summary' => 'asistencia eliminada',
-                    'detail' => '',
+                    'summary' => 'success',
+                    'detail' => 'asistencia eliminada',
                     'code' => '201'
                 ]
             ])

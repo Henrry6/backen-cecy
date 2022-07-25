@@ -47,8 +47,8 @@ class  DetailAttendanceController extends Controller
         return (new DetailAttendanceResource($detailAttendance))
             ->additional([
                 'msg' => [
-                    'summary' => 'Asistencia gaurdada',
-                    'detail' => '',
+                    'summary' => 'success',
+                    'detail' => 'Asistencia Guardada',
                     'code' => '200'
                 ]
             ])
@@ -57,7 +57,7 @@ class  DetailAttendanceController extends Controller
     public function updateType(SaveDetailAttendanceRequest $request, DetailAttendance $detailAttendance)
     {
         $detailAttendance->type_id = $request->input('type.id');
-        $detailAttendance->registration_id = $request->input('registration.id');  
+        $detailAttendance->registration_id = $request->input('registration.id');
         $detailAttendance->save();
 
         return (new SaveDetailAttendanceResource($detailAttendance))
