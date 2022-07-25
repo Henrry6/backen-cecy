@@ -325,6 +325,7 @@ class RegistrationController extends Controller
     private function check(DetailSchoolPeriod $detailSchoolPeriod)
     {
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+
         $currentDate = Carbon::now();
         $ordinaryStartedAt = Carbon::create($detailSchoolPeriod->ordinary_started_at);
         $ordinaryEndedAt = Carbon::create($detailSchoolPeriod->ordinary_ended_at);
@@ -560,9 +561,9 @@ class RegistrationController extends Controller
         }
 
         foreach ($request->file('files') as $file) {
-            // $registrationRequirement-->requirement()->associate(1);
             $registrationRequirement->registration()->associate($registration->id);
-            $registrationRequirement->url =  'registrationRequirements/'. $registrationRequirement->id.'.'.$file->getClientOriginalExtension();
+            //'registrationRequirements/'. $registrationRequirement->id.'.'.$file->getClientOriginalExtension();
+            $registrationRequirement->url = 'registrationRequirements/'. 'cedula'.'.'.$file->getClientOriginalExtension();
             $registrationRequirement->save();
             $file->storeAs('', $registrationRequirement->url, 'public');
         }
