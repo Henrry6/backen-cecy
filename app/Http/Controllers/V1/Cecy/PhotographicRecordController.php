@@ -150,7 +150,6 @@ class PhotographicRecordController extends Controller
     {
         $images = $record->images()->get();
         foreach ($images as $image) {
-            // Storage::deleteDirectory($image->directory);
             Storage::disk('public')->deleteDirectory('records' . $image->id);
             $image->delete();
         }
@@ -165,7 +164,7 @@ class PhotographicRecordController extends Controller
             [
                 'msg' => [
                     'summary' => 'success',
-                    'detail' => '',
+                    'detail' => 'Imagen cargada correctamente',
                     'code' => '200'
                 ]
             ]

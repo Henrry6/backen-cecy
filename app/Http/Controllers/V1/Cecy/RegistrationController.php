@@ -431,7 +431,6 @@ class RegistrationController extends Controller
     {
         $registration->grade1 = $request->input('grade1');
         $registration->grade2 = $request->input('grade2');
-//        $registration->final_grade = $request->input('finalGrade');//calculado
         $registration->save();
         $this->FinalGrade($request, $registration);
         return (new RegistrationResource($registration))
