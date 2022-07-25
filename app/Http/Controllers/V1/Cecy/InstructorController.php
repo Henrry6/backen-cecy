@@ -228,5 +228,20 @@ class InstructorController extends Controller
             ])
             ->response()->setStatusCode(200);
     }
+   
+    public function getAssignedInstructorsByCourseProfile(Course $course)
+    {
+        $instructors = $course->load('courseProfile.instructors')->courseProfile->instructors;
+
+        return (new InstructorCollection($instructors))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Éxito',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
 
 }

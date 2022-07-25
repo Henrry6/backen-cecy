@@ -290,18 +290,17 @@ class DetailPlanificationController extends Controller
      */
     public function assignInstructors(AssignInstructorsRequest $request, DetailPlanification $detailPlanification)
     {
-        $instructors = Instructor::whereIn('id', $request->input('ids'))->get();
-        $course = $detailPlanification->load('planification.course.courseProfile');
+        $instructors = Instructor::whereIn('id', $request->input('ids'))->with('user')->get();
+        $courseProfileId = $detailPlanification->load('planification.course.courseProfile')
+            ->planification->course->courseProfile->id;
         foreach ($instructors as $instructor) {
-            $instructor = $instructor->load('user');
             throw_if(
-                $instructor->hasCourseProfile($course->planification->course->courseProfile->id) === 0,
+                $instructor->hasCourseProfile($courseProfileId) === 0,
                 \Exception::class,
                 "Instructor {$instructor->user['name']} no tiene el perfil del curso",
                 400
             );
         }
-
         $detailPlanification->instructors()->sync($request->input('ids'));
 
         return (new ResponsibleCourseDetailPlanificationResource($detailPlanification))
@@ -314,6 +313,9 @@ class DetailPlanificationController extends Controller
             ])
             ->response()->setStatusCode(201);
     }
+
+
+    
 
     /*
         Obtener los horarios de cada paralelo dado un curso

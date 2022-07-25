@@ -9,6 +9,7 @@ use App\Http\Controllers\V1\Cecy\CatalogueController;
 use App\Http\Controllers\V1\Cecy\CertificateController;
 use App\Http\Controllers\V1\Cecy\ClassroomController;
 use App\Http\Controllers\V1\Cecy\CourseController;
+use App\Http\Controllers\V1\Cecy\CourseProfileController;
 use App\Http\Controllers\V1\Cecy\DetailAttendanceController;
 use App\Http\Controllers\V1\Cecy\DetailPlanificationController;
 use App\Http\Controllers\V1\Cecy\InstitutionController;
@@ -125,8 +126,10 @@ Route::controller(CourseController::class)->group(function () {
     });
 
     Route::prefix('courses/{course}')->group(function () {
-        Route::patch('approve', 'approveCourse'); //sin responsable
-        Route::patch('decline', 'declineCourse'); //sin responsable
+        Route::post('profile-instructors-assignment', 'assignInstructors'); // Salazar
+        
+        Route::patch('approve', 'approveCourse'); //se está usando
+        Route::patch('decline', 'declineCourse'); //se está usando
 
         Route::prefix('planifications')->group(function () {
             Route::get('', 'getPlanifications'); // Pérez
@@ -192,6 +195,12 @@ Route::get('/inform', function () {
 
     return $pdf->inline('Informe.pdf');
 });
+
+
+/***********************************************************************************************************************
+ * PROFILE COURSE
+ **************************/
+ Route::apiResource('course-profiles', CourseProfileController::class); //salazar
 
 /***********************************************************************************************************************
  * DETAIL ATTENDANCES
@@ -269,6 +278,7 @@ Route::controller(InstructorController::class)->group(function () {
         Route::get('catalogue', 'catalogue');
         Route::post('stores', 'storeInstructors'); //Rivera
         Route::get('courses/{course}', 'getInstructorsByCourseProfile'); //Perez
+        Route::get('courses/{course}/instructors-assigned', 'getAssignedInstructorsByCourseProfile'); //Perez
         Route::get('detail-planifications/{detail_planification}', 'getAssignedInstructorsByDetailPlanification'); //Perez
         Route::delete('destroys', 'destroys');
     });
