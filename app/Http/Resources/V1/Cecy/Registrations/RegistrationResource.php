@@ -19,8 +19,11 @@ class RegistrationResource extends JsonResource
      */
     public function toArray($request)
     {
+        $observaciones=(is_string($this->observations)||is_null($this->observations))?array(""):$this->observations;
+        $lastObservation=end($observaciones);
         return [
             'id' => $this->id,
+//            'detailPlanification' => DetailPlanificationResource::make($this->detailPlanification),
             'participant' => ParticipantResource::make($this->participant),
             'state' => CatalogueResource::make($this->state),
             'stateCourse' => CatalogueResource::make($this->stateCourse),
@@ -30,7 +33,7 @@ class RegistrationResource extends JsonResource
             'grade1' => $this->grade1,
             'grade2' => $this->grade2,
             'number' => $this->number,
-            'observations' => $this->observations,
+            'observations' => $lastObservation,
             'registeredAt' => $this->registered_at
         ];
     }

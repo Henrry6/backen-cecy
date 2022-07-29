@@ -3,72 +3,41 @@
 namespace App\Models\Cecy;
 
 use App\Models\Core\File;
-use App\Models\Core\Image;
-use App\Traits\FileTrait;
-use App\Traits\ImageTrait;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as Auditing;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\FileTrait;
+use App\Traits\ImageTrait;
 
-
-
-class PhotographicRecord extends Model implements Auditable
+class RegistrationRequirement extends Model implements Auditable
 {
-    use HasFactory;
     use Auditing;
+    use FileTrait;
+    use HasFactory;
     use ImageTrait;
     use SoftDeletes;
-    use FileTrait;
 
-    protected $table = 'cecy.photographic_records';
+    protected $table = 'cecy.registration_requirement';
 
     protected $fillable = [
-        'description',
-        'image',
-        'number_week',
-        'registered_at'
+        'url',
     ];
 
-    // Relationships
-    public function detailPlanification()
+    public function requirement()
     {
-        return $this->belongsTo(DetailPlanification::class);
+        return $this->belongsTo(Requirement::class);
     }
 
-    public function images() //revisar image o images
+    public function registration()
     {
-        return $this->morphMany(Image::class, 'imageable');
+        return $this->belongsTo(Registration::class);
     }
 
     public function files()
     {
         return $this->morphMany(File::class, 'fileable');
-    }
-
-    // Mutators
-
-    public function setDescriptionAttribute($value)
-    {
-        $this->attributes['description'] = strtoupper($value);
-    }
-
-    // Scopes
-
-    public function scopeDescription($query, $description)
-    {
-        if ($description) {
-            return $query->orWhere('description','iLike', "%$description%");
-        }
-    }
-
-    //revisar
-    public function scopeImage($query, $image)
-    {
-        if ($image) {
-            return $query->orWhere('image','iLike', "%$image->id%");
-        }
     }
 
     public function scopeCustomOrderBy($query, $sorts)
@@ -101,4 +70,6 @@ class PhotographicRecord extends Model implements Auditable
             return $query->select($fields);
         }
     }
+
 }
+

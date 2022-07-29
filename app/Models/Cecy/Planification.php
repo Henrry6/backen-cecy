@@ -138,13 +138,19 @@ class Planification extends Model implements Auditable
     public function scopeResponsibleCourse($query, $responsibleCourse)
     {
         if ($responsibleCourse) {
-            return $query->orWhere('responsible_course_id', $responsibleCourse->id);
+            return $query->whereHas('responsibleCourse.user',function($q) use ($responsibleCourse){
+                $q->where('name','like','%'.$responsibleCourse.'%');
+            });
+            // return $query->orWhere('responsible_course_id', $responsibleCourse->id);
         }
     }
     public function scopeResponsibleCecy($query, $responsibleCecy)
     {
         if ($responsibleCecy) {
-            return $query->orWhere('responsible_cecy_id', $responsibleCecy->id);
+            // return $query->orWhere('responsible_cecy_id', $responsibleCecy->id);
+            return $query->whereHas('responsibleCecy.user',function($q) use ($responsibleCecy){
+                $q->where('name','like','%'.$responsibleCecy.'%');
+            });
         }
     }
     public function scopeDetailSchoolPeriod($query, $detailSchoolPeriod)

@@ -9,6 +9,7 @@ use App\Http\Controllers\V1\Cecy\CatalogueController;
 use App\Http\Controllers\V1\Cecy\CertificateController;
 use App\Http\Controllers\V1\Cecy\ClassroomController;
 use App\Http\Controllers\V1\Cecy\CourseController;
+use App\Http\Controllers\V1\Cecy\CourseProfileController;
 use App\Http\Controllers\V1\Cecy\DetailAttendanceController;
 use App\Http\Controllers\V1\Cecy\DetailPlanificationController;
 use App\Http\Controllers\V1\Cecy\InstitutionController;
@@ -55,16 +56,17 @@ Route::controller(PlanificationController::class)->group(function () {
     Route::prefix('planifications/{planification}')->group(function () {
         Route::put('approve', 'approve');
         Route::put('assign-code', 'assignCode');
-        Route::patch('assign-responsible-cecy', 'assignResponsibleCecy');
+        Route::patch('responsible-cecy', 'assignResponsibleCecy');
         Route::put('initial-planification', 'updateInitialPlanification'); //Rivas
         Route::get('detail-planifications', 'getDetailPlanifications'); // Pérez
     });
 
     Route::prefix('planifications')->group(function () {
-        Route::get('period-states', 'getCurrentPlanificationsByAuthority'); //Rivas
+        Route::get('current-period-state', 'getCurrentPlanificationsByAuthority'); //Rivas
+        Route::get('previous-period-states', 'getPreviousPlanificationsByAuthority'); //Rivas
         Route::patch('destroys', 'destroys'); //Rivas
         Route::prefix('courses/{course}')->group(function () {
-            Route::get('', 'getPlanificationsByCourse'); //Rivas, Pérez, pplanificacion
+            Route::get('', 'getPlanificationsByCourse'); //Rivas - Pérez
             Route::post('', 'storePlanificationByCourse'); //Rivas - pplanificacion
         });
         Route::get('kpis/{state}', 'getKpi');
@@ -120,13 +122,19 @@ Route::controller(CourseController::class)->group(function () {
         Route::get('year-schedule', 'showYearSchedule');
         Route::patch('initial-course', 'destroys'); //Rivas - pcurso
         // Route::put('{course}', [CourseController::class, 'updateStateCourse']);
-        Route::get('getCoursesVisualization','getPublicCourses');
+        Route::get('getCoursesVisualization', 'getPublicCourses');
     });
 
     Route::prefix('courses/{course}')->group(function () {
-        Route::put('approve', 'approveCourse'); //sin responsable
-        Route::put('decline', 'declineCourse'); //sin responsable
+        Route::post('profile-instructors-assignment', 'assignInstructors'); // Salazar
+        
+        Route::patch('approve', 'approveCourse'); //se está usando
+        Route::patch('decline', 'declineCourse'); //se está usando
 
+        Route::prefix('planifications')->group(function () {
+            Route::get('', 'getPlanifications'); // Pérez
+
+        });
         //Para subir acta de curso aprobado
         Route::prefix('files')->group(function () {
             Route::get('{file}/download', 'downloadFile');
@@ -188,6 +196,12 @@ Route::get('/inform', function () {
     return $pdf->inline('Informe.pdf');
 });
 
+
+/***********************************************************************************************************************
+ * PROFILE COURSE
+ **************************/
+ Route::apiResource('course-profiles', CourseProfileController::class); //salazar
+
 /***********************************************************************************************************************
  * DETAIL ATTENDANCES
  **********************************************************************************************************************/
@@ -234,6 +248,7 @@ Route::controller(SchoolPeriodController::class)->group(function () {
     Route::prefix('school-periods')->group(function () {
         Route::patch('destroys', 'destroys');
         Route::get('catalogue', 'catalogue');
+        Route::get('current', 'getCurrent');
     });
 });
 Route::apiResource('school-periods', SchoolPeriodController::class);
@@ -263,6 +278,7 @@ Route::controller(InstructorController::class)->group(function () {
         Route::get('catalogue', 'catalogue');
         Route::post('stores', 'storeInstructors'); //Rivera
         Route::get('courses/{course}', 'getInstructorsByCourseProfile'); //Perez
+        Route::get('courses/{course}/instructors-assigned', 'getAssignedInstructorsByCourseProfile'); //Perez
         Route::get('detail-planifications/{detail_planification}', 'getAssignedInstructorsByDetailPlanification'); //Perez
         Route::delete('destroys', 'destroys');
     });
@@ -312,6 +328,7 @@ Route::apiResource('requirements', RequirementController::class);
  * ATTENDANCES / Santillan-Molina
  **********************************************************************************************************************/
 Route::prefix('attendances')->group(function () {
+    Route::post('detail-attendance',[AttendanceController::class,'storeAttendance']);
     Route::get('detail-planifications/{detail_planification}', [AttendanceController::class, 'getByDetailPlanification']); //asistencias por el detalle de la planificacion santillan
     Route::delete('detail-planifications/{detail_planification}', [AttendanceController::class, 'destroyAttendance']); // eliminacion santillan
     Route::delete('destroys', [AttendanceController::class, 'destroys']);
@@ -339,7 +356,7 @@ Route::controller(RegistrationController::class)->group(function () {
         Route::put('review', 'setRegistrationinReview'); //Rivas  - matriculacion
         Route::delete('eliminate', 'eliminate'); //Rivas - matriculacion
         Route::put('reenroll', 'reEnroll'); //Rivas - matriculacion
-
+        Route::post('', 'uploadDocuments');
         //Rivas
         Route::prefix('cecy-responsible')->group(function () {
             Route::prefix('files')->group(function () {
@@ -355,6 +372,8 @@ Route::controller(RegistrationController::class)->group(function () {
     });
 
     Route::prefix('registrations')->group(function () {
+          //Importa-Lee Datos del Excell y los guarda en BD Santillan
+        Route::get('excel/{detailPlanification}', [RegistrationController::class, 'exportExcel']);   //exportar Excel Santillan
         Route::put('participant-grades/{registration}', 'updateGradesParticipant'); // Actualizar notas
         Route::get('courses/participant', 'getCoursesByParticipant'); // Molina
         Route::post('register-student', 'registerStudent');
@@ -364,9 +383,28 @@ Route::controller(RegistrationController::class)->group(function () {
 });
 Route::apiResource('registrations', RegistrationController::class);
 
+Route::prefix('registration')->group(function () {
+    //lee el excel de las notas y lo carga a la base de datos
+    Route::post('import', [RegistrationController::class, 'registrationImport']);
+});
+/***********************************************************************************************************************
+ * AUTHORITIES
+ **********************************************************************************************************************/
+Route::controller(AuthorityController::class)->group(function () {
+    Route::prefix('authorities')->group(function () {
+        Route::patch('catalogue', [AuthorityController::class, 'catalogue']);//Perez
+        Route::patch('destroys', [AuthorityController::class, 'destroys']);
+    });
+
+    Route::prefix('authorities/{authority}')->group(function () {
+    });
+});
+
+Route::apiResource('authorities', AuthorityController::class);
+
 //photofraphicRecords files-images
-Route::controller(PhotographicRecordController::class)->group(function (){
-    Route::prefix('records/{record}')->group(function (){
+Route::controller(PhotographicRecordController::class)->group(function () {
+    Route::prefix('records/{record}')->group(function () {
         Route::prefix('images')->group(function () {
             Route::get('{image}/download', 'downloadImage');
             Route::get('', 'indexImages');
@@ -380,9 +418,11 @@ Route::controller(PhotographicRecordController::class)->group(function (){
     });
 });
 
-Route::prefix('records')->group(function (){
+Route::prefix('records')->group(function () {
     Route::get('detail-record/{detail_planification}', [PhotographicRecordController::class, 'getPhotograficRecord']);
 });
+
+Route::apiResource('records', PhotographicRecordController::class);
 
 
 Route::prefix('detailPlanification/{detailPlanification}')->group(function () {

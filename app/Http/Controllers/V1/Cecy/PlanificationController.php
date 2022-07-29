@@ -24,6 +24,7 @@ use App\Http\Resources\V1\Cecy\Planifications\ResponsibleCoursePlanifications\Pl
 use App\Http\Resources\V1\Cecy\Planifications\ResponsibleCoursePlanifications\PlanificationByCourseResource;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationResource;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationCollection;
+use App\Http\Resources\V1\Cecy\Planifications\PlanificationByAuthorityCollection;
 use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\GetPlanificationsByCourseRequest;
 use App\Models\Authentication\User;
 use App\Models\Cecy\Authority;
@@ -199,16 +200,18 @@ class PlanificationController extends Controller
                 ->where('responsible_cecy_id', $loggedInAuthority->id)
                 ->customOrderBy($sorts)
                 ->code($request->input('search'))
-                // ->state($request->input('search'))
-                // ->courseNameFilter($request->input('search'))
+                ->state($request->input('search'))
+                ->courseNameFilter($request->input('search'))
+                // ->responsibleCourse($request->input('search'))
                 ->paginate($request->input('perPage'));
         } else {
             $planifications = $course->planifications()
                 ->where('responsible_course_id', $responsibleCourse->id)
                 ->customOrderBy($sorts)
                 ->code($request->input('search'))
-                // ->state($request->input('search'))
-                // ->courseNameFilter($request->input('search'))
+                ->state($request->input('search'))
+                ->courseNameFilter($request->input('search'))
+                // ->resposibleCourse($request->input('search'))
                 ->paginate($request->input('perPage'));
         }
 
@@ -216,24 +219,6 @@ class PlanificationController extends Controller
             ->additional([
                 'msg' => [
                     'summary' => 'success',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ])
-            ->response()->setStatusCode(200);
-    }
-
-    public function getPlanitifications()
-    {
-        return "hola";
-        $planifications = Planification::where(['state_id' => function ($state) {
-            $state->where('code', State::APPROVED);
-        }])->paginate();
-
-        return (new CourseCollection($planifications))
-            ->additional([
-                'msg' => [
-                    'summary' => 'Me trae los cursos',
                     'detail' => '',
                     'code' => '200'
                 ]
@@ -260,18 +245,81 @@ class PlanificationController extends Controller
         }
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
         $currentState = Catalogue::firstWhere('code', $catalogue['school_period_state']['current']);
+        $detailPlanificationState = Catalogue::where([
+            ['code','=', 'CULMINATED'],
+            ['type','=','DETAIL_PLANIFICATION_STATE']
+            ])->first();
+            
+            // firstWhere('code', $catalogue['detail_planification_state']['to_be_approved']);
+            $approvedState = Catalogue::where([
+                ['code','=', $catalogue['planification_state']['approved']],
+            ['type','=','PLANIFICATION_STATE']
+            ])->first();
+            // return $authority;
+            
         $schoolPeriod = SchoolPeriod::firstWhere('state_id', $currentState->id);
 
         $planifications = $authority->planifications()
             ->whereHas('detailSchoolPeriod', function ($detailSchoolPeriod) use ($schoolPeriod) {
                 $detailSchoolPeriod->where('school_period_id', $schoolPeriod->id);
             })
+            ->with('detailPlanifications', function ($DTPL) use ($detailPlanificationState) {
+                $DTPL->where('state_id', $detailPlanificationState->id);
+            })
+            ->Where('state_id',$approvedState->id)
             ->courseNameFilter($request->input('search'))
             ->paginate($request->input('per_page'));
-        // ->customOrderBy($sorts);
-        // ->get();
-        // return $planifications;
-        return (new PlanificationCollection($planifications))
+
+        return (new PlanificationByAuthorityCollection($planifications))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])->response()->setStatusCode(200);
+    }
+
+    public function getPreviousPlanificationsByAuthority(IndexAuthorityRequest $request)
+    {
+        // DDRC-C: metodo para obtener las planificaciones 
+        // $sorts = explode(',', $request->input('sort'));
+
+        $authority = Authority::firstWhere('user_id', $request->user()->id);
+        //verificar que el usuario logeado es una autoridad de Authority
+        if (!$authority) {
+            return response()->json([
+                'data' => '',
+                'msg' => [
+                    'summary' => 'Error',
+                    'detail' => 'No se encontró al usuario: no es una autoridad o no está registrado.',
+                    'code' => '400'
+                ]
+            ], 400);
+        }
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+        $culminatedState = Catalogue::where([
+            ['code','=', 'CULMINATED'],
+            ['type','=','PLANIFICATION_STATE']
+            ])->first();
+            $detailPlanificationState = Catalogue::where([
+                ['code','=', 'CULMINATED'],
+                ['type','=','DETAIL_PLANIFICATION_STATE']
+                ])->first();
+        $schoolPeriod = SchoolPeriod::Where('state_id', null)->pluck('id');
+
+        $planifications = $authority->planifications()
+            ->whereHas('detailSchoolPeriod', function ($detailSchoolPeriod) use ($schoolPeriod) {
+                $detailSchoolPeriod->whereIn('school_period_id', $schoolPeriod);
+            })
+            ->with('detailPlanifications', function ($DTPL) use ($detailPlanificationState) {
+                $DTPL->where('state_id', $detailPlanificationState->id);
+            })
+            ->Where('state_id',$culminatedState->id)
+            ->courseNameFilter($request->input('search'))
+            ->paginate($request->input('per_page'));
+
+        return (new PlanificationByAuthorityCollection($planifications))
             ->additional([
                 'msg' => [
                     'summary' => 'success',
@@ -500,10 +548,31 @@ class PlanificationController extends Controller
     public function updateInitialPlanification(UpdatePlanificationByCourseRequest $request, Planification $planification)
     {
         // DDRC-C: actualiza los estados de inicio, fin y responsable del curso
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+        // validaciones
         $instructor = Instructor::find($request->input('responsibleCourse.id'));
-
+        $currentState = Catalogue::firstWhere('code', $catalogue['school_period_state']['current']);
+        $schoolPeriod = SchoolPeriod::firstWhere('state_id', $currentState->id);
+        $fechaMinima=Carbon::createFromFormat('Y-m-d',$schoolPeriod->started_at);
+        $fechaMaxima=Carbon::createFromFormat('Y-m-d',$schoolPeriod->ended_at);
+        $fechaInicio=Carbon::createFromFormat('Y-m-d',$request->input('startedAt'));
+        $fechaFin=Carbon::createFromFormat('Y-m-d',$request->input('endedAt'));
+        $rangoFechaInicio=$fechaInicio->between($fechaMinima,$fechaMaxima);
+        $rangoFechaFin=$fechaFin->between($fechaMinima,$fechaMaxima);
+        // return($schoolPeriod);
+        if (!$rangoFechaInicio || !$rangoFechaFin) {
+            return response()->json([
+                'data' => '',
+                'msg' => [
+                    'summary' => 'Error',
+                    'detail' => 'Las fechas se encuentran fuera del rango del periodo actual',
+                    'code' => '400'
+                ]
+            ], 400);
+        } 
+        
+        // asignacion
         $planification->responsibleCourse()->associate($instructor);
-
         $planification->ended_at = $request->input('endedAt');
         $planification->started_at = $request->input('startedAt');
 

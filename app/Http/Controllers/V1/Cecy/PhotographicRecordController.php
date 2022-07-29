@@ -53,14 +53,14 @@ class PhotographicRecordController extends Controller
     public function store(StorePhotographicRecordRequest $request)
     {
         $photographicRecord = new PhotographicRecord();
-        $photographicRecord->detailPlanification()
-            ->associate(DetailPlanification::find($request->input('detail_planification.id')));
+//        $photographicRecord->detailPlanification()
+//            ->associate(DetailPlanification::find($request->input('detail_planification_id')));
 
+        $photographicRecord->detail_planification_id = $request->input('detailPlanificationId');
         $photographicRecord->description = $request->input('description');
-        $photographicRecord->number_week = $request->input('number_week');
-        $photographicRecord->url_image = $request->input('url_image');
-        $photographicRecord->week_at = $request->input('week_at');
-
+        $photographicRecord->number_week = $request->input('numberWeek');
+//        $photographicRecord->url_image = $request->input('url_image');
+        $photographicRecord->registered_at = now();
         $photographicRecord->save();
 
         return (new PhotographicRecordResource($photographicRecord))
@@ -82,7 +82,7 @@ class PhotographicRecordController extends Controller
         $photographicRecord->description = $request->input('description');
         $photographicRecord->number_week = $request->input('number_week');
 //        $photographicRecord->url_image = $request->input('url_image');
-        $photographicRecord->week_at = $request->input('week_at');
+        $photographicRecord->week_at = now();
 
         $photographicRecord->save();
 
@@ -129,7 +129,8 @@ class PhotographicRecordController extends Controller
     }
     //revisar
     public function getPhotograficRecord(DetailPlanification $detailPlanification){
-        $photographicRecords = $detailPlanification->photographicRecords()->get();
+        $photographicRecords = $detailPlanification->photographicRecords()
+        ->where('registered_at' ,'=',now())->get();
         return(new PhotographicRecordCollection($photographicRecords))
             ->additional([
                 'msg' => [
@@ -149,36 +150,21 @@ class PhotographicRecordController extends Controller
     {
         $images = $record->images()->get();
         foreach ($images as $image) {
-            // Storage::deleteDirectory($image->directory);
             Storage::disk('public')->deleteDirectory('records' . $image->id);
             $image->delete();
         }
 
         foreach ($request->file('images') as $image) {
-            $newImage = new Image();
-            $newImage->name = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
-            $newImage->description = $request->input('description');
-            $newImage->extension = 'jpg';
-            $newImage->imageable()->associate($record);
-            $newImage->save();
 
-
-            Storage::disk('public')->makeDirectory('records/' . $newImage->id);
-
-            $storagePath = storage_path('app/public/records/');
-            $record->uploadOriginal(InterventionImage::make($image), $newImage->id, $storagePath);
-            $record->uploadLargeImage(InterventionImage::make($image), $newImage->id, $storagePath);
-            $record->uploadMediumImage(InterventionImage::make($image), $newImage->id, $storagePath);
-            $record->uploadSmallImage(InterventionImage::make($image), $newImage->id, $storagePath);
-
-            $newImage->directory = 'images/' . $newImage->id;
-            $newImage->save();
+            $record->image =  'records/'. $record->id.'.'.$image->getClientOriginalExtension();
+            $record->save();
+            $image->storeAs('', $record->image, 'public');
         }
-        return (new ImageResource($newImage))->additional(
+        return (new PhotographicRecordResource($record))->additional(
             [
                 'msg' => [
                     'summary' => 'success',
-                    'detail' => '',
+                    'detail' => 'Imagen cargada correctamente',
                     'code' => '200'
                 ]
             ]

@@ -13,11 +13,11 @@ class StorePhotographicRecordRequest extends FormRequest
     public function rules()
     {
         return [
-            'detailPlanification.id' => ['required', 'integer'],
+            'detailPlanificationId' => ['required', 'integer'],
             'description' => ['required', 'string'],
             'numberWeek' => ['required', 'integer'],
-            'urlImage' => ['required','string'],
-            'weekAt' => ['required','date'],
+//            'urlImage' => ['required','string'],
+//            'weekAt' => ['required','date'],
 
         ];
     }
@@ -25,11 +25,11 @@ class StorePhotographicRecordRequest extends FormRequest
     public function attributes()
     {
         return [
-            'detailPlanification.id' => 'Id detalle de la planificacion',
+            'detailPlanificationId' => 'Id detalle de la planificacion',
             'description' => 'descripción',
             'numberWeek' => 'numero de semanas',
-            'urlImage' => 'url de la imagen',
-            'weekAt' => 'fecha',
+//            'urlImage' => 'url de la imagen',
+//            'weekAt' => 'fecha',
         ];
     }
 }

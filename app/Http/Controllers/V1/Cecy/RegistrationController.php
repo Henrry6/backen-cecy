@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\V1\Cecy;
 
+use App\Exports\RegistrationExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Core\Files\UploadFileRequest;
-use App\Http\Requests\V1\Cecy\Certificates\ShowParticipantsRequest;
-use App\Http\Requests\V1\Cecy\Courses\GetCoursesByNameRequest;
 use App\Http\Requests\V1\Cecy\Participants\GetCoursesByParticipantRequest;
 use App\Http\Requests\V1\Cecy\Registrations\RegisterStudentRequest;
 use App\Http\Requests\V1\Cecy\Registrations\IndexRegistrationRequest;
@@ -16,27 +15,32 @@ use App\Http\Requests\V1\Cecy\Registrations\NullifyRegistrationRequest;
 use App\Http\Requests\V1\Core\Files\DestroysFileRequest;
 use App\Http\Requests\V1\Core\Files\IndexFileRequest;
 use App\Http\Requests\V1\Core\Files\UpdateFileRequest;
+use App\Http\Requests\V1\Core\Images\UploadImageRequest;
+use App\Http\Resources\V1\Cecy\PhotographicRecords\PhotographicRecordResource;
+use App\Http\Resources\V1\Cecy\RegistrationRequeriments\RegistrationRequerimentResource;
 use App\Http\Resources\V1\Cecy\Registrations\RegisterStudentResource;
-use App\Http\Resources\V1\Cecy\Certificates\CertificateResource;
-use App\Http\Resources\V1\Cecy\DetailPlanifications\DetailPlanificationParticipants\DetailPlanificationParticipantResource;
+use App\Http\Resources\V1\Cecy\Registrations\ParticipantRegistrationResource;
 use App\Http\Resources\V1\Cecy\Participants\CoursesByParticipantCollection;
 use App\Http\Resources\V1\Cecy\Registrations\RegistrationCollection;
 use App\Http\Resources\V1\Cecy\Registrations\RegistrationResource;
-use App\Http\Resources\V1\Cecy\Registrations\ParticipantRegistrationResource;
+use App\Imports\RegistrationImport;
 use App\Models\Cecy\AdditionalInformation;
 use App\Models\Cecy\DetailSchoolPeriod;
+use App\Models\Cecy\RegistrationRequirement;
 use App\Models\Core\File;
-use App\Models\Cecy\Course;
 use App\Models\Cecy\Catalogue;
 use App\Models\Cecy\DetailPlanification;
 use App\Models\Cecy\Participant;
 use App\Models\Cecy\Registration;
 use App\Models\Cecy\Requirement;
 use Carbon\Carbon;
+use FontLib\Table\Type\name;
+use Illuminate\Http\Request;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
-
+use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 class RegistrationController extends Controller
 {
@@ -74,8 +78,8 @@ class RegistrationController extends Controller
 
     public function show(Registration $registration)
     {
-        // datos de un registro
-        return (new DetailPlanificationParticipantResource($registration))
+        // DDRC-C: datos de un registro
+        return (new ParticipantRegistrationResource($registration))
             ->additional([
                 'msg' => [
                     'summary' => 'success',
@@ -136,10 +140,14 @@ class RegistrationController extends Controller
     public function reEnroll(RegistrationRequest $request, Registration $registration)
     {
         // DDRC-C: rematricula a un participante
+        $observaciones=(is_null($registration->observations))? array():$registration->observations ;
+        array_push($observaciones,$request->input('observations'));
+        $registration->observations=$observaciones;
+        // return $observaciones;
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
         $currentState = Catalogue::firstWhere('code', $catalogue['registration_state']['registered']);
-        $registration->observations = "";
         $registration->state()->associate(Catalogue::find($currentState->id));
+        $registration->registered_at=Date('Y-m-d');
         $registration->save();
         return (new RegistrationResource($registration))
             ->additional([
@@ -172,7 +180,11 @@ class RegistrationController extends Controller
         // DDRC-C: matricular a un participante
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
         $currentState = Catalogue::firstWhere('code', $catalogue['registration_state']['registered']);
-        $registration->observations = $request->input('observations');
+        // $registration->observations = $request->input('observations');
+        $observaciones=(is_null($registration->observations))? array():$registration->observations ;
+        array_push($observaciones,$request->input('observations'));
+        $registration->observations=$observaciones;
+        $registration->registered_at=Date('Y-m-d');
         $registration->state()->associate(Catalogue::find($currentState->id));
         $registration->save();
         return (new RegistrationResource($registration))
@@ -191,7 +203,10 @@ class RegistrationController extends Controller
         // DDRC-C: cambia el estado a 'en revición' de una incripción
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
         $currentState = Catalogue::firstWhere('code', $catalogue['registration_state']['in_review']);
-        $registration->observations = $request->input('observations');
+        // $registration->observations = $request->input('observations');
+        $observaciones=(is_null($registration->observations))? array():$registration->observations ;
+        array_push($observaciones,$request->input('observations'));
+        $registration->observations=$observaciones;
         $registration->state()->associate(Catalogue::find($currentState->id));
         $registration->save();
         return (new RegistrationResource($registration))
@@ -216,7 +231,10 @@ class RegistrationController extends Controller
             $registration = Registration::firstWhere('id', $value);
             $detailPlanification = $registration->detailPlanification;
 
-            $registration->observations = $request->input('observations');
+            // $registration->observations = $request->input('observations');
+            $observaciones=(is_null($registration->observations))? array():$registration->observations ;
+        array_push($observaciones,$request->input('observations'));
+        $registration->observations=$observaciones;
             $registration->state()->associate($currentState);
 
             $remainingRegistrations = $registration->detailPlanification->capacity;
@@ -251,7 +269,10 @@ class RegistrationController extends Controller
         $currentState = Catalogue::firstWhere('code', $catalogue['registration_state']['cancelled']);
         $detailPlanification = $registration->detailPlanification;
 
-        $registration->observations = $request->input('observations');
+        // $registration->observations = $request->input('observations');
+        $observaciones=(is_null($registration->observations))? array():$registration->observations ;
+        array_push($observaciones,$request->input('observations'));
+        $registration->observations=$observaciones;
         $registration->state()->associate(Catalogue::find($currentState->id));
 
         $remainingRegistrations = $registration->detailPlanification->capacity;
@@ -304,6 +325,7 @@ class RegistrationController extends Controller
     private function check(DetailSchoolPeriod $detailSchoolPeriod)
     {
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+
         $currentDate = Carbon::now();
         $ordinaryStartedAt = Carbon::create($detailSchoolPeriod->ordinary_started_at);
         $ordinaryEndedAt = Carbon::create($detailSchoolPeriod->ordinary_ended_at);
@@ -326,28 +348,28 @@ class RegistrationController extends Controller
         }
     }
 
-    private function storeAdditionalInformation(RegisterStudentRequest $request, Registration $registration)
+    private function storeAdditionalInformation( $student, Registration $registration)
     {
         $additionalInformation = new AdditionalInformation();
 
         $additionalInformation->registration()->associate($registration);
-        $additionalInformation->levelInstruction()->associate(Catalogue::find($request->input('levelInstruction.id')));
-        $additionalInformation->worked = $request->input('worked');
-        $additionalInformation->company_activity = $request->input('companyActivity');
-        $additionalInformation->company_address = $request->input('companyAddress');
-        $additionalInformation->company_email = $request->input('companyEmail');
-        $additionalInformation->company_name = $request->input('companyName');
-        $additionalInformation->company_phone = $request->input('companyPhone');
-        $additionalInformation->company_sponsored = $request->input('companySponsored');
-        $additionalInformation->contact_name = $request->input('contactName');
-        $additionalInformation->course_knows = $request->input('courseKnows');
-        $additionalInformation->course_follows = $request->input('courseFollows');
+        $additionalInformation->levelInstruction()->associate(Catalogue::find($student->input('levelInstruction.id')));
+        $additionalInformation->worked = $student->input('worked');
+        $additionalInformation->company_activity = $student->input('companyActivity');
+        $additionalInformation->company_address = $student->input('companyAddress');
+        $additionalInformation->company_email = $student->input('companyEmail');
+        $additionalInformation->company_name = $student->input('companyName');
+        $additionalInformation->company_phone = $student->input('companyPhone');
+        $additionalInformation->company_sponsored = $student->input('companySponsored');
+        $additionalInformation->contact_name = $student->input('contactName');
+        $additionalInformation->course_knows = $student->input('courseKnows');
+        $additionalInformation->course_follows = $student->input('courseFollows');
 
         return $additionalInformation;
     }
 
     // registrar estudiante al curso con la informacion adicional
-    public function registerStudent(RegisterStudentRequest $request)
+    public function registerStudent(Request $request)
     {
         $participant = Participant::firstWhere('user_id', $request->user()->id);
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
@@ -378,7 +400,7 @@ class RegistrationController extends Controller
         return (new RegisterStudentResource($registration))
             ->additional([
                 'msg' => [
-                    'summary' => 'Registro realizado con éxito',
+                    'summary' => 'Matricula Enviada',
                     'detail' => '',
                     'code' => '200'
                 ]
@@ -413,14 +435,13 @@ class RegistrationController extends Controller
     {
         $registration->grade1 = $request->input('grade1');
         $registration->grade2 = $request->input('grade2');
-//        $registration->final_grade = $request->input('finalGrade');//calculado
         $registration->save();
         $this->FinalGrade($request, $registration);
         return (new RegistrationResource($registration))
             ->additional([
                 'msg' => [
-                    'summary' => 'registro Actualizado',
-                    'Institution' => '',
+                    'summary' => 'succes',
+                    'detail' => 'registro Actualizado',
                     'code' => '200'
                 ]
             ])
@@ -436,8 +457,8 @@ class RegistrationController extends Controller
         return (new RegistrationResource($registration))
             ->additional([
                 'msg' => [
-                    'summary' => 'nota final actualizada',
-                    'Institution' => '',
+                    'summary' => 'succes',
+                    'detail' => 'nota final actualizada',
                     'code' => '200'
                 ]
             ])
@@ -447,41 +468,144 @@ class RegistrationController extends Controller
 
     }
 
-
     // Files
-    public function indexFiles(IndexFileRequest $request, Requirement $course)
+    public function indexFiles(IndexFileRequest $request, Registration $registration)
     {
-        return $course->indexFiles($request);
+        return $registration->indexFiles($request);
     }
 
-    public function uploadFileA(UploadFileRequest $request, Requirement $course)
+
+
+    public function uploadFileA(UploadFileRequest $request, Registration $registration)
     {
-        return $course->uploadFile($request);
+        return $registration->uploadFile($request);
     }
 
-    public function downloadFileA(Requirement $course, File $file)
+    public function downloadFileA(Registration $registration, File $file)
     {
-        return $course->downloadFile($file);
+        return $registration->downloadFile($file);
     }
 
-    public function showFileR(Requirement $course, File $file)
+    public function downloadRequirement(Requirement $requirement)
     {
-        return $course->showFile($file);
+        $url = storage_path('app/private/registration-requirement/').$requirement->url;
+        if (!Storage::exists($url)) {
+            return (new FileCollection([]))->additional(
+                [
+                    'msg' => [
+                        'summary' => 'Archivo no encontrado',
+                        'detail' => 'Intente de nuevo',
+                        'code' => '404'
+                    ]
+                ]);
+        }
+        return Storage::download($url);
     }
 
-    public function updateFile(UpdateFileRequest $request, Requirement $course, File $file)
+
+
+    public function showFileR(Registration $registration, File $file)
     {
-        return $course->updateFile($request, $file);
+        return $registration->showFile($file);
     }
 
-    public function destroyFileA(Requirement $course, File $file)
+    public function updateFile(UpdateFileRequest $request, Registration $registration, File $file)
     {
-        return $course->destroyFile($file);
+        return $registration->updateFile($request, $file);
     }
 
-    public function destroyFiles(Requirement $course, DestroysFileRequest $request)
+    public function destroyFileA(Registration $registration, File $file)
     {
-        return $course->destroyFiles($request);
+        return $registration->destroyFile($file);
     }
 
+    public function destroyFiles(Registration $registration, DestroysFileRequest $request)
+    {
+        return $registration->destroyFiles($request);
+    }
+
+    public function uploadDocuments(Request $request,  RegistrationRequirement $registrationRequirement)
+    {
+        $dataStudent= json_decode($request->dataStudent, true);
+        $participant = Participant::firstWhere('user_id', $request->user()->id);
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+        $state = Catalogue::firstWhere('code', $catalogue['registration_state']['in_review']);
+
+        $detailPlanification = DetailPlanification::find($dataStudent['detailPlanificationId']);
+
+        $planification = $detailPlanification->planification()->first();
+
+        $detailSchoolPeriod = $planification->detailSchoolPeriod()->first();
+
+        $registrationType = Catalogue::firstWhere('code', $this->check($detailSchoolPeriod));
+
+        $registration = new Registration();
+        $registration->participant()->associate($participant);
+        $registration->detailPlanification()->associate($detailPlanification);
+        $registration->type()->associate($registrationType);
+        $registration->state()->associate($state);
+        $registration->typeParticipant()->associate($participant->type);
+        $registration->registered_at = now();
+
+        DB::transaction(function () use($registration, $request) {
+            $registration->save();
+            $additionalInformation = $this->storeAdditionalInformation($request, $registration);
+            $additionalInformation->save();
+        });
+
+        $files = $registrationRequirement->files()->get();
+        foreach ($files as $file) {
+            Storage::disk('public')->deleteDirectory('registrationRequirements' . $file->id);
+            $file->delete();
+        }
+
+        foreach ($request->file('files') as $file) {
+            $registrationRequirement->registration()->associate($registration->id);
+            //'registrationRequirements/'. $registrationRequirement->id.'.'.$file->getClientOriginalExtension();
+            $registrationRequirement->url = 'registrationRequirements/'. 'cedula'.'.'.$file->getClientOriginalExtension();
+            $registrationRequirement->save();
+            $file->storeAs('', $registrationRequirement->url, 'public');
+        }
+        return (new RegistrationRequerimentResource($registrationRequirement))->additional(
+            [
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ]
+        );
+    }
+    public function registrationImport(Request $request){
+        $file = $request->file('excel');
+
+        if (!isset($file)) {
+//            echo 'No esta enviando el nombre del archivo, el nombre es excel';
+            return(
+            [
+                'msg' => [
+                    'summary' => 'error',
+                    'detail' => 'No esta enviando el nombre del archivo, el nombre es excel',
+                    'code' => '200'
+                ]
+            ]
+            );
+        }
+        Excel::import(new RegistrationImport, $file);
+//        echo 'Se importo correctamente';
+        return (
+        [
+            'msg' => [
+                'summary' => 'success',
+                'detail' => 'Se cargaron correctamente los datos',
+                'code' => '200'
+            ]
+        ]
+        );
+
+    }
+    public function exportExcel(DetailPlanification $detailPlanification)
+    {
+        return Excel::download(new RegistrationExport($detailPlanification->id), '-participants.xlsx');
+    }
 }

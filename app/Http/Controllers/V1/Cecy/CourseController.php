@@ -28,9 +28,11 @@ use App\Http\Requests\V1\Cecy\Courses\CareerCoordinator\StoreCourseRequest;
 use App\Http\Requests\V1\Cecy\Courses\CareerCoordinator\UpdateCourseNameAndDurationRequest;
 use App\Http\Requests\V1\Cecy\Courses\CatalogueCourseRequest;
 use App\Http\Requests\V1\Cecy\Courses\UpdateCourseRequest;
+use App\Http\Requests\V1\Cecy\DetailPlanifications\AssignInstructorsRequest;
 use App\Http\Requests\V1\Cecy\Planifications\GetDateByshowYearScheduleRequest;
 use App\Http\Requests\V1\Cecy\Planifications\GetPlanificationByResponsableCourseRequest;
 use App\Http\Requests\V1\Cecy\Planifications\IndexPlanificationRequest;
+use App\Http\Requests\V1\Cecy\ResponsibleCourseDetailPlanifications\GetPlanificationsByCourseRequest;
 use App\Http\Requests\V1\Core\Files\DestroysFileRequest;
 use App\Http\Requests\V1\Core\Files\IndexFileRequest;
 use App\Http\Requests\V1\Core\Files\UpdateFileRequest;
@@ -40,9 +42,11 @@ use App\Http\Resources\V1\Cecy\Planifications\InformCourseNeedsResource;
 use App\Http\Resources\V1\Cecy\Courses\CoursesByResponsibleCollection;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationCollection;
 use App\Http\Resources\V1\Cecy\Certificates\CertificateResource;
+use App\Http\Resources\V1\Cecy\CourseProfiles\CourseProfileResource;
 use App\Http\Resources\V1\Cecy\Courses\CoordinatorCecy\CourseByCoordinatorCecyCollection;
 use App\Http\Resources\V1\Cecy\Courses\CourseResource;
 use App\Http\Resources\V1\Cecy\Courses\CourseCollection;
+use App\Http\Resources\V1\Cecy\Planifications\ResponsibleCoursePlanifications\PlanificationByCourseCollection;
 use App\Http\Resources\V1\Core\ImageResource;
 use App\Models\Core\File;
 use App\Models\Core\Career;
@@ -78,6 +82,8 @@ class CourseController extends Controller
         $sorts = explode(',', $request->input('sort'));
 
         $courses = Course::customOrderBy($sorts)
+            ->name($request->input('search'))
+            ->code($request->input('search'))
             ->schoolPeriodId($request->input('schoolPeriod.id'))
             ->paginate($request->input('per_page'));
 
@@ -300,9 +306,8 @@ class CourseController extends Controller
             ], 404);
         }
 
-        // $courses = Course::where('responsible_id', $instructor->id)->get();
         $courses = Course::where('responsible_id', $instructor->id)
-            ->orWhereHas('planifications', function (Builder $query) use ($instructor) {
+            ->orWhereHas('planifications', function ($query) use ($instructor) {
                 $query->where('responsible_course_id', $instructor->id);
             })
             ->get();
@@ -355,7 +360,7 @@ class CourseController extends Controller
         return (new CourseResource($course))
             ->additional([
                 'msg' => [
-                    'summary' => 'success',
+                    'summary' => 'Información general del curso actualizada',
                     'detail' => '',
                     'code' => '200'
                 ]
@@ -418,27 +423,6 @@ class CourseController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    // Ingresar el motivo del por cual el curso no esta aprobado (Done)
-    public function notApproveCourseReason(Request $request, Course $course)
-    {
-        return "notApproveCourseReason";
-        $course->state()->associate(Catalogue::firstWhere('code', State::APPROVED));
-        $course->observation = $request->input('observation');
-        $course->save();
-
-        return (new CourseResource($course))
-            ->additional([
-                'msg' => [
-                    'summary' => 'Curso actualizado',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ])
-            ->response()->setStatusCode(200);
-    }
-
-
-
     // descarga las necesidades de un curso (Done)
     public function informCourseNeeds(Course $course)
     {
@@ -467,7 +451,7 @@ class CourseController extends Controller
     //Traer todos los cursos planificados de un año en especifico (Done)
     // el que hizo esto debe enviar el año en especifico bien por el url
     // o por params
-    public function showYearSchedule( GetDateByshowYearScheduleRequest $request )
+    public function showYearSchedule(GetDateByshowYearScheduleRequest $request)
     {
         // $year = $planificacion->whereYear('started_at')->first();
         //$planifications = Planification::whereYear('started_at', '=', 2022)->with(['course', 'detailPlanifications'])->get();
@@ -475,16 +459,16 @@ class CourseController extends Controller
         $planifications = Planification::whereYear('started_at', '=', $request->input("startedAt"))->with(['course', 'responsibleCourse.user', 'detailPlanifications'])->get();
         //$detailPlanifications = $planifications->detailPlanifications()->get();
         //$detailPlanifications=$planifications->detailPlanifications()->with('classroom')->get();
-        
+
         //$detailPlanifications = $planification->detailPlanifications()->get();
         $detailPlanifications = Planification::whereYear('started_at', '=', $request->input("startedAt"))->with(['detailPlanifications'])->get();
         //$responsibleCourse = Planification::whereYear('started_at', '=', $request->input("startedAt"))->with('responsibleCourse.user')->get(); 
-          /*     $course = $planifications->course()->get();
+        /*     $course = $planifications->course()->get();
         $detailPlanifications=$planifications->detailPlanifications()->get(); */
-        $data=[
-        'planifications' => $planifications,
-        'detailPlanifications' => $detailPlanifications,
-       // 'responsibleCourse' => $responsibleCourse
+        $data = [
+            'planifications' => $planifications,
+            'detailPlanifications' => $detailPlanifications,
+            // 'responsibleCourse' => $responsibleCourse
 
         ];
         //return $data ;
@@ -755,6 +739,67 @@ class CourseController extends Controller
             ->response()->setStatusCode(201);
     }
 
+    public function getPlanifications(GetPlanificationsByCourseRequest $request, Course $course)
+    {
+        $sorts = explode(',', $request->input('sort'));
+
+        $planifications = $course->planifications()
+            ->customOrderBy($sorts)
+            ->code($request->input('search'))
+            ->state($request->input('search'))
+            ->paginate($request->input('per_page'));
+
+        return (new PlanificationByCourseCollection($planifications))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
+
+    function getPlanificationsByRol(Request $request, Course $course)
+    {
+        $sorts = explode(',', $request->input('sort'));
+
+        $planifications = $course->planifications()
+            ->where($request->input('role.name'), $request->input('role.id'))
+            ->customOrderBy($sorts)
+            ->code($request->input('search'))
+            ->state($request->input('search'))
+            ->paginate($request->input('per_page'));
+
+        return (new PlanificationByCourseCollection($planifications))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
+    }
+
+    /**
+     * Assign instructors to profile.
+     */
+    public function assignInstructors(AssignInstructorsRequest $request, Course $course)
+    {
+        $courseProfile = $course->courseProfile;
+        $courseProfile->instructors()->sync($request->input('ids'));
+
+        return (new CourseResource($course))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Éxito',
+                    'detail' => 'Asignación actualizada',
+                    'code' => '201'
+                ]
+            ])
+            ->response()->setStatusCode(201);
+    }
 
 
     // Files
@@ -801,7 +846,7 @@ class CourseController extends Controller
             // Storage::deleteDirectory($image->directory);
             Storage::disk('public')->deleteDirectory('images/' . $image->id);
             $image->delete();
-        } 
+        }
 
         foreach ($request->file('images') as $image) {
             $newImage = new Image();
@@ -810,7 +855,7 @@ class CourseController extends Controller
             $newImage->extension = 'jpg';
             $newImage->imageable()->associate($course);
             $newImage->save();
-            
+
 
             Storage::disk('public')->makeDirectory('images/' . $newImage->id);
 
@@ -826,7 +871,7 @@ class CourseController extends Controller
         return (new ImageResource($newImage))->additional(
             [
                 'msg' => [
-                    'summary' => 'success',
+                    'summary' => 'Imagen cargada exitosamente!',
                     'detail' => '',
                     'code' => '200'
                 ]
