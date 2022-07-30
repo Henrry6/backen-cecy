@@ -11,6 +11,8 @@ use App\Http\Requests\V1\Cecy\DetailSchoolPeriods\UpdateDetailSchoolPeriodReques
 use App\Http\Resources\V1\Cecy\DetailSchoolPeriods\DetailSchoolPeriodCollection;
 use App\Http\Resources\V1\Cecy\DetailSchoolPeriods\DetailSchoolPeriodResource;
 use App\Models\Cecy\DetailSchoolPeriod;
+use App\Models\Cecy\SchoolPeriod;
+
 //use Illuminate\Http\Request;
 
 class DetailSchoolPeriodController extends Controller
@@ -74,18 +76,13 @@ class DetailSchoolPeriodController extends Controller
             ->response()->setStatusCode(201);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(StoreDetailSchoolPeriodRequest $request)
     {
         $detailSchoolPeriod = new DetailSchoolPeriod();
 
         $detailSchoolPeriod->schoolPeriod()
-            ->associate(DetailSchoolPeriod::find($request->input('schoolPeriod.id')));
+            ->associate(SchoolPeriod::find($request->input('schoolPeriod.id')));
 
         $detailSchoolPeriod->especial_ended_at = $request->input('especialEndedAt');
         $detailSchoolPeriod->especial_started_at = $request->input('especialStartedAt');

@@ -16,10 +16,10 @@ class UpdateSchoolPeriodRequest extends FormRequest
         return [
             'state.id' =>  ['integer', 'required'],
             'code' =>  ['required'],
-            'ended_at' =>  ['required'],
-            'minimum_note' =>  ['required'],
+            'endedAt' =>  ['required'],
+            'minimumNote' =>  ['required'],
             'name' =>  ['required'],
-            'started_at' =>  ['required'],
+            'startedAt' =>  ['required'],
         ];
     }
 
