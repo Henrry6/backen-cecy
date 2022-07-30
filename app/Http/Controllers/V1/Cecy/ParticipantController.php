@@ -47,8 +47,8 @@ class ParticipantController extends Controller
             return (new UserResource($user))
                 ->additional([
                     'msg' => [
-                        'summary' => 'El usuario ya se encuentra registrado',
-                        'detail' => 'Intente con otro nombre de usuario',
+                        'summary' => 'El número de cedula ingresada ya se encuentra registrada',
+                        'detail' => 'Intente con otro número de cedula',
                         'code' => '200'
                     ]
                 ])
