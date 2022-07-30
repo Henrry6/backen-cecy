@@ -185,7 +185,7 @@ class RegistrationController extends Controller
         array_push($observaciones,$request->input('observations'));
         $registration->observations=$observaciones;
         $registration->registered_at=Date('Y-m-d');
-        $registration->state()->associate(Catalogue::find($currentState->id));
+        $registration->state()->associate($currentState->id);
         $registration->save();
         return (new RegistrationResource($registration))
             ->additional([
