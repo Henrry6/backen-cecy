@@ -294,6 +294,12 @@ class CourseController extends Controller
     //obtener los cursos asignados a un docente responsable logueado (Done)
     public function getCoursesByResponsibleCourse(getCoursesByResponsibleRequest $request)
     {
+        $sorts = explode(',', $request->input('sort'));
+        $courses = Course::customOrderBy($sorts)
+            ->name($request->input('search'))
+            ->code($request->input('search'));
+
+
         $instructor = Instructor::firstWhere('user_id', $request->user()->id);
         if (!isset($instructor)) {
             return response()->json([
@@ -306,11 +312,18 @@ class CourseController extends Controller
             ], 404);
         }
 
+       
+
+
+
         $courses = Course::where('responsible_id', $instructor->id)
             ->orWhereHas('planifications', function ($query) use ($instructor) {
                 $query->where('responsible_course_id', $instructor->id);
             })
             ->get();
+
+          
+
 
         return (new CoursesByResponsibleCollection($courses))
             ->additional([

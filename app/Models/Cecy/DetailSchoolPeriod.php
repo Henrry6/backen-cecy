@@ -28,10 +28,9 @@ class DetailSchoolPeriod extends Model implements Auditable
     ];
 
     // Relationships
-    //revisar
     public function planifications()
     {
-        $this->hasMany(Planification::class);
+        return $this->hasMany(Planification::class);
     }
 
     public function schoolPeriod()
@@ -39,61 +38,57 @@ class DetailSchoolPeriod extends Model implements Auditable
         return $this->belongsTo(SchoolPeriod::class);
     }
 
-    // Mutators
-
-
     // Scopes
-
-    public function scopeEspecialEndedAt($query, $especialEndedAt) 
+    public function scopeEspecialEndedAt($query, $especialEndedAt)
     {
         if ($especialEndedAt) {
             return $query->orWhere('especial-ended-at', 'iLike', "%$especialEndedAt%");
         }
     }
 
-    public function scopeEspecialStartedAt($query, $especialStartedAt) 
+    public function scopeEspecialStartedAt($query, $especialStartedAt)
     {
         if ($especialStartedAt) {
             return $query->orWhere('especial-started-at', 'iLike', "%$especialStartedAt%");
         }
     }
 
-    public function scopeExtraordinaryEndedAt($query, $extraordinaryEndedAt) 
+    public function scopeExtraordinaryEndedAt($query, $extraordinaryEndedAt)
     {
         if ($extraordinaryEndedAt) {
             return $query->orWhere('extraordinary-ended-at', 'iLike', "%$extraordinaryEndedAt%");
         }
     }
 
-    public function scopeExtraordinaryStartedAt($query, $extraordinaryStartedAt) 
+    public function scopeExtraordinaryStartedAt($query, $extraordinaryStartedAt)
     {
         if ($extraordinaryStartedAt) {
             return $query->orWhere('extraordinary-started-at', 'iLike', "%$extraordinaryStartedAt%");
         }
     }
 
-    public function scopeNullificationEndedAt($query, $nullificationEndedAt) 
+    public function scopeNullificationEndedAt($query, $nullificationEndedAt)
     {
         if ($nullificationEndedAt) {
             return $query->orWhere('nullification-ended-at', 'iLike', "%$nullificationEndedAt%");
         }
     }
 
-    public function scopeNullificationStartedAt($query, $nullificationStartedAt) 
+    public function scopeNullificationStartedAt($query, $nullificationStartedAt)
     {
         if ($nullificationStartedAt) {
             return $query->orWhere('nullification-started-at', 'iLike', "%$nullificationStartedAt%");
         }
     }
 
-    public function scopeOrdinaryEndedAt($query, $ordinaryEndedAt) 
+    public function scopeOrdinaryEndedAt($query, $ordinaryEndedAt)
     {
         if ($ordinaryEndedAt) {
             return $query->orWhere('ordinary-ended-at', 'iLike', "%$ordinaryEndedAt%");
         }
     }
 
-    public function scopeOrdinaryStartedAt($query, $ordinaryStartedAt) 
+    public function scopeOrdinaryStartedAt($query, $ordinaryStartedAt)
     {
         if ($ordinaryStartedAt) {
             return $query->orWhere('ordinary-started-at', 'iLike', "%$ordinaryStartedAt%");
@@ -130,5 +125,5 @@ class DetailSchoolPeriod extends Model implements Auditable
             array_unshift($fields, 'id');
             return $query->select($fields);
         }
-    } 
+    }
 }

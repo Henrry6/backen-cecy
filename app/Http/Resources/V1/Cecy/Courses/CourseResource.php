@@ -66,7 +66,7 @@ class CourseResource extends JsonResource
             'techniquesRequisites' => $this->techniques_requisites,
             'theoryHours' => $this->theory_hours,
             'participantTypes' => CatalogueResource::collection($this->catalogues),
-            'instructor'=> InstructorResource::collection(CourseProfile::where('id',$this->id)->first()->instructors()->get()),
+            // 'instructor'=> InstructorResource::collection(CourseProfile::where('id',$this->id)->first()->instructors()->get()), //yo comente esta linea porque da error en el metodo show de curso  de la api, verificar si esta bien escrita
         ];
     }
 }
