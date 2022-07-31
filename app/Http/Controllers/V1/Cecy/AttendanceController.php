@@ -226,13 +226,8 @@ class AttendanceController extends Controller
         $grade1 = $registrations;
         $grade2 = $registrations;
         $final_grade = $registrations;
-
-
-        //return $registrations;
         //return $course;
         //return $planification;
-
-
         $pdf = PDF::loadView('reports/atendence-evaluation', [
             'planification' => $planification,
             'course' => $course,

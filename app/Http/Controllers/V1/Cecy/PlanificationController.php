@@ -372,12 +372,7 @@ class PlanificationController extends Controller
         $instructor = Instructor::where('id', $planification->responsible_course_id)->first();
         $user = $instructor->user();
         $user = User::firstWhere('id', $instructor->user_id);
-
         //return $course->evaluation_mechanisms->diagnostic['tecnique'];
-        //return $topics;
-        //return $course;
-        // return $planification;
-
         $pdf = PDF::loadView('reports/desing-curricular', [
             'planification' => $planification,
             'course' => $course,
@@ -386,14 +381,11 @@ class PlanificationController extends Controller
             'course_gen' => $course_gen,
             'user' => $user,
             'instructor' => $instructor,
-
         ]);
-
         return $pdf->stream('Diseño Curricular.pdf');
     }
 
     //trae la informacion correspondiente  al informe final del curso
-
     public function informeFinal(Planification $planification)
     {
         $planification = Planification::firstWhere('id', $planification->id);
@@ -405,15 +397,8 @@ class PlanificationController extends Controller
         $registrations = $planification->detailPlanifications()->first()->registrations()->get()->where("state_course_id", '107');
         $registrations = $planification->detailPlanifications()->first()->registrations()->get()->where("state_course_id", '106');
         $instructor = Instructor::where('id', $planification->responsible_course_id)->first();
-        //$user =  $instructor->user();
         $user = User::firstWhere('id', $instructor->user_id);
-
-
         //return $institution;
-        //return $registrations;
-        //return $course;
-        //return $planification;
-
         $pdf = PDF::loadView('reports/informe-final', [
             'planification' => $planification,
             'course' => $course,
@@ -423,8 +408,6 @@ class PlanificationController extends Controller
             'user' => $user,
             'instructor' => $instructor,
             'registrations' => $registrations,
-
-
         ]);
 
         return $pdf->stream('Informe final del curso.pdf');
