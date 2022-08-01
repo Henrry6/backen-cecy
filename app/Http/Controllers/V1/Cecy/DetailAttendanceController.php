@@ -17,6 +17,9 @@ use App\Models\Cecy\DetailAttendance;
 use App\Models\Cecy\DetailPlanification;
 use App\Models\Cecy\Participant;
 use App\Models\Cecy\Registration;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class  DetailAttendanceController extends Controller
 {
@@ -56,13 +59,40 @@ class  DetailAttendanceController extends Controller
     }
     public function updateType(SaveDetailAttendanceRequest $request, DetailAttendance $detailAttendance)
     {
-        //$detailAttendance->type_id = $request->input('type.id');
-        $date = date('y/m/d H:i:s') ;
-       // return $date;
         
+        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
+         //fecha del sistema actual
+        $date = Carbon:: now();
+        //hora inicio de la hora
+        $time = $this->getstartendtime($request)->started_time;
+     
+        //hora finalizacion
+        $hourend =  $this->getstartendtime($request)->ended_time;
+
+       // $detailPlanification = $this->getstartendtime($request->input('registration.id'));
+       $hour = Carbon::parse($time);
+       $hour2 = Carbon::parse($hourend);
+       $absent = Catalogue::where('type', 'ATTENDANCE')
+            ->where('code', 'ABSENT')
+            ->first();
+       $present = Catalogue::where('type', 'ATTENDANCE')
+            ->where('code', 'PRESENT')
+            ->first();
+       $backwardness = Catalogue::where('type', 'ATTENDANCE')
+            ->where('code', 'BACKWARDNESS')
+            ->first();
+
+       //return $hourend;  
+        //return var_dump($date->lte($hour2->toDateTimeString()));
+        if($hour->diffInMinutes($date)>=15 && $date->lt($hour2->toDateTimeString())){
+            $detailAttendance->type()->associate($backwardness->id);
+        }elseif($hour->diffInMinutes($date)<15 && $date->lt($hour2) ){
+            $detailAttendance->type()->associate($present->id);
+        }else{
+            $detailAttendance->type()->associate($absent->id);  
+        }
         $detailAttendance->registration_id = $request->input('registration.id');  
         $detailAttendance->save();
-
         return (new SaveDetailAttendanceResource($detailAttendance))
             ->additional([
                 'msg' => [
@@ -87,10 +117,15 @@ class  DetailAttendanceController extends Controller
                 'participant_id' => $participant->id
             ]
         )->first();
+        //return now()->toDateString() ;
 
-        $detailAttendances = DetailAttendance::customOrderBy($sorts)
+          $detailAttendances = DetailAttendance::customOrderBy($sorts)
             ->registration($registration)
+           ->whereHas('registration', function ($registration){
+                $registration->whereDate('registered_at','< ',now()->toDateString());
+            })
             ->paginate($request->input('per_page'));
+            //return$detailAttendances;
 
 
         return (new DetailAttendanceCollection($detailAttendances))
@@ -152,16 +187,20 @@ class  DetailAttendanceController extends Controller
 
         $dateToday = Date('Y-m-d');
 
-        //return $detailPlanification;
+        
 
        // echo($detailPlanification['id']);
+       //return $attendance;
 
         $attendance = Attendance::where(
 
-            ['detail_planification_id' => $detailPlanification->id],
-            [    'registered_at' => $dateToday]
+        [
+            ['detail_planification_id' ,'=', $detailPlanification->id],
+            [    'registered_at' ,'=', $dateToday]
+            ]
 
         )->first();
+        
 
         //echo($attendance);
 
@@ -174,6 +213,11 @@ class  DetailAttendanceController extends Controller
                 ]
             ])
             ->response()->setStatusCode(200);
+    }
+    public function getstartendtime(Request $request){
+     return Registration::
+         firstWhere('id' ,'=', $request->input('registration.id'))->detailPlanification()->
+         select('started_time','ended_time')->first();
     }
 }
 
