@@ -190,7 +190,7 @@ class PlanificationController extends Controller
     public function getPlanificationsByCourse(GetPlanificationsByCourseRequest $request, Course $course)
     {
         $sorts = explode(',', $request->input('sort'));
-
+//  return $request->user()->id;
         $loggedInAuthority = Authority::where('user_id', $request->user()->id)->first();
         // return $loggedInAuthority;
         $responsibleCourse = Instructor::where('user_id', $request->user()->id)->first();

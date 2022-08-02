@@ -41,7 +41,7 @@ use Illuminate\Support\Facades\DB;
 use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
-
+use App\Http\Resources\V1\Core\FileCollection;
 class RegistrationController extends Controller
 {
     public function additionalInformation(Registration $registration)
@@ -475,7 +475,6 @@ class RegistrationController extends Controller
     }
 
 
-
     public function uploadFileA(UploadFileRequest $request, Registration $registration)
     {
         return $registration->uploadFile($request);
@@ -486,10 +485,12 @@ class RegistrationController extends Controller
         return $registration->downloadFile($file);
     }
 
-    public function downloadRequirement(Requirement $requirement)
+    public function downloadRequirement(Registration $registration,RegistrationRequirement $registrationRequirement)
     {
-        $url = storage_path('app/private/registration-requirement/').$requirement->url;
-        if (!Storage::exists($url)) {
+        // $cos=$registrationRequirement;
+        // return $url;
+        // $url = storage_path('app/public/').$registrationRequirement->url;
+        if (!Storage::disk('public')->exists($registrationRequirement->url)) {
             return (new FileCollection([]))->additional(
                 [
                     'msg' => [
@@ -499,7 +500,7 @@ class RegistrationController extends Controller
                     ]
                 ]);
         }
-        return Storage::download($url);
+        return Storage::disk('public')->download($registrationRequirement->url);
     }
 
 
