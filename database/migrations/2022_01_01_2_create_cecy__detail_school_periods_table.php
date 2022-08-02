@@ -14,6 +14,7 @@ class CreateCecyDetailSchoolPeriodsTable extends Migration
             $table->softDeletes();
 
             $table->foreignId('school_period_id')
+                ->nullable()
                 ->comment('Id del periodo escolar')
                 ->constrained('cecy.school_periods');
 

@@ -57,7 +57,7 @@ class SchoolPeriodController extends Controller
         $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
         $currentState = Catalogue::firstWhere('code', $catalogue['school_period_state']['current']);
         $schoolPeriod = SchoolPeriod::firstWhere('state_id', $currentState->id);
-        
+
         return (new SchoolPeriodResource($schoolPeriod))
             ->additional([
                 'msg' => [
@@ -116,7 +116,7 @@ class SchoolPeriodController extends Controller
         $schoolPeriod->state()->associate(Catalogue::find($request->input('state.id')));
         $schoolPeriod->code = $request->input('code');
         $schoolPeriod->ended_at = $request->input('endedAt');
-        $schoolPeriod->minium_note = $request->input('miniumNote');
+        $schoolPeriod->minimum_note = $request->input('minimumNote');
         $schoolPeriod->name = $request->input('name');
         $schoolPeriod->started_at = $request->input('startedAt');
         $schoolPeriod->save();

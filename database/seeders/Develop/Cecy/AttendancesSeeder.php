@@ -36,11 +36,11 @@ class AttendancesSeeder extends Seeder
                     [
                         'detail_planification_id' => $detailPlanification,
                         'duration' =>  $faker->numberBetween(60, 120),
-                        'registered_at' => "2022-03-{$i}"
+                        'registered_at' => "2022-07-{$i}"
                     ]
                 );
             }
-            // $faker->dateTimeBetween('now', '+30 days')
+            // $faker->dateTimeBetween('now', '+30 days');
         }
     }
 }
