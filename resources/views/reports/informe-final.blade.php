@@ -28,38 +28,42 @@
 
 		<div class="fila1">
 			<div align=left>
-				<div>Nombre del docente:&nbsp;&nbsp;<b> {{$user->name}}</b> </div>
+				<div>Nombre del docente:&nbsp;&nbsp;<b> {{$user->name}}{{$user->lastname}}</b> </div>
 				<br>
 
 				<div>Nombre del curso: <b>{{$course->name}} </b>
 				</div>
 				<br>
-
+				@if($course->course_type_id == 33)
 				<div>Tipo de curso <b>Administrativo</b>
 				</div>
+				@else
+				<div>Tipo de curso <b>Tecnico</b>
+				</div>
+				@endif
 				<br>
+
+
+				@if($course->course_type_id == 34)
 
 				<div>Modalidad del curso: <b>Presencial</b>
 				</div>
+				@else
+				<div>Modalidad del curso: <b>Virtual</b>
+				</div>
+				@endif
+
 				<br>
 
 				<h4>Contenido del curso (Temas generales)</h4>
-				<div>1) {{$topics->description}}............................</div>
-				<br>
-				<div>2) {{$topics->description}}...........................</div>
-				<br>
+				
+				@foreach($topics as $key => $top)
 
-				<div>3) {{$topics->description}}............................</div>
+				<div>{{$key+1}}. {{$top->description}}</div>
 				<br>
+				@endforeach
 
-				<div>4) {{$topics->description}}........................</div>
-				<br>
-
-				<div>5) {{$topics->description}}.......................</div>
-				<br>
-
-				<div>6) {{$topics->description}}...........................</div>
-				<br>
+				
 				<div>Duracion del curso: <b>{{$course->duration}} </b> horas
 				</div>
 				<br>
@@ -102,11 +106,14 @@
 
 				</table>
 				<br>
-				<div>Participantes inscritos:</div>
 
-				<div align="center">Participantes retirados:</div>
-				<div>Participantes reprobados:</div>
-				<div align="center">Participantes aprobados:</div>
+				<div>Participantes inscritos: {{count($registrations)}}</div>
+
+
+				<div align="center">Participantes retirados: 0</div>
+				
+				<div>Participantes reprobados: {{count($reprovedregistrations)}}</div>
+				<div align="center">Participantes aprobados:{{count($aprovedregistrations)}}</div>
 				<br>
 				<br>
 
@@ -138,33 +145,33 @@
 				</tr>
 				<tr>
 					<td>INSCRITOS:</td>
-					<td> 40 </td>
-					<td>37 </td>
-					<td>77</td>
+					<td>1</td>
+					<td>4</td>
+					<td>{{count($registrations)}}</td>
 					<td>{{$course->observations}}</td>
 
 				</tr>
 				<tr>
 					<td>RETIRADOS:</td>
-					<td> 13 </td>
-					<td>6 </td>
-					<td>19</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
 					<td></td>
 				</tr>
 
 				<tr>
 					<td>REPROBADOS:</td>
-					<td> 13 </td>
-					<td>3 </td>
-					<td>{{count($registrations)}}</td>
+					<td>1</td>
+					<td>2</td>
+					<td>{{count($reprovedregistrations)}}</td>
 					<td></td>
 				</tr>
 
 				<tr>
 					<td>APROBADOS</td>
-					<td> 25 </td>
-					<td>27 </td>
-					<td>{{count($registrations)}}</td>
+					<td>1</td>
+					<td>1</td>
+					<td>{{count($aprovedregistrations)}}</td>
 					<td></td>
 				</tr>
 
@@ -179,7 +186,7 @@
 
 		<br>
 		<div class="col-12">
-			<div50> {{$user->name}} <br> DOCENTE</div50>
+			<div50> {{$user->name}} {{$user->lastname}} <br> DOCENTE</div50>
 			<div51> {{$planification->ended_at}}
 				<br> FECHA
 			</div51>
@@ -230,6 +237,9 @@
 			font-weight: bold;
 
 		}
+		
+		
+		
 
 		.yavirac {
 			width: 140px;

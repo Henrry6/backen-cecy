@@ -74,13 +74,16 @@
         <tr>
           <th class="column">Tipo de participante</th>
           <th></th>
-          <th>Modalidad {{$course->modality_id}}</th>
+
+          <th>Modalidad </th>
+
           <th></th>
+          
           <th>Duracion</th>
 
         </tr>
         <tr>
-          <td> <br> expertos en diferentes áreas técnicas, <br> tecnológicas y de especialización</td>
+          <td> <br> Externo</td>
           <td></td>
           <td>Virtual</td>
           <td></td>
@@ -119,18 +122,16 @@
 
       <table align="">
 
+
+        @foreach($topics as $key => $top)
+
+
         <tr>
-          <td>1. {{$topics->description}} </td>
+          <td>{{$key+1}}. {{$top->description}} </td>
 
         </tr>
-        <tr>
-          <td>2.{{$topics->description}}</td>
-
-        </tr>
-        <tr>
-          <td> 3. {{$topics->description}} </td>
-
-        </tr>
+        @endforeach
+        
       </table>
     </div>
     <br><br>
@@ -138,26 +139,29 @@
     <div class="col-11 ">
       <p>Temas secundarios o sub temas </p>
       <br>
-      <p>1.1. {{$topics->description}}</p>
+      @foreach($subtopic as $key => $top)
 
-      <p>2.1. {{$topics->description}}</p>
+      <p>{{$key+1.1}}. {{$top->description}}</p>
+      @endforeach
 
-      <p>3.1. {{$topics->description}}</p>
+
+      
     </div>
     <br><br>
 
     <div class="col-11 ">
+      
       <div>Temas transversales </div>
       <br>
 
       <table align="">
 
         <tr>
-          <td>{{$topics->description}}</td>
+          <td> tr </td>
 
         </tr>
         <tr>
-          <td> {{$topics->description}}</td>
+          <td> tr 2</td>
 
         </tr>
 
@@ -202,31 +206,17 @@
 
         </tr>
         <tr>
-          <td>{{$course->tecnique}}</td>
-          <td>Cuestionario escrito</td>
-          <td>Talleres</td>
-          <td>Entregable</td>
-          <td>Proyecto</td>
-          <td>Proeycto escrito-entragble final</td>
+        
+        
+          <td>{{($evaluation_diag->diagnostic)[0]->tecnique}}</td>
+          
 
+          <td>{{($evaluation_diag->diagnostic)[0]->instrument}}</td>
+          <td>{{($evaluation_diag->formative)[0]->technique}}</td>
+          <td>{{($evaluation_diag->formative)[0]->instrument}}</td>
+          <td>{{($evaluation_diag->final)[0]->tecnique}}</td>
+          <td>{{($evaluation_diag->final)[0]->instrument}}</td>
 
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-          <td>Tareas</td>
-          <td>Entregable</td>
-          <td>Examen</td>
-          <td>Cuestionario escrito</td>
-
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-          <td>Prueba</td>
-          <td>Cuestionario escrito</td>
-          <td></td>
-          <td></td>
 
         </tr>
       </table>
@@ -247,20 +237,14 @@
           <th>Fase teórica</th>
           <th>Fase práctica</th>
         </tr>
+        @foreach($classrooms as $classroom)
         <tr>
-          <td>Aula virtual</td>
+          <td>{{$classroom->classroom->name}}</td>
           <td>x</td>
           <td></td>
-
-
-
         </tr>
-        <tr>
-          <td>Plataforma Google Suite Yavirac</td>
-          <td></td>
-          <td>x</td>
+        @endforeach
 
-        </tr>
         <tr>
           <td colspan="3"></td>
         </tr>
@@ -298,10 +282,10 @@
       Firma del responsable del diseño curricular</h4>
     <br>
     <div1>Nombre y <br> apellido: </div1>
-    <div2>{{$user->name}} <br> GUTIEERRES</div2>
+    <div2>{{$user->name}} <br> {{$user->lastname}}</div2>
     <br><br>
     <div>Cedula</div>
-    <div>17xxxxxxx</div>
+    <div>{{$user->username}}</div>
     <br>
     <br>
 

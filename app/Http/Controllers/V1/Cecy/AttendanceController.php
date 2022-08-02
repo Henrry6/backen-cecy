@@ -216,6 +216,7 @@ class AttendanceController extends Controller
     {
         $planification = $course->planifications()->first();
         $detailPlanification = $planification->detailPlanifications()->first();
+        $attendances=$detailPlanification->attendances()->get();
         $days = $planification->detailPlanifications()->with('day')->get();
         $registrations = $detailPlanification->registrations()->get();
         $responsiblececy = $planification->responsibleCecy()->first();
@@ -239,6 +240,7 @@ class AttendanceController extends Controller
             'grade1' => $grade1,
             'grade2' => $grade2,
             'final_grade' => $final_grade,
+            'attendances'=>$attendances,
 
 
         ]);
