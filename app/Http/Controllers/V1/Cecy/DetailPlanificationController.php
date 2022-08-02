@@ -315,7 +315,7 @@ class DetailPlanificationController extends Controller
     }
 
 
-    
+
 
     /*
         Obtener los horarios de cada paralelo dado un curso
@@ -396,9 +396,14 @@ class DetailPlanificationController extends Controller
     //obtener los cursos asignados a un isntructor logueado (Done)
     public function getInstructorByCourses(getCoursesByResponsibleRequest $request)
     {
-
         $instructor = Instructor::FirstWhere('user_id', $request->user()->id)->first();
         $detailPlanification = $instructor->detailPlanifications()->get();
+//        $instructor = Instructor::FirstWhere('user_id', $request->user()->id)->first();
+//        $courseId = Course::where('name','LIKE', "%{$request->input('search')}%")->first();
+//        $detailPlanification = $instructor->detailPlanifications()->whereHas('planification', function($planification)use($courseId){
+//            $planification->where('course_id','=',$courseId);
+//        })->get();
+
 
         return (new DetailPlanificationByInstructorCollection($detailPlanification))
             ->additional([
