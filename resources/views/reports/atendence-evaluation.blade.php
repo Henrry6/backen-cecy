@@ -91,7 +91,10 @@
 
         </tr>
         <tr>
-          <td> AQUI VAN FECHAS </td>
+          @foreach($attendances as $at)
+          <td> {{$at->registered_at}} </td>
+
+          @endforeach
 
           <td>PARCIAL</td>
           <td>FINAL</td>
@@ -100,7 +103,11 @@
 
         </tr>
         <tr>
-          <td>AQUI VAN LAS HORAS</td>
+        @foreach($attendances as $dur)
+
+          <td>{{$dur->duration}}</td>
+          @endforeach
+
 
 
         </tr>
