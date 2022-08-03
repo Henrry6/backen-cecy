@@ -53,7 +53,7 @@ class Registration extends Model implements Auditable
         return $this->morphMany(File::class, 'fileable');
     }
     // Relationships
-    //revisar
+
     public function detailAttendances()
     {
         return $this->hasMany(DetailAttendance::class);
