@@ -562,6 +562,7 @@ class RegistrationController extends Controller
 
         foreach ($request->file('files') as $file) {
             $registrationRequirement->registration()->associate($registration->id);
+            //$registrationRequirement->requirement()->associate($registration->id);
             //'registrationRequirements/'. $registrationRequirement->id.'.'.$file->getClientOriginalExtension();
             $registrationRequirement->url = 'registrationRequirements/'. 'cedula'.'.'.$file->getClientOriginalExtension();
             $registrationRequirement->save();
