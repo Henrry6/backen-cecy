@@ -71,7 +71,7 @@ class AttendanceController extends Controller
     // AttendanceController
     public function getByDetailPlanification(DetailPlanification $detailPlanification)
     {
-        $attendances = $detailPlanification->attendances()->get();
+        $attendances = $detailPlanification->attendances()->orderBy('id','DESC')->get();
 
         return (new AttendanceCollection($attendances))
             ->additional([
