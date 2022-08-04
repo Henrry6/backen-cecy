@@ -241,6 +241,7 @@
         "type": "LEVEL_INSTRUCTION",
         "primary": "PRIMARY",
         "secondary": "SECONDARY",
+        "university": "UNIVERSITY",
         "undergraduate": "UNDERGRADUATE",
         "mastery": "MASTERY",
         "doctorate": "DOCTORATE"

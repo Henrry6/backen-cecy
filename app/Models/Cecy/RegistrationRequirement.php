@@ -25,9 +25,10 @@ class RegistrationRequirement extends Model implements Auditable
         'url',
     ];
 
-    public function requirement()
+    public function requirements()
     {
-        return $this->belongsTo(Requirement::class);
+        return $this->belongsToMany(Requirement::class, 'cecy.registration_requirement', 'registration_id', 'requirement_id')
+            ->withPivot(['url']);
     }
 
     public function registration()
