@@ -129,8 +129,8 @@ class PhotographicRecordController extends Controller
     }
     //revisar
     public function getPhotograficRecord(DetailPlanification $detailPlanification){
-        $photographicRecords = $detailPlanification->photographicRecords()
-        ->where('registered_at' ,'=',now())->get();
+        $photographicRecords = $detailPlanification->photographicRecords()->orderBy('id','DESC')->get();
+//        ->where('registered_at' ,'=',now())->get();
         return(new PhotographicRecordCollection($photographicRecords))
             ->additional([
                 'msg' => [

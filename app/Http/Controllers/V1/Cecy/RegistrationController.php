@@ -582,7 +582,7 @@ class RegistrationController extends Controller
 
         foreach ($request->file('files') as $file) {
             $registrationRequirement->registration()->associate($registration->id);
-            $registrationRequirement->requirement()->associate(rand(1,3));
+            //$registrationRequirement->requirement()->associate($registration->id);
             //'registrationRequirements/'. $registrationRequirement->id.'.'.$file->getClientOriginalExtension();
             $registrationRequirement->url = 'registrationRequirements/'. rand(1,1000).'.'.$file->getClientOriginalExtension();
             $registrationRequirement->save();

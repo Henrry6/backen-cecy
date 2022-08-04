@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Cecy\Attendances\SaveDetailAttendanceRequest;
 use App\Http\Requests\V1\Cecy\DetailAttendance\CatalogueDetailAttendanceRequest;
 use App\Http\Requests\V1\Cecy\DetailAttendance\GetDetailAttendancesByParticipantRequest;
+use App\Http\Resources\V1\Cecy\Attendances\AttendanceCollection;
 use App\Http\Resources\V1\Cecy\Attendances\AttendanceResource;
 use App\Http\Resources\V1\Cecy\Attendances\SaveDetailAttendanceResource;
 use App\Http\Resources\V1\Cecy\DetailAttendances\DetailAttendanceByAttendanceCollection;
@@ -117,18 +118,20 @@ class  DetailAttendanceController extends Controller
                 'participant_id' => $participant->id
             ]
         )->first();
-        //return now()->toDateString() ;
 
           $detailAttendances = DetailAttendance::customOrderBy($sorts)
             ->registration($registration)
-           ->whereHas('registration', function ($registration){
+           ->whereHas('attendance', function ($registration){
                 $registration->whereDate('registered_at','< ',now()->toDateString());
-            })
-            ->paginate($request->input('per_page'));
-            //return$detailAttendances;
+            });
+            
+            $atendance = $detailPlanification->attendances()->whereDate('registered_at','<=',now()->toDateString())->with(['detailAttendances'=>function ($q)use($registration){
+                $q->Where('registration_id',$registration->id);
+            }])->paginate($request->input('per_page'));
+            //return $atendance;
 
 
-        return (new DetailAttendanceCollection($detailAttendances))
+        return (new AttendanceCollection($atendance))
             ->additional([
                 'msg' => [
                     'summary' => 'consulta exitosa',

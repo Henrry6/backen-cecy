@@ -36,6 +36,7 @@ use App\Models\Cecy\Institution;
 use App\Models\Cecy\Instructor;
 use App\Models\Cecy\Planification;
 use App\Models\Cecy\SchoolPeriod;
+use App\Models\Cecy\Topic;
 use App\Models\Core\State;
 
 
@@ -364,20 +365,22 @@ class PlanificationController extends Controller
 
     public function curricularDesign(Planification $planification)
     {
-        $planification = Planification::firstWhere('id', $planification->id);
         $course = $planification->course()->first();
-        $topics = $course->topics()->first();
+        $topics = $course->topics()->get();
+        $topicsId=[];
+        foreach ($topics as $topic => $value) {
+            array_push($topicsId, $value->id);
+        }
+        $subtopic=Topic::whereIn('parent_id',$topicsId)->get();
+        //return $subtopic;
+        $classrooms = $planification->detailPlanifications()->with('classroom')->get();
         $course_tec = $course->techniques_requisites['technical'];
         $course_gen = $course->techniques_requisites['general'];
+        $evaluation_diag = json_decode(json_encode($course->evaluation_mechanisms));
+        $tecnique= ($evaluation_diag->diagnostic)[0];
         $instructor = Instructor::where('id', $planification->responsible_course_id)->first();
         $user = $instructor->user();
         $user = User::firstWhere('id', $instructor->user_id);
-
-        //return $course->evaluation_mechanisms->diagnostic['tecnique'];
-        //return $topics;
-        //return $course;
-        // return $planification;
-
         $pdf = PDF::loadView('reports/desing-curricular', [
             'planification' => $planification,
             'course' => $course,
@@ -386,45 +389,47 @@ class PlanificationController extends Controller
             'course_gen' => $course_gen,
             'user' => $user,
             'instructor' => $instructor,
+            'evaluation_diag'=>$evaluation_diag,
+            'tecnique'=>$tecnique,
+            'classrooms' => $classrooms,
+            'subtopic'=>$subtopic,
+            
+            
+
+      
 
         ]);
-
         return $pdf->stream('Diseño Curricular.pdf');
     }
 
     //trae la informacion correspondiente  al informe final del curso
-
     public function informeFinal(Planification $planification)
     {
-        $planification = Planification::firstWhere('id', $planification->id);
         $course = $planification->course()->first();
+        $topics = $course->topics()->get();
         $days = $planification->detailPlanifications()->with('day')->get();
-        $topics = $course->topics()->first();
+        //$classrooms = $planification->detailPlanifications()->with('classroom')->get();
         $responsiblececy = $planification->responsibleCecy()->first();
         $institution = Institution::firstWhere('id', $responsiblececy->institution_id);
-        $registrations = $planification->detailPlanifications()->first()->registrations()->get()->where("state_course_id", '107');
-        $registrations = $planification->detailPlanifications()->first()->registrations()->get()->where("state_course_id", '106');
+        $registrations = $planification->detailPlanifications()->first()->registrations()->get();
+        $aprovedregistrations = $planification->detailPlanifications()->first()->registrations()->where("state_course_id", '107')->get();
+        $reprovedregistrations = $planification->detailPlanifications()->first()->registrations()->where("state_course_id", '106')->get();
+        //return $reprovedregistrations;
         $instructor = Instructor::where('id', $planification->responsible_course_id)->first();
-        //$user =  $instructor->user();
         $user = User::firstWhere('id', $instructor->user_id);
-
-
-        //return $institution;
-        //return $registrations;
-        //return $course;
-        //return $planification;
-
         $pdf = PDF::loadView('reports/informe-final', [
             'planification' => $planification,
             'course' => $course,
             'days' => $days,
+            //'classrooms' => $classrooms,
             'topics' => $topics,
             'institution' => $institution,
             'user' => $user,
             'instructor' => $instructor,
-            'registrations' => $registrations,
-
-
+            'aprovedregistrations'=>$aprovedregistrations,
+            'reprovedregistrations'=>$reprovedregistrations,
+            'registrations'=>$registrations
+            
         ]);
 
         return $pdf->stream('Informe final del curso.pdf');
