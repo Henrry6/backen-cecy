@@ -36,7 +36,7 @@ class AttendancesSeeder extends Seeder
                     [
                         'detail_planification_id' => $detailPlanification,
                         'duration' =>  $faker->numberBetween(60, 120),
-                        'registered_at' => "2022-07-{$i}"
+                        'registered_at' => "2022-08-{$i}"
                     ]
                 );
             }
