@@ -2,6 +2,8 @@
 
 use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\RegistrationObservationsMail;
 use App\Http\Controllers\V1\Cecy\DetailSchoolPeriodController;
 use App\Http\Controllers\V1\Cecy\AttendanceController;
 use App\Http\Controllers\V1\Cecy\AuthorityController;
@@ -195,6 +197,11 @@ Route::get('/inform', function () {
 
     return $pdf->inline('Informe.pdf');
 });
+
+/***********************************************************************************************************************
+ * Mails
+ **********************************************************************************************************************/
+Route::get('/observations-mail/{registration}',[RegistrationController::class, 'sendObservations']);
 
 
 /***********************************************************************************************************************
