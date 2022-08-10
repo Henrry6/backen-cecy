@@ -282,6 +282,7 @@ class CourseController extends Controller
     //visualizar un listado de cursos para los instructores capacitados
     public function getCourseList()
     {
+        //return Course::paginate(100)->load('courseProfile');
         return (new CourseListCollection(Course::paginate(100)))
             ->additional([
                 'msg' => [

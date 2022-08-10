@@ -12,9 +12,9 @@ class CourseProfileResource extends JsonResource
         return [
             'id' => $this->id,
 //            'course' => CourseCollection::make($this->course),
-            'requiredExperiences' => $this->require_experience,
-            'requiredKnowledges' => $this->require_knowledge,
-            'requiredSkills' => $this->require_skills
+            'requiredExperiences' => $this->required_experiences,
+            'requiredKnowledges' => $this->required_knowledges,
+            'requiredSkills' => $this->required_skills
         ];
     }
 }

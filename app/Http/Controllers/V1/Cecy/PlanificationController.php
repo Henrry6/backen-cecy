@@ -38,6 +38,8 @@ use App\Models\Cecy\Planification;
 use App\Models\Cecy\SchoolPeriod;
 use App\Models\Cecy\Topic;
 use App\Models\Core\State;
+use App\Models\Cecy\Participant;
+
 
 
 class PlanificationController extends Controller
@@ -366,6 +368,19 @@ class PlanificationController extends Controller
     public function curricularDesign(Planification $planification)
     {
         $course = $planification->course()->first();
+        $area=$course->area()->first();
+        $speciality=$course->speciality()->first();
+        if (!isset($area)) {
+            return 'no existe una area';
+        }
+
+        if (!isset($speciality)) {
+            return 'no existe una especialidad';
+        }
+
+
+
+        //return $area;
         $topics = $course->topics()->get();
         $topicsId=[];
         foreach ($topics as $topic => $value) {
@@ -381,6 +396,11 @@ class PlanificationController extends Controller
         $instructor = Instructor::where('id', $planification->responsible_course_id)->first();
         $user = $instructor->user();
         $user = User::firstWhere('id', $instructor->user_id);
+
+
+        
+
+
         $pdf = PDF::loadView('reports/desing-curricular', [
             'planification' => $planification,
             'course' => $course,
@@ -393,8 +413,9 @@ class PlanificationController extends Controller
             'tecnique'=>$tecnique,
             'classrooms' => $classrooms,
             'subtopic'=>$subtopic,
-            
-            
+            'area'=>$area,
+            'speciality'=>$speciality,
+
 
       
 
@@ -414,9 +435,47 @@ class PlanificationController extends Controller
         $registrations = $planification->detailPlanifications()->first()->registrations()->get();
         $aprovedregistrations = $planification->detailPlanifications()->first()->registrations()->where("state_course_id", '107')->get();
         $reprovedregistrations = $planification->detailPlanifications()->first()->registrations()->where("state_course_id", '106')->get();
+        $aprovedhombres = 0;
+        $aprovedmujeres = 0;
+        $reprovedhombres = 0;
+        $reprovedmujeres = 0;
+        $inscritoshombres = 0;
+        $inscritosmujeres =0;
+
+
+        foreach ($aprovedregistrations as $key => $value) {
+            if (Participant::firstWhere("id",$value->participant_id)->user->sex_id == 7  ) {
+                $aprovedhombres +=1 ;
+            }
+            else {
+                $aprovedmujeres +=1;
+            }
+        }
+
+        foreach ($reprovedregistrations as $key => $value) {
+            if (Participant::firstWhere("id",$value->participant_id)->user->sex_id == 7  ) {
+                $reprovedhombres +=1 ;
+            }
+            else {
+                $reprovedmujeres +=1;
+            }
+        }
+        foreach ($registrations as $key => $value) {
+            if (Participant::firstWhere("id",$value->participant_id)->user->sex_id == 7  ) {
+                $inscritoshombres +=1 ;
+            }
+            else {
+                $inscritosmujeres +=1;
+            }
+        }
+        //return $reprovedhombres.' '.$reprovedmujeres;
+
+
+       
         //return $reprovedregistrations;
         $instructor = Instructor::where('id', $planification->responsible_course_id)->first();
         $user = User::firstWhere('id', $instructor->user_id);
+
         $pdf = PDF::loadView('reports/informe-final', [
             'planification' => $planification,
             'course' => $course,
@@ -428,8 +487,18 @@ class PlanificationController extends Controller
             'instructor' => $instructor,
             'aprovedregistrations'=>$aprovedregistrations,
             'reprovedregistrations'=>$reprovedregistrations,
-            'registrations'=>$registrations
+            'registrations'=>$registrations,
+            'reprovedhombres'=>$reprovedhombres,
+            'reprovedmujeres'=>$reprovedmujeres,
+            'aprovedhombres'=>$aprovedhombres,
+            'aprovedmujeres'=>$aprovedmujeres,
+            'inscritoshombres'=>$inscritoshombres,
+            'inscritosmujeres'=>$inscritosmujeres,
+
             
+        ]);
+        $pdf->setOptions([
+            'page-size' => 'a4'
         ]);
 
         return $pdf->stream('Informe final del curso.pdf');

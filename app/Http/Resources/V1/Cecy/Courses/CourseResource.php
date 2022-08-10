@@ -8,6 +8,7 @@ use App\Http\Resources\V1\Cecy\Planifications\PlanificationResource;
 use App\Http\Resources\V1\Core\CareerResource;
 use App\Http\Resources\V1\Core\ImageResource;
 use App\Models\Cecy\Catalogue;
+use App\Models\Cecy\Course;
 use App\Models\Cecy\CourseProfile;
 use App\Models\Cecy\DetailPlanification;
 use App\Models\Cecy\Instructor;

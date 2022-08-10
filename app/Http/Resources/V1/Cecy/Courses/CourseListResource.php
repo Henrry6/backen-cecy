@@ -3,6 +3,7 @@
 namespace App\Http\Resources\V1\Cecy\Courses;
 
 use App\Http\Resources\V1\Cecy\Catalogues\CatalogueResource;
+use App\Http\Resources\V1\Cecy\CourseProfiles\CourseProfileResource;
 use App\Http\Resources\V1\Cecy\Instructors\InstructorResource;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationResource;
 use App\Http\Resources\V1\Core\CareerResource;
@@ -24,6 +25,7 @@ class CourseListResource extends JsonResource
             'code' => $this->code,
             'duration' => $this->duration,
             'name' => $this->name,
+            'profilecourse'=> CourseProfileResource::make($this->courseProfile),
             'instructor'=> InstructorResource::collection(CourseProfile::where('id',$this->id)->first()->instructors()->get()), //yo comente esta linea porque da error en el metodo show de curso  de la api, verificar si esta bien escrita
         ];
     }
