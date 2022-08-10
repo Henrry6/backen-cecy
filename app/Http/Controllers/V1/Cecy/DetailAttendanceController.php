@@ -61,8 +61,11 @@ class  DetailAttendanceController extends Controller
     public function updateType(SaveDetailAttendanceRequest $request, DetailAttendance $detailAttendance)
     {
         
-        $catalogue = json_decode(file_get_contents(storage_path() . "/catalogue.json"), true);
-         //fecha del sistema actual
+        $duration = $detailAttendance->attendance->duration;
+
+        //return $duration;
+
+        //fecha del sistema actual
         $date = Carbon:: now();
         //hora inicio de la hora
         $time = $this->getstartendtime($request)->started_time;
@@ -83,16 +86,22 @@ class  DetailAttendanceController extends Controller
             ->where('code', 'BACKWARDNESS')
             ->first();
 
-       //return $hourend;  
+        //return $detailAttendance->attendance->duration_student = $duration/2;
+
+        $attendance = Attendance::firstWhere('id', $detailAttendance->attendance_id);  
         //return var_dump($date->lte($hour2->toDateTimeString()));
         if($hour->diffInMinutes($date)>=15 && $date->lt($hour2->toDateTimeString())){
+            $attendance->duration_student = ceil($duration/2);
             $detailAttendance->type()->associate($backwardness->id);
         }elseif($hour->diffInMinutes($date)<15 && $date->lt($hour2) ){
+            $attendance->duration_student = $duration;
             $detailAttendance->type()->associate($present->id);
         }else{
-            $detailAttendance->type()->associate($absent->id);  
+            $detailAttendance->type()->associate($absent->id);
+            $attendance->duration_student = 0;
         }
         $detailAttendance->registration_id = $request->input('registration.id');  
+        $attendance->save();
         $detailAttendance->save();
         return (new SaveDetailAttendanceResource($detailAttendance))
             ->additional([
