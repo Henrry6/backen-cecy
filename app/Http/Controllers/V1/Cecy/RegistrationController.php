@@ -5,6 +5,8 @@ namespace App\Http\Controllers\V1\Cecy;
 use App\Exports\RegistrationExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Core\Files\UploadFileRequest;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\RegistrationObservationsMail;
 use App\Http\Requests\V1\Cecy\Participants\GetCoursesByParticipantRequest;
 use App\Http\Requests\V1\Cecy\Registrations\RegisterStudentRequest;
 use App\Http\Requests\V1\Cecy\Registrations\IndexRegistrationRequest;
@@ -209,6 +211,7 @@ class RegistrationController extends Controller
         $registration->observations=$observaciones;
         $registration->state()->associate(Catalogue::find($currentState->id));
         $registration->save();
+        $this->sendObservations($registration);
         return (new RegistrationResource($registration))
             ->additional([
                 'msg' => [
@@ -219,6 +222,23 @@ class RegistrationController extends Controller
             ])
             ->response()->setStatusCode(201);
     }
+
+    // public function sendObservations(Request $request)
+    // {  
+    //     $email = new ContactMailable($request->all());
+    //     Mail::to('info@onesoft.com.ec')->send($email);
+    //     return redirect()->back()->with('Mensaje enviado');
+    // }
+    public function sendObservations(Registration $registration) {
+        $name=$registration->participant->user()->first()->name;
+        $email=$registration->participant->user()->first()->email;
+        $course=$registration->detailPlanification()->first()->planification()->first()->course()->first()->name;
+        $observations=($registration->observations)[array_key_last($registration->observations)];
+        
+        Mail::to($email)->send(new RegistrationObservationsMail($course,$observations,$name));
+        return new RegistrationObservationsMail($course,$observations,$name);
+    }
+
     public function nullifyRegistrations(NullifyRegistrationRequest $request)
     {
         //DDRC-C: cancela varias Matriculas */
@@ -564,7 +584,7 @@ class RegistrationController extends Controller
             $registrationRequirement->registration()->associate($registration->id);
             //$registrationRequirement->requirement()->associate($registration->id);
             //'registrationRequirements/'. $registrationRequirement->id.'.'.$file->getClientOriginalExtension();
-            $registrationRequirement->url = 'registrationRequirements/'. 'cedula'.'.'.$file->getClientOriginalExtension();
+            $registrationRequirement->url = 'registrationRequirements/'. rand(1,1000).'.'.$file->getClientOriginalExtension();
             $registrationRequirement->save();
             $file->storeAs('', $registrationRequirement->url, 'public');
         }
