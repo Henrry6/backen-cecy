@@ -74,9 +74,7 @@ class ParticipantController extends Controller
         $user->nationality()->associate(Location::find($request->input('nationality.id')));
         $user->ethnicOrigin()->associate(CoreCatalogue::find($request->input('ethnicOrigin.id')));
         $user->address()->associate($this->createUserAddress($request->input('address')));
-        // $user->bloodType()->associate(Catalogue::find($request->input('bloodType.id')));
-        // $user->civilStatus()->associate(Catalogue::find($request->input('civilStatus.id')));
-        // $user->sex()->associate(Catalogue::find($request->input('sex.id')));
+
 
         $user->phone = $request->input('phone');
         $user->username = $request->input('username');
@@ -88,7 +86,6 @@ class ParticipantController extends Controller
 
         DB::transaction(function () use ($request, $user) {
             $user->save();
-            // $user->addPhones($request->input('phones'));
             $user->addEmails($request->input('emails'));
             $participant = $this->createParticipant($request->input('participantType.id'), $user);
             $participant->save();

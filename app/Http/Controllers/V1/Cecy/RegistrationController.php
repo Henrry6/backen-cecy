@@ -608,4 +608,20 @@ class RegistrationController extends Controller
     {
         return Excel::download(new RegistrationExport($detailPlanification->id), '-participants.xlsx');
     }
+
+    //Verifica si un participante ya se encuentra matriculado en un curso
+    public function getRegistrationsByParticipant(DetailPlanification $detailPlanification)
+    {
+        echo("entre");
+        // $registration = $detailPlanification->registrations()->get();
+        // return (new RegistrationCollection($registration))
+        //     ->additional([
+        //         'msg' => [
+        //             'summary' => 'success',
+        //             'records' => '',
+        //             'code' => '200'
+        //         ]
+        //     ])
+        //     ->response()->setStatusCode(200);
+    }
 }

@@ -379,6 +379,7 @@ Route::controller(RegistrationController::class)->group(function () {
         Route::post('register-student', 'registerStudent');
         Route::get('participant/{detailPlanification}', 'getParticipantByDetailPlanification'); //santillan
         Route::patch('nullify-registrations', 'nullifyRegistrations'); //Rivas - matriculacion
+        Route::get('detail-planification/{detailPlanification}','getRegistrationsByParticipant');//Guachagmira
     });
 });
 Route::apiResource('registrations', RegistrationController::class);
