@@ -2,6 +2,8 @@
 
 use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\RegistrationObservationsMail;
 use App\Http\Controllers\V1\Cecy\DetailSchoolPeriodController;
 use App\Http\Controllers\V1\Cecy\AttendanceController;
 use App\Http\Controllers\V1\Cecy\AuthorityController;
@@ -111,6 +113,7 @@ Route::controller(CourseController::class)->group(function () {
             Route::post('', 'storeCourseByCareer'); //Rivas - pcurso
         });
 
+        Route::get('profile', 'getCourseList');
         Route::get('', 'getCourses');
         Route::post('', 'storeNewCourse');
         Route::get('private-courses-participant', 'getPrivateCoursesByParticipantType'); //Guachagmira
@@ -195,6 +198,11 @@ Route::get('/inform', function () {
 
     return $pdf->inline('Informe.pdf');
 });
+
+/***********************************************************************************************************************
+ * Mails
+ **********************************************************************************************************************/
+Route::get('/observations-mail/{registration}',[RegistrationController::class, 'sendObservations']);
 
 
 /***********************************************************************************************************************
@@ -361,6 +369,7 @@ Route::controller(RegistrationController::class)->group(function () {
         Route::prefix('cecy-responsible')->group(function () {
             Route::prefix('files')->group(function () {
                 Route::get('{file}/download', 'downloadFileA');
+                Route::get('{registration_requirement}/downloadRequirement', 'downloadRequirement');
                 Route::get('', 'indexFiles');
                 Route::get('{file}', 'showFileR');
                 Route::post('', 'uploadFileA');

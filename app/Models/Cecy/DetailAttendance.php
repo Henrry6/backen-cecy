@@ -22,6 +22,7 @@ class DetailAttendance extends Model implements Auditable
         'plan_ended_at',
         'registrations_left',
         'started_time',
+        'duration',
     ];
 
     // Relationships

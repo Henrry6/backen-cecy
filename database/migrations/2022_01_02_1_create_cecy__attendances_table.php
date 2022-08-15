@@ -22,6 +22,10 @@ class CreateCecyAttendancesTable extends Migration
 
             $table->date('registered_at')
                 ->comment('Fecha de la asistencia la cual será guardada');
+
+            $table->integer('duration_student')
+                ->nullable()
+                ->comment('Duracion de horas que asiste el estudiante');
         });
     }
 

@@ -14,6 +14,7 @@ class DetailAttendanceParticipantsResource extends JsonResource
         return [
             'id' => $this->id,
             'type' => CatalogueResource::make($this->type),
+            'registration' => RegistrationResource::make($this->registration),
         ];
     }
 }

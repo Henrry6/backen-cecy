@@ -14,7 +14,7 @@ class StoreDetailSchoolPeriodRequest extends FormRequest
     public function rules()
     {
         return [
-            'schoolPeriod.id' =>  ['integer', 'required'],
+            'schoolPeriod.id' =>  ['required'],
             'especialEndedAt'=>  ['required'],
             'especialStartedAt'=>  ['required'],
             'extraordinaryEndedAt'=>  ['required'],

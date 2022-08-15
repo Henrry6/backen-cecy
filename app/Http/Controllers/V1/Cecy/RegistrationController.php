@@ -5,6 +5,8 @@ namespace App\Http\Controllers\V1\Cecy;
 use App\Exports\RegistrationExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Core\Files\UploadFileRequest;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\RegistrationObservationsMail;
 use App\Http\Requests\V1\Cecy\Participants\GetCoursesByParticipantRequest;
 use App\Http\Requests\V1\Cecy\Registrations\RegisterStudentRequest;
 use App\Http\Requests\V1\Cecy\Registrations\IndexRegistrationRequest;
@@ -41,7 +43,7 @@ use Illuminate\Support\Facades\DB;
 use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
-
+use App\Http\Resources\V1\Core\FileCollection;
 class RegistrationController extends Controller
 {
     public function additionalInformation(Registration $registration)
@@ -185,7 +187,7 @@ class RegistrationController extends Controller
         array_push($observaciones,$request->input('observations'));
         $registration->observations=$observaciones;
         $registration->registered_at=Date('Y-m-d');
-        $registration->state()->associate(Catalogue::find($currentState->id));
+        $registration->state()->associate($currentState->id);
         $registration->save();
         return (new RegistrationResource($registration))
             ->additional([
@@ -209,6 +211,7 @@ class RegistrationController extends Controller
         $registration->observations=$observaciones;
         $registration->state()->associate(Catalogue::find($currentState->id));
         $registration->save();
+        $this->sendObservations($registration);
         return (new RegistrationResource($registration))
             ->additional([
                 'msg' => [
@@ -219,6 +222,23 @@ class RegistrationController extends Controller
             ])
             ->response()->setStatusCode(201);
     }
+
+    // public function sendObservations(Request $request)
+    // {  
+    //     $email = new ContactMailable($request->all());
+    //     Mail::to('info@onesoft.com.ec')->send($email);
+    //     return redirect()->back()->with('Mensaje enviado');
+    // }
+    public function sendObservations(Registration $registration) {
+        $name=$registration->participant->user()->first()->name;
+        $email=$registration->participant->user()->first()->email;
+        $course=$registration->detailPlanification()->first()->planification()->first()->course()->first()->name;
+        $observations=($registration->observations)[array_key_last($registration->observations)];
+        
+        Mail::to($email)->send(new RegistrationObservationsMail($course,$observations,$name));
+        return new RegistrationObservationsMail($course,$observations,$name);
+    }
+
     public function nullifyRegistrations(NullifyRegistrationRequest $request)
     {
         //DDRC-C: cancela varias Matriculas */
@@ -475,7 +495,6 @@ class RegistrationController extends Controller
     }
 
 
-
     public function uploadFileA(UploadFileRequest $request, Registration $registration)
     {
         return $registration->uploadFile($request);
@@ -486,10 +505,12 @@ class RegistrationController extends Controller
         return $registration->downloadFile($file);
     }
 
-    public function downloadRequirement(Requirement $requirement)
+    public function downloadRequirement(Registration $registration,RegistrationRequirement $registrationRequirement)
     {
-        $url = storage_path('app/private/registration-requirement/').$requirement->url;
-        if (!Storage::exists($url)) {
+        // $cos=$registrationRequirement;
+        // return $url;
+        // $url = storage_path('app/public/').$registrationRequirement->url;
+        if (!Storage::disk('public')->exists($registrationRequirement->url)) {
             return (new FileCollection([]))->additional(
                 [
                     'msg' => [
@@ -499,7 +520,7 @@ class RegistrationController extends Controller
                     ]
                 ]);
         }
-        return Storage::download($url);
+        return Storage::disk('public')->download($registrationRequirement->url);
     }
 
 
@@ -561,8 +582,9 @@ class RegistrationController extends Controller
 
         foreach ($request->file('files') as $file) {
             $registrationRequirement->registration()->associate($registration->id);
+            //$registrationRequirement->requirement()->associate($registration->id);
             //'registrationRequirements/'. $registrationRequirement->id.'.'.$file->getClientOriginalExtension();
-            $registrationRequirement->url = 'registrationRequirements/'. 'cedula'.'.'.$file->getClientOriginalExtension();
+            $registrationRequirement->url = 'registrationRequirements/'. rand(1,1000).'.'.$file->getClientOriginalExtension();
             $registrationRequirement->save();
             $file->storeAs('', $registrationRequirement->url, 'public');
         }

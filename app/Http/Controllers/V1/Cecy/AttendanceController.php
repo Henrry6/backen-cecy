@@ -71,7 +71,7 @@ class AttendanceController extends Controller
     // AttendanceController
     public function getByDetailPlanification(DetailPlanification $detailPlanification)
     {
-        $attendances = $detailPlanification->attendances()->get();
+        $attendances = $detailPlanification->attendances()->orderBy('id','DESC')->get();
 
         return (new AttendanceCollection($attendances))
             ->additional([
@@ -214,8 +214,16 @@ class AttendanceController extends Controller
     //trae informacion del informe de asistencia evaluacion
     public function attendanceEvaluation(Course $course)
     {
-        $planification = $course->planifications()->first();
-        $detailPlanification = $planification->detailPlanifications()->first();
+        $detailPlanification= DetailPlanification::where('id',$course->id)->first();
+        $planification = $detailPlanification->planification()->first();
+        //return $planification;
+        //$planification = $course->planification()->first();
+
+        $attendances=$detailPlanification->attendances()->get();
+        $days = $planification->detailPlanifications()->with('day')->get();
+        //$planification = $course->planifications()->first();
+        //$detailPlanification = $planification->detailPlanifications()->first();
+        $attendances=$detailPlanification->attendances()->get();
         $days = $planification->detailPlanifications()->with('day')->get();
         $registrations = $detailPlanification->registrations()->get();
         $responsiblececy = $planification->responsibleCecy()->first();
@@ -226,13 +234,8 @@ class AttendanceController extends Controller
         $grade1 = $registrations;
         $grade2 = $registrations;
         $final_grade = $registrations;
-
-
-        //return $registrations;
         //return $course;
         //return $planification;
-
-
         $pdf = PDF::loadView('reports/atendence-evaluation', [
             'planification' => $planification,
             'course' => $course,
@@ -244,6 +247,8 @@ class AttendanceController extends Controller
             'grade1' => $grade1,
             'grade2' => $grade2,
             'final_grade' => $final_grade,
+            'attendances'=>$attendances,
+            
 
 
         ]);

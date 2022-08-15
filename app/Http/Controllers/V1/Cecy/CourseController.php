@@ -42,10 +42,11 @@ use App\Http\Resources\V1\Cecy\Planifications\InformCourseNeedsResource;
 use App\Http\Resources\V1\Cecy\Courses\CoursesByResponsibleCollection;
 use App\Http\Resources\V1\Cecy\Planifications\PlanificationCollection;
 use App\Http\Resources\V1\Cecy\Certificates\CertificateResource;
-use App\Http\Resources\V1\Cecy\CourseProfiles\CourseProfileResource;
 use App\Http\Resources\V1\Cecy\Courses\CoordinatorCecy\CourseByCoordinatorCecyCollection;
 use App\Http\Resources\V1\Cecy\Courses\CourseResource;
 use App\Http\Resources\V1\Cecy\Courses\CourseCollection;
+use App\Http\Resources\V1\Cecy\Courses\CourseListCollection;
+use App\Http\Resources\V1\Cecy\Courses\CourseListResource;
 use App\Http\Resources\V1\Cecy\Planifications\ResponsibleCoursePlanifications\PlanificationByCourseCollection;
 use App\Http\Resources\V1\Core\ImageResource;
 use App\Models\Core\File;
@@ -278,6 +279,19 @@ class CourseController extends Controller
             ])->response()->setStatusCode(200);
     }
 
+    //visualizar un listado de cursos para los instructores capacitados
+    public function getCourseList()
+    {
+        //return Course::paginate(100)->load('courseProfile');
+        return (new CourseListCollection(Course::paginate(100)))
+            ->additional([
+                'msg' => [
+                    'summary' => 'Me trae los cursos',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ])->response()->setStatusCode(200);
+    }
     //visualizar todos los cursos (Done)
     public function getCourses()
     {
@@ -294,6 +308,12 @@ class CourseController extends Controller
     //obtener los cursos asignados a un docente responsable logueado (Done)
     public function getCoursesByResponsibleCourse(getCoursesByResponsibleRequest $request)
     {
+        // $sorts = explode(',', $request->input('sort'));
+        // $courses = Course::customOrderBy($sorts)
+        //     ->name($request->input('search'))
+        //     ->code($request->input('search'));
+
+
         $instructor = Instructor::firstWhere('user_id', $request->user()->id);
         if (!isset($instructor)) {
             return response()->json([
@@ -306,11 +326,15 @@ class CourseController extends Controller
             ], 404);
         }
 
+    
+
         $courses = Course::where('responsible_id', $instructor->id)
             ->orWhereHas('planifications', function ($query) use ($instructor) {
                 $query->where('responsible_course_id', $instructor->id);
             })
+            ->name($request->input('search'))
             ->get();
+          
 
         return (new CoursesByResponsibleCollection($courses))
             ->additional([
@@ -526,7 +550,6 @@ class CourseController extends Controller
     {
         $course->state_id = $request->id;
         $course->save();
-
         return (new CourseResource($course))
             ->additional([
                 'msg' => [
