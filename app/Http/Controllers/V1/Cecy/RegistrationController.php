@@ -632,18 +632,21 @@ class RegistrationController extends Controller
     }
 
     //Verifica si un participante ya se encuentra matriculado en un curso
-    public function getRegistrationsByParticipant(DetailPlanification $detailPlanification)
+    public function getRegistrationsByDetailPlanificationAndParticipant(Request $request, DetailPlanification $detailPlanification)
     {
-        echo("entre");
-        // $registration = $detailPlanification->registrations()->get();
-        // return (new RegistrationCollection($registration))
-        //     ->additional([
-        //         'msg' => [
-        //             'summary' => 'success',
-        //             'records' => '',
-        //             'code' => '200'
-        //         ]
-        //     ])
-        //     ->response()->setStatusCode(200);
+        $participant = Participant::where('user_id', $request->user()->id)->first();
+        $registration = Registration::where('detail_planification_id',$detailPlanification->id)
+                ->where('participant_id',$participant->id)
+                ->paginate($request->input('per_page'));;
+            
+        return (new RegistrationCollection($registration))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'records' => '',
+                    'code' => '200'
+                ]
+            ])
+            ->response()->setStatusCode(200);
     }
 }
